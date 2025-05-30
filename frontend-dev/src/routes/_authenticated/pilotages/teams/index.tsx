@@ -61,7 +61,6 @@ function TeamsPage() {
   const { data } = useSuspenseQuery(teamsQueryOptions);
   const [deleteId, setDeleteId] = useState<string | null>(null);
   const queryClient = useQueryClient();
-
   // Ajoute la fonction onDelete à chaque ligne
   const dataWithDelete = {
     ...data,
