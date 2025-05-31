@@ -5,7 +5,7 @@ import { z } from "zod";
 
 const fallback = "/dashboard" as const;
 
-export const Route = createFileRoute("/_guest/(login)/_guestLayout/login")({
+export const Route = createFileRoute("/_guest/(login)/login")({
   validateSearch: z.object({
     redirect: z.string().optional().catch(""),
   }),

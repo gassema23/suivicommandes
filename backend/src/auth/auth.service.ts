@@ -21,6 +21,8 @@ import { ForgotPasswordDto } from './dto/forgot-password.dto';
 import { ResetPasswordDto } from './dto/reset-password.dto';
 import { ChangePasswordDto } from './dto/change-password.dto';
 import { RolesModule } from 'src/roles/roles.module';
+import { instanceToPlain } from 'class-transformer';
+import { VerifyEmailInterface } from './interfaces/verify-email.interface';
 
 export interface JwtPayload {
   sub: string;
@@ -111,8 +113,15 @@ export class AuthService {
   }
 
   async register(registerDto: RegisterDto): Promise<{ message: string }> {
-    const { email, password, confirmPassword, firstName, lastName, teamId, roleId } =
-      registerDto;
+    const {
+      email,
+      password,
+      confirmPassword,
+      firstName,
+      lastName,
+      teamId,
+      roleId,
+    } = registerDto;
     let hashedPassword: string;
     // Vérifier si l'utilisateur existe déjà
     const existingUser = await this.userRepository.findOne({
@@ -168,10 +177,12 @@ export class AuthService {
     };
   }
 
-  async verifyEmail(token: string): Promise<{ message: string }> {
+  async verifyEmail(token: string): Promise<{ message: string; user: VerifyEmailInterface }> {
     try {
       const payload = this.jwtService.verify(token);
+
       const user = await this.userRepository.findOne({
+        select: ['id', 'emailVerifiedAt', 'firstName', 'lastName', 'email'],
         where: { id: payload.sub },
       });
 
@@ -183,11 +194,11 @@ export class AuthService {
         throw new BadRequestException('Email déjà vérifié');
       }
 
-      await this.userRepository.update(user.id, {
-        emailVerifiedAt: new Date(),
-      });
-
-      return { message: 'Email vérifié avec succès' };
+      // await this.userRepository.update(user.id, {
+      //   emailVerifiedAt: new Date(),
+      // });
+      const userPlain = instanceToPlain(user) as VerifyEmailInterface;
+      return { message: 'Email vérifié avec succès', user: userPlain };
     } catch (error) {
       throw new BadRequestException('Token de vérification invalide ou expiré');
     }

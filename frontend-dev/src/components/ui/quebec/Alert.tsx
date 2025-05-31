@@ -1,8 +1,8 @@
-import * as React from "react"
-import { cn } from "@/lib/utils"
+import * as React from "react";
+import { cn } from "@/lib/utils";
 
 interface AlertProps extends React.HTMLAttributes<HTMLDivElement> {
-  variant?: "default" | "destructive" | "info" | "warning"
+  variant?: "default" | "destructive" | "info" | "warning";
 }
 
 const Alert = React.forwardRef<HTMLDivElement, AlertProps>(
@@ -20,31 +20,23 @@ const Alert = React.forwardRef<HTMLDivElement, AlertProps>(
       {...props}
     />
   )
-)
-Alert.displayName = "Alert"
+);
+Alert.displayName = "Alert";
 
 const AlertTitle = React.forwardRef<
   HTMLParagraphElement,
   React.HTMLAttributes<HTMLHeadingElement>
 >(({ className, ...props }, ref) => (
-  <h5
-    ref={ref}
-    className={cn("alert-title", className)}
-    {...props}
-  />
-))
-AlertTitle.displayName = "AlertTitle"
+  <h5 ref={ref} className={cn("alert-title", className)} {...props} />
+));
+AlertTitle.displayName = "AlertTitle";
 
 const AlertDescription = React.forwardRef<
   HTMLParagraphElement,
   React.HTMLAttributes<HTMLParagraphElement>
 >(({ className, ...props }, ref) => (
-  <div
-    ref={ref}
-    className={cn("alert-description", className)}
-    {...props}
-  />
-))
-AlertDescription.displayName = "AlertDescription"
+  <div ref={ref} className={cn("alert-description", className)} {...props} />
+));
+AlertDescription.displayName = "AlertDescription";
 
-export { Alert, AlertTitle, AlertDescription }
+export { Alert, AlertTitle, AlertDescription };

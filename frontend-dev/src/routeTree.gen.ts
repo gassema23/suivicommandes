@@ -15,10 +15,11 @@ import { Route as UnauthorizedImport } from './routes/unauthorized'
 import { Route as GuestImport } from './routes/_guest'
 import { Route as AuthenticatedImport } from './routes/_authenticated'
 import { Route as AuthenticatedIndexImport } from './routes/_authenticated/index'
+import { Route as GuestVerifyEmailTokenImport } from './routes/_guest/verify-email/$token'
+import { Route as GuestloginLoginImport } from './routes/_guest/(login)/login'
 import { Route as AuthenticatedPilotagesUsersIndexImport } from './routes/_authenticated/pilotages/users/index'
 import { Route as AuthenticatedPilotagesTeamsIndexImport } from './routes/_authenticated/pilotages/teams/index'
 import { Route as AuthenticatedAdministrationsRolesIndexImport } from './routes/_authenticated/administrations/roles/index'
-import { Route as GuestloginGuestLayoutLoginImport } from './routes/_guest/(login)/_guestLayout.login'
 import { Route as AuthenticatedPilotagesUsersCreateImport } from './routes/_authenticated/pilotages/users/create'
 import { Route as AuthenticatedPilotagesTeamsCreateImport } from './routes/_authenticated/pilotages/teams/create'
 import { Route as AuthenticatedAdministrationsRolesCreateImport } from './routes/_authenticated/administrations/roles/create'
@@ -49,6 +50,18 @@ const AuthenticatedIndexRoute = AuthenticatedIndexImport.update({
   getParentRoute: () => AuthenticatedRoute,
 } as any)
 
+const GuestVerifyEmailTokenRoute = GuestVerifyEmailTokenImport.update({
+  id: '/verify-email/$token',
+  path: '/verify-email/$token',
+  getParentRoute: () => GuestRoute,
+} as any)
+
+const GuestloginLoginRoute = GuestloginLoginImport.update({
+  id: '/(login)/login',
+  path: '/login',
+  getParentRoute: () => GuestRoute,
+} as any)
+
 const AuthenticatedPilotagesUsersIndexRoute =
   AuthenticatedPilotagesUsersIndexImport.update({
     id: '/pilotages/users/',
@@ -69,14 +82,6 @@ const AuthenticatedAdministrationsRolesIndexRoute =
     path: '/administrations/roles/',
     getParentRoute: () => AuthenticatedRoute,
   } as any)
-
-const GuestloginGuestLayoutLoginRoute = GuestloginGuestLayoutLoginImport.update(
-  {
-    id: '/(login)/_guestLayout/login',
-    path: '/login',
-    getParentRoute: () => GuestRoute,
-  } as any,
-)
 
 const AuthenticatedPilotagesUsersCreateRoute =
   AuthenticatedPilotagesUsersCreateImport.update({
@@ -145,6 +150,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedIndexImport
       parentRoute: typeof AuthenticatedImport
     }
+    '/_guest/(login)/login': {
+      id: '/_guest/(login)/login'
+      path: '/login'
+      fullPath: '/login'
+      preLoaderRoute: typeof GuestloginLoginImport
+      parentRoute: typeof GuestImport
+    }
+    '/_guest/verify-email/$token': {
+      id: '/_guest/verify-email/$token'
+      path: '/verify-email/$token'
+      fullPath: '/verify-email/$token'
+      preLoaderRoute: typeof GuestVerifyEmailTokenImport
+      parentRoute: typeof GuestImport
+    }
     '/_authenticated/administrations/roles/create': {
       id: '/_authenticated/administrations/roles/create'
       path: '/administrations/roles/create'
@@ -165,13 +184,6 @@ declare module '@tanstack/react-router' {
       fullPath: '/pilotages/users/create'
       preLoaderRoute: typeof AuthenticatedPilotagesUsersCreateImport
       parentRoute: typeof AuthenticatedImport
-    }
-    '/_guest/(login)/_guestLayout/login': {
-      id: '/_guest/(login)/_guestLayout/login'
-      path: '/login'
-      fullPath: '/login'
-      preLoaderRoute: typeof GuestloginGuestLayoutLoginImport
-      parentRoute: typeof GuestImport
     }
     '/_authenticated/administrations/roles/': {
       id: '/_authenticated/administrations/roles/'
@@ -248,11 +260,13 @@ const AuthenticatedRouteWithChildren = AuthenticatedRoute._addFileChildren(
 )
 
 interface GuestRouteChildren {
-  GuestloginGuestLayoutLoginRoute: typeof GuestloginGuestLayoutLoginRoute
+  GuestloginLoginRoute: typeof GuestloginLoginRoute
+  GuestVerifyEmailTokenRoute: typeof GuestVerifyEmailTokenRoute
 }
 
 const GuestRouteChildren: GuestRouteChildren = {
-  GuestloginGuestLayoutLoginRoute: GuestloginGuestLayoutLoginRoute,
+  GuestloginLoginRoute: GuestloginLoginRoute,
+  GuestVerifyEmailTokenRoute: GuestVerifyEmailTokenRoute,
 }
 
 const GuestRouteWithChildren = GuestRoute._addFileChildren(GuestRouteChildren)
@@ -261,10 +275,11 @@ export interface FileRoutesByFullPath {
   '': typeof GuestRouteWithChildren
   '/unauthorized': typeof UnauthorizedRoute
   '/': typeof AuthenticatedIndexRoute
+  '/login': typeof GuestloginLoginRoute
+  '/verify-email/$token': typeof GuestVerifyEmailTokenRoute
   '/administrations/roles/create': typeof AuthenticatedAdministrationsRolesCreateRoute
   '/pilotages/teams/create': typeof AuthenticatedPilotagesTeamsCreateRoute
   '/pilotages/users/create': typeof AuthenticatedPilotagesUsersCreateRoute
-  '/login': typeof GuestloginGuestLayoutLoginRoute
   '/administrations/roles': typeof AuthenticatedAdministrationsRolesIndexRoute
   '/pilotages/teams': typeof AuthenticatedPilotagesTeamsIndexRoute
   '/pilotages/users': typeof AuthenticatedPilotagesUsersIndexRoute
@@ -276,10 +291,11 @@ export interface FileRoutesByTo {
   '': typeof GuestRouteWithChildren
   '/unauthorized': typeof UnauthorizedRoute
   '/': typeof AuthenticatedIndexRoute
+  '/login': typeof GuestloginLoginRoute
+  '/verify-email/$token': typeof GuestVerifyEmailTokenRoute
   '/administrations/roles/create': typeof AuthenticatedAdministrationsRolesCreateRoute
   '/pilotages/teams/create': typeof AuthenticatedPilotagesTeamsCreateRoute
   '/pilotages/users/create': typeof AuthenticatedPilotagesUsersCreateRoute
-  '/login': typeof GuestloginGuestLayoutLoginRoute
   '/administrations/roles': typeof AuthenticatedAdministrationsRolesIndexRoute
   '/pilotages/teams': typeof AuthenticatedPilotagesTeamsIndexRoute
   '/pilotages/users': typeof AuthenticatedPilotagesUsersIndexRoute
@@ -293,10 +309,11 @@ export interface FileRoutesById {
   '/_guest': typeof GuestRouteWithChildren
   '/unauthorized': typeof UnauthorizedRoute
   '/_authenticated/': typeof AuthenticatedIndexRoute
+  '/_guest/(login)/login': typeof GuestloginLoginRoute
+  '/_guest/verify-email/$token': typeof GuestVerifyEmailTokenRoute
   '/_authenticated/administrations/roles/create': typeof AuthenticatedAdministrationsRolesCreateRoute
   '/_authenticated/pilotages/teams/create': typeof AuthenticatedPilotagesTeamsCreateRoute
   '/_authenticated/pilotages/users/create': typeof AuthenticatedPilotagesUsersCreateRoute
-  '/_guest/(login)/_guestLayout/login': typeof GuestloginGuestLayoutLoginRoute
   '/_authenticated/administrations/roles/': typeof AuthenticatedAdministrationsRolesIndexRoute
   '/_authenticated/pilotages/teams/': typeof AuthenticatedPilotagesTeamsIndexRoute
   '/_authenticated/pilotages/users/': typeof AuthenticatedPilotagesUsersIndexRoute
@@ -310,10 +327,11 @@ export interface FileRouteTypes {
     | ''
     | '/unauthorized'
     | '/'
+    | '/login'
+    | '/verify-email/$token'
     | '/administrations/roles/create'
     | '/pilotages/teams/create'
     | '/pilotages/users/create'
-    | '/login'
     | '/administrations/roles'
     | '/pilotages/teams'
     | '/pilotages/users'
@@ -324,10 +342,11 @@ export interface FileRouteTypes {
     | ''
     | '/unauthorized'
     | '/'
+    | '/login'
+    | '/verify-email/$token'
     | '/administrations/roles/create'
     | '/pilotages/teams/create'
     | '/pilotages/users/create'
-    | '/login'
     | '/administrations/roles'
     | '/pilotages/teams'
     | '/pilotages/users'
@@ -339,10 +358,11 @@ export interface FileRouteTypes {
     | '/_guest'
     | '/unauthorized'
     | '/_authenticated/'
+    | '/_guest/(login)/login'
+    | '/_guest/verify-email/$token'
     | '/_authenticated/administrations/roles/create'
     | '/_authenticated/pilotages/teams/create'
     | '/_authenticated/pilotages/users/create'
-    | '/_guest/(login)/_guestLayout/login'
     | '/_authenticated/administrations/roles/'
     | '/_authenticated/pilotages/teams/'
     | '/_authenticated/pilotages/users/'
@@ -395,7 +415,8 @@ export const routeTree = rootRoute
     "/_guest": {
       "filePath": "_guest.tsx",
       "children": [
-        "/_guest/(login)/_guestLayout/login"
+        "/_guest/(login)/login",
+        "/_guest/verify-email/$token"
       ]
     },
     "/unauthorized": {
@@ -404,6 +425,14 @@ export const routeTree = rootRoute
     "/_authenticated/": {
       "filePath": "_authenticated/index.tsx",
       "parent": "/_authenticated"
+    },
+    "/_guest/(login)/login": {
+      "filePath": "_guest/(login)/login.tsx",
+      "parent": "/_guest"
+    },
+    "/_guest/verify-email/$token": {
+      "filePath": "_guest/verify-email/$token.tsx",
+      "parent": "/_guest"
     },
     "/_authenticated/administrations/roles/create": {
       "filePath": "_authenticated/administrations/roles/create.tsx",
@@ -416,10 +445,6 @@ export const routeTree = rootRoute
     "/_authenticated/pilotages/users/create": {
       "filePath": "_authenticated/pilotages/users/create.tsx",
       "parent": "/_authenticated"
-    },
-    "/_guest/(login)/_guestLayout/login": {
-      "filePath": "_guest/(login)/_guestLayout.login.tsx",
-      "parent": "/_guest"
     },
     "/_authenticated/administrations/roles/": {
       "filePath": "_authenticated/administrations/roles/index.tsx",
