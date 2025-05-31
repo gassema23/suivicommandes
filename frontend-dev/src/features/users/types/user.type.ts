@@ -1,4 +1,5 @@
 import type { BackendRole, Role } from "@/features/roles/types/role.type";
+import type { Team } from "@/features/teams/types/team.type";
 
 export interface BackendUser {
   id: string;
@@ -25,9 +26,13 @@ export interface BackendUser {
 export interface User {
   id: string;
   fullName: string;
+  firstName: string;
+  lastName: string;
   profilePicture?: string;
+  emailVerifiedAt?: string | null;
   email?: string;
   initials?: string;
   createdAt: string;
   role: Role;
+  team: Team;
 }

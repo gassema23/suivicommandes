@@ -31,7 +31,6 @@ export class RolesService {
   }
 
   async findById(id: string): Promise<Role> {
-    console.log('findById called with id:', id);
     const role = await this.roleRepository.findOne({
       where: { id },
       relations: ['permissions'],
@@ -82,6 +81,13 @@ export class RolesService {
         totalPages: Math.ceil(total / limit),
       },
     };
+  }
+
+  async getRolesList(): Promise<Role[]> {
+    return this.roleRepository.find({
+      select: ['id', 'roleName'],
+      order: { roleName: 'ASC' },
+    });
   }
 
   async update(id: string, roleDto: CreateRoleDto): Promise<Role> {

@@ -17,12 +17,15 @@ import { Button } from "@/components/ui/quebec/Button";
 import { useNavigate } from "@tanstack/react-router";
 import { teamSchema, type TeamFormData } from "../schemas/team.schema";
 import { updateTeam } from "../services/updateTeam";
+import FormError from "@/components/ui/shadcn/form-error";
+import { useState } from "react";
 
 interface TeamUpdateFormProps {
   team: Team;
 }
 
 export default function TeamUpdateForm({ team }: TeamUpdateFormProps) {
+  const [backendError, setBackendError] = useState<string | null>(null);
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const {
@@ -53,17 +56,17 @@ export default function TeamUpdateForm({ team }: TeamUpdateFormProps) {
   const updateTeamMutation = useMutation({
     mutationFn: (data: TeamFormData) => updateTeam(team.id, data),
     onSuccess: () => {
+      setBackendError(null);
       queryClient.invalidateQueries({ queryKey: ["teams"] });
       navigate({ to: "/pilotages/teams" });
     },
-    onError: (error: any) => {
-      // Gère l'erreur ici (toast, etc.)
+    onError: (error: { message: string }) => {
+      setBackendError(error.message);
     },
   });
 
   const onSubmit = (data: TeamFormData) => {
     // Appelle ta mutation ici
-    console.log("submit", data);
     updateTeamMutation.mutate(data);
   };
 
@@ -72,6 +75,12 @@ export default function TeamUpdateForm({ team }: TeamUpdateFormProps) {
       className="xl:w-3xl w-full space-y-4"
       onSubmit={handleSubmit(onSubmit)}
     >
+      {backendError && (
+        <FormError
+          title="Erreur lors de l'envoie du formulaire"
+          message={backendError}
+        />
+      )}
       <div className="grid grid-cols-12 gap-2 items-center">
         <Label className="col-span-12 xl:col-span-4">Nom de l'équipe</Label>
         <div className="col-span-12 xl:col-span-8">

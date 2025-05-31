@@ -94,7 +94,6 @@ export class AuthController {
     @CurrentUser() user: User,
     @Res({ passthrough: true }) res: Response,
   ) {
-    console.log('Déconnexion de l|’utilisateur:', user.id);
     // Invalide le refreshToken côté base de données si besoin
     await this.authService.logout(user.id);
 
@@ -170,8 +169,7 @@ export class AuthController {
   @ApiOperation({
     summary: "Obtenir les informations de l'utilisateur connecté",
   })
-  @ApiResponse({ status: 200, description: 'Informations utilisateur' })
-  
+  @ApiResponse({ status: 200, description: 'Informations utilisateur' })  
   async getProfile(@CurrentUser() user: User) {
     return { user: instanceToPlain(user) };
   }

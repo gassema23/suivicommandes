@@ -1,5 +1,4 @@
 import { Button } from "@/components/ui/quebec/Button";
-import { DeleteModal } from "@/components/ui/quebec/DeleteModal";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -8,14 +7,13 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/shadcn/dropdown-menu";
-import { PermissionGate } from "@/features/authorizations/components/PermissionGate";
 import { useAuth } from "@/providers/auth-provider";
 import { Link } from "@tanstack/react-router";
 import { MoreHorizontal } from "lucide-react";
 
 interface DataTableActionProps {
   id: string;
-  baseUrl: string; // ex: "/settings/roles"
+  baseUrl: string;
   onDelete?: () => void;
   showPage?: boolean;
   resource?: string;
@@ -65,9 +63,12 @@ export default function DataTableAction({
           )}
 
           {canDelete && (
-            <DropdownMenuItem onClick={onDelete} className="text-destructive">
-              Supprimer
-            </DropdownMenuItem>
+            <>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem onClick={onDelete} className="text-destructive">
+                Supprimer
+              </DropdownMenuItem>
+            </>
           )}
         </DropdownMenuContent>
       </DropdownMenu>

@@ -24,7 +24,6 @@ export interface CreateRoleResponse {
 }
 
 export const createRole = async (data: CreateRoleRequest): Promise<CreateRoleResponse> => {
-  console.log("Creating role with data:", data);
     const response = await fetch(`${API_ROUTE}/roles`, {
     method: "POST",
     headers: {

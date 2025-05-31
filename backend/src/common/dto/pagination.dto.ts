@@ -31,4 +31,9 @@ export class PaginationDto {
   @IsOptional()
   @IsString()
   search?: string;
+  
+  @ApiPropertyOptional({ description: "Alphabétique" })
+  @IsOptional()
+  @IsString()
+  startsWith?: string;
 }

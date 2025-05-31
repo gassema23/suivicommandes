@@ -17,7 +17,7 @@ interface UserAvatarProps
   extends React.HTMLAttributes<HTMLDivElement>,
     VariantProps<typeof statusVariant> {
   user: User;
-  size?: "sm" | "md" | "lg";
+  size?: "sm" | "md" | "lg" | "xl" | "xxl";
   showStatusIndicator?: boolean;
   tooltipContent?: React.ReactNode;
 }
@@ -38,6 +38,7 @@ const statusVariant = cva(
         md: "h-3 w-3 -right-0.5 bottom-0",
         lg: "h-4 w-4 -right-0.5 bottom-0",
         xl: "h-5 w-5 right-1 bottom-0",
+        xxl: "h-5 w-5 right-1 bottom-0",
       },
     },
     defaultVariants: {
@@ -56,6 +57,7 @@ const avatarSizeVariant = cva(
         md: "h-8 w-8 text-lg",
         lg: "h-12 w-12 text-xl",
         xl: "h-16 w-16 text-4xl",
+        xxl: "h-32 w-32 text-4xl",
       },
     },
     defaultVariants: {
@@ -69,7 +71,7 @@ export default function UserAvatar({
   variant = "online",
   size = "md",
   user,
-  showStatusIndicator = true,
+  showStatusIndicator = false,
   tooltipContent,
   ...props
 }: UserAvatarProps) {

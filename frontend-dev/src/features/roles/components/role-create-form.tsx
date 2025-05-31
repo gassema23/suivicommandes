@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
@@ -22,11 +22,12 @@ import {
   type CreateRoleFormData,
 } from "../schemas/role.schema";
 import { fetchResources } from "../services/fetchResources";
-
+import FormError from "@/components/ui/shadcn/form-error";
 
 export default function CreateRolePage() {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
+  const [backendError, setBackendError] = useState<string | null>(null);
 
   // Récupération dynamique des ressources
   const {
@@ -67,11 +68,12 @@ export default function CreateRolePage() {
   const createRoleMutation = useMutation({
     mutationFn: createRole,
     onSuccess: () => {
+      setBackendError(null);
       queryClient.invalidateQueries({ queryKey: ["roles"] });
       navigate({ to: "/administrations/roles" });
     },
-    onError: (error: any) => {
-      // Gère l'erreur ici (toast, etc.)
+    onError: (error: { message: string }) => {
+      setBackendError(error.message);
     },
   });
 
@@ -93,6 +95,12 @@ export default function CreateRolePage() {
 
   return (
     <form onSubmit={form.handleSubmit(onSubmit)} className="w-full space-y-6">
+      {backendError && (
+        <FormError
+          title="Erreur lors de l'envoie du formulaire"
+          message={backendError}
+        />
+      )}
       {/* Champ nom du rôle */}
       <Card>
         <CardContent className="pt-6 w-md">

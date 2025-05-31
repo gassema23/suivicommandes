@@ -16,7 +16,6 @@ export function RoleList({ roles }: { roles: Role[] }) {
   return (
     <div className="grid gap-y-6">
       {roles.map((role) => {
-        // Fonction utilitaire pour vérifier une permission pour ce rôle
         const hasPermission = (resource: string, action: string) => {
           const perm = role.permissions.find(
             (p) => p.resource === resource.toLowerCase()
@@ -26,9 +25,7 @@ export function RoleList({ roles }: { roles: Role[] }) {
 
         const handleDelete = (roleId: string) => {
           if (confirm("Êtes-vous sûr de vouloir supprimer ce rôle ?")) {
-            // Logique de suppression du rôle
             console.log(`Suppression du rôle avec l'ID: ${roleId}`);
-            // Ici, vous pouvez appeler une fonction pour supprimer le rôle via une API ou autre
           }
         };
 
@@ -44,7 +41,10 @@ export function RoleList({ roles }: { roles: Role[] }) {
                 <div className="flex gap-2">
                   <PermissionGate resource="roles" action="update">
                     <Button variant="outline" size="sm" asChild>
-                      <Link to={`/administrations/roles/update/${role.id}`}>
+                      <Link
+                        to={`/administrations/roles/update/$id`}
+                        params={{ id: role.id }}
+                      >
                         <Edit className="w-4 h-4" />
                       </Link>
                     </Button>

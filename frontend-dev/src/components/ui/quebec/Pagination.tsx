@@ -16,6 +16,7 @@ interface PaginationProps {
   currentPage?: number
   totalPages?: number
   onPageChange?: (page: number) => void
+  onLetterChange?: (letter: string) => void
 
   // Pour la variante alphabétique
   currentLetter?: string
@@ -35,6 +36,7 @@ export function Pagination({
   currentLetter,
   currentItem = 1,
   totalItems = 1,
+  onLetterChange,
 }: PaginationProps) {
   // Gestion des clics sur les pages numériques
   const handlePageClick = (page: number) => {
@@ -45,7 +47,9 @@ export function Pagination({
   // Gestion des clics sur les lettres
   const handleLetterClick = (letter: string) => {
     // Implémentation à compléter selon vos besoins
-    console.log(`Naviguer vers la lettre: ${letter}`)
+    if (letter !== currentLetter) {
+      onLetterChange?.(letter)
+    }
   }
 
   // Rendu de la pagination numérique

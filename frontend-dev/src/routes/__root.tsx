@@ -11,7 +11,7 @@ import { ErrorPage } from "@/components/layouts/ErrorPage";
 
 type RouterContext = {
   auth: AuthContext;
-  queryClient?: QueryClient;
+  queryClient: QueryClient;
 };
 
 export const Route = createRootRouteWithContext<RouterContext>()({

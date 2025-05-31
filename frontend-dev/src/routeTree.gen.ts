@@ -19,6 +19,7 @@ import { Route as AuthenticatedPilotagesUsersIndexImport } from './routes/_authe
 import { Route as AuthenticatedPilotagesTeamsIndexImport } from './routes/_authenticated/pilotages/teams/index'
 import { Route as AuthenticatedAdministrationsRolesIndexImport } from './routes/_authenticated/administrations/roles/index'
 import { Route as GuestloginGuestLayoutLoginImport } from './routes/_guest/(login)/_guestLayout.login'
+import { Route as AuthenticatedPilotagesUsersCreateImport } from './routes/_authenticated/pilotages/users/create'
 import { Route as AuthenticatedPilotagesTeamsCreateImport } from './routes/_authenticated/pilotages/teams/create'
 import { Route as AuthenticatedAdministrationsRolesCreateImport } from './routes/_authenticated/administrations/roles/create'
 import { Route as AuthenticatedPilotagesTeamsUpdateIdImport } from './routes/_authenticated/pilotages/teams/update/$id'
@@ -76,6 +77,13 @@ const GuestloginGuestLayoutLoginRoute = GuestloginGuestLayoutLoginImport.update(
     getParentRoute: () => GuestRoute,
   } as any,
 )
+
+const AuthenticatedPilotagesUsersCreateRoute =
+  AuthenticatedPilotagesUsersCreateImport.update({
+    id: '/pilotages/users/create',
+    path: '/pilotages/users/create',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
 
 const AuthenticatedPilotagesTeamsCreateRoute =
   AuthenticatedPilotagesTeamsCreateImport.update({
@@ -151,6 +159,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedPilotagesTeamsCreateImport
       parentRoute: typeof AuthenticatedImport
     }
+    '/_authenticated/pilotages/users/create': {
+      id: '/_authenticated/pilotages/users/create'
+      path: '/pilotages/users/create'
+      fullPath: '/pilotages/users/create'
+      preLoaderRoute: typeof AuthenticatedPilotagesUsersCreateImport
+      parentRoute: typeof AuthenticatedImport
+    }
     '/_guest/(login)/_guestLayout/login': {
       id: '/_guest/(login)/_guestLayout/login'
       path: '/login'
@@ -202,6 +217,7 @@ interface AuthenticatedRouteChildren {
   AuthenticatedIndexRoute: typeof AuthenticatedIndexRoute
   AuthenticatedAdministrationsRolesCreateRoute: typeof AuthenticatedAdministrationsRolesCreateRoute
   AuthenticatedPilotagesTeamsCreateRoute: typeof AuthenticatedPilotagesTeamsCreateRoute
+  AuthenticatedPilotagesUsersCreateRoute: typeof AuthenticatedPilotagesUsersCreateRoute
   AuthenticatedAdministrationsRolesIndexRoute: typeof AuthenticatedAdministrationsRolesIndexRoute
   AuthenticatedPilotagesTeamsIndexRoute: typeof AuthenticatedPilotagesTeamsIndexRoute
   AuthenticatedPilotagesUsersIndexRoute: typeof AuthenticatedPilotagesUsersIndexRoute
@@ -215,6 +231,8 @@ const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
     AuthenticatedAdministrationsRolesCreateRoute,
   AuthenticatedPilotagesTeamsCreateRoute:
     AuthenticatedPilotagesTeamsCreateRoute,
+  AuthenticatedPilotagesUsersCreateRoute:
+    AuthenticatedPilotagesUsersCreateRoute,
   AuthenticatedAdministrationsRolesIndexRoute:
     AuthenticatedAdministrationsRolesIndexRoute,
   AuthenticatedPilotagesTeamsIndexRoute: AuthenticatedPilotagesTeamsIndexRoute,
@@ -245,6 +263,7 @@ export interface FileRoutesByFullPath {
   '/': typeof AuthenticatedIndexRoute
   '/administrations/roles/create': typeof AuthenticatedAdministrationsRolesCreateRoute
   '/pilotages/teams/create': typeof AuthenticatedPilotagesTeamsCreateRoute
+  '/pilotages/users/create': typeof AuthenticatedPilotagesUsersCreateRoute
   '/login': typeof GuestloginGuestLayoutLoginRoute
   '/administrations/roles': typeof AuthenticatedAdministrationsRolesIndexRoute
   '/pilotages/teams': typeof AuthenticatedPilotagesTeamsIndexRoute
@@ -259,6 +278,7 @@ export interface FileRoutesByTo {
   '/': typeof AuthenticatedIndexRoute
   '/administrations/roles/create': typeof AuthenticatedAdministrationsRolesCreateRoute
   '/pilotages/teams/create': typeof AuthenticatedPilotagesTeamsCreateRoute
+  '/pilotages/users/create': typeof AuthenticatedPilotagesUsersCreateRoute
   '/login': typeof GuestloginGuestLayoutLoginRoute
   '/administrations/roles': typeof AuthenticatedAdministrationsRolesIndexRoute
   '/pilotages/teams': typeof AuthenticatedPilotagesTeamsIndexRoute
@@ -275,6 +295,7 @@ export interface FileRoutesById {
   '/_authenticated/': typeof AuthenticatedIndexRoute
   '/_authenticated/administrations/roles/create': typeof AuthenticatedAdministrationsRolesCreateRoute
   '/_authenticated/pilotages/teams/create': typeof AuthenticatedPilotagesTeamsCreateRoute
+  '/_authenticated/pilotages/users/create': typeof AuthenticatedPilotagesUsersCreateRoute
   '/_guest/(login)/_guestLayout/login': typeof GuestloginGuestLayoutLoginRoute
   '/_authenticated/administrations/roles/': typeof AuthenticatedAdministrationsRolesIndexRoute
   '/_authenticated/pilotages/teams/': typeof AuthenticatedPilotagesTeamsIndexRoute
@@ -291,6 +312,7 @@ export interface FileRouteTypes {
     | '/'
     | '/administrations/roles/create'
     | '/pilotages/teams/create'
+    | '/pilotages/users/create'
     | '/login'
     | '/administrations/roles'
     | '/pilotages/teams'
@@ -304,6 +326,7 @@ export interface FileRouteTypes {
     | '/'
     | '/administrations/roles/create'
     | '/pilotages/teams/create'
+    | '/pilotages/users/create'
     | '/login'
     | '/administrations/roles'
     | '/pilotages/teams'
@@ -318,6 +341,7 @@ export interface FileRouteTypes {
     | '/_authenticated/'
     | '/_authenticated/administrations/roles/create'
     | '/_authenticated/pilotages/teams/create'
+    | '/_authenticated/pilotages/users/create'
     | '/_guest/(login)/_guestLayout/login'
     | '/_authenticated/administrations/roles/'
     | '/_authenticated/pilotages/teams/'
@@ -360,6 +384,7 @@ export const routeTree = rootRoute
         "/_authenticated/",
         "/_authenticated/administrations/roles/create",
         "/_authenticated/pilotages/teams/create",
+        "/_authenticated/pilotages/users/create",
         "/_authenticated/administrations/roles/",
         "/_authenticated/pilotages/teams/",
         "/_authenticated/pilotages/users/",
@@ -386,6 +411,10 @@ export const routeTree = rootRoute
     },
     "/_authenticated/pilotages/teams/create": {
       "filePath": "_authenticated/pilotages/teams/create.tsx",
+      "parent": "/_authenticated"
+    },
+    "/_authenticated/pilotages/users/create": {
+      "filePath": "_authenticated/pilotages/users/create.tsx",
       "parent": "/_authenticated"
     },
     "/_guest/(login)/_guestLayout/login": {

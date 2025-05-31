@@ -53,6 +53,7 @@ export class UsersController {
     required: false,
     description: 'Recherche par nom ou email',
   })
+  
   async findAll(
     @Query() paginationDto: PaginationDto,
     @Query('search') search?: string,
@@ -105,7 +106,7 @@ export class UsersController {
   @ApiResponse({ status: 200, description: 'Utilisateur mis à jour' })
   @ApiResponse({ status: 404, description: 'Utilisateur non trouvé' })
   async update(
-    @Param('id', ParseUUIDPipe) id: string,
+    @Param('id') id: string,
     @Body() updateUserDto: UpdateUserDto,
     @CurrentUser() currentUser: User,
   ) {

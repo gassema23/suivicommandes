@@ -141,7 +141,6 @@ export class TeamsService {
       relations: ['owner', 'users', 'createdBy', 'updatedBy'],
     });
 
-    console.log('Fetching team with ID:', id);
     if (!team) {
       throw new NotFoundException('Équipe non trouvée');
     }
@@ -169,6 +168,17 @@ export class TeamsService {
     });
 
     return this.teamRepository.save(team);
+  }
+
+  async getTeamsList(): Promise<Team[]> {
+    const teams = await this.teamRepository.find({
+      select:{
+        id: true,
+        teamName: true,
+      },
+      order: { teamName: 'ASC' },
+    });
+    return teams;
   }
 
   async remove(id: string, deletedBy: string): Promise<void> {

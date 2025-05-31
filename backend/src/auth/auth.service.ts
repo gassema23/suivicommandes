@@ -111,9 +111,9 @@ export class AuthService {
   }
 
   async register(registerDto: RegisterDto): Promise<{ message: string }> {
-    const { email, password, confirmPassword, firstName, lastName, teamId } =
+    const { email, password, confirmPassword, firstName, lastName, teamId, roleId } =
       registerDto;
-
+    let hashedPassword: string;
     // Vérifier si l'utilisateur existe déjà
     const existingUser = await this.userRepository.findOne({
       where: { email },
@@ -122,13 +122,31 @@ export class AuthService {
       throw new ConflictException('Un utilisateur avec cet email existe déjà');
     }
 
-    // vérifier si le password et confirmpassword correspondent
-    if (password !== registerDto.confirmPassword) {
-      throw new BadRequestException('Les mots de passe ne correspondent pas');
+    if (password) {
+      // vérifier si le password et confirmpassword correspondent
+      if (password !== registerDto.confirmPassword) {
+        throw new BadRequestException('Les mots de passe ne correspondent pas');
+      }
+      // Hasher le mot de passe
+      hashedPassword = await bcrypt.hash(password, 12);
+    } else {
+      // générer un mot de passe aléatoire si non fourni
+      const randomPassword = Math.random().toString(36).slice(-8);
+      registerDto.password = randomPassword;
+      registerDto.confirmPassword = randomPassword;
+      // Hasher le mot de passe
+      hashedPassword = await bcrypt.hash(randomPassword, 12);
+      console.warn(
+        'Aucun mot de passe fourni, un mot de passe aléatoire a été généré :',
+        randomPassword,
+      );
+      // Vous pouvez envoyer ce mot de passe par email ou le stocker pour l'utilisateur
+      // Note: Assurez-vous de gérer la sécurité de ce mot de passe généré
+      // await this.emailService.sendRandomPasswordEmail(
+      //   email,
+      //   randomPassword,
+      // );
     }
-
-    // Hasher le mot de passe
-    const hashedPassword = await bcrypt.hash(password, 12);
 
     // Créer l'utilisateur
     const user = this.userRepository.create({
@@ -137,6 +155,7 @@ export class AuthService {
       email,
       password: hashedPassword,
       teamId,
+      roleId,
     });
 
     await this.userRepository.save(user);
@@ -288,7 +307,6 @@ export class AuthService {
   }
 
   async logout(userId: string): Promise<{ message: string }> {
-    console.log(`Déconnexion de l'utilisateur avec ID: ${userId}`);
     await this.userRepository.update(userId, {
       rememberToken: '',
     });

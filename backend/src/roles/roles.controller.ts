@@ -54,6 +54,13 @@ export class RolesController {
     }));
   }
 
+  @Get('rolesList')
+  @Permissions([{ resource: Resource.ROLES, actions: [Action.READ] }])
+  async getRolesList() {
+    const roles = await this.rolesService.getRolesList();
+    return roles.map((role) => instanceToPlain(role));
+  }
+
   @Get(':id')
   @Permissions([{ resource: Resource.ROLES, actions: [Action.READ] }])
   async findOne(@Param('id') id: string) {

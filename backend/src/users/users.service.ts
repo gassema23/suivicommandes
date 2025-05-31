@@ -5,7 +5,16 @@ import {
   BadRequestException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository, FindOptionsWhere, ILike, IsNull, Not, In } from 'typeorm';
+import {
+  Repository,
+  FindOptionsWhere,
+  ILike,
+  IsNull,
+  Not,
+  In,
+  And,
+  Raw,
+} from 'typeorm';
 import * as bcrypt from 'bcryptjs';
 
 import { User } from './entities/user.entity';
@@ -58,63 +67,81 @@ export class UsersService {
       limit = 10,
       sort = 'createdAt',
       order = 'DESC',
+      startsWith,
     } = paginationDto;
+
     const skip = (page - 1) * limit;
 
-    // Si on veut trier par le nom complet (fullName)
-    if (sort?.toLowerCase() === 'fullname') {
-      const qb = this.userRepository
-        .createQueryBuilder('user')
-        .leftJoinAndSelect('user.team', 'team')
-        .leftJoinAndSelect('user.createdBy', 'createdBy')
-        .skip(skip)
-        .take(limit);
+    // Helper pour construire les conditions alphabétiques sur fullName
+    const buildFullNameAlphabetFilter = (qb: any) => {
+      if (!startsWith) return;
 
-      if (search) {
-        qb.where(
-          'user.firstName ILIKE :search OR user.lastName ILIKE :search',
-          {
-            search: `%${search}%`,
-          },
+      const ranges = {
+        'A-E': ['A', 'E'],
+        'F-J': ['F', 'J'],
+        'K-O': ['K', 'O'],
+        'P-T': ['P', 'T'],
+        'U-Z': ['U', 'Z'],
+      };
+
+      const range = ranges[startsWith as keyof typeof ranges];
+      if (!range) return;
+
+      const [start, end] = range;
+
+      // Filtrer sur le fullName concaténé (firstName + ' ' + lastName)
+      qb.andWhere(
+        "UPPER(CONCAT(user.firstName, ' ', user.lastName)) >= :start AND UPPER(CONCAT(user.firstName, ' ', user.lastName)) <= :endZ",
+        {
+          start: start,
+          endZ: end + 'Z',
+        },
+      );
+    };
+
+    // Utiliser toujours le query builder pour avoir plus de contrôle
+    const qb = this.userRepository
+      .createQueryBuilder('user')
+      .leftJoinAndSelect('user.team', 'team')
+      .leftJoinAndSelect('user.createdBy', 'createdBy')
+      .skip(skip)
+      .take(limit);
+
+    // Filtre de recherche textuelle sur fullName
+    if (search) {
+      qb.where("CONCAT(user.firstName, ' ', user.lastName) ILIKE :search", {
+        search: `%${search}%`,
+      });
+    }
+
+    // Filtre alphabétique sur fullName
+    buildFullNameAlphabetFilter(qb);
+
+    // Tri - toujours par fullName pour la cohérence
+    if (
+      sort?.toLowerCase() === 'fullname' ||
+      sort?.toLowerCase() === 'createdAt'
+    ) {
+      if (sort?.toLowerCase() === 'fullname') {
+        qb.orderBy({
+          'user.firstName': order.toUpperCase() === 'ASC' ? 'ASC' : 'DESC',
+          'user.lastName': order.toUpperCase() === 'ASC' ? 'ASC' : 'DESC',
+        });
+      } else {
+        qb.orderBy(
+          `user.${sort}`,
+          order.toUpperCase() === 'ASC' ? 'ASC' : 'DESC',
         );
       }
-
-      qb.orderBy({
-        'user.firstName': order.toUpperCase() === 'ASC' ? 'ASC' : 'DESC',
-        'user.lastName': order.toUpperCase() === 'ASC' ? 'ASC' : 'DESC',
-      });
-
-      const [users, total] = await qb.getManyAndCount();
-
-      return {
-        data: users,
-        meta: {
-          page,
-          limit,
-          total,
-          totalPages: Math.ceil(total / limit),
-        },
-      };
+    } else {
+      // Pour tout autre champ de tri
+      qb.orderBy(
+        `user.${sort}`,
+        order.toUpperCase() === 'ASC' ? 'ASC' : 'DESC',
+      );
     }
 
-    // Sinon, tri classique sur une colonne physique
-    const whereCondition: FindOptionsWhere<User> = {};
-    if (search) {
-      whereCondition.firstName = ILike(`%${search}%`);
-    }
-
-    const orderBy: Record<string, 'ASC' | 'DESC'> = {};
-    if (sort) {
-      orderBy[sort] = order?.toUpperCase() === 'ASC' ? 'ASC' : 'DESC';
-    }
-
-    const [users, total] = await this.userRepository.findAndCount({
-      where: whereCondition,
-      relations: ['team', 'createdBy'],
-      skip,
-      take: limit,
-      order: orderBy,
-    });
+    const [users, total] = await qb.getManyAndCount();
 
     return {
       data: users,
@@ -123,6 +150,7 @@ export class UsersService {
         limit,
         total,
         totalPages: Math.ceil(total / limit),
+        startsWith, // Inclure dans la réponse pour le frontend
       },
     };
   }

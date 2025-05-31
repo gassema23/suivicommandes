@@ -41,7 +41,7 @@ export const Route = createFileRoute("/_authenticated/pilotages/teams/")({
 
   errorComponent: ({ error }) => (
     <FormError
-      title="Erreur lors du chargement des utilisateurs"
+      title="Erreur lors du chargement des équipes"
       message={error.message}
     />
   ),

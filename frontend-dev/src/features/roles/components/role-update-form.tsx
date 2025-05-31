@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
@@ -23,9 +23,12 @@ import {
 import { API_ROUTE } from "@/config";
 import type { Role } from "../types/role.type";
 import { updateRole } from "../services/updateRole";
+import FormError from "@/components/ui/shadcn/form-error";
 
 // Fetch resources depuis le backend
-const fetchResources = async (): Promise<{ value: string; label: string }[]> => {
+const fetchResources = async (): Promise<
+  { value: string; label: string }[]
+> => {
   const res = await fetch(`${API_ROUTE}/roles/resources/`, {
     method: "GET",
     credentials: "include",
@@ -41,6 +44,7 @@ interface RoleUpdateFormProps {
 export default function RoleUpdateForm({ role }: RoleUpdateFormProps) {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
+  const [backendError, setBackendError] = useState<string | null>(null);
   // Récupération dynamique des ressources
   const {
     data: resourcesRaw = [],
@@ -94,11 +98,12 @@ export default function RoleUpdateForm({ role }: RoleUpdateFormProps) {
   const updateRoleMutation = useMutation({
     mutationFn: (data: CreateRoleFormData) => updateRole(role.id, data),
     onSuccess: () => {
+      setBackendError(null);
       queryClient.invalidateQueries({ queryKey: ["roles"] });
-      navigate({ to: "/settings/roles" });
+      navigate({ to: "/administrations/roles" });
     },
-    onError: (error: any) => {
-      // Gère l'erreur ici (toast, etc.)
+    onError: (error: { message: string }) => {
+      setBackendError(error.message);
     },
   });
 
@@ -120,6 +125,12 @@ export default function RoleUpdateForm({ role }: RoleUpdateFormProps) {
 
   return (
     <form onSubmit={form.handleSubmit(onSubmit)} className="w-full space-y-6">
+      {backendError && (
+        <FormError
+          title="Erreur lors de l'envoie du formulaire"
+          message={backendError}
+        />
+      )}
       {/* Champ nom du rôle */}
       <Card>
         <CardContent className="pt-6 w-md">
@@ -178,7 +189,7 @@ export default function RoleUpdateForm({ role }: RoleUpdateFormProps) {
         <Button
           type="button"
           variant="outline"
-          onClick={() => navigate({ to: "/settings/roles" })}
+          onClick={() => navigate({ to: "/administrations/roles" })}
           disabled={form.formState.isSubmitting}
         >
           Annuler
@@ -188,7 +199,9 @@ export default function RoleUpdateForm({ role }: RoleUpdateFormProps) {
           type="submit"
           disabled={form.formState.isSubmitting || getTotalPermissions() === 0}
         >
-          {form.formState.isSubmitting ? "Mise à jour..." : "Mettre à jour le rôle"}
+          {form.formState.isSubmitting
+            ? "Mise à jour..."
+            : "Mettre à jour le rôle"}
         </Button>
       </div>
     </form>

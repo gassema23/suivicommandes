@@ -5,5 +5,6 @@ export interface PaginatedResult<T> {
       limit: number;
       total: number;
       totalPages: number;
+      startsWith?: string;
     };
   }

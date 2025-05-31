@@ -48,6 +48,15 @@ export class TeamsController {
     return this.teamsService.create(createTeamDto, currentUser.id);
   }
 
+  @Get('teamsList')
+  @Permissions([{ resource: Resource.TEAMS, actions: [Action.READ] }])
+  @ApiOperation({ summary: 'Obtenir la liste des équipes' })
+  @ApiResponse({ status: 200, description: 'Liste des équipes' })
+  async getTeamsList() {
+    const teams = await this.teamsService.getTeamsList();
+    return teams;
+  }
+
   @Get()
   @Permissions([{ resource: Resource.TEAMS, actions: [Action.READ] }])
   @ApiOperation({ summary: 'Obtenir la liste des équipes' })
@@ -58,7 +67,6 @@ export class TeamsController {
     description: 'Recherche par nom',
   })
   async findAll(@Query() paginationDto: PaginationDto) {
-    console.log('Pagination DTO:', paginationDto);
     return this.teamsService.findAll(paginationDto, paginationDto.search);
   }
 
@@ -68,7 +76,6 @@ export class TeamsController {
   @ApiResponse({ status: 200, description: 'Équipe trouvée' })
   @ApiResponse({ status: 404, description: 'Équipe non trouvée' })
   async findOne(@Param('id', ParseUUIDPipe) id: string) {
-    console.log('Fetching team with ID:', id);
     return this.teamsService.findOne(id);
   }
 

@@ -1,7 +1,6 @@
 import { Input } from "@/components/ui/shadcn/input";
 import { Label } from "@radix-ui/react-dropdown-menu";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { fetchOwners } from "../hooks/fetchOwners";
 import {
   Select,
   SelectContent,
@@ -14,30 +13,37 @@ import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@/components/ui/quebec/Button";
 import { useNavigate } from "@tanstack/react-router";
-import { teamSchema, type TeamFormData } from "../schemas/team.schema";
-import { createTeam } from "../services/createTeam";
+import type { User } from "../types/user.type";
+import { getRoles } from "@/features/roles/services/getRoles";
+import { userSchema, type UserFormData } from "../schemas/user.schema";
+import { updateUser } from "../services/updateUser";
 import { useState } from "react";
 import FormError from "@/components/ui/shadcn/form-error";
 
-export default function TeamCreateForm() {
+interface UpdateUserFormProps {
+  user: User;
+}
+
+export default function UserUpdateForm({ user }: UpdateUserFormProps) {
   const [backendError, setBackendError] = useState<string | null>(null);
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const {
-    data: ownerData = [],
-    isLoading: loadingOwners,
-    error: ownerError,
+    data: roleData = [],
+    isLoading: loadingRoles,
+    error: roleError,
   } = useQuery({
-    queryKey: ["owners"],
-    queryFn: fetchOwners,
+    queryKey: ["roles"],
+    queryFn: getRoles,
   });
 
-  const form = useForm<TeamFormData>({
-    resolver: zodResolver(teamSchema),
+  const form = useForm<UserFormData>({
+    resolver: zodResolver(userSchema),
     defaultValues: {
-      teamName: "",
-      teamDescription: "",
-      ownerId: "",
+      firstName: user.firstName,
+      lastName: user.lastName,
+      email: user.email,
+      roleId: user.role?.id ?? "",
     },
   });
 
@@ -48,85 +54,100 @@ export default function TeamCreateForm() {
     formState: { errors },
   } = form;
 
-  const createTeamMutation = useMutation({
-    mutationFn: (data: TeamFormData) => createTeam(data),
+  const updateUserMutation = useMutation({
+    mutationFn: (data: UserFormData) => updateUser(user.id, data),
     onSuccess: () => {
       setBackendError(null);
-      queryClient.invalidateQueries({ queryKey: ["teams"] });
-      navigate({ to: "/pilotages/teams" });
+      queryClient.invalidateQueries({ queryKey: ["users"] });
+      navigate({ to: "/pilotages/users" });
     },
     onError: (error: { message: string }) => {
       setBackendError(error.message);
     },
   });
-  const onSubmit = (data: TeamFormData) => {
-    createTeamMutation.mutate(data);
-  };
 
+  const onSubmit = (data: UserFormData) => {
+    updateUserMutation.mutate(data);
+  };
   return (
     <form
       className="xl:w-3xl w-full space-y-4"
       onSubmit={handleSubmit(onSubmit)}
     >
       {backendError && (
-        <FormError
-          title="Erreur lors de l'envoie du formulaire"
-          message={backendError}
-        />
+        <FormError title="Erreur lors de l'envoie du formulaire" message={backendError} />
       )}
       <div className="grid grid-cols-12 gap-2 items-center">
-        <Label className="col-span-12 xl:col-span-4">Nom de l'équipe</Label>
+        <Label className="col-span-12 xl:col-span-4">Prénom</Label>
         <div className="col-span-12 xl:col-span-8">
           <Input
             className="block w-full"
-            id="teamName"
-            {...register("teamName")}
+            id="firstName"
+            {...register("firstName")}
             required
           />
-          {errors.teamName && (
+          {errors.firstName && (
             <p className="text-destructive text-sm mt-1">
-              {errors.teamName.message}
+              {errors.firstName.message}
             </p>
           )}
         </div>
       </div>
       <div className="grid grid-cols-12 gap-2 items-center">
-        <Label className="col-span-12 xl:col-span-4">Description</Label>
+        <Label className="col-span-12 xl:col-span-4">Nom</Label>
         <div className="col-span-12 xl:col-span-8">
           <Input
             className="block w-full"
-            id="teamDescription"
-            {...register("teamDescription")}
+            id="lastName"
+            {...register("lastName")}
+            required
           />
-          {errors.teamDescription && (
+          {errors.lastName && (
             <p className="text-destructive text-sm mt-1">
-              {errors.teamDescription.message}
+              {errors.lastName.message}
             </p>
           )}
         </div>
       </div>
       <div className="grid grid-cols-12 gap-2 items-center">
-        <Label className="col-span-12 xl:col-span-4">Propriétaire</Label>
+        <Label className="col-span-12 xl:col-span-4">Email</Label>
+        <div className="col-span-12 xl:col-span-8">
+          <Input
+            className="block w-full"
+            id="email"
+            type="email"
+            {...register("email")}
+            required
+          />
+          {errors.email && (
+            <p className="text-destructive text-sm mt-1">
+              {errors.email.message}
+            </p>
+          )}
+        </div>
+      </div>
+      <div className="grid grid-cols-12 gap-2 items-center">
+        <Label className="col-span-12 xl:col-span-4">Rôle</Label>
         <div className="col-span-12 xl:col-span-8">
           <Controller
             control={control}
-            name="ownerId"
+            name="roleId"
             render={({ field }) => (
               <Select value={field.value} onValueChange={field.onChange}>
                 <SelectTrigger className="w-full">
-                  <SelectValue placeholder="Sélectionner une option" />
+                  <SelectValue placeholder="Sélectionner un rôle" />
                 </SelectTrigger>
                 <SelectContent>
-                  {loadingOwners ? (
+                  {loadingRoles ? (
                     <Skeleton className="h-8" />
-                  ) : ownerError ? (
+                  ) : roleError ? (
                     <div className="px-3 py-2 text-destructive">
                       Erreur de chargement
                     </div>
                   ) : (
-                    ownerData.map((owner) => (
-                      <SelectItem key={owner.id} value={owner.id}>
-                        {owner.fullName}
+                    roleData.map((role) => (
+                      <SelectItem key={role.id} value={role.id}>
+                        {role.roleName}
                       </SelectItem>
                     ))
                   )}
@@ -134,9 +155,9 @@ export default function TeamCreateForm() {
               </Select>
             )}
           />
-          {errors.ownerId && (
+          {errors.roleId && (
             <p className="text-destructive text-sm mt-1">
-              {errors.ownerId.message}
+              {errors.roleId.message}
             </p>
           )}
         </div>
@@ -146,14 +167,14 @@ export default function TeamCreateForm() {
         <Button
           type="button"
           variant="outline"
-          onClick={() => navigate({ to: "/pilotages/teams" })}
+          onClick={() => navigate({ to: "/pilotages/users" })}
           disabled={form.formState.isSubmitting}
         >
           Annuler
         </Button>
 
         <Button type="submit" disabled={form.formState.isSubmitting}>
-          {form.formState.isSubmitting ? "Création..." : "Créer"}
+          {form.formState.isSubmitting ? "Mise à jour..." : "Mettre à jour"}
         </Button>
       </div>
     </form>

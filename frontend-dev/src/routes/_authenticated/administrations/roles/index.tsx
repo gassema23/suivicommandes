@@ -42,8 +42,8 @@ export const Route = createFileRoute("/_authenticated/administrations/roles/")({
 });
 
 function RolePage() {
-  const { data: roles = { data: [] } } = useSuspenseQuery(rolesQueryOptions);
 
+  const { data: roles = { data: [] } } = useSuspenseQuery(rolesQueryOptions);
   return (
     <div className="w-full">
       <RoleList roles={roles.data} />
