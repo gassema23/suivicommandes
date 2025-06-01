@@ -9,6 +9,8 @@ import {
   HttpCode,
   HttpStatus,
   Res,
+  Param,
+  Patch,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import {
@@ -33,6 +35,7 @@ import { EnableTwoFactorDto } from './dto/enable-two-factor.dto';
 import { RefreshTokenDto } from './dto/refresh-token.dto';
 import { instanceToPlain } from 'class-transformer';
 import { parseDurationToMs } from 'src/common/utils/parse-duration';
+import { OnboardingDto } from './dto/onboarding.dto';
 
 @ApiTags('Authentication')
 @Controller('auth')
@@ -62,7 +65,8 @@ export class AuthController {
     @Res({ passthrough: true }) res: Response,
   ) {
     const jwtExpirationAcessToken = process.env.JWT_EXPIRATION || '8h';
-    const jwtExpirationRefreshToken = process.env.JWT_REFRESH_EXPIRATION || '30d';
+    const jwtExpirationRefreshToken =
+      process.env.JWT_REFRESH_EXPIRATION || '30d';
 
     const { user, accessToken, refreshToken, requiresTwoFactor } =
       await this.authService.login(loginDto);
@@ -74,7 +78,7 @@ export class AuthController {
       httpOnly: true,
       sameSite: 'strict',
       secure: process.env.NODE_ENV === 'production',
-      maxAge:maxAgeAcessToken
+      maxAge: maxAgeAcessToken,
     });
     res.cookie('refreshToken', refreshToken, {
       httpOnly: true,
@@ -83,6 +87,18 @@ export class AuthController {
       maxAge: maxAgeRefreshToken,
     });
     return { user, requiresTwoFactor: !!requiresTwoFactor };
+  }
+
+  @Patch('onboard/:id')
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({ summary: 'Onboard nouvel utilisateur' })
+  @ApiResponse({ status: 200, description: 'Connexion réussie' })
+  @ApiResponse({ status: 401, description: 'Identifiants invalides' })
+  async onboard(
+      @Param('id') id: string,
+      @Body() onboardingDto: OnboardingDto,
+    ) {
+    return this.authService.onboard(id, onboardingDto);
   }
 
   @Post('logout')
@@ -169,7 +185,7 @@ export class AuthController {
   @ApiOperation({
     summary: "Obtenir les informations de l'utilisateur connecté",
   })
-  @ApiResponse({ status: 200, description: 'Informations utilisateur' })  
+  @ApiResponse({ status: 200, description: 'Informations utilisateur' })
   async getProfile(@CurrentUser() user: User) {
     return { user: instanceToPlain(user) };
   }

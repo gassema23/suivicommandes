@@ -23,6 +23,7 @@ import { ChangePasswordDto } from './dto/change-password.dto';
 import { RolesModule } from 'src/roles/roles.module';
 import { instanceToPlain } from 'class-transformer';
 import { VerifyEmailInterface } from './interfaces/verify-email.interface';
+import { OnboardingDto } from './dto/onboarding.dto';
 
 export interface JwtPayload {
   sub: string;
@@ -177,7 +178,9 @@ export class AuthService {
     };
   }
 
-  async verifyEmail(token: string): Promise<{ message: string; user: VerifyEmailInterface }> {
+  async verifyEmail(
+    token: string,
+  ): Promise<{ message: string; user: VerifyEmailInterface }> {
     try {
       const payload = this.jwtService.verify(token);
 
@@ -353,11 +356,13 @@ export class AuthService {
   }
 
   private async sendVerificationEmail(user: User): Promise<void> {
+
     const verificationToken = this.jwtService.sign(
       { sub: user.id, type: 'email-verification' },
       { expiresIn: '24h' },
     );
 
+    // Envoyer l'email de vérification
     await this.emailService.sendVerificationEmail(user, verificationToken);
   }
 
@@ -371,5 +376,30 @@ export class AuthService {
       throw new BadRequestException('Utilisateur non trouvé');
     }
     return user.role.permissions || [];
+  }
+
+  async onboard(
+    userId: string,
+    onboardingDto: OnboardingDto /*: Promise<{ message: string }>*/,
+  ) {
+
+    this.verifyEmail(onboardingDto.email);
+
+    const { email, password, confirmPassword } = onboardingDto;
+
+    // vérifier si le password et confirmpassword correspondent
+    if (password !== confirmPassword) {
+      throw new BadRequestException('Les mots de passe ne correspondent pas');
+    }
+    // Hasher le mot de passe
+    const hashedPassword = await bcrypt.hash(password, 12);
+
+    // Mettre à jour les informations de l'utilisateur
+    // await this.userRepository.update(userId, {
+    //   ...onboardingDto,
+    //   emailVerifiedAt: new Date(), // Marquer l'email comme vérifié
+    // });
+
+    //return { message: 'Onboarding réussi' };
   }
 }

@@ -1,6 +1,6 @@
 "use client";
 import { Button } from "@/components/ui/quebec/Button";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
 import { useState } from "react";
 import FormError from "@/components/ui/shadcn/form-error";
@@ -10,15 +10,16 @@ import ErrorMessage from "@/components/ui/shadcn/error-message";
 import PasswordInput from "@/components/ui/shadcn/password-input";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useNavigate } from "@tanstack/react-router";
-import {
-  VerifyEmailSchema,
-  type VerifyEmailFormData,
-} from "./schema/verify-email.schema";
+import { updateVerifyEmail } from "../services/updateVerifyEmail";
+import type { User } from "@/features/users/types/user.type";
+import { VerifyEmailSchema, type VerifyEmailFormData } from "../shemas/verify-email.schema";
+type VerifyEmailFormProps = {
+  user: User;
+};
 
-export default function VerifyEmailForm({ user }: VerifyEmailFormData) {
+export default function VerifyEmailForm({ user }: VerifyEmailFormProps) {
   const [backendError, setBackendError] = useState<string | null>(null);
   const navigate = useNavigate();
-  const queryClient = useQueryClient();
 
   const form = useForm<VerifyEmailFormData>({
     resolver: zodResolver(VerifyEmailSchema),
@@ -32,7 +33,6 @@ export default function VerifyEmailForm({ user }: VerifyEmailFormData) {
   const {
     register,
     handleSubmit,
-    control,
     formState: { errors },
   } = form;
 
@@ -40,7 +40,7 @@ export default function VerifyEmailForm({ user }: VerifyEmailFormData) {
     mutationFn: (data: VerifyEmailFormData) => updateVerifyEmail(user.id, data),
     onSuccess: () => {
       setBackendError(null);
-      navigate({ to: "/login" });
+      navigate({ to: "/" });
     },
     onError: (error: { message: string }) => {
       setBackendError(error.message);
@@ -48,12 +48,16 @@ export default function VerifyEmailForm({ user }: VerifyEmailFormData) {
   });
 
   const onSubmit = (data: VerifyEmailFormData) => {
+    setBackendError(null);
     // Appelle ta mutation ici
     verifyEmailMutation.mutate(data);
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
+    <form
+      onSubmit={handleSubmit(onSubmit)}
+      className="xl:max-w-3xl w-full space-y-4"
+    >
       <div className="flex flex-col">
         <h1 className="section-title">Bienvenu {user.fullName}</h1>
         <p className="subtitle">

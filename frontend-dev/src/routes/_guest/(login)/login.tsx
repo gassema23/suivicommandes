@@ -3,7 +3,7 @@ import LoginForm from "@/features/auth/login-form";
 import { APP_NAME } from "@/config";
 import { z } from "zod";
 
-const fallback = "/dashboard" as const;
+const fallback = "/" as const;
 
 export const Route = createFileRoute("/_guest/(login)/login")({
   validateSearch: z.object({
