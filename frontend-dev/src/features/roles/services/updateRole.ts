@@ -10,8 +10,10 @@ export async function updateRole(roleId: string, data: CreateRoleFormData) {
     },
     body: JSON.stringify(data),
   });
+
+  const result = await res.json();
   if (!res.ok) {
-    throw new Error("Erreur lors de la mise à jour du rôle");
+    throw new Error(result.message || "Erreur lors de la mise à jour du rôle");
   }
-  return res.json();
+  return result;
 }

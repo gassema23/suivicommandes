@@ -10,8 +10,10 @@ export async function createUser(data: UserFormData) {
     },
     body: JSON.stringify(data),
   });
+
+  const result = await res.json();
   if (!res.ok) {
-    throw new Error("Erreur lors de la mise à jour de l'utilisateur");
+    throw new Error(result.message || "Erreur lors de la mise à jour de l'utilisateur");
   }
-  return res.json();
+  return result as UserFormData;
 }

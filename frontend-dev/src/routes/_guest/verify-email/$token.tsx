@@ -1,13 +1,10 @@
 import LoadingPage from "@/components/ui/loader/loading-page";
-import { Button } from "@/components/ui/quebec/Button";
-import { Input } from "@/components/ui/shadcn/input";
 import { APP_NAME } from "@/config";
 import type { User } from "@/features/users/types/user.type";
-import VerifyEmailExpiredErrorForm from "@/features/verify-email/components/verify-email-expired-error-form";
-import VerifyEmailForm from "@/features/verify-email/components/verify-email-form";
+import ResendVerificationEmailForm from "@/features/verify-email/components/resend-verification-email-form";
+import VerifyEmailExpiredErrorForm from "@/features/verify-email/components/resend-verification-email-form";
 import { fetchEmailToken } from "@/features/verify-email/services/fetchEmailToken";
 import { verifyEmailParamsSchema } from "@/features/verify-email/shemas/verify-email-params.schema";
-import { Label } from "@radix-ui/react-dropdown-menu";
 import {
   createFileRoute,
   redirect,
@@ -47,5 +44,5 @@ function RouteComponent() {
     message?: string;
     user?: User;
   };
-  return <VerifyEmailForm user={data.user} />;
+  return <ResendVerificationEmailForm user={data.user} />;
 }

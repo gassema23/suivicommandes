@@ -23,6 +23,7 @@ import {
   TableRow,
 } from "@/components/ui/shadcn/table";
 import { DataTablePagination } from "./components/DataTablePagination";
+import NoData from "@/components/ui/quebec/no-data";
 
 type DataTableProps<TData> = {
   data: { data: TData[] | TData[] }; // <-- note the nested data
@@ -102,7 +103,7 @@ export function DataTable<TData>({ data, columns }: DataTableProps<TData>) {
                   colSpan={columns.length}
                   className="h-24 text-center"
                 >
-                  No results.
+                  <NoData withImage />
                 </TableCell>
               </TableRow>
             )}

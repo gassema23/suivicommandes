@@ -94,10 +94,7 @@ export class AuthController {
   @ApiOperation({ summary: 'Onboard nouvel utilisateur' })
   @ApiResponse({ status: 200, description: 'Connexion réussie' })
   @ApiResponse({ status: 401, description: 'Identifiants invalides' })
-  async onboard(
-      @Param('id') id: string,
-      @Body() onboardingDto: OnboardingDto,
-    ) {
+  async onboard(@Param('id') id: string, @Body() onboardingDto: OnboardingDto) {
     return this.authService.onboard(id, onboardingDto);
   }
 
@@ -165,6 +162,16 @@ export class AuthController {
     @Body() changePasswordDto: ChangePasswordDto,
   ) {
     return this.authService.changePassword(user.id, changePasswordDto);
+  }
+
+  @Post('resend-email-verification')
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({ summary: 'Retourner le courriel de vérification' })
+  @ApiResponse({ status: 200, description: 'Tokens renouvelés' })
+  async resendEmailVerification(
+    @Body() data: { email: string; token: string },
+  ) {
+    return this.authService.resendEmailVerification(data);
   }
 
   @Post('refresh')

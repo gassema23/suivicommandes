@@ -21,7 +21,7 @@ export class AuthorizationsGuard implements CanActivate {
     const request = context.switchToHttp().getRequest();
 
     if (!request.user) {
-      throw new UnauthorizedException('User not authenticated');
+      throw new UnauthorizedException('Utilisateur non authentifié');
     }
 
     const routePermissions: Permission[] = this.reflector.getAllAndOverride(
@@ -39,7 +39,7 @@ export class AuthorizationsGuard implements CanActivate {
         );
         if (!userPermission) {
           throw new ForbiddenException(
-            `User does not have permission for resource: ${routePermission.resource}`,
+            `L'utilisateur n'a pas la permission pour la ressource : ${routePermission.resource}`,
           );
         } else {
           const hasAction = routePermission.actions.every((action) =>
@@ -47,13 +47,15 @@ export class AuthorizationsGuard implements CanActivate {
           );
           if (!hasAction) {
             throw new ForbiddenException(
-              `User does not have required actions for resource: ${routePermission.resource}`,
+              `L'utilisateur n'a pas les actions requises pour la ressource : ${routePermission.resource}`,
             );
           }
         }
       }
     } catch (error) {
-      throw new ForbiddenException('Error fetching user permissions');
+      throw new ForbiddenException(
+        'Erreur lors de la récupération des permissions utilisateur',
+      );
     }
 
     return true;

@@ -1,7 +1,7 @@
 import { API_ROUTE } from "@/config";
-import type { TeamUpdateFormData } from "../schemas/team.schema";
+import type { TeamFormData } from "../schemas/team.schema";
 
-export async function updateTeam(teamId: string, data: TeamUpdateFormData) {
+export async function updateTeam(teamId: string, data: TeamFormData) {
   const res = await fetch(`${API_ROUTE}/teams/${teamId}`, {
     method: "PATCH",
     credentials: "include",
@@ -10,8 +10,13 @@ export async function updateTeam(teamId: string, data: TeamUpdateFormData) {
     },
     body: JSON.stringify(data),
   });
+
+  const result = await res.json();
   if (!res.ok) {
-    throw new Error("Erreur lors de la mise à jour de l'équipe");
+    throw new Error(
+      result.message || "Erreur lors de la mise à jour de l'équipe"
+    );
   }
-  return res.json();
+
+  return result;
 }

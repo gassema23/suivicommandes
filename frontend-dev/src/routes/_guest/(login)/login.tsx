@@ -1,7 +1,7 @@
 import { createFileRoute, redirect } from "@tanstack/react-router";
-import LoginForm from "@/features/auth/login-form";
 import { APP_NAME } from "@/config";
 import { z } from "zod";
+import MultiStepLoginForm from "@/features/auth/components/MultiStepLoginForm";
 
 const fallback = "/" as const;
 
@@ -30,5 +30,5 @@ export const Route = createFileRoute("/_guest/(login)/login")({
 });
 
 function LoginPage() {
-  return <LoginForm />;
+  return <MultiStepLoginForm />;
 }

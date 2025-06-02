@@ -13,6 +13,7 @@ import { EmailModule } from './email/email.module';
 import { RedisConfig } from './config/redis.config';
 import { getDatabaseConfig } from './config/database.config';
 import { RolesModule } from './roles/roles.module';
+import { HolidaysModule } from './holidays/holidays.module';
 
 @Module({
   imports: [
@@ -98,6 +99,7 @@ import { RolesModule } from './roles/roles.module';
     TeamsModule,
     EmailModule,
     RolesModule,
+    HolidaysModule,
   ],
 })
 export class AppModule {}

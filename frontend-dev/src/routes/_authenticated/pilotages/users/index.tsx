@@ -86,7 +86,6 @@ function RouteComponent() {
     navigate({ search: { page: 1, startsWith: letter } });
   };
 
-  console.log("Data fetched:", data);
   return (
     <div>
       {data.data.length == 0 && (

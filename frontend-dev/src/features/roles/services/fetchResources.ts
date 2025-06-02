@@ -6,6 +6,10 @@ export const fetchResources = async (): Promise<string[]> => {
     method: "GET",
     credentials: "include",
   });
-  if (!res.ok) throw new Error("Erreur lors du chargement des ressources");
-  return res.json();
+
+    const result = await res.json();
+    if (!res.ok) {
+      throw new Error(result.message || "Erreur lors du chargement des rôles");
+    }
+    return result as string[];
 };

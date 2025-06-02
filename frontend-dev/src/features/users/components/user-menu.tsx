@@ -6,21 +6,19 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/shadcn/dropdown-menu";
-import { Link, useNavigate } from "@tanstack/react-router";
+import { Link } from "@tanstack/react-router";
 import { Spinner } from "@/components/ui/loader/spinner";
 import UserAvatar from "./user-avatar";
 import { useAuth } from "@/providers/auth-provider";
 
 export default function UserMenu() {
   const { logout, user } = useAuth();
-  const navigate = useNavigate();
 
   const handleLogout = async () => {
     await logout();
-    navigate({ to: "/login" });
   };
 
-  if(!user) {
+  if (!user) {
     return <Spinner className="h-6 w-6" />;
   }
 
@@ -42,7 +40,7 @@ export default function UserMenu() {
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuItem asChild>
-          <Link to="/">Profile</Link>
+          <Link to="/profile">Profile</Link>
         </DropdownMenuItem>
         <DropdownMenuItem onClick={handleLogout}>Déconnexion</DropdownMenuItem>
       </DropdownMenuContent>

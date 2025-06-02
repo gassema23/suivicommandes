@@ -5,15 +5,21 @@ import { createPermissionGuard } from "@/features/authorizations/helpers/createP
 import { PERMISSIONS } from "@/features/authorizations/types/auth.types";
 import TeamUpdateForm from "@/features/teams/components/team-update-form";
 import { fetchTeam } from "@/features/teams/services/fetchTeam";
-import { createFileRoute } from "@tanstack/react-router";
+import { queryOptions, useSuspenseQuery } from "@tanstack/react-query";
+import { createFileRoute, useParams } from "@tanstack/react-router";
+
+const teamsQueryOptions = (id: string) =>
+  queryOptions({
+    queryKey: ["teams", id],
+    queryFn: () => fetchTeam(id),
+  });
 
 export const Route = createFileRoute(
   "/_authenticated/pilotages/teams/update/$id"
 )({
   beforeLoad: createPermissionGuard([PERMISSIONS.TEAMS.UPDATE]),
-  loader: async ({ params }) => {
-    return fetchTeam(params.id);
-  },
+  loader: ({ context, params }) =>
+    context.queryClient.ensureQueryData(teamsQueryOptions(params.id)),
   head: () => ({
     meta: [
       {
@@ -49,6 +55,7 @@ export const Route = createFileRoute(
 });
 
 function RouteComponent() {
-  const data = Route.useLoaderData();
+  const { id } = useParams({ strict: false });
+  const { data } = useSuspenseQuery(teamsQueryOptions(id!));
   return <TeamUpdateForm team={data} />;
 }

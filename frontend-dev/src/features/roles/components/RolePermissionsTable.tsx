@@ -10,13 +10,17 @@ export function RolePermissionsTable({
   actions: string[];
   hasPermission: (resource: string, action: string) => boolean;
 }) {
+  const sortedActions = [...actions].sort();
+  const sortedPermissions = [...permissions].sort((a, b) =>
+    a.resource.localeCompare(b.resource)
+  );
   return (
     <div className="overflow-x-auto">
       <table className="w-full">
         <thead>
           <tr>
             <th className="text-left p-2">Ressource</th>
-            {actions.map((action) => (
+            {sortedActions.map((action) => (
               <th key={action} className="text-center p-2 last:pr-0">
                 <div className="bg-foreground text-muted px-4 py-2 rounded-md text-sm font-medium capitalize">
                   {action}
@@ -26,7 +30,7 @@ export function RolePermissionsTable({
           </tr>
         </thead>
         <tbody>
-          {permissions.map((permission, index) => (
+          {sortedPermissions.map((permission, index) => (
             <tr
               key={permission.resource}
               className={index % 2 === 0 ? "bg-muted/50" : ""}
@@ -34,7 +38,7 @@ export function RolePermissionsTable({
               <td className="p-3 font-medium capitalize">
                 {permission.resource}
               </td>
-              {actions.map((action) => (
+              {sortedActions.map((action) => (
                 <td key={action} className="text-center p-3">
                   {hasPermission(permission.resource, action) && (
                     <div className="inline-flex items-center justify-center w-6 h-6 bg-success rounded-full">

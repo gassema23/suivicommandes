@@ -1,25 +1,27 @@
-"use client"
+"use client";
 
-import type React from "react"
-
-import { useState } from "react"
+import React, { useState } from "react";
 
 interface TabContent {
-  id: string
-  label: string
-  content: React.ReactNode
+  id: string;
+  label: string;
+  content: () => React.ReactNode;
 }
 
 interface NavigationTabsProps {
-  tabs: TabContent[]
-  defaultTab?: string
-  className?: string
+  tabs: TabContent[];
+  defaultTab?: string;
+  className?: string;
 }
 
-export function NavigationTabs({ tabs, defaultTab, className = "" }: NavigationTabsProps) {
-  const [activeTab, setActiveTab] = useState(defaultTab || tabs[0]?.id)
+export function NavigationTabs({
+  tabs,
+  defaultTab,
+  className = "",
+}: NavigationTabsProps) {
+  const [activeTab, setActiveTab] = useState(defaultTab || tabs[0]?.id);
 
-  const activeTabContent = tabs.find((tab) => tab.id === activeTab)
+  const activeTabContent = tabs.find((tab) => tab.id === activeTab);
 
   return (
     <div className={`w-full ${className}`}>
@@ -37,9 +39,9 @@ export function NavigationTabs({ tabs, defaultTab, className = "" }: NavigationT
       </div>
 
       {/* Contenu de l'onglet actif */}
-      <div className="tab-content">
-        <div className="tab-pane active">{activeTabContent?.content}</div>
+      <div className="tab-content mt-4">
+        <div className="tab-pane active">{activeTabContent?.content()}</div>
       </div>
     </div>
-  )
+  );
 }

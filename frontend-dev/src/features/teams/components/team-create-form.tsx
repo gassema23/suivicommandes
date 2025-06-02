@@ -153,7 +153,7 @@ export default function TeamCreateForm() {
         </Button>
 
         <Button type="submit" disabled={form.formState.isSubmitting}>
-          {form.formState.isSubmitting ? "Création..." : "Créer"}
+          {form.formState.isSubmitting ? "Enregistrement..." : "Enregistrer"}
         </Button>
       </div>
     </form>

@@ -52,8 +52,7 @@ export class UsersController {
     name: 'search',
     required: false,
     description: 'Recherche par nom ou email',
-  })
-  
+  }) 
   async findAll(
     @Query() paginationDto: PaginationDto,
     @Query('search') search?: string,

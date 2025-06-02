@@ -10,8 +10,9 @@ export async function createTeam(data: TeamFormData) {
     },
     body: JSON.stringify(data),
   });
+  const result = await res.json();
   if (!res.ok) {
-    throw new Error("Erreur lors de la création de l'équipe");
+    throw new Error(result.message || "Erreur lors de la création de l'équipe");
   }
-  return res.json();
+  return result as TeamFormData;
 }

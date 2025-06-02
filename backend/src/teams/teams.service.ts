@@ -162,7 +162,18 @@ export class TeamsService {
     updatedBy: string,
   ): Promise<Team> {
     const team = await this.findOne(id);
-
+    // Vérifier si le nom de l'équipe existe déjà
+    if (
+      updateTeamDto.teamName &&
+      updateTeamDto.teamName !== team.teamName
+    ) {
+      const existingTeam = await this.teamRepository.findOne({
+        where: { teamName: updateTeamDto.teamName },
+      });
+      if (existingTeam) {
+        throw new BadRequestException('Une équipe avec ce nom existe déjà');
+      }
+    }
     Object.assign(team, updateTeamDto, {
       updatedBy: { id: updatedBy } as User,
     });

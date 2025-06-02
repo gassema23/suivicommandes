@@ -169,7 +169,7 @@ export default function CreateRolePage() {
           type="submit"
           disabled={form.formState.isSubmitting || getTotalPermissions() === 0}
         >
-          {form.formState.isSubmitting ? "Création..." : "Créer le rôle"}
+          {form.formState.isSubmitting ? "Enregistrement..." : "Enregistrer"}
         </Button>
       </div>
     </form>

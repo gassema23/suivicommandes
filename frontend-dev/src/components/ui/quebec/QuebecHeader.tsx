@@ -8,11 +8,7 @@ export function QuebecHeader() {
     <header className="bg-primary text-primary-foreground">
       <div className="mx-auto px-8">
         <div className="flex items-center justify-between h-16">
-          <div className="flex items-center gap-4">
-            <div className="quebec-header-logo">
-              <SidebarTrigger />
-            </div>
-          </div>
+          <SidebarTrigger />
 
           <div className="flex items-center gap-4">
             <button

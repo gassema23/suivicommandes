@@ -1,6 +1,8 @@
+import LoadingPage from "@/components/ui/loader/loading-page";
 import { API_ROUTE } from "@/config";
 import type { User } from "@/features/users/types/user.type";
 import logoutUser from "@/lib/logout-user";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import * as React from "react";
 
 export interface AuthContext {
@@ -23,43 +25,41 @@ export interface AuthContext {
 const AuthContext = React.createContext<AuthContext | null>(null);
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
-  const [user, setUser] = React.useState<User | null>(null);
-  const [loading, setLoading] = React.useState(true);
+  const queryClient = useQueryClient();
 
-  // Fonction utilitaire pour récupérer l'utilisateur
-  const fetchUser = React.useCallback(async () => {
-    setLoading(true);
-    try {
+  // Utilise React Query pour charger l'utilisateur
+  const {
+    data: user,
+    isLoading,
+    refetch,
+  } = useQuery({
+    // Utilise le cache de React Query pour éviter les appels réseau inutiles
+    staleTime: 5 * 60 * 1000, // 5 minutes
+    queryKey: ["me"],
+    queryFn: async () => {
       const res = await fetch(`${API_ROUTE}/auth/me`, {
         credentials: "include",
       });
-      if (!res.ok) {
-        setUser(null);
-      } else {
-        const data = await res.json();
-        setUser(data?.user ?? null);
-      }
-    } catch {
-      setUser(null);
-    } finally {
-      setLoading(false);
-    }
-  }, []);
-
-  // Chargement initial de l'utilisateur
-  React.useEffect(() => {
-    fetchUser();
-  }, [fetchUser]);
+      if (!res.ok) return null;
+      const data = await res.json();
+      return data?.user ?? null;
+    },
+  });
 
   const logout = React.useCallback(async () => {
     await logoutUser();
-    setUser(null);
-  }, []);
+    queryClient.invalidateQueries({ queryKey: ["me"] });
+    queryClient.clear();
+    window.location.href = "/login";
+  }, [queryClient]);
 
-  const login = React.useCallback(async () => {
-    await fetchUser();
-  }, [fetchUser]);
-
+  const login = React.useCallback(
+    async (redirectTo?: string) => {
+      await refetch();
+      window.location.href = redirectTo || "/";
+    },
+    [refetch]
+  );
   // Vérification du rôle
   const hasRole = React.useCallback(
     (role: string) => {
@@ -120,8 +120,12 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const isAuthenticated = !!user;
 
-  if (loading) {
-    return null; // ou <LoadingPage /> si tu veux un loader
+  if (isLoading) {
+    return (
+      <div className="min-h-screen flex justify-center items-center">
+        <LoadingPage />
+      </div>
+    );
   }
 
   return (

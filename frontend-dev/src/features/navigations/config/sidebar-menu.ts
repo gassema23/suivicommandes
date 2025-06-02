@@ -37,6 +37,11 @@ export const sidebarMenu = {
           url: "/pilotages/teams",
           permission: PERMISSIONS.TEAMS.READ,
         },
+        {
+          title: "Jours fériés",
+          url: "/pilotages/holidays",
+          permission: PERMISSIONS.HOLIDAYS.READ,
+        },
       ],
     },
     {

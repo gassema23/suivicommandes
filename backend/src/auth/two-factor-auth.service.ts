@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import * as speakeasy from 'speakeasy';
 import * as qrcode from 'qrcode';
@@ -22,7 +22,7 @@ export class TwoFactorAuthService {
 
     // Correction: vérification de otpauth_url et await correct
     if (!secret.otpauth_url) {
-      throw new Error('Impossible de générer l\'URL OTP');
+      throw new BadRequestException('Impossible de générer l\'URL OTP');
     }
 
     const qrCodeUrl = await qrcode.toDataURL(secret.otpauth_url);
@@ -34,15 +34,16 @@ export class TwoFactorAuthService {
   }
 
   async enableTwoFactor(user: User, secret: string, code: string): Promise<void> {
+
     const isValidCode = speakeasy.totp.verify({
       secret,
       encoding: 'base32',
       token: code,
       window: 2,
     });
-
+    
     if (!isValidCode) {
-      throw new Error('Code de vérification invalide');
+      throw new BadRequestException('Code de vérification invalide');
     }
 
     await this.userRepository.update(user.id, {

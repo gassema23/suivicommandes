@@ -184,10 +184,12 @@ export class AuthService {
     try {
       const payload = this.jwtService.verify(token);
 
+
       const user = await this.userRepository.findOne({
         select: ['id', 'emailVerifiedAt', 'firstName', 'lastName', 'email'],
         where: { id: payload.sub },
       });
+
 
       if (!user) {
         throw new NotFoundException('Utilisateur non trouvé');
@@ -200,6 +202,7 @@ export class AuthService {
       // await this.userRepository.update(user.id, {
       //   emailVerifiedAt: new Date(),
       // });
+
       const userPlain = instanceToPlain(user) as VerifyEmailInterface;
       return { message: 'Email vérifié avec succès', user: userPlain };
     } catch (error) {
@@ -356,7 +359,6 @@ export class AuthService {
   }
 
   private async sendVerificationEmail(user: User): Promise<void> {
-
     const verificationToken = this.jwtService.sign(
       { sub: user.id, type: 'email-verification' },
       { expiresIn: '24h' },
@@ -378,11 +380,32 @@ export class AuthService {
     return user.role.permissions || [];
   }
 
+  async resendEmailVerification(data:{
+    token: string;
+    email: string;
+  }): Promise<{ message: string }> {
+
+    const user = await this.verifyEmail(data.token);
+
+    /*
+    const user = await this.userRepository.findOne({
+      where: { email: email },
+    });
+
+    if (!user || user.email !== email) {
+      throw new NotFoundException('Utilisateur non trouvé');
+    }
+
+    // Envoyer un nouvel email de vérification
+    await this.sendVerificationEmail(user.email);
+*/
+    return { message: 'Un nouvel email de vérification a été envoyé' };
+  }
+
   async onboard(
     userId: string,
     onboardingDto: OnboardingDto /*: Promise<{ message: string }>*/,
   ) {
-
     this.verifyEmail(onboardingDto.email);
 
     const { email, password, confirmPassword } = onboardingDto;
@@ -402,4 +425,5 @@ export class AuthService {
 
     //return { message: 'Onboarding réussi' };
   }
+  
 }

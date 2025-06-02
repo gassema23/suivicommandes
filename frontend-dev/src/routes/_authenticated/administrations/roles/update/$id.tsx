@@ -4,13 +4,22 @@ import { APP_NAME } from "@/config";
 import { createPermissionGuard } from "@/features/authorizations/helpers/createPermissionGuard";
 import { PERMISSIONS } from "@/features/authorizations/types/auth.types";
 import { fetchRole } from "@/features/roles/services/fetchRole";
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, useParams } from "@tanstack/react-router";
 import RoleUpdateForm from "@/features/roles/components/role-update-form";
+import { queryOptions, useSuspenseQuery } from "@tanstack/react-query";
+
+const rolesQueryOptions = (id: string) =>
+  queryOptions({
+    queryKey: ["roles", id],
+    queryFn: () => fetchRole(id),
+  });
 
 export const Route = createFileRoute(
   "/_authenticated/administrations/roles/update/$id"
 )({
   beforeLoad: createPermissionGuard([PERMISSIONS.ROLES.UPDATE]),
+  loader: ({ context, params }) =>
+    context.queryClient.ensureQueryData(rolesQueryOptions(params.id)),
   component: RouteComponent,
   head: () => ({
     meta: [
@@ -23,9 +32,6 @@ export const Route = createFileRoute(
       },
     ],
   }),
-  loader: async ({ params }) => {
-    return fetchRole(params.id);
-  },
   errorComponent: ({ error }) => (
     <FormError
       title="Erreur lors du chargement du rôle"
@@ -49,7 +55,8 @@ export const Route = createFileRoute(
 });
 
 function RouteComponent() {
-  const data = Route.useLoaderData();
+  const { id } = useParams({ strict: false });
+  const { data } = useSuspenseQuery(rolesQueryOptions(id!));
 
   return (
     <div>

@@ -200,11 +200,9 @@ export class UsersService {
       where: { id },
       relations: ['team', 'createdBy', 'updatedBy'],
     });
-
     if (!user) {
       throw new NotFoundException('Utilisateur non trouvé');
     }
-
     return user;
   }
 
