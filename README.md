@@ -63,6 +63,8 @@ git push origin features
 
 ## Conventions
 
+### Structure recommandée
+
 src/
 ├── assets/               # Images, SVGs, fichiers statiques
 │   └── logo.svg
@@ -72,11 +74,12 @@ src/
 │   └── layout/           # Navbar, Sidebar, Footer, etc.
 │
 ├── features/             # Domaines métiers, chacun avec ses propres composants, hooks, services
-│   └── users/
-│       ├── components/
-│       ├── hooks/
-│       ├── services/
-│       └── types/
+│   ├── users/
+│   │   ├── components/
+│   │   ├── hooks/
+│   │   ├── services/
+│   │   └── types/
+│   └── ...               # Autres domaines (sectors, services, etc.)
 │
 ├── hooks/                # Hooks globaux (non liés à un domaine spécifique)
 │   ├── useAuth.ts
@@ -108,6 +111,7 @@ src/
 ├── App.tsx
 └── main.tsx
 
+### Bonnes conventions
 
 | Élément             | Convention                                                        |
 | ------------------- | ----------------------------------------------------------------- |
