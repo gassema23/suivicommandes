@@ -122,3 +122,13 @@ src/
 | Hooks               | `useCamelCase.ts` : `useUserList.ts`                              |
 | Dossiers de domaine | `features/nom-domaine/`                                           |
 | Fichiers typés      | `user.type.ts`, `form.type.ts`, etc. dans `types/` ou `features/.../types/` |
+
+### Différence entre un fichier .ts et .d.ts
+
+| Caractéristique          | `user.ts`                   | `user.d.ts`                       |
+| ------------------------ | --------------------------- | --------------------------------- |
+| Contient du code ?       | ✅ Oui                       | ❌ Non (types seulement)           |
+| Utilisé dans ?           | Projet normal (code métier) | Déclarations de type, lib externe |
+| Compilé par TypeScript ? | ✅ Oui                       | ❌ Non (analyse uniquement)        |
+| Doit exporter ?          | ✅ Oui (`export`) souvent    | ❌ Pas nécessaire (`declare`)      |
+| Cas d’usage typique      | Types + logique métier      | Types globaux ou modules JS       |

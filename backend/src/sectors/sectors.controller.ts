@@ -57,6 +57,17 @@ export class SectorsController {
     return this.sectorsService.getSectorsList();
   }
 
+  @Get(':id/services')
+  @Permissions([{ resource: Resource.SECTORS, actions: [Action.READ] }, { resource: Resource.SERVICES, actions: [Action.READ] }])
+  @ApiOperation({ summary: 'Obtenir les services d’un secteur par son ID' })
+  @ApiResponse({
+    status: 200,
+    description: 'Services du secteur récupérés avec succès',
+  })
+  async getServicesBySectorId(@Param('id', ParseUUIDPipe) id: string) {
+    return this.sectorsService.getServicesBySectorId(id);
+  }
+
   @Post()
   @Permissions([{ resource: Resource.SECTORS, actions: [Action.CREATE] }])
   @ApiOperation({ summary: 'Créer un secteur' })

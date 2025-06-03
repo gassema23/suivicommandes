@@ -39,7 +39,7 @@ export const SectorColumns: ColumnDef<Sector>[] = [
   {
     accessorKey: "isAutoCalculate",
     cell: ({ getValue }) => {
-      return getValue<boolean>() ? <CheckCircle className="text-success ml-5" /> : <XCircle className="text-warning ml-5" />;
+      return getValue<boolean>() ? <CheckCircle className="text-success ml-5" /> : <XCircle className="text-destructive ml-5" />;
     },
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Calcul automatique" />
@@ -50,7 +50,7 @@ export const SectorColumns: ColumnDef<Sector>[] = [
   {
     accessorKey: "isConformity",
     cell: ({ getValue }) => {
-      return getValue<boolean>() ? <CheckCircle className="text-success ml-5" /> : <XCircle className="text-warning ml-5" />;
+      return getValue<boolean>() ? <CheckCircle className="text-success ml-5" /> : <XCircle className="text-destructive ml-5" />;
     },
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Conformité obligatoire" />

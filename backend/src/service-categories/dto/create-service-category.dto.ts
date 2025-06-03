@@ -4,6 +4,7 @@ import {
   IsOptional,
   IsUUID,
   IsBoolean,
+  IsNotEmpty,
 } from 'class-validator';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 
@@ -15,7 +16,7 @@ export class CreateServiceCategoryDto {
   @IsString()
   @MaxLength(125)
   serviceCategoryName: string;
-
+  
   @ApiProperty({
     example: 'SALI',
     description: 'ID du service auquel la catégorie de service appartient',

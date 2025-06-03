@@ -10,25 +10,31 @@ interface LoadingProgressProps {
 
 export function LoadingProgress({
   className,
-  duration = 2000,
+  duration = 3000,
   color = "hsl(var(--primary))",
-  height = 3,
+  height = 5,
 }: LoadingProgressProps) {
   const [progress, setProgress] = useState(0)
   const [visible, setVisible] = useState(true)
 
   useEffect(() => {
-    const timer = setTimeout(() => {
+    setProgress(0)
+    setVisible(true)
+
+    // Lance l'animation vers 100%
+    const progressTimer = setTimeout(() => {
       setProgress(100)
+    }, 50) // petit délai pour déclencher la transition
 
-      const hideTimer = setTimeout(() => {
-        setVisible(false)
-      }, 200)
+    // Cache la barre après la durée d'animation
+    const hideTimer = setTimeout(() => {
+      setVisible(false)
+    }, duration + 200) // 200ms pour laisser la transition finir
 
-      return () => clearTimeout(hideTimer)
-    }, 200)
-
-    return () => clearTimeout(timer)
+    return () => {
+      clearTimeout(progressTimer)
+      clearTimeout(hideTimer)
+    }
   }, [duration])
 
   if (!visible) return null
@@ -42,11 +48,12 @@ export function LoadingProgress({
       aria-valuenow={progress}
     >
       <div
-        className="transition-all ease-out duration-2000"
+        className="transition-all ease-out"
         style={{
           height: `${height}px`,
           width: `${progress}%`,
           backgroundColor: color,
+          opacity: "65%",
           transition: `width ${duration}ms cubic-bezier(0.4, 0, 0.2, 1)`,
         }}
       />

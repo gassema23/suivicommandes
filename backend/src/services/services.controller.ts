@@ -71,6 +71,14 @@ export class ServicesController {
     return this.servicesService.update(id, updateServiceDto, currentUser.id);
   }
 
+  @Get('servicesList')
+  @Permissions([{ resource: Resource.SERVICES, actions: [Action.READ] }])
+  @ApiOperation({ summary: 'Obtenir la liste des services pour un select' })
+  @ApiResponse({ status: 200, description: 'Liste des services pour un select' })
+  async getServicesList() {
+    return this.servicesService.getServicesList();
+  }
+
   @Get(':id')
   @Permissions([{ resource: Resource.SERVICES, actions: [Action.READ] }])
   @ApiOperation({ summary: 'Obtenir un service par son ID' })

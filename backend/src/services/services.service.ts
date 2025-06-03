@@ -73,6 +73,13 @@ export class ServicesService {
     return service;
   }
 
+  async getServicesList(): Promise<Service[]> {
+    return this.serviceRepository.find({
+      select: ['id', 'serviceName'],
+      order: { serviceName: 'ASC' },
+    });
+  }
+
   async create(createServiceDto: CreateServiceDto, createdBy: string) {
     const existingService = await this.serviceRepository.findOne({
       where: {

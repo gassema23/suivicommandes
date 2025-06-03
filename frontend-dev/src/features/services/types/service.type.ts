@@ -5,5 +5,5 @@ export interface Service {
   sectorId?: string;
   serviceName: string;
   serviceDescription?: string;
-  sector?: Partial<Sector>;
+  sector: Sector;
 }

@@ -1,8 +1,12 @@
 {
   "name": "frontend-dev",
   "private": true,
-  "version": "0.0.0",
+  "version": "0.0.1",
   "type": "module",
+  "author": {
+    "name": "Mathieu Gasse",
+    "email": "gasse.mathieu@gmail.com"
+  },
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",

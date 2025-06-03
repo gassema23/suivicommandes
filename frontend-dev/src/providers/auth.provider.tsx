@@ -1,4 +1,5 @@
 import LoadingPage from "@/components/ui/loader/LoadingPage";
+import { LoadingProgress } from "@/components/ui/loader/LoadingProgress";
 import { API_ROUTE } from "@/config";
 import type { User } from "@/features/users/types/user.type";
 import logoutUser from "@/lib/logout-user";
@@ -122,9 +123,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen flex justify-center items-center">
-        <LoadingPage />
-      </div>
+      <LoadingProgress
+        duration={2000}
+        color="var(--foreground)"
+        height={6}
+      />
     );
   }
 

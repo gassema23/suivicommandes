@@ -7,6 +7,7 @@ import { PaginatedResult } from 'src/common/interfaces/paginated-result.interfac
 import { CreateSectorDto } from './dto/create-sector.dto';
 import { User } from 'src/users/entities/user.entity';
 import { UpdateSectorDto } from './dto/update-sector.dto';
+import { Service } from 'src/services/entities/service.entity';
 
 @Injectable()
 export class SectorsService {
@@ -88,6 +89,19 @@ export class SectorsService {
     }
 
     return sector;
+  }
+
+  async getServicesBySectorId(id: string): Promise<Service[]> {
+    const sector = await this.sectorRepository.findOne({
+      where: { id },
+      relations: ['services'],
+    });
+
+    if (!sector?.services) {
+      throw new BadRequestException('Services non trouvé');
+    }
+
+    return sector.services;
   }
 
   async update(
