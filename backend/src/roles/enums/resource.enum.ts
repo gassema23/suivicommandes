@@ -6,4 +6,6 @@ export enum Resource {
   SECTORS = 'sectors',
   SERVICES = 'services',
   SERVICE_CATEGORIES = 'service_categories',
+  CLIENTS = 'clients',
+  SUBDIVISION_CLIENTS = 'subdivision_clients',
 }

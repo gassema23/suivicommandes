@@ -6,42 +6,31 @@ import {
   UpdateDateColumn,
   DeleteDateColumn,
   ManyToOne,
+  OneToMany,
   JoinColumn,
   Index,
-  OneToMany,
 } from 'typeorm';
 import { User } from '../../users/entities/user.entity';
-import { IsOptional, IsString, IsUUID, MaxLength } from 'class-validator';
-import { Sector } from 'src/sectors/entities/sectors.entity';
-import { ServiceCategory } from 'src/service-categories/entities/service-category.entity';
+import { IsOptional, IsString, Max, MaxLength } from 'class-validator';
+import { SubdivisionClient } from 'src/subdivision-clients/entities/subdivision-client.entity';
 
-@Entity('services')
-@Index(['serviceName'])
+@Entity('clients')
+@Index(['clientNumber'])
 @Index(['deletedAt'])
-export class Service {
+export class Client {
   @PrimaryGeneratedColumn('uuid')
   readonly id: string;
 
-  @Column({ name: 'sector_id', nullable: false })
-  @IsUUID()
-  sectorId?: string;
-
-  @ManyToOne(() => Sector, (sector) => sector.services, { nullable: false })
-  @JoinColumn({ name: 'sector_id' })
-  @IsOptional()
-  sector: Sector;
-
-  @Column({ name: 'service_name', length: 125, nullable: true })
+  @Column({ name: 'client_name', length: 125, nullable: true })
   @IsOptional()
   @IsString()
   @MaxLength(125)
-  serviceName?: string;
+  clientName?: string;
 
-  @Column({ name: 'service_description', length: 500, nullable: true })
-  @IsOptional()
+  @Column({ name: 'client_number', length: 25, nullable: false })
   @IsString()
-  @MaxLength(500)
-  serviceDescription?: string;
+  @MaxLength(25)
+  clientNumber?: string;
 
   // Relation vers l'utilisateur ayant créé l'équipe
   @ManyToOne(() => User, { nullable: true })
@@ -71,9 +60,6 @@ export class Service {
   @IsOptional()
   readonly deletedAt?: Date;
 
-  @OneToMany(
-    () => ServiceCategory,
-    (serviceCategory) => serviceCategory.service,
-  )
-  serviceCategories?: ServiceCategory[];
+  @OneToMany(() => SubdivisionClient, (sub) => sub.client)
+  subdivisionClients?: SubdivisionClient[];
 }

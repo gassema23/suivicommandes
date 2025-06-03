@@ -11,7 +11,6 @@ import {
 } from 'typeorm';
 import { User } from '../../users/entities/user.entity';
 import { IsOptional, IsString, IsUUID, MaxLength } from 'class-validator';
-import { Sector } from 'src/sectors/entities/sectors.entity';
 import { Service } from 'src/services/entities/service.entity';
 
 @Entity('service_categories')

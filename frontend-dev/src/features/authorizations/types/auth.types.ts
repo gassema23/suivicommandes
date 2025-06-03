@@ -25,6 +25,8 @@ export const PERMISSIONS = {
   SECTORS: makePermissions("sectors"),
   SERVICES: makePermissions("services"),
   SERVICE_CATEGORIES: makePermissions("service_categories"),
+  CLIENTS: makePermissions("clients"),
+  SUBDIVISION_CLIENTS: makePermissions("subdivision_clients"),
 } as const;
 
 export const ROLES = {

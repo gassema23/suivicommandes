@@ -8,54 +8,43 @@ import {
   ManyToOne,
   JoinColumn,
   Index,
-  OneToMany,
 } from 'typeorm';
 import { User } from '../../users/entities/user.entity';
 import { IsOptional, IsString, IsUUID, MaxLength } from 'class-validator';
-import { Sector } from 'src/sectors/entities/sectors.entity';
-import { ServiceCategory } from 'src/service-categories/entities/service-category.entity';
+import { Client } from 'src/clients/entities/client.entity';
 
-@Entity('services')
-@Index(['serviceName'])
+@Entity('subdivision_clients')
+@Index(['subdivisionClientNumber'])
 @Index(['deletedAt'])
-export class Service {
+export class SubdivisionClient {
   @PrimaryGeneratedColumn('uuid')
   readonly id: string;
 
-  @Column({ name: 'sector_id', nullable: false })
-  @IsUUID()
-  sectorId?: string;
+  @ManyToOne(() => Client, (client) => client.subdivisionClients, { nullable: false })
+  @JoinColumn({ name: 'client_id' })
+  client: Client;
 
-  @ManyToOne(() => Sector, (sector) => sector.services, { nullable: false })
-  @JoinColumn({ name: 'sector_id' })
-  @IsOptional()
-  sector: Sector;
-
-  @Column({ name: 'service_name', length: 125, nullable: true })
+  @Column({ name: 'subdivision_client_name', length: 125, nullable: true })
   @IsOptional()
   @IsString()
   @MaxLength(125)
-  serviceName?: string;
+  subdivisionClientName?: string;
 
-  @Column({ name: 'service_description', length: 500, nullable: true })
-  @IsOptional()
+  @Column({ name: 'subdivision_client_number', length: 25, nullable: false })
   @IsString()
-  @MaxLength(500)
-  serviceDescription?: string;
+  @MaxLength(25)
+  subdivisionClientNumber!: string;
 
-  // Relation vers l'utilisateur ayant créé l'équipe
   @ManyToOne(() => User, { nullable: true })
   @JoinColumn({ name: 'created_by' })
   @IsOptional()
   createdBy?: Partial<User>;
 
-  // Relation vers l'utilisateur ayant mis à jour l'équipe
   @ManyToOne(() => User, { nullable: true })
   @JoinColumn({ name: 'updated_by' })
   @IsOptional()
   updatedBy?: Partial<User>;
 
-  // Relation vers l'utilisateur ayant supprimé l'équipe
   @ManyToOne(() => User, { nullable: true })
   @JoinColumn({ name: 'deleted_by' })
   @IsOptional()
@@ -70,10 +59,4 @@ export class Service {
   @DeleteDateColumn({ name: 'deleted_at' })
   @IsOptional()
   readonly deletedAt?: Date;
-
-  @OneToMany(
-    () => ServiceCategory,
-    (serviceCategory) => serviceCategory.service,
-  )
-  serviceCategories?: ServiceCategory[];
 }

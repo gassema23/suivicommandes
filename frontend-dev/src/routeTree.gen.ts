@@ -21,10 +21,12 @@ import { Route as GuestloginTwoFactorImport } from './routes/_guest/(login)/two-
 import { Route as GuestloginLoginImport } from './routes/_guest/(login)/login'
 import { Route as AuthenticatedPilotagesUsersIndexImport } from './routes/_authenticated/pilotages/users/index'
 import { Route as AuthenticatedPilotagesTeamsIndexImport } from './routes/_authenticated/pilotages/teams/index'
+import { Route as AuthenticatedPilotagesSubdivisionClientsIndexImport } from './routes/_authenticated/pilotages/subdivision-clients/index'
 import { Route as AuthenticatedPilotagesServicesIndexImport } from './routes/_authenticated/pilotages/services/index'
 import { Route as AuthenticatedPilotagesServiceCategoriesIndexImport } from './routes/_authenticated/pilotages/service-categories/index'
 import { Route as AuthenticatedPilotagesSectorsIndexImport } from './routes/_authenticated/pilotages/sectors/index'
 import { Route as AuthenticatedPilotagesHolidaysIndexImport } from './routes/_authenticated/pilotages/holidays/index'
+import { Route as AuthenticatedPilotagesClientsIndexImport } from './routes/_authenticated/pilotages/clients/index'
 import { Route as AuthenticatedAdministrationsRolesIndexImport } from './routes/_authenticated/administrations/roles/index'
 import { Route as AuthenticatedPilotagesUsersCreateImport } from './routes/_authenticated/pilotages/users/create'
 import { Route as AuthenticatedPilotagesTeamsCreateImport } from './routes/_authenticated/pilotages/teams/create'
@@ -32,12 +34,14 @@ import { Route as AuthenticatedPilotagesServicesCreateImport } from './routes/_a
 import { Route as AuthenticatedPilotagesServiceCategoriesCreateImport } from './routes/_authenticated/pilotages/service-categories/create'
 import { Route as AuthenticatedPilotagesSectorsCreateImport } from './routes/_authenticated/pilotages/sectors/create'
 import { Route as AuthenticatedPilotagesHolidaysCreateImport } from './routes/_authenticated/pilotages/holidays/create'
+import { Route as AuthenticatedPilotagesClientsCreateImport } from './routes/_authenticated/pilotages/clients/create'
 import { Route as AuthenticatedAdministrationsRolesCreateImport } from './routes/_authenticated/administrations/roles/create'
 import { Route as AuthenticatedPilotagesTeamsUpdateIdImport } from './routes/_authenticated/pilotages/teams/update/$id'
 import { Route as AuthenticatedPilotagesServicesUpdateIdImport } from './routes/_authenticated/pilotages/services/update/$id'
 import { Route as AuthenticatedPilotagesServiceCategoriesUpdateIdImport } from './routes/_authenticated/pilotages/service-categories/update/$id'
 import { Route as AuthenticatedPilotagesSectorsUpdateIdImport } from './routes/_authenticated/pilotages/sectors/update/$id'
 import { Route as AuthenticatedPilotagesHolidaysUpdateIdImport } from './routes/_authenticated/pilotages/holidays/update/$id'
+import { Route as AuthenticatedPilotagesClientsUpdateIdImport } from './routes/_authenticated/pilotages/clients/update/$id'
 import { Route as AuthenticatedAdministrationsRolesUpdateIdImport } from './routes/_authenticated/administrations/roles/update/$id'
 
 // Create/Update Routes
@@ -102,6 +106,13 @@ const AuthenticatedPilotagesTeamsIndexRoute =
     getParentRoute: () => AuthenticatedRoute,
   } as any)
 
+const AuthenticatedPilotagesSubdivisionClientsIndexRoute =
+  AuthenticatedPilotagesSubdivisionClientsIndexImport.update({
+    id: '/pilotages/subdivision-clients/',
+    path: '/pilotages/subdivision-clients/',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+
 const AuthenticatedPilotagesServicesIndexRoute =
   AuthenticatedPilotagesServicesIndexImport.update({
     id: '/pilotages/services/',
@@ -127,6 +138,13 @@ const AuthenticatedPilotagesHolidaysIndexRoute =
   AuthenticatedPilotagesHolidaysIndexImport.update({
     id: '/pilotages/holidays/',
     path: '/pilotages/holidays/',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+
+const AuthenticatedPilotagesClientsIndexRoute =
+  AuthenticatedPilotagesClientsIndexImport.update({
+    id: '/pilotages/clients/',
+    path: '/pilotages/clients/',
     getParentRoute: () => AuthenticatedRoute,
   } as any)
 
@@ -179,6 +197,13 @@ const AuthenticatedPilotagesHolidaysCreateRoute =
     getParentRoute: () => AuthenticatedRoute,
   } as any)
 
+const AuthenticatedPilotagesClientsCreateRoute =
+  AuthenticatedPilotagesClientsCreateImport.update({
+    id: '/pilotages/clients/create',
+    path: '/pilotages/clients/create',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+
 const AuthenticatedAdministrationsRolesCreateRoute =
   AuthenticatedAdministrationsRolesCreateImport.update({
     id: '/administrations/roles/create',
@@ -218,6 +243,13 @@ const AuthenticatedPilotagesHolidaysUpdateIdRoute =
   AuthenticatedPilotagesHolidaysUpdateIdImport.update({
     id: '/pilotages/holidays/update/$id',
     path: '/pilotages/holidays/update/$id',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+
+const AuthenticatedPilotagesClientsUpdateIdRoute =
+  AuthenticatedPilotagesClientsUpdateIdImport.update({
+    id: '/pilotages/clients/update/$id',
+    path: '/pilotages/clients/update/$id',
     getParentRoute: () => AuthenticatedRoute,
   } as any)
 
@@ -295,6 +327,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdministrationsRolesCreateImport
       parentRoute: typeof AuthenticatedImport
     }
+    '/_authenticated/pilotages/clients/create': {
+      id: '/_authenticated/pilotages/clients/create'
+      path: '/pilotages/clients/create'
+      fullPath: '/pilotages/clients/create'
+      preLoaderRoute: typeof AuthenticatedPilotagesClientsCreateImport
+      parentRoute: typeof AuthenticatedImport
+    }
     '/_authenticated/pilotages/holidays/create': {
       id: '/_authenticated/pilotages/holidays/create'
       path: '/pilotages/holidays/create'
@@ -344,6 +383,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdministrationsRolesIndexImport
       parentRoute: typeof AuthenticatedImport
     }
+    '/_authenticated/pilotages/clients/': {
+      id: '/_authenticated/pilotages/clients/'
+      path: '/pilotages/clients'
+      fullPath: '/pilotages/clients'
+      preLoaderRoute: typeof AuthenticatedPilotagesClientsIndexImport
+      parentRoute: typeof AuthenticatedImport
+    }
     '/_authenticated/pilotages/holidays/': {
       id: '/_authenticated/pilotages/holidays/'
       path: '/pilotages/holidays'
@@ -372,6 +418,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedPilotagesServicesIndexImport
       parentRoute: typeof AuthenticatedImport
     }
+    '/_authenticated/pilotages/subdivision-clients/': {
+      id: '/_authenticated/pilotages/subdivision-clients/'
+      path: '/pilotages/subdivision-clients'
+      fullPath: '/pilotages/subdivision-clients'
+      preLoaderRoute: typeof AuthenticatedPilotagesSubdivisionClientsIndexImport
+      parentRoute: typeof AuthenticatedImport
+    }
     '/_authenticated/pilotages/teams/': {
       id: '/_authenticated/pilotages/teams/'
       path: '/pilotages/teams'
@@ -391,6 +444,13 @@ declare module '@tanstack/react-router' {
       path: '/administrations/roles/update/$id'
       fullPath: '/administrations/roles/update/$id'
       preLoaderRoute: typeof AuthenticatedAdministrationsRolesUpdateIdImport
+      parentRoute: typeof AuthenticatedImport
+    }
+    '/_authenticated/pilotages/clients/update/$id': {
+      id: '/_authenticated/pilotages/clients/update/$id'
+      path: '/pilotages/clients/update/$id'
+      fullPath: '/pilotages/clients/update/$id'
+      preLoaderRoute: typeof AuthenticatedPilotagesClientsUpdateIdImport
       parentRoute: typeof AuthenticatedImport
     }
     '/_authenticated/pilotages/holidays/update/$id': {
@@ -437,6 +497,7 @@ interface AuthenticatedRouteChildren {
   AuthenticatedIndexRoute: typeof AuthenticatedIndexRoute
   AuthenticatedProfileIndexRoute: typeof AuthenticatedProfileIndexRoute
   AuthenticatedAdministrationsRolesCreateRoute: typeof AuthenticatedAdministrationsRolesCreateRoute
+  AuthenticatedPilotagesClientsCreateRoute: typeof AuthenticatedPilotagesClientsCreateRoute
   AuthenticatedPilotagesHolidaysCreateRoute: typeof AuthenticatedPilotagesHolidaysCreateRoute
   AuthenticatedPilotagesSectorsCreateRoute: typeof AuthenticatedPilotagesSectorsCreateRoute
   AuthenticatedPilotagesServiceCategoriesCreateRoute: typeof AuthenticatedPilotagesServiceCategoriesCreateRoute
@@ -444,13 +505,16 @@ interface AuthenticatedRouteChildren {
   AuthenticatedPilotagesTeamsCreateRoute: typeof AuthenticatedPilotagesTeamsCreateRoute
   AuthenticatedPilotagesUsersCreateRoute: typeof AuthenticatedPilotagesUsersCreateRoute
   AuthenticatedAdministrationsRolesIndexRoute: typeof AuthenticatedAdministrationsRolesIndexRoute
+  AuthenticatedPilotagesClientsIndexRoute: typeof AuthenticatedPilotagesClientsIndexRoute
   AuthenticatedPilotagesHolidaysIndexRoute: typeof AuthenticatedPilotagesHolidaysIndexRoute
   AuthenticatedPilotagesSectorsIndexRoute: typeof AuthenticatedPilotagesSectorsIndexRoute
   AuthenticatedPilotagesServiceCategoriesIndexRoute: typeof AuthenticatedPilotagesServiceCategoriesIndexRoute
   AuthenticatedPilotagesServicesIndexRoute: typeof AuthenticatedPilotagesServicesIndexRoute
+  AuthenticatedPilotagesSubdivisionClientsIndexRoute: typeof AuthenticatedPilotagesSubdivisionClientsIndexRoute
   AuthenticatedPilotagesTeamsIndexRoute: typeof AuthenticatedPilotagesTeamsIndexRoute
   AuthenticatedPilotagesUsersIndexRoute: typeof AuthenticatedPilotagesUsersIndexRoute
   AuthenticatedAdministrationsRolesUpdateIdRoute: typeof AuthenticatedAdministrationsRolesUpdateIdRoute
+  AuthenticatedPilotagesClientsUpdateIdRoute: typeof AuthenticatedPilotagesClientsUpdateIdRoute
   AuthenticatedPilotagesHolidaysUpdateIdRoute: typeof AuthenticatedPilotagesHolidaysUpdateIdRoute
   AuthenticatedPilotagesSectorsUpdateIdRoute: typeof AuthenticatedPilotagesSectorsUpdateIdRoute
   AuthenticatedPilotagesServiceCategoriesUpdateIdRoute: typeof AuthenticatedPilotagesServiceCategoriesUpdateIdRoute
@@ -463,6 +527,8 @@ const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
   AuthenticatedProfileIndexRoute: AuthenticatedProfileIndexRoute,
   AuthenticatedAdministrationsRolesCreateRoute:
     AuthenticatedAdministrationsRolesCreateRoute,
+  AuthenticatedPilotagesClientsCreateRoute:
+    AuthenticatedPilotagesClientsCreateRoute,
   AuthenticatedPilotagesHolidaysCreateRoute:
     AuthenticatedPilotagesHolidaysCreateRoute,
   AuthenticatedPilotagesSectorsCreateRoute:
@@ -477,6 +543,8 @@ const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
     AuthenticatedPilotagesUsersCreateRoute,
   AuthenticatedAdministrationsRolesIndexRoute:
     AuthenticatedAdministrationsRolesIndexRoute,
+  AuthenticatedPilotagesClientsIndexRoute:
+    AuthenticatedPilotagesClientsIndexRoute,
   AuthenticatedPilotagesHolidaysIndexRoute:
     AuthenticatedPilotagesHolidaysIndexRoute,
   AuthenticatedPilotagesSectorsIndexRoute:
@@ -485,10 +553,14 @@ const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
     AuthenticatedPilotagesServiceCategoriesIndexRoute,
   AuthenticatedPilotagesServicesIndexRoute:
     AuthenticatedPilotagesServicesIndexRoute,
+  AuthenticatedPilotagesSubdivisionClientsIndexRoute:
+    AuthenticatedPilotagesSubdivisionClientsIndexRoute,
   AuthenticatedPilotagesTeamsIndexRoute: AuthenticatedPilotagesTeamsIndexRoute,
   AuthenticatedPilotagesUsersIndexRoute: AuthenticatedPilotagesUsersIndexRoute,
   AuthenticatedAdministrationsRolesUpdateIdRoute:
     AuthenticatedAdministrationsRolesUpdateIdRoute,
+  AuthenticatedPilotagesClientsUpdateIdRoute:
+    AuthenticatedPilotagesClientsUpdateIdRoute,
   AuthenticatedPilotagesHolidaysUpdateIdRoute:
     AuthenticatedPilotagesHolidaysUpdateIdRoute,
   AuthenticatedPilotagesSectorsUpdateIdRoute:
@@ -528,6 +600,7 @@ export interface FileRoutesByFullPath {
   '/verify-email/$token': typeof GuestVerifyEmailTokenRoute
   '/profile': typeof AuthenticatedProfileIndexRoute
   '/administrations/roles/create': typeof AuthenticatedAdministrationsRolesCreateRoute
+  '/pilotages/clients/create': typeof AuthenticatedPilotagesClientsCreateRoute
   '/pilotages/holidays/create': typeof AuthenticatedPilotagesHolidaysCreateRoute
   '/pilotages/sectors/create': typeof AuthenticatedPilotagesSectorsCreateRoute
   '/pilotages/service-categories/create': typeof AuthenticatedPilotagesServiceCategoriesCreateRoute
@@ -535,13 +608,16 @@ export interface FileRoutesByFullPath {
   '/pilotages/teams/create': typeof AuthenticatedPilotagesTeamsCreateRoute
   '/pilotages/users/create': typeof AuthenticatedPilotagesUsersCreateRoute
   '/administrations/roles': typeof AuthenticatedAdministrationsRolesIndexRoute
+  '/pilotages/clients': typeof AuthenticatedPilotagesClientsIndexRoute
   '/pilotages/holidays': typeof AuthenticatedPilotagesHolidaysIndexRoute
   '/pilotages/sectors': typeof AuthenticatedPilotagesSectorsIndexRoute
   '/pilotages/service-categories': typeof AuthenticatedPilotagesServiceCategoriesIndexRoute
   '/pilotages/services': typeof AuthenticatedPilotagesServicesIndexRoute
+  '/pilotages/subdivision-clients': typeof AuthenticatedPilotagesSubdivisionClientsIndexRoute
   '/pilotages/teams': typeof AuthenticatedPilotagesTeamsIndexRoute
   '/pilotages/users': typeof AuthenticatedPilotagesUsersIndexRoute
   '/administrations/roles/update/$id': typeof AuthenticatedAdministrationsRolesUpdateIdRoute
+  '/pilotages/clients/update/$id': typeof AuthenticatedPilotagesClientsUpdateIdRoute
   '/pilotages/holidays/update/$id': typeof AuthenticatedPilotagesHolidaysUpdateIdRoute
   '/pilotages/sectors/update/$id': typeof AuthenticatedPilotagesSectorsUpdateIdRoute
   '/pilotages/service-categories/update/$id': typeof AuthenticatedPilotagesServiceCategoriesUpdateIdRoute
@@ -558,6 +634,7 @@ export interface FileRoutesByTo {
   '/verify-email/$token': typeof GuestVerifyEmailTokenRoute
   '/profile': typeof AuthenticatedProfileIndexRoute
   '/administrations/roles/create': typeof AuthenticatedAdministrationsRolesCreateRoute
+  '/pilotages/clients/create': typeof AuthenticatedPilotagesClientsCreateRoute
   '/pilotages/holidays/create': typeof AuthenticatedPilotagesHolidaysCreateRoute
   '/pilotages/sectors/create': typeof AuthenticatedPilotagesSectorsCreateRoute
   '/pilotages/service-categories/create': typeof AuthenticatedPilotagesServiceCategoriesCreateRoute
@@ -565,13 +642,16 @@ export interface FileRoutesByTo {
   '/pilotages/teams/create': typeof AuthenticatedPilotagesTeamsCreateRoute
   '/pilotages/users/create': typeof AuthenticatedPilotagesUsersCreateRoute
   '/administrations/roles': typeof AuthenticatedAdministrationsRolesIndexRoute
+  '/pilotages/clients': typeof AuthenticatedPilotagesClientsIndexRoute
   '/pilotages/holidays': typeof AuthenticatedPilotagesHolidaysIndexRoute
   '/pilotages/sectors': typeof AuthenticatedPilotagesSectorsIndexRoute
   '/pilotages/service-categories': typeof AuthenticatedPilotagesServiceCategoriesIndexRoute
   '/pilotages/services': typeof AuthenticatedPilotagesServicesIndexRoute
+  '/pilotages/subdivision-clients': typeof AuthenticatedPilotagesSubdivisionClientsIndexRoute
   '/pilotages/teams': typeof AuthenticatedPilotagesTeamsIndexRoute
   '/pilotages/users': typeof AuthenticatedPilotagesUsersIndexRoute
   '/administrations/roles/update/$id': typeof AuthenticatedAdministrationsRolesUpdateIdRoute
+  '/pilotages/clients/update/$id': typeof AuthenticatedPilotagesClientsUpdateIdRoute
   '/pilotages/holidays/update/$id': typeof AuthenticatedPilotagesHolidaysUpdateIdRoute
   '/pilotages/sectors/update/$id': typeof AuthenticatedPilotagesSectorsUpdateIdRoute
   '/pilotages/service-categories/update/$id': typeof AuthenticatedPilotagesServiceCategoriesUpdateIdRoute
@@ -590,6 +670,7 @@ export interface FileRoutesById {
   '/_guest/verify-email/$token': typeof GuestVerifyEmailTokenRoute
   '/_authenticated/profile/': typeof AuthenticatedProfileIndexRoute
   '/_authenticated/administrations/roles/create': typeof AuthenticatedAdministrationsRolesCreateRoute
+  '/_authenticated/pilotages/clients/create': typeof AuthenticatedPilotagesClientsCreateRoute
   '/_authenticated/pilotages/holidays/create': typeof AuthenticatedPilotagesHolidaysCreateRoute
   '/_authenticated/pilotages/sectors/create': typeof AuthenticatedPilotagesSectorsCreateRoute
   '/_authenticated/pilotages/service-categories/create': typeof AuthenticatedPilotagesServiceCategoriesCreateRoute
@@ -597,13 +678,16 @@ export interface FileRoutesById {
   '/_authenticated/pilotages/teams/create': typeof AuthenticatedPilotagesTeamsCreateRoute
   '/_authenticated/pilotages/users/create': typeof AuthenticatedPilotagesUsersCreateRoute
   '/_authenticated/administrations/roles/': typeof AuthenticatedAdministrationsRolesIndexRoute
+  '/_authenticated/pilotages/clients/': typeof AuthenticatedPilotagesClientsIndexRoute
   '/_authenticated/pilotages/holidays/': typeof AuthenticatedPilotagesHolidaysIndexRoute
   '/_authenticated/pilotages/sectors/': typeof AuthenticatedPilotagesSectorsIndexRoute
   '/_authenticated/pilotages/service-categories/': typeof AuthenticatedPilotagesServiceCategoriesIndexRoute
   '/_authenticated/pilotages/services/': typeof AuthenticatedPilotagesServicesIndexRoute
+  '/_authenticated/pilotages/subdivision-clients/': typeof AuthenticatedPilotagesSubdivisionClientsIndexRoute
   '/_authenticated/pilotages/teams/': typeof AuthenticatedPilotagesTeamsIndexRoute
   '/_authenticated/pilotages/users/': typeof AuthenticatedPilotagesUsersIndexRoute
   '/_authenticated/administrations/roles/update/$id': typeof AuthenticatedAdministrationsRolesUpdateIdRoute
+  '/_authenticated/pilotages/clients/update/$id': typeof AuthenticatedPilotagesClientsUpdateIdRoute
   '/_authenticated/pilotages/holidays/update/$id': typeof AuthenticatedPilotagesHolidaysUpdateIdRoute
   '/_authenticated/pilotages/sectors/update/$id': typeof AuthenticatedPilotagesSectorsUpdateIdRoute
   '/_authenticated/pilotages/service-categories/update/$id': typeof AuthenticatedPilotagesServiceCategoriesUpdateIdRoute
@@ -622,6 +706,7 @@ export interface FileRouteTypes {
     | '/verify-email/$token'
     | '/profile'
     | '/administrations/roles/create'
+    | '/pilotages/clients/create'
     | '/pilotages/holidays/create'
     | '/pilotages/sectors/create'
     | '/pilotages/service-categories/create'
@@ -629,13 +714,16 @@ export interface FileRouteTypes {
     | '/pilotages/teams/create'
     | '/pilotages/users/create'
     | '/administrations/roles'
+    | '/pilotages/clients'
     | '/pilotages/holidays'
     | '/pilotages/sectors'
     | '/pilotages/service-categories'
     | '/pilotages/services'
+    | '/pilotages/subdivision-clients'
     | '/pilotages/teams'
     | '/pilotages/users'
     | '/administrations/roles/update/$id'
+    | '/pilotages/clients/update/$id'
     | '/pilotages/holidays/update/$id'
     | '/pilotages/sectors/update/$id'
     | '/pilotages/service-categories/update/$id'
@@ -651,6 +739,7 @@ export interface FileRouteTypes {
     | '/verify-email/$token'
     | '/profile'
     | '/administrations/roles/create'
+    | '/pilotages/clients/create'
     | '/pilotages/holidays/create'
     | '/pilotages/sectors/create'
     | '/pilotages/service-categories/create'
@@ -658,13 +747,16 @@ export interface FileRouteTypes {
     | '/pilotages/teams/create'
     | '/pilotages/users/create'
     | '/administrations/roles'
+    | '/pilotages/clients'
     | '/pilotages/holidays'
     | '/pilotages/sectors'
     | '/pilotages/service-categories'
     | '/pilotages/services'
+    | '/pilotages/subdivision-clients'
     | '/pilotages/teams'
     | '/pilotages/users'
     | '/administrations/roles/update/$id'
+    | '/pilotages/clients/update/$id'
     | '/pilotages/holidays/update/$id'
     | '/pilotages/sectors/update/$id'
     | '/pilotages/service-categories/update/$id'
@@ -681,6 +773,7 @@ export interface FileRouteTypes {
     | '/_guest/verify-email/$token'
     | '/_authenticated/profile/'
     | '/_authenticated/administrations/roles/create'
+    | '/_authenticated/pilotages/clients/create'
     | '/_authenticated/pilotages/holidays/create'
     | '/_authenticated/pilotages/sectors/create'
     | '/_authenticated/pilotages/service-categories/create'
@@ -688,13 +781,16 @@ export interface FileRouteTypes {
     | '/_authenticated/pilotages/teams/create'
     | '/_authenticated/pilotages/users/create'
     | '/_authenticated/administrations/roles/'
+    | '/_authenticated/pilotages/clients/'
     | '/_authenticated/pilotages/holidays/'
     | '/_authenticated/pilotages/sectors/'
     | '/_authenticated/pilotages/service-categories/'
     | '/_authenticated/pilotages/services/'
+    | '/_authenticated/pilotages/subdivision-clients/'
     | '/_authenticated/pilotages/teams/'
     | '/_authenticated/pilotages/users/'
     | '/_authenticated/administrations/roles/update/$id'
+    | '/_authenticated/pilotages/clients/update/$id'
     | '/_authenticated/pilotages/holidays/update/$id'
     | '/_authenticated/pilotages/sectors/update/$id'
     | '/_authenticated/pilotages/service-categories/update/$id'
@@ -736,6 +832,7 @@ export const routeTree = rootRoute
         "/_authenticated/",
         "/_authenticated/profile/",
         "/_authenticated/administrations/roles/create",
+        "/_authenticated/pilotages/clients/create",
         "/_authenticated/pilotages/holidays/create",
         "/_authenticated/pilotages/sectors/create",
         "/_authenticated/pilotages/service-categories/create",
@@ -743,13 +840,16 @@ export const routeTree = rootRoute
         "/_authenticated/pilotages/teams/create",
         "/_authenticated/pilotages/users/create",
         "/_authenticated/administrations/roles/",
+        "/_authenticated/pilotages/clients/",
         "/_authenticated/pilotages/holidays/",
         "/_authenticated/pilotages/sectors/",
         "/_authenticated/pilotages/service-categories/",
         "/_authenticated/pilotages/services/",
+        "/_authenticated/pilotages/subdivision-clients/",
         "/_authenticated/pilotages/teams/",
         "/_authenticated/pilotages/users/",
         "/_authenticated/administrations/roles/update/$id",
+        "/_authenticated/pilotages/clients/update/$id",
         "/_authenticated/pilotages/holidays/update/$id",
         "/_authenticated/pilotages/sectors/update/$id",
         "/_authenticated/pilotages/service-categories/update/$id",
@@ -792,6 +892,10 @@ export const routeTree = rootRoute
       "filePath": "_authenticated/administrations/roles/create.tsx",
       "parent": "/_authenticated"
     },
+    "/_authenticated/pilotages/clients/create": {
+      "filePath": "_authenticated/pilotages/clients/create.tsx",
+      "parent": "/_authenticated"
+    },
     "/_authenticated/pilotages/holidays/create": {
       "filePath": "_authenticated/pilotages/holidays/create.tsx",
       "parent": "/_authenticated"
@@ -820,6 +924,10 @@ export const routeTree = rootRoute
       "filePath": "_authenticated/administrations/roles/index.tsx",
       "parent": "/_authenticated"
     },
+    "/_authenticated/pilotages/clients/": {
+      "filePath": "_authenticated/pilotages/clients/index.tsx",
+      "parent": "/_authenticated"
+    },
     "/_authenticated/pilotages/holidays/": {
       "filePath": "_authenticated/pilotages/holidays/index.tsx",
       "parent": "/_authenticated"
@@ -836,6 +944,10 @@ export const routeTree = rootRoute
       "filePath": "_authenticated/pilotages/services/index.tsx",
       "parent": "/_authenticated"
     },
+    "/_authenticated/pilotages/subdivision-clients/": {
+      "filePath": "_authenticated/pilotages/subdivision-clients/index.tsx",
+      "parent": "/_authenticated"
+    },
     "/_authenticated/pilotages/teams/": {
       "filePath": "_authenticated/pilotages/teams/index.tsx",
       "parent": "/_authenticated"
@@ -846,6 +958,10 @@ export const routeTree = rootRoute
     },
     "/_authenticated/administrations/roles/update/$id": {
       "filePath": "_authenticated/administrations/roles/update/$id.tsx",
+      "parent": "/_authenticated"
+    },
+    "/_authenticated/pilotages/clients/update/$id": {
+      "filePath": "_authenticated/pilotages/clients/update/$id.tsx",
       "parent": "/_authenticated"
     },
     "/_authenticated/pilotages/holidays/update/$id": {

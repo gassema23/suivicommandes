@@ -46,6 +46,16 @@ export const sidebarMenu = {
           permission: PERMISSIONS.SERVICE_CATEGORIES.READ,
         },
         {
+          title: "Clients",
+          url: "/pilotages/clients",
+          permission: PERMISSIONS.CLIENTS.READ,
+        },
+        {
+          title: "Subdivisions clients",
+          url: "/pilotages/subdivision-clients",
+          permission: PERMISSIONS.SUBDIVISION_CLIENTS.READ,
+        },
+        {
           title: "Utilisateurs",
           url: "/pilotages/users",
           permission: PERMISSIONS.USERS.READ,
