@@ -58,6 +58,13 @@ export class ClientsService {
     };
   }
 
+  async getClientsList(): Promise<Client[]> {
+    return this.clientRepository.find({
+      select: ['id', 'clientName', 'clientNumber'],
+      order: { clientName: 'ASC' },
+    });
+  }
+
   async create(createClientDto: CreateClientDto, createdBy: string) {
     const existingClient = await this.clientRepository.findOne({
       where: {

@@ -28,6 +28,7 @@ import { CurrentUser } from 'src/auth/decorators/current-user.decorator';
 import { User } from 'src/users/entities/user.entity';
 import { CreateClientDto } from './dto/create-client.dto';
 import { UpdateClientDto } from './dto/update-client.dto';
+import { instanceToPlain } from 'class-transformer';
 
 @Controller('clients')
 @ApiTags('Clients')
@@ -46,7 +47,14 @@ export class ClientsController {
     description: 'Recherche par nom',
   })
   async findAll(@Query() paginationDto: PaginationDto) {
-    return this.clientsService.findAll(paginationDto, paginationDto.search);
+    const result = await this.clientsService.findAll(
+      paginationDto,
+      paginationDto.search,
+    );
+    return {
+      ...result,
+      data: result.data.map((client) => instanceToPlain(client)),
+    };
   }
 
   @Post()
@@ -60,6 +68,18 @@ export class ClientsController {
     return this.clientsService.create(createClientDto, currentUser.id);
   }
 
+  @Get('clientsList')
+  @Permissions([{ resource: Resource.CLIENTS, actions: [Action.READ] }])
+  @ApiOperation({ summary: 'Obtenir la liste des clients pour le sélecteur' })
+  @ApiResponse({
+    status: 200,
+    description: 'Liste des clients pour le sélecteur',
+  })
+  async getClientsList() {
+    const clients = await this.clientsService.getClientsList();
+    return clients.map((client) => instanceToPlain(client));
+  }
+
   @Get(':id')
   @Permissions([{ resource: Resource.CLIENTS, actions: [Action.READ] }])
   @ApiOperation({ summary: 'Afficher un client par son ID' })
@@ -68,7 +88,8 @@ export class ClientsController {
     description: 'Client récupéré avec succès',
   })
   async findOne(@Param('id', ParseUUIDPipe) id: string) {
-    return this.clientsService.findOne(id);
+    const client = await this.clientsService.findOne(id);
+    return instanceToPlain(client);
   }
 
   @Patch(':id')

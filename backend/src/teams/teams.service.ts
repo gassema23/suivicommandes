@@ -29,13 +29,13 @@ export class TeamsService {
   ) {}
 
   async create(createTeamDto: CreateTeamDto, createdBy: string): Promise<Team> {
-    // Vérifier si le nom de l'équipe existe déjà
     const existingTeam = await this.teamRepository.findOne({
       where: { teamName: createTeamDto.teamName },
     });
     if (existingTeam) {
       throw new BadRequestException('Une équipe avec ce nom existe déjà');
     }
+    
     const team = this.teamRepository.create({
       ...createTeamDto,
       createdBy: { id: createdBy } as User,

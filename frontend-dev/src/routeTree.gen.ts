@@ -30,6 +30,7 @@ import { Route as AuthenticatedPilotagesClientsIndexImport } from './routes/_aut
 import { Route as AuthenticatedAdministrationsRolesIndexImport } from './routes/_authenticated/administrations/roles/index'
 import { Route as AuthenticatedPilotagesUsersCreateImport } from './routes/_authenticated/pilotages/users/create'
 import { Route as AuthenticatedPilotagesTeamsCreateImport } from './routes/_authenticated/pilotages/teams/create'
+import { Route as AuthenticatedPilotagesSubdivisionClientsCreateImport } from './routes/_authenticated/pilotages/subdivision-clients/create'
 import { Route as AuthenticatedPilotagesServicesCreateImport } from './routes/_authenticated/pilotages/services/create'
 import { Route as AuthenticatedPilotagesServiceCategoriesCreateImport } from './routes/_authenticated/pilotages/service-categories/create'
 import { Route as AuthenticatedPilotagesSectorsCreateImport } from './routes/_authenticated/pilotages/sectors/create'
@@ -37,6 +38,7 @@ import { Route as AuthenticatedPilotagesHolidaysCreateImport } from './routes/_a
 import { Route as AuthenticatedPilotagesClientsCreateImport } from './routes/_authenticated/pilotages/clients/create'
 import { Route as AuthenticatedAdministrationsRolesCreateImport } from './routes/_authenticated/administrations/roles/create'
 import { Route as AuthenticatedPilotagesTeamsUpdateIdImport } from './routes/_authenticated/pilotages/teams/update/$id'
+import { Route as AuthenticatedPilotagesSubdivisionClientsUpdateIdImport } from './routes/_authenticated/pilotages/subdivision-clients/update/$id'
 import { Route as AuthenticatedPilotagesServicesUpdateIdImport } from './routes/_authenticated/pilotages/services/update/$id'
 import { Route as AuthenticatedPilotagesServiceCategoriesUpdateIdImport } from './routes/_authenticated/pilotages/service-categories/update/$id'
 import { Route as AuthenticatedPilotagesSectorsUpdateIdImport } from './routes/_authenticated/pilotages/sectors/update/$id'
@@ -169,6 +171,13 @@ const AuthenticatedPilotagesTeamsCreateRoute =
     getParentRoute: () => AuthenticatedRoute,
   } as any)
 
+const AuthenticatedPilotagesSubdivisionClientsCreateRoute =
+  AuthenticatedPilotagesSubdivisionClientsCreateImport.update({
+    id: '/pilotages/subdivision-clients/create',
+    path: '/pilotages/subdivision-clients/create',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+
 const AuthenticatedPilotagesServicesCreateRoute =
   AuthenticatedPilotagesServicesCreateImport.update({
     id: '/pilotages/services/create',
@@ -215,6 +224,13 @@ const AuthenticatedPilotagesTeamsUpdateIdRoute =
   AuthenticatedPilotagesTeamsUpdateIdImport.update({
     id: '/pilotages/teams/update/$id',
     path: '/pilotages/teams/update/$id',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+
+const AuthenticatedPilotagesSubdivisionClientsUpdateIdRoute =
+  AuthenticatedPilotagesSubdivisionClientsUpdateIdImport.update({
+    id: '/pilotages/subdivision-clients/update/$id',
+    path: '/pilotages/subdivision-clients/update/$id',
     getParentRoute: () => AuthenticatedRoute,
   } as any)
 
@@ -362,6 +378,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedPilotagesServicesCreateImport
       parentRoute: typeof AuthenticatedImport
     }
+    '/_authenticated/pilotages/subdivision-clients/create': {
+      id: '/_authenticated/pilotages/subdivision-clients/create'
+      path: '/pilotages/subdivision-clients/create'
+      fullPath: '/pilotages/subdivision-clients/create'
+      preLoaderRoute: typeof AuthenticatedPilotagesSubdivisionClientsCreateImport
+      parentRoute: typeof AuthenticatedImport
+    }
     '/_authenticated/pilotages/teams/create': {
       id: '/_authenticated/pilotages/teams/create'
       path: '/pilotages/teams/create'
@@ -481,6 +504,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedPilotagesServicesUpdateIdImport
       parentRoute: typeof AuthenticatedImport
     }
+    '/_authenticated/pilotages/subdivision-clients/update/$id': {
+      id: '/_authenticated/pilotages/subdivision-clients/update/$id'
+      path: '/pilotages/subdivision-clients/update/$id'
+      fullPath: '/pilotages/subdivision-clients/update/$id'
+      preLoaderRoute: typeof AuthenticatedPilotagesSubdivisionClientsUpdateIdImport
+      parentRoute: typeof AuthenticatedImport
+    }
     '/_authenticated/pilotages/teams/update/$id': {
       id: '/_authenticated/pilotages/teams/update/$id'
       path: '/pilotages/teams/update/$id'
@@ -502,6 +532,7 @@ interface AuthenticatedRouteChildren {
   AuthenticatedPilotagesSectorsCreateRoute: typeof AuthenticatedPilotagesSectorsCreateRoute
   AuthenticatedPilotagesServiceCategoriesCreateRoute: typeof AuthenticatedPilotagesServiceCategoriesCreateRoute
   AuthenticatedPilotagesServicesCreateRoute: typeof AuthenticatedPilotagesServicesCreateRoute
+  AuthenticatedPilotagesSubdivisionClientsCreateRoute: typeof AuthenticatedPilotagesSubdivisionClientsCreateRoute
   AuthenticatedPilotagesTeamsCreateRoute: typeof AuthenticatedPilotagesTeamsCreateRoute
   AuthenticatedPilotagesUsersCreateRoute: typeof AuthenticatedPilotagesUsersCreateRoute
   AuthenticatedAdministrationsRolesIndexRoute: typeof AuthenticatedAdministrationsRolesIndexRoute
@@ -519,6 +550,7 @@ interface AuthenticatedRouteChildren {
   AuthenticatedPilotagesSectorsUpdateIdRoute: typeof AuthenticatedPilotagesSectorsUpdateIdRoute
   AuthenticatedPilotagesServiceCategoriesUpdateIdRoute: typeof AuthenticatedPilotagesServiceCategoriesUpdateIdRoute
   AuthenticatedPilotagesServicesUpdateIdRoute: typeof AuthenticatedPilotagesServicesUpdateIdRoute
+  AuthenticatedPilotagesSubdivisionClientsUpdateIdRoute: typeof AuthenticatedPilotagesSubdivisionClientsUpdateIdRoute
   AuthenticatedPilotagesTeamsUpdateIdRoute: typeof AuthenticatedPilotagesTeamsUpdateIdRoute
 }
 
@@ -537,6 +569,8 @@ const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
     AuthenticatedPilotagesServiceCategoriesCreateRoute,
   AuthenticatedPilotagesServicesCreateRoute:
     AuthenticatedPilotagesServicesCreateRoute,
+  AuthenticatedPilotagesSubdivisionClientsCreateRoute:
+    AuthenticatedPilotagesSubdivisionClientsCreateRoute,
   AuthenticatedPilotagesTeamsCreateRoute:
     AuthenticatedPilotagesTeamsCreateRoute,
   AuthenticatedPilotagesUsersCreateRoute:
@@ -569,6 +603,8 @@ const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
     AuthenticatedPilotagesServiceCategoriesUpdateIdRoute,
   AuthenticatedPilotagesServicesUpdateIdRoute:
     AuthenticatedPilotagesServicesUpdateIdRoute,
+  AuthenticatedPilotagesSubdivisionClientsUpdateIdRoute:
+    AuthenticatedPilotagesSubdivisionClientsUpdateIdRoute,
   AuthenticatedPilotagesTeamsUpdateIdRoute:
     AuthenticatedPilotagesTeamsUpdateIdRoute,
 }
@@ -605,6 +641,7 @@ export interface FileRoutesByFullPath {
   '/pilotages/sectors/create': typeof AuthenticatedPilotagesSectorsCreateRoute
   '/pilotages/service-categories/create': typeof AuthenticatedPilotagesServiceCategoriesCreateRoute
   '/pilotages/services/create': typeof AuthenticatedPilotagesServicesCreateRoute
+  '/pilotages/subdivision-clients/create': typeof AuthenticatedPilotagesSubdivisionClientsCreateRoute
   '/pilotages/teams/create': typeof AuthenticatedPilotagesTeamsCreateRoute
   '/pilotages/users/create': typeof AuthenticatedPilotagesUsersCreateRoute
   '/administrations/roles': typeof AuthenticatedAdministrationsRolesIndexRoute
@@ -622,6 +659,7 @@ export interface FileRoutesByFullPath {
   '/pilotages/sectors/update/$id': typeof AuthenticatedPilotagesSectorsUpdateIdRoute
   '/pilotages/service-categories/update/$id': typeof AuthenticatedPilotagesServiceCategoriesUpdateIdRoute
   '/pilotages/services/update/$id': typeof AuthenticatedPilotagesServicesUpdateIdRoute
+  '/pilotages/subdivision-clients/update/$id': typeof AuthenticatedPilotagesSubdivisionClientsUpdateIdRoute
   '/pilotages/teams/update/$id': typeof AuthenticatedPilotagesTeamsUpdateIdRoute
 }
 
@@ -639,6 +677,7 @@ export interface FileRoutesByTo {
   '/pilotages/sectors/create': typeof AuthenticatedPilotagesSectorsCreateRoute
   '/pilotages/service-categories/create': typeof AuthenticatedPilotagesServiceCategoriesCreateRoute
   '/pilotages/services/create': typeof AuthenticatedPilotagesServicesCreateRoute
+  '/pilotages/subdivision-clients/create': typeof AuthenticatedPilotagesSubdivisionClientsCreateRoute
   '/pilotages/teams/create': typeof AuthenticatedPilotagesTeamsCreateRoute
   '/pilotages/users/create': typeof AuthenticatedPilotagesUsersCreateRoute
   '/administrations/roles': typeof AuthenticatedAdministrationsRolesIndexRoute
@@ -656,6 +695,7 @@ export interface FileRoutesByTo {
   '/pilotages/sectors/update/$id': typeof AuthenticatedPilotagesSectorsUpdateIdRoute
   '/pilotages/service-categories/update/$id': typeof AuthenticatedPilotagesServiceCategoriesUpdateIdRoute
   '/pilotages/services/update/$id': typeof AuthenticatedPilotagesServicesUpdateIdRoute
+  '/pilotages/subdivision-clients/update/$id': typeof AuthenticatedPilotagesSubdivisionClientsUpdateIdRoute
   '/pilotages/teams/update/$id': typeof AuthenticatedPilotagesTeamsUpdateIdRoute
 }
 
@@ -675,6 +715,7 @@ export interface FileRoutesById {
   '/_authenticated/pilotages/sectors/create': typeof AuthenticatedPilotagesSectorsCreateRoute
   '/_authenticated/pilotages/service-categories/create': typeof AuthenticatedPilotagesServiceCategoriesCreateRoute
   '/_authenticated/pilotages/services/create': typeof AuthenticatedPilotagesServicesCreateRoute
+  '/_authenticated/pilotages/subdivision-clients/create': typeof AuthenticatedPilotagesSubdivisionClientsCreateRoute
   '/_authenticated/pilotages/teams/create': typeof AuthenticatedPilotagesTeamsCreateRoute
   '/_authenticated/pilotages/users/create': typeof AuthenticatedPilotagesUsersCreateRoute
   '/_authenticated/administrations/roles/': typeof AuthenticatedAdministrationsRolesIndexRoute
@@ -692,6 +733,7 @@ export interface FileRoutesById {
   '/_authenticated/pilotages/sectors/update/$id': typeof AuthenticatedPilotagesSectorsUpdateIdRoute
   '/_authenticated/pilotages/service-categories/update/$id': typeof AuthenticatedPilotagesServiceCategoriesUpdateIdRoute
   '/_authenticated/pilotages/services/update/$id': typeof AuthenticatedPilotagesServicesUpdateIdRoute
+  '/_authenticated/pilotages/subdivision-clients/update/$id': typeof AuthenticatedPilotagesSubdivisionClientsUpdateIdRoute
   '/_authenticated/pilotages/teams/update/$id': typeof AuthenticatedPilotagesTeamsUpdateIdRoute
 }
 
@@ -711,6 +753,7 @@ export interface FileRouteTypes {
     | '/pilotages/sectors/create'
     | '/pilotages/service-categories/create'
     | '/pilotages/services/create'
+    | '/pilotages/subdivision-clients/create'
     | '/pilotages/teams/create'
     | '/pilotages/users/create'
     | '/administrations/roles'
@@ -728,6 +771,7 @@ export interface FileRouteTypes {
     | '/pilotages/sectors/update/$id'
     | '/pilotages/service-categories/update/$id'
     | '/pilotages/services/update/$id'
+    | '/pilotages/subdivision-clients/update/$id'
     | '/pilotages/teams/update/$id'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -744,6 +788,7 @@ export interface FileRouteTypes {
     | '/pilotages/sectors/create'
     | '/pilotages/service-categories/create'
     | '/pilotages/services/create'
+    | '/pilotages/subdivision-clients/create'
     | '/pilotages/teams/create'
     | '/pilotages/users/create'
     | '/administrations/roles'
@@ -761,6 +806,7 @@ export interface FileRouteTypes {
     | '/pilotages/sectors/update/$id'
     | '/pilotages/service-categories/update/$id'
     | '/pilotages/services/update/$id'
+    | '/pilotages/subdivision-clients/update/$id'
     | '/pilotages/teams/update/$id'
   id:
     | '__root__'
@@ -778,6 +824,7 @@ export interface FileRouteTypes {
     | '/_authenticated/pilotages/sectors/create'
     | '/_authenticated/pilotages/service-categories/create'
     | '/_authenticated/pilotages/services/create'
+    | '/_authenticated/pilotages/subdivision-clients/create'
     | '/_authenticated/pilotages/teams/create'
     | '/_authenticated/pilotages/users/create'
     | '/_authenticated/administrations/roles/'
@@ -795,6 +842,7 @@ export interface FileRouteTypes {
     | '/_authenticated/pilotages/sectors/update/$id'
     | '/_authenticated/pilotages/service-categories/update/$id'
     | '/_authenticated/pilotages/services/update/$id'
+    | '/_authenticated/pilotages/subdivision-clients/update/$id'
     | '/_authenticated/pilotages/teams/update/$id'
   fileRoutesById: FileRoutesById
 }
@@ -837,6 +885,7 @@ export const routeTree = rootRoute
         "/_authenticated/pilotages/sectors/create",
         "/_authenticated/pilotages/service-categories/create",
         "/_authenticated/pilotages/services/create",
+        "/_authenticated/pilotages/subdivision-clients/create",
         "/_authenticated/pilotages/teams/create",
         "/_authenticated/pilotages/users/create",
         "/_authenticated/administrations/roles/",
@@ -854,6 +903,7 @@ export const routeTree = rootRoute
         "/_authenticated/pilotages/sectors/update/$id",
         "/_authenticated/pilotages/service-categories/update/$id",
         "/_authenticated/pilotages/services/update/$id",
+        "/_authenticated/pilotages/subdivision-clients/update/$id",
         "/_authenticated/pilotages/teams/update/$id"
       ]
     },
@@ -910,6 +960,10 @@ export const routeTree = rootRoute
     },
     "/_authenticated/pilotages/services/create": {
       "filePath": "_authenticated/pilotages/services/create.tsx",
+      "parent": "/_authenticated"
+    },
+    "/_authenticated/pilotages/subdivision-clients/create": {
+      "filePath": "_authenticated/pilotages/subdivision-clients/create.tsx",
       "parent": "/_authenticated"
     },
     "/_authenticated/pilotages/teams/create": {
@@ -978,6 +1032,10 @@ export const routeTree = rootRoute
     },
     "/_authenticated/pilotages/services/update/$id": {
       "filePath": "_authenticated/pilotages/services/update/$id.tsx",
+      "parent": "/_authenticated"
+    },
+    "/_authenticated/pilotages/subdivision-clients/update/$id": {
+      "filePath": "_authenticated/pilotages/subdivision-clients/update/$id.tsx",
       "parent": "/_authenticated"
     },
     "/_authenticated/pilotages/teams/update/$id": {

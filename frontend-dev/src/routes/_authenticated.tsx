@@ -47,7 +47,6 @@ export const Route = createFileRoute("/_authenticated")({
 function AuthLayout() {
   const matches = useMatches();
   const currentRoute = matches[matches.length - 1] as StaticData;
-
   return (
     <SidebarProvider>
       <AppSidebar />

@@ -13,6 +13,7 @@ import {
 import { User } from '../../users/entities/user.entity';
 import { IsOptional, IsString, Max, MaxLength } from 'class-validator';
 import { SubdivisionClient } from 'src/subdivision-clients/entities/subdivision-client.entity';
+import { Expose } from 'class-transformer';
 
 @Entity('clients')
 @Index(['clientNumber'])
@@ -62,4 +63,19 @@ export class Client {
 
   @OneToMany(() => SubdivisionClient, (sub) => sub.client)
   subdivisionClients?: SubdivisionClient[];
+
+  // Virtual properties
+  @Expose()
+  get virtualClientName(): string {
+    if (this.clientName && this.clientNumber) {
+      return `${this.clientName} (${this.clientNumber})`;
+    }
+    if (this.clientName) {
+      return this.clientName;
+    }
+    if (this.clientNumber) {
+      return this.clientNumber;
+    }
+    return '';
+  }
 }

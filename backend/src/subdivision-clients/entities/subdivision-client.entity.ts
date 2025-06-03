@@ -12,6 +12,7 @@ import {
 import { User } from '../../users/entities/user.entity';
 import { IsOptional, IsString, IsUUID, MaxLength } from 'class-validator';
 import { Client } from 'src/clients/entities/client.entity';
+import { Expose } from 'class-transformer';
 
 @Entity('subdivision_clients')
 @Index(['subdivisionClientNumber'])
@@ -20,7 +21,9 @@ export class SubdivisionClient {
   @PrimaryGeneratedColumn('uuid')
   readonly id: string;
 
-  @ManyToOne(() => Client, (client) => client.subdivisionClients, { nullable: false })
+  @ManyToOne(() => Client, (client) => client.subdivisionClients, {
+    nullable: false,
+  })
   @JoinColumn({ name: 'client_id' })
   client: Client;
 
@@ -59,4 +62,19 @@ export class SubdivisionClient {
   @DeleteDateColumn({ name: 'deleted_at' })
   @IsOptional()
   readonly deletedAt?: Date;
+
+  // Virtual properties
+  @Expose()
+  get virtualSubdivisionClientName(): string {
+    if (this.subdivisionClientName && this.subdivisionClientNumber) {
+      return `${this.subdivisionClientName} (${this.subdivisionClientNumber})`;
+    }
+    if (this.subdivisionClientName) {
+      return this.subdivisionClientName;
+    }
+    if (this.subdivisionClientName) {
+      return this.subdivisionClientName;
+    }
+    return '';
+  }
 }
