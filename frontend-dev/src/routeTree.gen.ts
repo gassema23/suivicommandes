@@ -22,6 +22,7 @@ import { Route as GuestloginLoginImport } from './routes/_guest/(login)/login'
 import { Route as AuthenticatedPilotagesUsersIndexImport } from './routes/_authenticated/pilotages/users/index'
 import { Route as AuthenticatedPilotagesTeamsIndexImport } from './routes/_authenticated/pilotages/teams/index'
 import { Route as AuthenticatedPilotagesServicesIndexImport } from './routes/_authenticated/pilotages/services/index'
+import { Route as AuthenticatedPilotagesServiceCategoriesIndexImport } from './routes/_authenticated/pilotages/service-categories/index'
 import { Route as AuthenticatedPilotagesSectorsIndexImport } from './routes/_authenticated/pilotages/sectors/index'
 import { Route as AuthenticatedPilotagesHolidaysIndexImport } from './routes/_authenticated/pilotages/holidays/index'
 import { Route as AuthenticatedAdministrationsRolesIndexImport } from './routes/_authenticated/administrations/roles/index'
@@ -103,6 +104,13 @@ const AuthenticatedPilotagesServicesIndexRoute =
   AuthenticatedPilotagesServicesIndexImport.update({
     id: '/pilotages/services/',
     path: '/pilotages/services/',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+
+const AuthenticatedPilotagesServiceCategoriesIndexRoute =
+  AuthenticatedPilotagesServiceCategoriesIndexImport.update({
+    id: '/pilotages/service-categories/',
+    path: '/pilotages/service-categories/',
     getParentRoute: () => AuthenticatedRoute,
   } as any)
 
@@ -327,6 +335,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedPilotagesSectorsIndexImport
       parentRoute: typeof AuthenticatedImport
     }
+    '/_authenticated/pilotages/service-categories/': {
+      id: '/_authenticated/pilotages/service-categories/'
+      path: '/pilotages/service-categories'
+      fullPath: '/pilotages/service-categories'
+      preLoaderRoute: typeof AuthenticatedPilotagesServiceCategoriesIndexImport
+      parentRoute: typeof AuthenticatedImport
+    }
     '/_authenticated/pilotages/services/': {
       id: '/_authenticated/pilotages/services/'
       path: '/pilotages/services'
@@ -400,6 +415,7 @@ interface AuthenticatedRouteChildren {
   AuthenticatedAdministrationsRolesIndexRoute: typeof AuthenticatedAdministrationsRolesIndexRoute
   AuthenticatedPilotagesHolidaysIndexRoute: typeof AuthenticatedPilotagesHolidaysIndexRoute
   AuthenticatedPilotagesSectorsIndexRoute: typeof AuthenticatedPilotagesSectorsIndexRoute
+  AuthenticatedPilotagesServiceCategoriesIndexRoute: typeof AuthenticatedPilotagesServiceCategoriesIndexRoute
   AuthenticatedPilotagesServicesIndexRoute: typeof AuthenticatedPilotagesServicesIndexRoute
   AuthenticatedPilotagesTeamsIndexRoute: typeof AuthenticatedPilotagesTeamsIndexRoute
   AuthenticatedPilotagesUsersIndexRoute: typeof AuthenticatedPilotagesUsersIndexRoute
@@ -431,6 +447,8 @@ const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
     AuthenticatedPilotagesHolidaysIndexRoute,
   AuthenticatedPilotagesSectorsIndexRoute:
     AuthenticatedPilotagesSectorsIndexRoute,
+  AuthenticatedPilotagesServiceCategoriesIndexRoute:
+    AuthenticatedPilotagesServiceCategoriesIndexRoute,
   AuthenticatedPilotagesServicesIndexRoute:
     AuthenticatedPilotagesServicesIndexRoute,
   AuthenticatedPilotagesTeamsIndexRoute: AuthenticatedPilotagesTeamsIndexRoute,
@@ -482,6 +500,7 @@ export interface FileRoutesByFullPath {
   '/administrations/roles': typeof AuthenticatedAdministrationsRolesIndexRoute
   '/pilotages/holidays': typeof AuthenticatedPilotagesHolidaysIndexRoute
   '/pilotages/sectors': typeof AuthenticatedPilotagesSectorsIndexRoute
+  '/pilotages/service-categories': typeof AuthenticatedPilotagesServiceCategoriesIndexRoute
   '/pilotages/services': typeof AuthenticatedPilotagesServicesIndexRoute
   '/pilotages/teams': typeof AuthenticatedPilotagesTeamsIndexRoute
   '/pilotages/users': typeof AuthenticatedPilotagesUsersIndexRoute
@@ -509,6 +528,7 @@ export interface FileRoutesByTo {
   '/administrations/roles': typeof AuthenticatedAdministrationsRolesIndexRoute
   '/pilotages/holidays': typeof AuthenticatedPilotagesHolidaysIndexRoute
   '/pilotages/sectors': typeof AuthenticatedPilotagesSectorsIndexRoute
+  '/pilotages/service-categories': typeof AuthenticatedPilotagesServiceCategoriesIndexRoute
   '/pilotages/services': typeof AuthenticatedPilotagesServicesIndexRoute
   '/pilotages/teams': typeof AuthenticatedPilotagesTeamsIndexRoute
   '/pilotages/users': typeof AuthenticatedPilotagesUsersIndexRoute
@@ -538,6 +558,7 @@ export interface FileRoutesById {
   '/_authenticated/administrations/roles/': typeof AuthenticatedAdministrationsRolesIndexRoute
   '/_authenticated/pilotages/holidays/': typeof AuthenticatedPilotagesHolidaysIndexRoute
   '/_authenticated/pilotages/sectors/': typeof AuthenticatedPilotagesSectorsIndexRoute
+  '/_authenticated/pilotages/service-categories/': typeof AuthenticatedPilotagesServiceCategoriesIndexRoute
   '/_authenticated/pilotages/services/': typeof AuthenticatedPilotagesServicesIndexRoute
   '/_authenticated/pilotages/teams/': typeof AuthenticatedPilotagesTeamsIndexRoute
   '/_authenticated/pilotages/users/': typeof AuthenticatedPilotagesUsersIndexRoute
@@ -567,6 +588,7 @@ export interface FileRouteTypes {
     | '/administrations/roles'
     | '/pilotages/holidays'
     | '/pilotages/sectors'
+    | '/pilotages/service-categories'
     | '/pilotages/services'
     | '/pilotages/teams'
     | '/pilotages/users'
@@ -593,6 +615,7 @@ export interface FileRouteTypes {
     | '/administrations/roles'
     | '/pilotages/holidays'
     | '/pilotages/sectors'
+    | '/pilotages/service-categories'
     | '/pilotages/services'
     | '/pilotages/teams'
     | '/pilotages/users'
@@ -620,6 +643,7 @@ export interface FileRouteTypes {
     | '/_authenticated/administrations/roles/'
     | '/_authenticated/pilotages/holidays/'
     | '/_authenticated/pilotages/sectors/'
+    | '/_authenticated/pilotages/service-categories/'
     | '/_authenticated/pilotages/services/'
     | '/_authenticated/pilotages/teams/'
     | '/_authenticated/pilotages/users/'
@@ -672,6 +696,7 @@ export const routeTree = rootRoute
         "/_authenticated/administrations/roles/",
         "/_authenticated/pilotages/holidays/",
         "/_authenticated/pilotages/sectors/",
+        "/_authenticated/pilotages/service-categories/",
         "/_authenticated/pilotages/services/",
         "/_authenticated/pilotages/teams/",
         "/_authenticated/pilotages/users/",
@@ -747,6 +772,10 @@ export const routeTree = rootRoute
     },
     "/_authenticated/pilotages/sectors/": {
       "filePath": "_authenticated/pilotages/sectors/index.tsx",
+      "parent": "/_authenticated"
+    },
+    "/_authenticated/pilotages/service-categories/": {
+      "filePath": "_authenticated/pilotages/service-categories/index.tsx",
       "parent": "/_authenticated"
     },
     "/_authenticated/pilotages/services/": {

@@ -24,6 +24,7 @@ export const PERMISSIONS = {
   HOLIDAYS: makePermissions("holidays"),
   SECTORS: makePermissions("sectors"),
   SERVICES: makePermissions("services"),
+  SERVICE_CATEGORIES: makePermissions("service_categories"),
 } as const;
 
 export const ROLES = {

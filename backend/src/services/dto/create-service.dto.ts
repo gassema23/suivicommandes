@@ -21,7 +21,7 @@ export class CreateServiceDto {
 
   @ApiPropertyOptional({
     example: 'Une description',
-    description: 'Description du secteur',
+    description: 'Description du service',
   })
   @IsOptional()
   @IsString()

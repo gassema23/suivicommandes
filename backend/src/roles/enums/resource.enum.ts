@@ -5,4 +5,5 @@ export enum Resource {
   HOLIDAYS = 'holidays',
   SECTORS = 'sectors',
   SERVICES = 'services',
+  SERVICE_CATEGORIES = 'service_categories',
 }

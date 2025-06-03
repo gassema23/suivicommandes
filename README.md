@@ -11,6 +11,7 @@ Application de gestion et de suivi des commandes, équipes et utilisateurs.
 - [Utilisation](#utilisation)
 - [Technologies](#technologies)
 - [Développement](#développement)
+- [Conventions](#conventions)
 - [Auteurs](#auteurs)
 
 ---
@@ -58,3 +59,60 @@ docker-compose up --build
 git add .
 git commit -m "description des modifs"
 git push origin features
+```
+
+## Conventions
+
+src/
+├── assets/               # Images, SVGs, fichiers statiques
+│   └── logo.svg
+│
+├── components/           # Composants réutilisables (généraux)
+│   ├── ui/               # Boutons, Inputs, Modals, etc. (souvent liés à ShadCN)
+│   └── layout/           # Navbar, Sidebar, Footer, etc.
+│
+├── features/             # Domaines métiers, chacun avec ses propres composants, hooks, services
+│   └── users/
+│       ├── components/
+│       ├── hooks/
+│       ├── services/
+│       └── types/
+│
+├── hooks/                # Hooks globaux (non liés à un domaine spécifique)
+│   ├── useAuth.ts
+│   └── useDebounce.ts
+│
+├── lib/                  # Code d'infrastructure (API, date, validation, etc.)
+│   ├── api.ts            # Axios/fetch configuration
+│   ├── auth.ts           # Auth helpers
+│   └── validators.ts     # Zod ou Yup validators
+│
+├── pages/                # Pages si tu utilises Next.js
+│   └── index.tsx
+│
+├── routes/               # Fichiers de routage si nécessaire (ex: React Router)
+│   └── AppRoutes.tsx
+│
+├── store/                # Zustand, Redux ou autre state global
+│   └── authStore.ts
+│
+├── styles/               # Fichiers CSS globaux ou Tailwind config
+│   └── globals.css
+│
+├── types/                # Types globaux
+│   └── index.d.ts
+│
+├── utils/                # Fonctions utilitaires pures
+│   └── formatDate.ts
+│
+├── App.tsx
+└── main.tsx
+
+
+| Élément             | Convention                                                        |
+| ------------------- | ----------------------------------------------------------------- |
+| Composants React    | `PascalCase` : `UserCard.tsx`, `Sidebar.tsx`                      |
+| Fichiers service    | `kebab-case.service.ts` : `user.service.ts`                       |
+| Hooks               | `useCamelCase.ts` : `useUserList.ts`                              |
+| Dossiers de domaine | `features/nom-domaine/`                                           |
+| Fichiers typés      | `user.ts`, `form.ts`, etc. dans `types/` ou `features/.../types/` |
