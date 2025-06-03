@@ -1,4 +1,4 @@
-import { useAuth } from "@/providers/auth-provider";
+import { useAuth } from "@/providers/auth.provider";
 import { useNavigate, useRouter } from "@tanstack/react-router";
 import { useMemo } from "react";
 

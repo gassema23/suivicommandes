@@ -1,9 +1,9 @@
-import LoadingPage from "@/components/ui/loader/loading-page";
+import LoadingPage from "@/components/ui/loader/LoadingPage";
 import FormError from "@/components/ui/shadcn/form-error";
 import { APP_NAME } from "@/config";
 import { createPermissionGuard } from "@/features/authorizations/helpers/createPermissionGuard";
 import { PERMISSIONS } from "@/features/authorizations/types/auth.types";
-import { fetchRole } from "@/features/roles/services/fetchRole";
+import { fetchRole } from "@/features/roles/services/fetch-role.service";
 import { createFileRoute, useParams } from "@tanstack/react-router";
 import RoleUpdateForm from "@/features/roles/components/role-update-form";
 import { queryOptions, useSuspenseQuery } from "@tanstack/react-query";

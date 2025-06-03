@@ -1,12 +1,12 @@
-import LoadingPage from "@/components/ui/loader/loading-page";
+import LoadingPage from "@/components/ui/loader/LoadingPage";
 import { DeleteModal } from "@/components/ui/quebec/DeleteModal";
 import FormError from "@/components/ui/shadcn/form-error";
 import { APP_NAME } from "@/config";
 import { createPermissionGuard } from "@/features/authorizations/helpers/createPermissionGuard";
 import { PERMISSIONS } from "@/features/authorizations/types/auth.types";
 import { DataTable } from "@/features/table/DataTable";
-import { teamColumns } from "@/features/teams/components/team-columns";
-import { getTeams } from "@/features/teams/services/getTeams";
+import { teamColumns } from "@/features/teams/components/TeamColumns";
+import { getTeams } from "@/features/teams/services/get-teams.service";
 import {
   queryOptions,
   useQueryClient,

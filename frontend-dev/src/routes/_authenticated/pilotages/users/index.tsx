@@ -1,12 +1,12 @@
-import LoadingPage from "@/components/ui/loader/loading-page";
+import LoadingPage from "@/components/ui/loader/LoadingPage";
 import { Badge } from "@/components/ui/quebec/Badge";
 import { Card, CardContent } from "@/components/ui/quebec/Card";
 import FormError from "@/components/ui/shadcn/form-error";
 import { APP_NAME } from "@/config";
 import { createPermissionGuard } from "@/features/authorizations/helpers/createPermissionGuard";
 import { PERMISSIONS } from "@/features/authorizations/types/auth.types";
-import UserAvatar from "@/features/users/components/user-avatar";
-import { getUsers } from "@/features/users/services/getUsers";
+import UserAvatar from "@/components/ui/quebec/UserAvatar";
+import { getUsers } from "@/features/users/services/get-users.service";
 import { queryOptions, useSuspenseQuery } from "@tanstack/react-query";
 import { createFileRoute, useRouter } from "@tanstack/react-router";
 import { Mail, MoreHorizontal, Shield } from "lucide-react";
@@ -19,20 +19,16 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/shadcn/dropdown-menu";
-import { z } from "zod";
 import { Pagination } from "@/components/ui/quebec/Pagination";
-import NoData from "@/components/ui/quebec/no-data";
+import NoData from "@/components/ui/quebec/NoData";
+import { usersSearchSchema } from "@/features/users/schemas/user-search.schema";
 
-// Schema de validation pour les paramètres de recherche
-const usersSearchSchema = z.object({
-  page: z.number().min(1).optional().default(1),
-  startsWith: z.string().optional().default("A-E"),
-});
 
-const usersQueryOptions = (page: number, startsWith?: string) =>
+
+const usersQueryOptions = (page: number) =>
   queryOptions({
-    queryKey: ["users", page, startsWith],
-    queryFn: () => getUsers({ page, startsWith }),
+    queryKey: ["users", page],
+    queryFn: () => getUsers({ page }),
   });
 
 export const Route = createFileRoute("/_authenticated/pilotages/users/")({
@@ -75,22 +71,19 @@ export const Route = createFileRoute("/_authenticated/pilotages/users/")({
 });
 
 function RouteComponent() {
-  const { page, startsWith } = Route.useSearch();
+  const { page } = Route.useSearch();
   const { navigate } = useRouter();
-  const { data } = useSuspenseQuery(usersQueryOptions(page, startsWith));
-  const goToPage = (newPage: number) => {
-    navigate({ search: { page: newPage, startsWith } });
-  };
+  const { data } = useSuspenseQuery(usersQueryOptions(page));
 
-  const goToLetter = (letter: string) => {
-    navigate({ search: { page: 1, startsWith: letter } });
+  const goToPage = (newPage: number) => {
+    navigate({ search: { page: newPage } });
   };
 
   return (
     <div>
       {data.data.length == 0 && (
         <NoData withImage>
-          Aucun utilisateur trouvé pour la plage de lettres {startsWith}.
+          Aucun utilisateur trouvé.
         </NoData>
       )}
       <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-4 gap-4">
@@ -156,9 +149,6 @@ function RouteComponent() {
           currentPage={data.meta.page}
           totalPages={data.meta.totalPages}
           onPageChange={goToPage}
-          variant="alphabetic"
-          currentLetter={startsWith}
-          onLetterChange={goToLetter}
         />
       </div>
     </div>

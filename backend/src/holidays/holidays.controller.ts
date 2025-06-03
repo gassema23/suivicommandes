@@ -66,7 +66,7 @@ export class HolidaysController {
     status: 200,
     description: 'Jour férié récupéré avec succès',
   })
-  async findOne(@Query('id') id: string) {
+  async findOne(@Param('id', ParseUUIDPipe) id: string) {
     return this.holidaysService.findOne(id);
   }
 

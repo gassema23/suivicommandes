@@ -1,9 +1,9 @@
-import LoadingPage from "@/components/ui/loader/loading-page";
+import LoadingPage from "@/components/ui/loader/LoadingPage";
 import { APP_NAME } from "@/config";
 import type { User } from "@/features/users/types/user.type";
-import ResendVerificationEmailForm from "@/features/verify-email/components/resend-verification-email-form";
-import VerifyEmailExpiredErrorForm from "@/features/verify-email/components/resend-verification-email-form";
-import { fetchEmailToken } from "@/features/verify-email/services/fetchEmailToken";
+import ResendVerificationEmailForm from "@/features/verify-email/components/ResendVerificationEmailForm";
+import VerifyEmailExpiredErrorForm from "@/features/verify-email/components/ResendVerificationEmailForm";
+import { fetchEmailToken } from "@/features/verify-email/services/fetch-email-token.service";
 import { verifyEmailParamsSchema } from "@/features/verify-email/shemas/verify-email-params.schema";
 import {
   createFileRoute,

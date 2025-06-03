@@ -7,7 +7,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/shadcn/dropdown-menu";
-import { useAuth } from "@/providers/auth-provider";
+import { useAuth } from "@/providers/auth.provider";
 import { Link } from "@tanstack/react-router";
 import { MoreHorizontal } from "lucide-react";
 

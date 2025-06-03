@@ -1,6 +1,6 @@
-import { useAuth } from "@/providers/auth-provider";
+import { useAuth } from "@/providers/auth.provider";
 import { useNavigate } from "@tanstack/react-router";
-import { useNavigationHistory } from "../hooks/use-navigation-history";
+import { useNavigationHistory } from "../hooks/useNavigationHistory";
 
 export const UnauthorizedPage: React.FC = () => {
   const { user, getUserPermissions } = useAuth();

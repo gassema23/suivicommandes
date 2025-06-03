@@ -4,9 +4,9 @@ import "./styles/gloabal.css";
 import { RouterProvider, createRouter } from "@tanstack/react-router";
 
 import { routeTree } from "./routeTree.gen";
-import { useAuth } from "./providers/auth-provider.tsx";
+import { useAuth } from "./providers/auth.provider.tsx";
 import React from "react";
-import Providers from "./providers/providers.tsx";
+import Providers from "./providers/providers.provider.tsx";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 const queryClient = new QueryClient({

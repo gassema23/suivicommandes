@@ -1,4 +1,4 @@
-import CreateUserForm from '@/features/users/components/create-user-form'
+import CreateUserForm from '@/features/users/components/CreateUserForm'
 import { createFileRoute } from '@tanstack/react-router'
 
 export const Route = createFileRoute('/_authenticated/pilotages/users/create')({

@@ -14,6 +14,9 @@ import { RedisConfig } from './config/redis.config';
 import { getDatabaseConfig } from './config/database.config';
 import { RolesModule } from './roles/roles.module';
 import { HolidaysModule } from './holidays/holidays.module';
+import { SectorsModule } from './sectors/sectors.module';
+import { ServicesModule } from './services/services.module';
+import { ServiceCategoriesModule } from './service-categories/service-categories.module';
 
 @Module({
   imports: [
@@ -100,6 +103,9 @@ import { HolidaysModule } from './holidays/holidays.module';
     EmailModule,
     RolesModule,
     HolidaysModule,
+    SectorsModule,
+    ServicesModule,
+    ServiceCategoriesModule,
   ],
 })
 export class AppModule {}

@@ -4,7 +4,7 @@ import {
   Outlet,
   createRootRouteWithContext,
 } from "@tanstack/react-router";
-import type { AuthContext } from "@/providers/auth-provider";
+import type { AuthContext } from "@/providers/auth.provider";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import type { QueryClient } from "@tanstack/react-query";
 import { ErrorPage } from "@/components/layouts/ErrorPage";

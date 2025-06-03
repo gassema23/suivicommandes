@@ -22,7 +22,7 @@ import {
 } from "../schemas/role.schema";
 import { API_ROUTE } from "@/config";
 import type { Role } from "../types/role.type";
-import { updateRole } from "../services/updateRole";
+import { updateRole } from "../services/update-role.service";
 import FormError from "@/components/ui/shadcn/form-error";
 
 // Fetch resources depuis le backend

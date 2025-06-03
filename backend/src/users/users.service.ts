@@ -67,39 +67,10 @@ export class UsersService {
       limit = 10,
       sort = 'createdAt',
       order = 'DESC',
-      startsWith,
     } = paginationDto;
 
     const skip = (page - 1) * limit;
 
-    // Helper pour construire les conditions alphabétiques sur fullName
-    const buildFullNameAlphabetFilter = (qb: any) => {
-      if (!startsWith) return;
-
-      const ranges = {
-        'A-E': ['A', 'E'],
-        'F-J': ['F', 'J'],
-        'K-O': ['K', 'O'],
-        'P-T': ['P', 'T'],
-        'U-Z': ['U', 'Z'],
-      };
-
-      const range = ranges[startsWith as keyof typeof ranges];
-      if (!range) return;
-
-      const [start, end] = range;
-
-      // Filtrer sur le fullName concaténé (firstName + ' ' + lastName)
-      qb.andWhere(
-        "UPPER(CONCAT(user.firstName, ' ', user.lastName)) >= :start AND UPPER(CONCAT(user.firstName, ' ', user.lastName)) <= :endZ",
-        {
-          start: start,
-          endZ: end + 'Z',
-        },
-      );
-    };
-
-    // Utiliser toujours le query builder pour avoir plus de contrôle
     const qb = this.userRepository
       .createQueryBuilder('user')
       .leftJoinAndSelect('user.team', 'team')
@@ -114,10 +85,6 @@ export class UsersService {
       });
     }
 
-    // Filtre alphabétique sur fullName
-    buildFullNameAlphabetFilter(qb);
-
-    // Tri - toujours par fullName pour la cohérence
     if (
       sort?.toLowerCase() === 'fullname' ||
       sort?.toLowerCase() === 'createdAt'
@@ -134,7 +101,6 @@ export class UsersService {
         );
       }
     } else {
-      // Pour tout autre champ de tri
       qb.orderBy(
         `user.${sort}`,
         order.toUpperCase() === 'ASC' ? 'ASC' : 'DESC',
@@ -150,7 +116,6 @@ export class UsersService {
         limit,
         total,
         totalPages: Math.ceil(total / limit),
-        startsWith, // Inclure dans la réponse pour le frontend
       },
     };
   }
@@ -159,7 +124,6 @@ export class UsersService {
     role?: string | string[],
   ): Promise<{ id: string; fullName: string }[]> {
     const where: FindOptionsWhere<User> = {};
-
     if (role) {
       let roles: string[];
       if (Array.isArray(role)) {

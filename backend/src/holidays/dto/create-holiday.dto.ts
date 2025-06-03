@@ -1,4 +1,10 @@
-import { IsString, MaxLength, IsOptional, IsUUID, IsDate } from 'class-validator';
+import {
+  IsString,
+  MaxLength,
+  IsOptional,
+  IsUUID,
+  IsDate,
+} from 'class-validator';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { Transform } from 'class-transformer';
 
@@ -14,10 +20,12 @@ export class CreateHolidayDto {
   @MaxLength(125)
   holidayName?: string;
 
-  @ApiPropertyOptional({ example: 'Une description', description: 'Description du jour férié' })
+  @ApiPropertyOptional({
+    example: 'Une description',
+    description: 'Description du jour férié',
+  })
   @IsOptional()
   @IsString()
   @MaxLength(500)
   holidayDescription?: string;
-
 }

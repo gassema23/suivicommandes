@@ -16,12 +16,12 @@ import { Label } from "@/components/ui/shadcn/label";
 import { Input } from "@/components/ui/shadcn/input";
 import { PermissionMatrix } from "./PermissionMatrix";
 import { usePermissionMatrix } from "../hooks/usePermissionMatrix";
-import { createRole } from "../services/createRole";
+import { createRole } from "../services/create-role.service";
 import {
   createRoleSchema,
   type CreateRoleFormData,
 } from "../schemas/role.schema";
-import { fetchResources } from "../services/fetchResources";
+import { fetchResources } from "../services/fetch-resources.service";
 import FormError from "@/components/ui/shadcn/form-error";
 
 export default function CreateRolePage() {

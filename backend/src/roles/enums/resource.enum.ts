@@ -3,4 +3,6 @@ export enum Resource {
   TEAMS = 'teams',
   ROLES = 'roles',
   HOLIDAYS = 'holidays',
+  SECTORS = 'sectors',
+  SERVICES = 'services',
 }

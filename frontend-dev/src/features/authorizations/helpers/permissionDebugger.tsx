@@ -1,5 +1,5 @@
-import { useAuth } from "@/providers/auth-provider";
-import { useAvailablePermissions } from "../hooks/use-available-permissions";
+import { useAuth } from "@/providers/auth.provider";
+import { useAvailablePermissions } from "../hooks/useAvailablePermissions";
 
 export const PermissionDebugger: React.FC = () => {
   const { user } = useAuth();

@@ -19,7 +19,7 @@ import { ChevronDown } from "lucide-react";
 import { sidebarMenu } from "./config/sidebar-menu";
 import AppLogo from "@/components/ui/quebec/AppLogo";
 import { ProtectedNavLink } from "../authorizations/components/ProtectedNavLink";
-import { usePermissions } from "../authorizations/hooks/use-permissions";
+import { usePermissions } from "../authorizations/hooks/usePermissions";
 
 type Permission = {
   resource: string;

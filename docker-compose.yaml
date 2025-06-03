@@ -47,9 +47,10 @@ services:
   backend:
     build:
       context: ./backend
+      dockerfile: Dockerfile.dev
     volumes:
-      - ./backend:/app
       - /app/node_modules
+      - ./backend:/app
     ports:
       - "4010:4010"
     env_file: ./backend/.env
@@ -58,6 +59,7 @@ services:
   frontend:
     build:
       context: ./frontend-dev
+      dockerfile: Dockerfile.dev
     volumes:
       - ./frontend-dev:/src
       - /app/node_modules

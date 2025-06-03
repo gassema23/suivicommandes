@@ -24,9 +24,22 @@ export const sidebarMenu = {
         PERMISSIONS.USERS.READ,
         PERMISSIONS.TEAMS.READ,
         PERMISSIONS.ROLES.READ,
+        PERMISSIONS.HOLIDAYS.READ,
+        PERMISSIONS.SECTORS.READ,
+        PERMISSIONS.SERVICES.READ,
       ],
       permissionLogic: "OR",
       items: [
+        {
+          title: "Secteurs",
+          url: "/pilotages/sectors",
+          permission: PERMISSIONS.SECTORS.READ,
+        },
+        {
+          title: "Services",
+          url: "/pilotages/services",
+          permission: PERMISSIONS.SERVICES.READ,
+        },
         {
           title: "Utilisateurs",
           url: "/pilotages/users",

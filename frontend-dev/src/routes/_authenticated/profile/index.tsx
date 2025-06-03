@@ -1,8 +1,8 @@
-import LoadingPage from "@/components/ui/loader/loading-page";
+import LoadingPage from "@/components/ui/loader/LoadingPage";
 import FormError from "@/components/ui/shadcn/form-error";
-import ProfileBanner from "@/features/profile/components/profile-banner";
-import ProfileMenu from "@/features/profile/components/profile-menu";
-import { getProfile } from "@/features/profile/services/getProfile";
+import ProfileBanner from "@/features/profile/components/ProfileBanner";
+import ProfileMenu from "@/features/profile/components/ProfileMenu";
+import { getProfile } from "@/features/profile/services/get-profile.service";
 import { queryOptions, useSuspenseQuery } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
 

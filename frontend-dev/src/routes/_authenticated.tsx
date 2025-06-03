@@ -1,4 +1,4 @@
-import LoadingPage from "@/components/ui/loader/loading-page";
+import LoadingPage from "@/components/ui/loader/LoadingPage";
 import { Breadcrumb } from "@/components/ui/quebec/Breadcrumb";
 import { QuebecFooter } from "@/components/ui/quebec/Footer";
 import { QuebecHeader } from "@/components/ui/quebec/QuebecHeader";

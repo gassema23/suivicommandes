@@ -1,10 +1,10 @@
-import LoadingPage from "@/components/ui/loader/loading-page";
+import LoadingPage from "@/components/ui/loader/LoadingPage";
 import FormError from "@/components/ui/shadcn/form-error";
 import { APP_NAME } from "@/config";
 import { createPermissionGuard } from "@/features/authorizations/helpers/createPermissionGuard";
 import { PERMISSIONS } from "@/features/authorizations/types/auth.types";
-import TeamUpdateForm from "@/features/teams/components/team-update-form";
-import { fetchTeam } from "@/features/teams/services/fetchTeam";
+import TeamUpdateForm from "@/features/teams/components/TeamUpdateForm";
+import { fetchTeam } from "@/features/teams/services/fetch-team.service";
 import { queryOptions, useSuspenseQuery } from "@tanstack/react-query";
 import { createFileRoute, useParams } from "@tanstack/react-router";
 

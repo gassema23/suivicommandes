@@ -2,7 +2,7 @@ import React from 'react';
 import type { User } from '../types/user.type';
 import type { ColumnDefinition } from '@/features/table/types/table.types';
 import { ReusableTable } from '@/features/table/ReusableTable';
-import { userService } from '../services/usersService';
+import { userService } from '../services/users-service.service';
 const UsersTable: React.FC = () => {
   const columns: ColumnDefinition<User>[] = [
     {

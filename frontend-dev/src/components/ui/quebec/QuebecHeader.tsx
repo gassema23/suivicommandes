@@ -1,4 +1,4 @@
-import UserMenu from "@/features/users/components/user-menu";
+import UserMenu from "@/features/navigations/components/UserMenu";
 import { SidebarTrigger } from "../shadcn/sidebar";
 import { ThemeToggle } from "./ThemeToogle";
 import { Search } from "lucide-react";

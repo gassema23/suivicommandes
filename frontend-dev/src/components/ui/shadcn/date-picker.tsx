@@ -5,11 +5,12 @@ import {
 } from "@/components/ui/shadcn/popover";
 import { Button } from "../quebec/Button";
 import { CalendarIcon } from "lucide-react";
-import { cn } from "@/lib/utils";
+import { cn, parseLocalDate } from "@/lib/utils";
 import { format } from "date-fns";
 import { Calendar } from "@/components/ui/shadcn/calendar";
 import type { DayPickerSingleProps } from "react-day-picker";
 import { fr } from "date-fns/locale";
+import { useState } from "react";
 
 type DatePickerProps = {
   value?: Date;
@@ -23,8 +24,15 @@ export default function DatePicker({
   className,
   ...props
 }: DatePickerProps) {
+  const [open, setOpen] = useState(false);
+  const dateValue =
+    typeof value === "string" && value
+      ? parseLocalDate(value)
+      : value instanceof Date
+        ? value
+        : undefined;
   return (
-    <Popover>
+    <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
         <Button
           variant="outline"
@@ -35,14 +43,21 @@ export default function DatePicker({
           type="button"
         >
           <CalendarIcon className="mr-2 h-4 w-4" />
-          {value ? format(value, "PPP", { locale: fr }) : <span>Choisir une date</span>}
+          {dateValue ? (
+            format(dateValue, "yyyy-MM-dd", { locale: fr })
+          ) : (
+            <span>Choisir une date</span>
+          )}
         </Button>
       </PopoverTrigger>
       <PopoverContent className="w-auto p-0">
         <Calendar
-          selected={value}
-          onSelect={onChange}
-          initialFocus
+          selected={dateValue}
+          month={dateValue}
+          onSelect={(date) => {
+            onChange?.(date);
+            setOpen(false); // Ferme le popover après sélection
+          }}
           {...props}
         />
       </PopoverContent>

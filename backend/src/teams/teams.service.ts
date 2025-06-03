@@ -162,11 +162,7 @@ export class TeamsService {
     updatedBy: string,
   ): Promise<Team> {
     const team = await this.findOne(id);
-    // Vérifier si le nom de l'équipe existe déjà
-    if (
-      updateTeamDto.teamName &&
-      updateTeamDto.teamName !== team.teamName
-    ) {
+    if (updateTeamDto.teamName && updateTeamDto.teamName !== team.teamName) {
       const existingTeam = await this.teamRepository.findOne({
         where: { teamName: updateTeamDto.teamName },
       });
@@ -174,6 +170,20 @@ export class TeamsService {
         throw new BadRequestException('Une équipe avec ce nom existe déjà');
       }
     }
+
+    if (
+      updateTeamDto.ownerId &&
+      (!team.owner || team.owner.id !== updateTeamDto.ownerId)
+    ) {
+      const newOwner = await this.userRepository.findOne({
+        where: { id: updateTeamDto.ownerId },
+      });
+      if (!newOwner) {
+        throw new BadRequestException('Propriétaire introuvable');
+      }
+      team.owner = newOwner;
+    }
+
     Object.assign(team, updateTeamDto, {
       updatedBy: { id: updatedBy } as User,
     });
@@ -183,7 +193,7 @@ export class TeamsService {
 
   async getTeamsList(): Promise<Team[]> {
     const teams = await this.teamRepository.find({
-      select:{
+      select: {
         id: true,
         teamName: true,
       },

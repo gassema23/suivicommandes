@@ -1,7 +1,7 @@
-import { useAuth } from "@/providers/auth-provider";
+import { useAuth } from "@/providers/auth.provider";
 import { useNavigate } from "@tanstack/react-router";
 import { useCallback, useEffect } from "react";
-import { useNavigationHistory } from "../hooks/use-navigation-history";
+import { useNavigationHistory } from "../hooks/useNavigationHistory";
 interface PermissionCheck {
   resource: string;
   action: string;

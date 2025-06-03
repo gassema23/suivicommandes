@@ -9,7 +9,7 @@ import { Input } from "@/components/ui/shadcn/input";
 import PasswordInput from "@/components/ui/shadcn/password-input";
 import FormError from "@/components/ui/shadcn/form-error";
 import ErrorMessage from "@/components/ui/shadcn/error-message";
-import { useAuth } from "@/providers/auth-provider";
+import { useAuth } from "@/providers/auth.provider";
 import { API_ROUTE } from "@/config";
 import { QuebecLink } from "@/components/ui/quebec/QuebecLink";
 import { Label } from "@/components/ui/shadcn/label";

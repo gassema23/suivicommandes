@@ -1,11 +1,11 @@
-import LoadingPage from "@/components/ui/loader/loading-page";
+import LoadingPage from "@/components/ui/loader/LoadingPage";
 import { DeleteModal } from "@/components/ui/quebec/DeleteModal";
 import FormError from "@/components/ui/shadcn/form-error";
 import { APP_NAME } from "@/config";
 import { createPermissionGuard } from "@/features/authorizations/helpers/createPermissionGuard";
 import { PERMISSIONS } from "@/features/authorizations/types/auth.types";
-import { holidayColumns } from "@/features/holidays/components/holiday-columns";
-import { getHolidays } from "@/features/holidays/services/getHolidays";
+import { holidayColumns } from "@/features/holidays/components/holidayColumns";
+import { getHolidays } from "@/features/holidays/services/get-holidays.service";
 import { DataTable } from "@/features/table/DataTable";
 import {
   queryOptions,
@@ -23,15 +23,7 @@ const holidaysQueryOptions = queryOptions({
 export const Route = createFileRoute("/_authenticated/pilotages/holidays/")({
   beforeLoad: createPermissionGuard([PERMISSIONS.HOLIDAYS.READ]),
   head: () => ({
-    meta: [
-      {
-        name: "description",
-        content: "",
-      },
-      {
-        title: `Jour férié | ${APP_NAME}`,
-      },
-    ],
+    meta: [{ title: `Jour férié | ${APP_NAME}` }],
   }),
   loader: ({ context }) =>
     context.queryClient.ensureQueryData(holidaysQueryOptions),

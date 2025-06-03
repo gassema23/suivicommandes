@@ -20,7 +20,7 @@ export class Holiday {
   @PrimaryGeneratedColumn('uuid')
   readonly id: string;
 
-  @Column({ name: 'holiday_date' })
+  @Column({ name: 'holiday_date', type: 'date' }) 
   @IsDate()
   holidayDate: Date;
 
