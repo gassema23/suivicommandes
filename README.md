@@ -65,6 +65,7 @@ git push origin features
 
 ### Structure recommandée
 
+```text
 src/
 ├── assets/               # Images, SVGs, fichiers statiques
 │   └── logo.svg
@@ -110,6 +111,7 @@ src/
 │
 ├── App.tsx
 └── main.tsx
+```
 
 ### Bonnes conventions
 
