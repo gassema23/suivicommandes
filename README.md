@@ -55,4 +55,6 @@ docker-compose up --build
 
 ### Push sur github
 ```bash
+git add .
+git commit -m "description des modifs"
 git push origin features
