@@ -51,7 +51,9 @@ Application de gestion et de suivi des commandes, équipes et utilisateurs.
 git clone https://github.com/votre-utilisateur/suivicommandes.git
 cd suivicommandes
 docker-compose up --build
+```
 
-
+---
+### Push sur github
 ```bash
- git push origin features
+git push origin features
