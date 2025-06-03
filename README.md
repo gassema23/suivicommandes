@@ -121,4 +121,4 @@ src/
 | Fichiers service    | `kebab-case.service.ts` : `user.service.ts`                       |
 | Hooks               | `useCamelCase.ts` : `useUserList.ts`                              |
 | Dossiers de domaine | `features/nom-domaine/`                                           |
-| Fichiers typés      | `user.ts`, `form.ts`, etc. dans `types/` ou `features/.../types/` |
+| Fichiers typés      | `user.type.ts`, `form.type.ts`, etc. dans `types/` ou `features/.../types/` |
