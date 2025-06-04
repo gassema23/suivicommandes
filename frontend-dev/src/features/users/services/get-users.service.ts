@@ -1,17 +1,8 @@
 import { API_ROUTE } from "@/config";
 import type { UserResponse } from "../types/user.type";
 
-interface GetUsersParams {
-  page?: number;
-}
-
-export const getUsers = async ({
-  page = 1,
-}: GetUsersParams): Promise<UserResponse> => {
-  const params = new URLSearchParams();
-  params.append("page", String(page));
-
-  const res = await fetch(`${API_ROUTE}/users?${params.toString()}`, {
+export const getUsers = async (): Promise<UserResponse> => {
+  const res = await fetch(`${API_ROUTE}/users`, {
     method: "GET",
     credentials: "include",
   });

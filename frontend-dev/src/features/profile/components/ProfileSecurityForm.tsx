@@ -11,7 +11,6 @@ import { useState } from "react";
 
 export default function ProfileSecurityForm() {
   const [qrCodeValue, setQrCodeValue] = useState<string>("");
-
   
 
   return (

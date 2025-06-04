@@ -5,7 +5,7 @@ export async function updateServiceCategory(
   serviceCategoryId: string,
   data: ServiceCategoryFormData
 ) {
-    const { sectorId, ...payload } = data;
+  const { sectorId, ...payload } = data;
   const res = await fetch(
     `${API_ROUTE}/service-categories/${serviceCategoryId}`,
     {

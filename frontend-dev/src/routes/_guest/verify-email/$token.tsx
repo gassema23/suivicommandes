@@ -32,7 +32,7 @@ export const Route = createFileRoute("/_guest/verify-email/$token")({
       { name: "description", content: "Vérification de votre adresse email" },
     ],
   }),
-  errorComponent: ({ error }) => {
+  errorComponent: () => {
     return <VerifyEmailExpiredErrorForm />;
   },
   component: RouteComponent,

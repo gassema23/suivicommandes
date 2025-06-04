@@ -4,7 +4,6 @@ import type { ServiceCategoryFormData } from "../schemas/service-category.schema
 export async function createServiceCategory(data: ServiceCategoryFormData) {
    const { sectorId, ...payload } = data;
 
-
   const res = await fetch(`${API_ROUTE}/service-categories/`, {
     method: "POST",
     credentials: "include",

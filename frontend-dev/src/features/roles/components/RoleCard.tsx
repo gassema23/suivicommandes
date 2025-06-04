@@ -11,8 +11,16 @@ import {
   CardTitle,
 } from "@/components/ui/quebec/Card";
 import { capitalizeFirstLetter } from "@/lib/utils";
+import type { Role } from "../types/role.type";
 
-export default function RoleCard({ role, handleDelete, hasPermission }) {
+type RoleCardProps = {
+  role: Role;
+  handleDelete: (id: string) => void;
+  hasPermission: (permission: string) => boolean;
+};
+
+
+export default function RoleCard({ role, handleDelete, hasPermission }:RoleCardProps) {
   return (
     <Card key={role.id} elevation={1}>
       <CardHeader>
@@ -50,7 +58,7 @@ export default function RoleCard({ role, handleDelete, hasPermission }) {
       <CardContent>
         <RolePermissionsTable
           permissions={role.permissions}
-          actions={ACTIONS}
+          actions={[...ACTIONS]} 
           hasPermission={hasPermission}
         />
       </CardContent>

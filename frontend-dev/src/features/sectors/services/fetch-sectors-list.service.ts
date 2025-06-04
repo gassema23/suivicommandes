@@ -8,6 +8,5 @@ export const fetchSectorsList = async (): Promise<Sector[]> => {
     credentials: "include",
   });
   if (!res.ok) throw new Error("Erreur lors du chargement des secteurs");
-  console.log("fetchSectors", res); 
   return res.json();
 };

@@ -8,7 +8,7 @@ import {
 import { Skeleton } from "@/components/ui/shadcn/skeleton";
 
 interface DependentSelectProps<T> {
-  value: string;
+  value: string | undefined;
   onChange: (val: string) => void;
   data: T[] | undefined;
   isLoading: boolean;

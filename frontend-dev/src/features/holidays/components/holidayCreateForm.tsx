@@ -46,13 +46,6 @@ export default function HolidayCreateForm() {
     },
   });
   const onSubmit = (data: HolidayFormData) => {
-    const payload = {
-      ...data,
-      holidayDate:
-        data.holidayDate instanceof Date
-          ? data.holidayDate.toISOString().slice(0, 10) // "YYYY-MM-DD"
-          : data.holidayDate,
-    };
     createTeamMutation.mutate(data);
   };
 

@@ -1,4 +1,3 @@
-import LoadingPage from "@/components/ui/loader/LoadingPage";
 import { LoadingProgress } from "@/components/ui/loader/LoadingProgress";
 import { API_ROUTE } from "@/config";
 import { QUERY_KEYS } from "@/config/query-key";
@@ -124,11 +123,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   if (isLoading) {
     return (
-      <LoadingProgress
-        duration={2000}
-        color="var(--foreground)"
-        height={6}
-      />
+      <LoadingProgress duration={2000} color="var(--foreground)" height={6} />
     );
   }
 

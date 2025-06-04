@@ -50,8 +50,6 @@ export default function ServiceUpdateForm({ service }: ServiceUpdateFormProps) {
     formState: { errors },
   } = form;
 
-  const sectorId = watch("sectorId");
-
   const createTeamMutation = useMutation({
     mutationFn: (data: ServiceFormData) => updateService(service.id, data),
     onSuccess: () => {

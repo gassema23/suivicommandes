@@ -33,8 +33,11 @@ export function DeleteModal({
   const [error, setError] = useState<string | null>(null);
 
   const handleDelete = async () => {
+    if (!deleteId) return;
+
     setLoading(true);
     setError(null);
+
     try {
       const res = await fetch(`${API_ROUTE}/${deleteUrl}`, {
         method: "DELETE",
@@ -47,12 +50,15 @@ export function DeleteModal({
 
       if (!res.ok) {
         const errorData = await res.json();
-        throw new Error(errorData.message || "Erreur lors de la suppression");
+        throw new Error(errorData?.message ?? "Erreur lors de la suppression");
       }
+
       onOpenChange(false);
       onSuccess?.();
-    } catch (err: any) {
-      setError(err.message || "Erreur inconnue");
+    } catch (err) {
+      const message =
+        err instanceof Error ? err.message : "Erreur inconnue";
+      setError(message);
     } finally {
       setLoading(false);
     }
@@ -72,7 +78,9 @@ export function DeleteModal({
           <DialogTitle>{title}</DialogTitle>
           <DialogDescription>{description}</DialogDescription>
         </DialogHeader>
+
         {error && <div className="text-destructive text-sm mb-2">{error}</div>}
+
         <DialogFooter className="flex gap-2 justify-end">
           <Button
             type="button"
@@ -86,9 +94,9 @@ export function DeleteModal({
             type="button"
             variant="destructive"
             onClick={handleDelete}
-            disabled={loading}
+            isLoading={loading}
           >
-            {loading ? "Suppression..." : "Supprimer"}
+            Supprimer
           </Button>
         </DialogFooter>
       </DialogContent>

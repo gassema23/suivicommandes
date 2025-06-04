@@ -4,7 +4,7 @@ import { momentFr } from "@/lib/momentFr";
 import DataTableAction from "@/features/common/table/components/DataTableAction";
 import { DataTableColumnHeader } from "@/features/common/table/components/DataTableColumnHeader";
 import type { Sector } from "../types/sector.type";
-import { CheckCircle, X, XCircle, type CheckCircle2 } from "lucide-react";
+import { CheckCircle, XCircle } from "lucide-react";
 
 momentFr();
 

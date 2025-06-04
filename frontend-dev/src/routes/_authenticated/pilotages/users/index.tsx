@@ -2,13 +2,12 @@ import LoadingPage from "@/components/ui/loader/LoadingPage";
 import { Badge } from "@/components/ui/quebec/Badge";
 import { Card, CardContent } from "@/components/ui/quebec/Card";
 import FormError from "@/components/ui/shadcn/form-error";
-import { APP_NAME } from "@/config";
 import { createPermissionGuard } from "@/features/common/authorizations/helpers/createPermissionGuard";
 import { PERMISSIONS } from "@/features/common/authorizations/types/auth.types";
 import UserAvatar from "@/components/ui/quebec/UserAvatar";
 import { getUsers } from "@/features/users/services/get-users.service";
 import { queryOptions, useSuspenseQuery } from "@tanstack/react-query";
-import { createFileRoute, useRouter } from "@tanstack/react-router";
+import { createFileRoute } from "@tanstack/react-router";
 import { Mail, MoreHorizontal, Shield } from "lucide-react";
 
 import {
@@ -21,41 +20,29 @@ import {
 } from "@/components/ui/shadcn/dropdown-menu";
 import { Pagination } from "@/components/ui/quebec/Pagination";
 import NoData from "@/components/ui/quebec/NoData";
-import { usersSearchSchema } from "@/features/users/schemas/user-search.schema";
 import { capitalizeFirstLetter } from "@/lib/utils";
 import type { UserResponse } from "@/features/users/types/user.type";
 import { QUERY_KEYS } from "@/config/query-key";
 
-const usersQueryOptions = (page: number) =>
-  queryOptions<UserResponse>({
-    queryKey: QUERY_KEYS.USERS_WITH_PAGE(page),
-    queryFn: () => getUsers({ page }),
-  });
+const usersQueryOptions = queryOptions<UserResponse>({
+  queryKey: QUERY_KEYS.USERS,
+  queryFn: getUsers,
+});
 
 export const Route = createFileRoute("/_authenticated/pilotages/users/")({
-  // Validation des paramètres de recherche
-  validateSearch: usersSearchSchema,
-
   beforeLoad: createPermissionGuard([PERMISSIONS.USERS.READ]),
-
   head: () => ({
     meta: [{ title: "Utilisateurs" }],
   }),
-
-  loader: ({ context }) => {
-    const page = context.search?.page ?? 1;
-    return context.queryClient.ensureQueryData(usersQueryOptions(page));
-  },
-
+  loader: ({ context }) =>
+    context.queryClient.ensureQueryData(usersQueryOptions),
   component: RouteComponent,
-
   errorComponent: ({ error }) => (
     <FormError
       title="Erreur lors du chargement des utilisateurs"
       message={error.message}
     />
   ),
-
   staticData: {
     title: "Utilisateurs",
     action: "/pilotages/users/create",
@@ -64,19 +51,11 @@ export const Route = createFileRoute("/_authenticated/pilotages/users/")({
       { label: "Utilisateurs", href: "/pilotages/users", isCurrent: true },
     ],
   },
-
   pendingComponent: () => <LoadingPage />,
 });
 
 function RouteComponent() {
-  const { page } = Route.useSearch();
-  const { navigate } = useRouter();
-  const { data:users } = useSuspenseQuery<UserResponse>(usersQueryOptions(page));
-
-  const goToPage = (newPage: number) => {
-    navigate({ search: { page: newPage } });
-  };
-
+  const { data: users } = useSuspenseQuery<UserResponse>(usersQueryOptions);
   return (
     <div>
       {users.data.length == 0 && (
@@ -142,9 +121,8 @@ function RouteComponent() {
       </div>
       <div className="mt-6">
         <Pagination
-          currentPage={data.meta.page}
-          totalPages={data.meta.totalPages}
-          onPageChange={goToPage}
+          currentPage={users.meta.page}
+          totalPages={users.meta.totalPages}
         />
       </div>
     </div>

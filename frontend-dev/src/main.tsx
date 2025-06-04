@@ -24,7 +24,7 @@ const router = createRouter({
   scrollRestoration: true,
   context: {
     auth: undefined!, // This will be set after we wrap the app in an AuthProvider
-    queryClient
+    queryClient,
   },
 });
 
@@ -37,26 +37,26 @@ declare module "@tanstack/react-router" {
 
 function InnerApp() {
   const auth = useAuth();
-  return <RouterProvider router={router} context={{ auth }} />;
+  return <RouterProvider router={router} context={{ auth, queryClient }} />;
 }
 
 function App() {
   return (
     <QueryClientProvider client={queryClient}>
-    <Providers>
-      <InnerApp />
-    </Providers>
+      <Providers>
+        <InnerApp />
+      </Providers>
     </QueryClientProvider>
-  )
+  );
 }
 
-const rootElement = document.getElementById('root')!
+const rootElement = document.getElementById("root")!;
 
 if (!rootElement.innerHTML) {
-  const root = ReactDOM.createRoot(rootElement)
+  const root = ReactDOM.createRoot(rootElement);
   root.render(
     <React.StrictMode>
       <App />
-    </React.StrictMode>,
-  )
+    </React.StrictMode>
+  );
 }

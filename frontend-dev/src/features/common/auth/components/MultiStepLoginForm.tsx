@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useMutation } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useNavigate, useSearch } from "@tanstack/react-router";
+import { useSearch } from "@tanstack/react-router";
 import { z } from "zod";
 import { Button } from "@/components/ui/quebec/Button";
 import { Input } from "@/components/ui/shadcn/input";
@@ -37,20 +37,25 @@ export default function MultiStepLoginForm({
   const [backendError, setBackendError] = useState<string | null>(null);
   const [email, setEmail] = useState("");
   const search = useSearch({ from: "/_guest/(login)/login" });
-  const navigate = useNavigate();
   const { login } = useAuth();
 
-  // Step 1: Email + mot de passe
   const formStep1 = useForm<z.infer<typeof Step1Schema>>({
     resolver: zodResolver(Step1Schema),
   });
 
-  // Step 2: Code 2FA
   const formStep2 = useForm<z.infer<typeof Step2Schema>>({
     resolver: zodResolver(Step2Schema),
   });
 
-  // Mutation pour vérifier email/mot de passe
+  // Utilitaire pour parser proprement une erreur
+  const extractErrorMessage = (err: unknown): string => {
+    if (err instanceof Error) return err.message;
+    if (typeof err === "object" && err !== null && "message" in err) {
+      return String((err as { message?: unknown }).message);
+    }
+    return "Erreur inconnue";
+  };
+
   const checkMutation = useMutation({
     mutationFn: async (data: z.infer<typeof Step1Schema>) => {
       const res = await fetch(`${API_ROUTE}/auth/login`, {
@@ -59,6 +64,7 @@ export default function MultiStepLoginForm({
         body: JSON.stringify(data),
         credentials: "include",
       });
+
       const result = await res.json();
       if (!res.ok) throw new Error(result.message || "Erreur de connexion.");
       return result;
@@ -68,14 +74,12 @@ export default function MultiStepLoginForm({
       if (data.twoFactorEnabled) {
         setStep(2);
       } else {
-        // Connexion directe si pas de 2FA
         login(search.redirect);
       }
     },
-    onError: (error: any) => setBackendError(error.message),
+    onError: (error) => setBackendError(extractErrorMessage(error)),
   });
 
-  // Mutation pour vérifier le code 2FA
   const verifyMutation = useMutation({
     mutationFn: async (data: z.infer<typeof Step2Schema>) => {
       const res = await fetch(`${API_ROUTE}/auth/2fa/verify`, {
@@ -84,23 +88,20 @@ export default function MultiStepLoginForm({
         body: JSON.stringify({ email, code: data.code }),
         credentials: "include",
       });
+
       const result = await res.json();
       if (!res.ok) throw new Error(result.message || "Code 2FA invalide.");
       return result;
     },
-    onSuccess: () => {
-      login(search.redirect);
-    },
-    onError: (error: any) => setBackendError(error.message),
+    onSuccess: () => login(search.redirect),
+    onError: (error) => setBackendError(extractErrorMessage(error)),
   });
 
-  // Soumission étape 1
   const onSubmitStep1 = (data: z.infer<typeof Step1Schema>) => {
     setBackendError(null);
     checkMutation.mutate(data);
   };
 
-  // Soumission étape 2
   const onSubmitStep2 = (data: z.infer<typeof Step2Schema>) => {
     setBackendError(null);
     verifyMutation.mutate(data);
@@ -153,19 +154,19 @@ export default function MultiStepLoginForm({
             <Button
               type="submit"
               className="w-full"
-              loading={checkMutation.isPending}
+              isLoading={checkMutation.isPending}
             >
               Se connecter
             </Button>
           </div>
         </form>
       )}
+
       {step === 2 && (
         <form
           onSubmit={formStep2.handleSubmit(onSubmitStep2)}
           className="flex flex-col gap-6 w-full"
         >
-        
           <h1 className="section-title">Vérification en deux étapes</h1>
           <p className="subtitle">
             Veuillez entrer le code généré par votre application
@@ -179,12 +180,9 @@ export default function MultiStepLoginForm({
               className="w-full"
             >
               <InputOTPGroup className="flex justify-center items-center space-x-3">
-                <InputOTPSlot index={0} className="border" />
-                <InputOTPSlot index={1} className="border" />
-                <InputOTPSlot index={2} className="border" />
-                <InputOTPSlot index={3} className="border" />
-                <InputOTPSlot index={4} className="border" />
-                <InputOTPSlot index={5} className="border" />
+                {Array.from({ length: 6 }).map((_, index) => (
+                  <InputOTPSlot key={index} index={index} className="border" />
+                ))}
               </InputOTPGroup>
             </InputOTP>
             <ErrorMessage
@@ -193,7 +191,7 @@ export default function MultiStepLoginForm({
             <Button
               type="submit"
               className="w-full"
-              loading={verifyMutation.isPending}
+              isLoading={verifyMutation.isPending}
             >
               Vérifier
             </Button>

@@ -1,50 +1,55 @@
-import {redirect} from "@tanstack/react-router";
+import { redirect } from "@tanstack/react-router";
 
 interface PermissionCheck {
   resource: string;
   action: string;
 }
 
+interface AuthContext {
+  auth: {
+    user: any; // idéalement, remplace `any` par votre type `User`
+    hasRole: (role: string) => boolean;
+    hasAllPermissions: (permissions: PermissionCheck[]) => boolean;
+    hasAnyPermission: (permissions: PermissionCheck[]) => boolean;
+  };
+}
+
+interface GuardArgs {
+  context: AuthContext;
+}
+
 // =============================================================================
 // 1. Route Guards pour TanStack Router
 // =============================================================================
 
-// Fonction helper pour vérifier les permissions dans beforeLoad
 export const createPermissionGuard = (
   requiredPermissions: PermissionCheck[] = [],
   requiredRole?: string,
   requireAll: boolean = false
 ) => {
-  return async ({ context }: any) => {
-    const { user, hasPermission, hasRole, hasAllPermissions, hasAnyPermission } = context.auth;
+  return async ({ context }: GuardArgs) => {
+    const { user, hasRole, hasAllPermissions, hasAnyPermission } = context.auth;
 
-    // Vérification de l'authentification
     if (!user) {
       throw redirect({
-        to: '/login',
+        to: "/login",
         search: {
-          redirect: window.location.pathname + window.location.search
-        }
+          redirect: window.location.pathname + window.location.search,
+        },
       });
     }
 
-    // Vérification du rôle
     if (requiredRole && !hasRole(requiredRole)) {
-      throw redirect({
-        to: '/unauthorized'
-      });
+      throw redirect({ to: "/unauthorized" });
     }
 
-    // Vérification des permissions
     if (requiredPermissions.length > 0) {
       const hasRequiredPermissions = requireAll
         ? hasAllPermissions(requiredPermissions)
         : hasAnyPermission(requiredPermissions);
-      
+
       if (!hasRequiredPermissions) {
-        throw redirect({
-          to: '/unauthorized'
-        });
+        throw redirect({ to: "/unauthorized" });
       }
     }
 
@@ -52,8 +57,6 @@ export const createPermissionGuard = (
   };
 };
 
-// Guard spécialisé pour admin
-export const adminGuard = createPermissionGuard([], 'admin');
-
-// Guard spécialisé pour utilisateurs connectés
+// Guards spécialisés
+export const adminGuard = createPermissionGuard([], "admin");
 export const authGuard = createPermissionGuard([]);

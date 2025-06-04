@@ -1,5 +1,5 @@
 import type { Column } from "@tanstack/react-table"
-import { ArrowDown, ArrowUp, ChevronDown, ChevronsUpDown, ChevronUp, EyeOff, SortAsc, SortDesc } from "lucide-react"
+import {ChevronDown, ChevronsUpDown, ChevronUp, EyeOff} from "lucide-react"
 
 import { cn } from "@/lib/utils"
 import {

@@ -1,6 +1,5 @@
 import LoadingPage from '@/components/ui/loader/LoadingPage'
 import FormError from '@/components/ui/shadcn/form-error'
-import { APP_NAME } from '@/config'
 import { createPermissionGuard } from '@/features/common/authorizations/helpers/createPermissionGuard'
 import { PERMISSIONS } from '@/features/common/authorizations/types/auth.types'
 import ClientCreateForm from '@/features/clients/components/ClientCreateForm'

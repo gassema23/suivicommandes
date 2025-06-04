@@ -50,7 +50,6 @@ export default function CreateRolePage() {
     isResourcePartiallySelected,
     getFormattedPermissions,
     getTotalPermissions,
-    setMatrix,
   } = usePermissionMatrix(resourceValues);
 
   const form = useForm<CreateRoleFormData>({

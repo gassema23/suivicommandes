@@ -7,16 +7,8 @@ import { Input } from "@/components/ui/shadcn/input";
 import { Textarea } from "@/components/ui/shadcn/textarea";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Label } from "@/components/ui/shadcn/label";
-import { Controller, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { serviceSchema, type ServiceFormData } from "../schemas/service.schema";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/shadcn/select";
-import { Skeleton } from "@/components/ui/shadcn/skeleton";
 import { createService } from "../services/create-service.service";
 import { fetchSectorsList } from "@/features/sectors/services/fetch-sectors-list.service";
 import { DependentSelect } from "@/features/common/dependant-select/components/DependentSelect";

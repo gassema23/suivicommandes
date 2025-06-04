@@ -29,24 +29,9 @@ export default function ServiceCategoryUpdateForm({
   serviceCategory,
 }: ServiceCategoryUpdateFormProps) {
   const [backendError, setBackendError] = useState<string | null>(null);
-  const [selectedSectorId, setSelectedSectorId] = useState<string | null>(
-    serviceCategory?.service?.sector?.id ?? ""
-  );
+
   const navigate = useNavigate();
   const queryClient = useQueryClient();
-
-  const {
-    data: servicesData = [],
-    isLoading: loadingServices,
-    error: serviceError,
-  } = useQuery({
-    queryKey: QUERY_KEYS.SERVICE_BY_SECTOR(selectedSectorId),
-    queryFn: () =>
-      selectedSectorId
-        ? fetchServicesBySector(selectedSectorId)
-        : Promise.resolve([]),
-    enabled: !!selectedSectorId,
-  });
 
   const form = useForm<ServiceCategoryFormData>({
     resolver: zodResolver(serviceCategorySchema),
@@ -78,7 +63,9 @@ export default function ServiceCategoryUpdateForm({
       updateServiceCategory(serviceCategory.id, data),
     onSuccess: () => {
       setBackendError(null);
-      queryClient.invalidateQueries({ queryKey: QUERY_KEYS.SERVICE_CATEGORIES });
+      queryClient.invalidateQueries({
+        queryKey: QUERY_KEYS.SERVICE_CATEGORIES,
+      });
       navigate({ to: "/pilotages/service-categories" });
     },
     onError: (error: { message: string }) => {
@@ -94,7 +81,7 @@ export default function ServiceCategoryUpdateForm({
     isLoading: isLoadingSectors,
     isError: isErrorSectors,
   } = useQuery({
-    queryKey: ["sectors"],
+    queryKey: QUERY_KEYS.SECTORS_LISTS,
     queryFn: fetchSectorsList,
   });
 
@@ -124,7 +111,6 @@ export default function ServiceCategoryUpdateForm({
             value={watch("sectorId")}
             onChange={(value) => {
               setValue("sectorId", value);
-              setValue("serviceId", "");
             }}
             data={sectors}
             isLoading={isLoadingSectors}

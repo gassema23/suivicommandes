@@ -6,6 +6,7 @@ export const ACTIONS = [
   "export",
   "import",
 ] as const;
+
 type Action = (typeof ACTIONS)[number];
 
 const makePermissions = <T extends string>(resource: T) =>
