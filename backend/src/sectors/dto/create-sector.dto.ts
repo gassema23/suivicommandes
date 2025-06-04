@@ -1,5 +1,6 @@
 import { IsString, MaxLength, IsOptional, IsDate } from 'class-validator';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import { Transform } from 'class-transformer';
 
 export class CreateSectorDto {
   @ApiProperty({ example: 'RGT', description: 'Nom du secteur' })
@@ -14,6 +15,7 @@ export class CreateSectorDto {
   })
   @IsOptional()
   @IsString()
+  @Transform(({ value }) => value === "" ? null : value)
   sectorClientTimeEnd?: string;
 
   @ApiPropertyOptional({
@@ -22,6 +24,7 @@ export class CreateSectorDto {
   })
   @IsOptional()
   @IsString()
+  @Transform(({ value }) => value === "" ? null : value)
   sectorProviderTimeEnd?: string;
 
   @ApiProperty({

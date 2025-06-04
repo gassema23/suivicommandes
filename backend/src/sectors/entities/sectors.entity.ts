@@ -27,12 +27,12 @@ export class Sector {
   @MaxLength(125)
   sectorName?: string;
 
-  @Column({ name: 'sector_client_time_end', type: 'time', nullable: true })
+  @Column({ name: 'sector_client_time_end', type: 'time', nullable: true, default: '00:00'  })
   @IsOptional()
   @IsString()
   sectorClientTimeEnd?: string;
 
-  @Column({ name: 'sector_provider_time_end', type: 'time', nullable: true })
+  @Column({ name: 'sector_provider_time_end', type: 'time', nullable: true, default: '00:00'  })
   @IsOptional()
   @IsString()
   sectorProviderTimeEnd?: string;
