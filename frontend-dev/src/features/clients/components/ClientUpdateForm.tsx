@@ -10,6 +10,7 @@ import { Label } from "@/components/ui/shadcn/label";
 import { clientSchema, type ClientFormData } from "../schemas/clients.schema";
 import type { Client } from "../types/client.type";
 import { updateClient } from "../services/update-client.service";
+import { QUERY_KEYS } from "@/config/query-key";
 
 interface ClientUpdateFormProps {
   client: Client;
@@ -38,7 +39,7 @@ export default function ClientUpdateForm({ client }: ClientUpdateFormProps) {
     mutationFn: (data: ClientFormData) => updateClient(client.id, data),
     onSuccess: () => {
       setBackendError(null);
-      queryClient.invalidateQueries({ queryKey: ["clients"] });
+      queryClient.invalidateQueries({ queryKey: QUERY_KEYS.CLIENTS});
       navigate({ to: "/pilotages/clients" });
     },
     onError: (error: { message: string }) => {

@@ -11,6 +11,7 @@ import { Input } from "@/components/ui/shadcn/input";
 import { Textarea } from "@/components/ui/shadcn/textarea";
 import DatePicker from "@/components/ui/shadcn/date-picker";
 import { Label } from "@/components/ui/shadcn/label";
+import { QUERY_KEYS } from "@/config/query-key";
 
 export default function HolidayCreateForm() {
   const [backendError, setBackendError] = useState<string | null>(null);
@@ -37,7 +38,7 @@ export default function HolidayCreateForm() {
     mutationFn: (data: HolidayFormData) => createHoliday(data),
     onSuccess: () => {
       setBackendError(null);
-      queryClient.invalidateQueries({ queryKey: ["holidays"] });
+      queryClient.invalidateQueries({ queryKey: QUERY_KEYS.HOLIDAYS });
       navigate({ to: "/pilotages/holidays" });
     },
     onError: (error: { message: string }) => {

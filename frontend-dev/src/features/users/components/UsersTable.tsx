@@ -3,6 +3,7 @@ import type { User } from '../types/user.type';
 import type { ColumnDefinition } from '@/features/table/types/table.types';
 import { ReusableTable } from '@/features/table/ReusableTable';
 import { userService } from '../services/users-service.service';
+import { QUERY_KEYS } from '@/config/query-key';
 const UsersTable: React.FC = () => {
   const columns: ColumnDefinition<User>[] = [
     {
@@ -100,7 +101,7 @@ const UsersTable: React.FC = () => {
 
       <ReusableTable
         columns={columns}
-        queryKey={['users']}
+        queryKey={QUERY_KEYS.USERS}
         fetchFn={userService.getUsers}
         searchable={true}
         defaultPageSize={10}

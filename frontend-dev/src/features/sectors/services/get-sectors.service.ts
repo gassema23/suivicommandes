@@ -1,7 +1,7 @@
 import { API_ROUTE } from "@/config";
-import type { Sector } from "../types/sector.type";
+import type { SectorsResponse } from "../types/sector.type";
 
-export const getSectors = async (): Promise<Sector> => {
+export const getSectors = async (): Promise<SectorsResponse> => {
   const response = await fetch(`${API_ROUTE}/sectors`, {
     method: "GET",
     credentials: "include",

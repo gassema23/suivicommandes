@@ -1,5 +1,6 @@
 import { Check } from "lucide-react";
 import type { Role } from "../types/role.type";
+import { capitalizeFirstLetter } from "@/lib/utils";
 
 export function RolePermissionsTable({
   permissions,
@@ -22,8 +23,8 @@ export function RolePermissionsTable({
             <th className="text-left p-2">Ressource</th>
             {sortedActions.map((action) => (
               <th key={action} className="text-center p-2 last:pr-0">
-                <div className="bg-foreground text-muted px-4 py-2 rounded-md text-sm font-medium capitalize">
-                  {action}
+                <div className="bg-foreground text-muted px-4 py-2 rounded-md text-sm font-medium">
+                  {capitalizeFirstLetter(action)}
                 </div>
               </th>
             ))}
@@ -35,8 +36,8 @@ export function RolePermissionsTable({
               key={permission.resource}
               className={index % 2 === 0 ? "bg-muted/50" : ""}
             >
-              <td className="p-3 font-medium capitalize">
-                {permission.resource}
+              <td className="p-3 font-medium">
+                {capitalizeFirstLetter(permission.resource)}
               </td>
               {sortedActions.map((action) => (
                 <td key={action} className="text-center p-3">

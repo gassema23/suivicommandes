@@ -21,6 +21,7 @@ export class SubdivisionClient {
   @PrimaryGeneratedColumn('uuid')
   readonly id: string;
 
+
   @ManyToOne(() => Client, (client) => client.subdivisionClients, {
     nullable: false,
   })

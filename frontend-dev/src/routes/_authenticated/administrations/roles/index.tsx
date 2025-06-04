@@ -4,12 +4,14 @@ import { APP_NAME } from "@/config";
 import { queryOptions, useSuspenseQuery } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
 import { getRoles } from "@/features/roles/services/get-roles.service";
-import { createPermissionGuard } from "@/features/authorizations/helpers/createPermissionGuard";
-import { PERMISSIONS } from "@/features/authorizations/types/auth.types";
+import { createPermissionGuard } from "@/features/common/authorizations/helpers/createPermissionGuard";
+import { PERMISSIONS } from "@/features/common/authorizations/types/auth.types";
 import { RoleList } from "@/features/roles/components/RoleList";
+import type { RoleResponse } from "@/features/roles/types/role.type";
+import { QUERY_KEYS } from "@/config/query-key";
 
-const rolesQueryOptions = queryOptions({
-  queryKey: ["roles"],
+const rolesQueryOptions = queryOptions<RoleResponse>({
+  queryKey: QUERY_KEYS.ROLES,
   queryFn: () => getRoles(),
 });
 
@@ -42,8 +44,7 @@ export const Route = createFileRoute("/_authenticated/administrations/roles/")({
 });
 
 function RolePage() {
-
-  const { data: roles = { data: [] } } = useSuspenseQuery(rolesQueryOptions);
+  const { data: roles } = useSuspenseQuery<RoleResponse>(rolesQueryOptions);
   return (
     <div className="w-full">
       <RoleList roles={roles.data} />

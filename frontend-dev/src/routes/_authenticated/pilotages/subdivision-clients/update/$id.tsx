@@ -1,7 +1,8 @@
 import LoadingPage from "@/components/ui/loader/LoadingPage";
 import FormError from "@/components/ui/shadcn/form-error";
-import { createPermissionGuard } from "@/features/authorizations/helpers/createPermissionGuard";
-import { PERMISSIONS } from "@/features/authorizations/types/auth.types";
+import { QUERY_KEYS } from "@/config/query-key";
+import { createPermissionGuard } from "@/features/common/authorizations/helpers/createPermissionGuard";
+import { PERMISSIONS } from "@/features/common/authorizations/types/auth.types";
 import SubdivisionClientUpdateForm from "@/features/subdivision-clients/components/SubdivisionClientUpdateForm";
 import { fetchSubdivisionClient } from "@/features/subdivision-clients/services/fetch-subdivision-client.service";
 import { queryOptions, useSuspenseQuery } from "@tanstack/react-query";
@@ -9,7 +10,7 @@ import { createFileRoute, useParams } from "@tanstack/react-router";
 
 const subdivisionClientsQueryOptions = (id: string) =>
   queryOptions({
-    queryKey: ["subdivisionClients", id],
+    queryKey: QUERY_KEYS.SUBDIVISION_CLIENT_WITH_ID(id),
     queryFn: () => fetchSubdivisionClient(id),
   });
 

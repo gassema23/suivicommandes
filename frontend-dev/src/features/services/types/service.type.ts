@@ -1,9 +1,12 @@
 import type { Sector } from "@/features/sectors/types/sector.type";
+import type { PaginatedResponse } from "@/types/paginate-response.type";
 
-export interface Service {
+export type Service = {
   id: string;
   sectorId?: string;
   serviceName: string;
   serviceDescription?: string;
   sector: Sector;
-}
+};
+
+export type ServiceResponse = PaginatedResponse<Service>;

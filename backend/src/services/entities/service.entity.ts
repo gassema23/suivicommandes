@@ -11,7 +11,7 @@ import {
   OneToMany,
 } from 'typeorm';
 import { User } from '../../users/entities/user.entity';
-import { IsOptional, IsString, IsUUID, MaxLength } from 'class-validator';
+import { IsOptional, IsString, MaxLength } from 'class-validator';
 import { Sector } from 'src/sectors/entities/sectors.entity';
 import { ServiceCategory } from 'src/service-categories/entities/service-category.entity';
 
@@ -22,13 +22,8 @@ export class Service {
   @PrimaryGeneratedColumn('uuid')
   readonly id: string;
 
-  @Column({ name: 'sector_id', nullable: false })
-  @IsUUID()
-  sectorId?: string;
-
   @ManyToOne(() => Sector, (sector) => sector.services, { nullable: false })
   @JoinColumn({ name: 'sector_id' })
-  @IsOptional()
   sector: Sector;
 
   @Column({ name: 'service_name', length: 125, nullable: true })
@@ -43,19 +38,16 @@ export class Service {
   @MaxLength(500)
   serviceDescription?: string;
 
-  // Relation vers l'utilisateur ayant créé l'équipe
   @ManyToOne(() => User, { nullable: true })
   @JoinColumn({ name: 'created_by' })
   @IsOptional()
   createdBy?: Partial<User>;
 
-  // Relation vers l'utilisateur ayant mis à jour l'équipe
   @ManyToOne(() => User, { nullable: true })
   @JoinColumn({ name: 'updated_by' })
   @IsOptional()
   updatedBy?: Partial<User>;
 
-  // Relation vers l'utilisateur ayant supprimé l'équipe
   @ManyToOne(() => User, { nullable: true })
   @JoinColumn({ name: 'deleted_by' })
   @IsOptional()

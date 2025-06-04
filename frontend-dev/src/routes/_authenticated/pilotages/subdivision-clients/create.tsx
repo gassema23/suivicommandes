@@ -1,7 +1,7 @@
 import LoadingPage from "@/components/ui/loader/LoadingPage";
 import FormError from "@/components/ui/shadcn/form-error";
-import { createPermissionGuard } from "@/features/authorizations/helpers/createPermissionGuard";
-import { PERMISSIONS } from "@/features/authorizations/types/auth.types";
+import { createPermissionGuard } from "@/features/common/authorizations/helpers/createPermissionGuard";
+import { PERMISSIONS } from "@/features/common/authorizations/types/auth.types";
 import SubdivisionClientCreateForm from "@/features/subdivision-clients/components/SubdivisionClientCreateForm";
 import { createFileRoute } from "@tanstack/react-router";
 

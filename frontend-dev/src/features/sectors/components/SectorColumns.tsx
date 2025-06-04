@@ -1,8 +1,8 @@
 import type { ColumnDef } from "@tanstack/react-table";
 import moment from "moment";
 import { momentFr } from "@/lib/momentFr";
-import DataTableAction from "@/features/table/components/DataTableAction";
-import { DataTableColumnHeader } from "@/features/table/components/DataTableColumnHeader";
+import DataTableAction from "@/features/common/table/components/DataTableAction";
+import { DataTableColumnHeader } from "@/features/common/table/components/DataTableColumnHeader";
 import type { Sector } from "../types/sector.type";
 import { CheckCircle, X, XCircle, type CheckCircle2 } from "lucide-react";
 

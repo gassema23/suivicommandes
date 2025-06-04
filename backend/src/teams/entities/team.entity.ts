@@ -21,10 +21,6 @@ export class Team {
   @PrimaryGeneratedColumn('uuid')
   readonly id: string;
 
-  @Column({ name: 'owner_id', nullable: true })
-  @IsOptional()
-  ownerId?: string;
-
   // Relation vers l'utilisateur propriétaire de l'équipe
   @ManyToOne(() => User, { nullable: true })
   @JoinColumn({ name: 'owner_id' })

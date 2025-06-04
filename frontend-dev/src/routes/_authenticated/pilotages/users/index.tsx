@@ -3,8 +3,8 @@ import { Badge } from "@/components/ui/quebec/Badge";
 import { Card, CardContent } from "@/components/ui/quebec/Card";
 import FormError from "@/components/ui/shadcn/form-error";
 import { APP_NAME } from "@/config";
-import { createPermissionGuard } from "@/features/authorizations/helpers/createPermissionGuard";
-import { PERMISSIONS } from "@/features/authorizations/types/auth.types";
+import { createPermissionGuard } from "@/features/common/authorizations/helpers/createPermissionGuard";
+import { PERMISSIONS } from "@/features/common/authorizations/types/auth.types";
 import UserAvatar from "@/components/ui/quebec/UserAvatar";
 import { getUsers } from "@/features/users/services/get-users.service";
 import { queryOptions, useSuspenseQuery } from "@tanstack/react-query";
@@ -22,12 +22,13 @@ import {
 import { Pagination } from "@/components/ui/quebec/Pagination";
 import NoData from "@/components/ui/quebec/NoData";
 import { usersSearchSchema } from "@/features/users/schemas/user-search.schema";
-
-
+import { capitalizeFirstLetter } from "@/lib/utils";
+import type { UserResponse } from "@/features/users/types/user.type";
+import { QUERY_KEYS } from "@/config/query-key";
 
 const usersQueryOptions = (page: number) =>
-  queryOptions({
-    queryKey: ["users", page],
+  queryOptions<UserResponse>({
+    queryKey: QUERY_KEYS.USERS_WITH_PAGE(page),
     queryFn: () => getUsers({ page }),
   });
 
@@ -38,10 +39,7 @@ export const Route = createFileRoute("/_authenticated/pilotages/users/")({
   beforeLoad: createPermissionGuard([PERMISSIONS.USERS.READ]),
 
   head: () => ({
-    meta: [
-      { name: "description", content: "" },
-      { title: `Utilisateurs | ${APP_NAME}` },
-    ],
+    meta: [{ title: "Utilisateurs" }],
   }),
 
   loader: ({ context }) => {
@@ -73,7 +71,7 @@ export const Route = createFileRoute("/_authenticated/pilotages/users/")({
 function RouteComponent() {
   const { page } = Route.useSearch();
   const { navigate } = useRouter();
-  const { data } = useSuspenseQuery(usersQueryOptions(page));
+  const { data:users } = useSuspenseQuery<UserResponse>(usersQueryOptions(page));
 
   const goToPage = (newPage: number) => {
     navigate({ search: { page: newPage } });
@@ -81,13 +79,11 @@ function RouteComponent() {
 
   return (
     <div>
-      {data.data.length == 0 && (
-        <NoData withImage>
-          Aucun utilisateur trouvé.
-        </NoData>
+      {users.data.length == 0 && (
+        <NoData withImage>Aucun utilisateur trouvé.</NoData>
       )}
       <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-4 gap-4">
-        {data.data.map((user) => (
+        {users.data.map((user) => (
           <Card key={user.id} className="w-full" elevation={1}>
             <CardContent>
               <div className="flex justify-end w-full">
@@ -135,8 +131,8 @@ function RouteComponent() {
                 </div>
                 <div className=" flex items-center gap-x-4">
                   <Shield className="h-4 w-4" />
-                  <div className="capitalize">
-                    {user.role?.roleName || "Aucun rôle"}
+                  <div>
+                    {capitalizeFirstLetter(user.role?.roleName) || "Aucun rôle"}
                   </div>
                 </div>
               </div>

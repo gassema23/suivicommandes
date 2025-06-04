@@ -12,6 +12,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import DatePicker from "@/components/ui/shadcn/date-picker";
 import { Textarea } from "@/components/ui/shadcn/textarea";
 import { updateHoliday } from "../services/update-holiday.service";
+import { QUERY_KEYS } from "@/config/query-key";
 
 interface HolidayFormProps {
   holiday: Holiday;
@@ -42,7 +43,7 @@ export default function HolidayUpdateForm({ holiday }: HolidayFormProps) {
     mutationFn: (data: HolidayFormData) => updateHoliday(holiday.id, data),
     onSuccess: () => {
       setBackendError(null);
-      queryClient.invalidateQueries({ queryKey: ["holidays"] });
+      queryClient.invalidateQueries({ queryKey: QUERY_KEYS.HOLIDAYS });
       navigate({ to: "/pilotages/holidays" });
     },
     onError: (error: { message: string }) => {

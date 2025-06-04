@@ -1,5 +1,5 @@
 import { API_ROUTE } from "@/config";
-import type { User } from "../types/user.type";
+import type { UserResponse } from "../types/user.type";
 
 interface GetUsersParams {
   page?: number;
@@ -7,7 +7,7 @@ interface GetUsersParams {
 
 export const getUsers = async ({
   page = 1,
-}: GetUsersParams): Promise<{ data: User[]; meta: any }> => {
+}: GetUsersParams): Promise<UserResponse> => {
   const params = new URLSearchParams();
   params.append("page", String(page));
 
@@ -23,5 +23,5 @@ export const getUsers = async ({
       result.message || "Erreur lors de la récupération de l'utilisateur"
     );
   }
-  return result as { data: User[]; meta: any };
+  return result;
 };

@@ -1,8 +1,7 @@
 import LoadingPage from '@/components/ui/loader/LoadingPage'
 import FormError from '@/components/ui/shadcn/form-error'
-import { APP_NAME } from '@/config'
-import { createPermissionGuard } from '@/features/authorizations/helpers/createPermissionGuard'
-import { PERMISSIONS } from '@/features/authorizations/types/auth.types'
+import { createPermissionGuard } from '@/features/common/authorizations/helpers/createPermissionGuard'
+import { PERMISSIONS } from '@/features/common/authorizations/types/auth.types'
 import ServiceCategoryCreateForm from '@/features/service-categories/components/ServiceCategoryCreateForm'
 import { createFileRoute } from '@tanstack/react-router'
 
@@ -11,7 +10,7 @@ export const Route = createFileRoute(
 )({
   beforeLoad: createPermissionGuard([PERMISSIONS.SERVICES.CREATE]),
       head: () => ({
-        meta: [{title: `Ajouter une catégorie de service | ${APP_NAME}`}],
+        meta: [{title: "Ajouter une catégorie de service"}],
       }),
       component: RouteComponent,
       errorComponent: ({ error }) => (

@@ -1,8 +1,8 @@
 import LoadingPage from "@/components/ui/loader/LoadingPage";
 import FormError from "@/components/ui/shadcn/form-error";
-import { APP_NAME } from "@/config";
-import { createPermissionGuard } from "@/features/authorizations/helpers/createPermissionGuard";
-import { PERMISSIONS } from "@/features/authorizations/types/auth.types";
+import { QUERY_KEYS } from "@/config/query-key";
+import { createPermissionGuard } from "@/features/common/authorizations/helpers/createPermissionGuard";
+import { PERMISSIONS } from "@/features/common/authorizations/types/auth.types";
 import TeamUpdateForm from "@/features/teams/components/TeamUpdateForm";
 import { fetchTeam } from "@/features/teams/services/fetch-team.service";
 import { queryOptions, useSuspenseQuery } from "@tanstack/react-query";
@@ -10,7 +10,7 @@ import { createFileRoute, useParams } from "@tanstack/react-router";
 
 const teamsQueryOptions = (id: string) =>
   queryOptions({
-    queryKey: ["teams", id],
+    queryKey: QUERY_KEYS.TEAM_WITH_ID(id),
     queryFn: () => fetchTeam(id),
   });
 
@@ -21,15 +21,7 @@ export const Route = createFileRoute(
   loader: ({ context, params }) =>
     context.queryClient.ensureQueryData(teamsQueryOptions(params.id)),
   head: () => ({
-    meta: [
-      {
-        name: "description",
-        content: "",
-      },
-      {
-        title: `Modifier l'équipe | ${APP_NAME}`,
-      },
-    ],
+    meta: [{ title: "Modifier l'équipe" }],
   }),
   errorComponent: ({ error }) => (
     <FormError

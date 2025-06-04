@@ -1,12 +1,13 @@
 import LoadingPage from "@/components/ui/loader/LoadingPage";
 import { DeleteModal } from "@/components/ui/quebec/DeleteModal";
 import FormError from "@/components/ui/shadcn/form-error";
-import { APP_NAME } from "@/config";
-import { createPermissionGuard } from "@/features/authorizations/helpers/createPermissionGuard";
-import { PERMISSIONS } from "@/features/authorizations/types/auth.types";
-import { DataTable } from "@/features/table/DataTable";
+import { QUERY_KEYS } from "@/config/query-key";
+import { createPermissionGuard } from "@/features/common/authorizations/helpers/createPermissionGuard";
+import { PERMISSIONS } from "@/features/common/authorizations/types/auth.types";
+import { DataTable } from "@/features/common/table/DataTable";
 import { teamColumns } from "@/features/teams/components/TeamColumns";
 import { getTeams } from "@/features/teams/services/get-teams.service";
+import type { TeamResponse } from "@/features/teams/types/team.type";
 import {
   queryOptions,
   useQueryClient,
@@ -15,23 +16,15 @@ import {
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 
-const teamsQueryOptions = queryOptions({
-  queryKey: ["teams"],
+const teamsQueryOptions = queryOptions<TeamResponse>({
+  queryKey: QUERY_KEYS.TEAMS,
   queryFn: () => getTeams(),
 });
 
 export const Route = createFileRoute("/_authenticated/pilotages/teams/")({
   beforeLoad: createPermissionGuard([PERMISSIONS.TEAMS.READ]),
   head: () => ({
-    meta: [
-      {
-        name: "description",
-        content: "",
-      },
-      {
-        title: `Équipes | ${APP_NAME}`,
-      },
-    ],
+    meta: [{ title: "Équipes" }],
   }),
 
   loader: ({ context }) =>
@@ -58,13 +51,13 @@ export const Route = createFileRoute("/_authenticated/pilotages/teams/")({
 });
 
 function TeamsPage() {
-  const { data } = useSuspenseQuery(teamsQueryOptions);
+  const { data: teams } = useSuspenseQuery<TeamResponse>(teamsQueryOptions);
   const [deleteId, setDeleteId] = useState<string | null>(null);
   const queryClient = useQueryClient();
   // Ajoute la fonction onDelete à chaque ligne
   const dataWithDelete = {
-    ...data,
-    data: data.data.map((team) => ({
+    ...teams,
+    data: (teams.data ?? []).map((team) => ({
       ...team,
       onDelete: () => setDeleteId(team.id),
     })),
@@ -80,7 +73,7 @@ function TeamsPage() {
         deleteId={deleteId}
         onSuccess={() => {
           setDeleteId(null);
-          queryClient.invalidateQueries({ queryKey: ["teams"] });
+          queryClient.invalidateQueries({ queryKey: QUERY_KEYS.TEAMS });
         }}
       />
     </>

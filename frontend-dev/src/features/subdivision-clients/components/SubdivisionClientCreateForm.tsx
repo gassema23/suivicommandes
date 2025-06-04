@@ -18,6 +18,7 @@ import { Controller, useForm } from "react-hook-form";
 import { subdivisionClientSchema, type SubdivisionClientFormData } from "../schemas/subdivision-client.schema";
 import { fetchClients } from "../services/fetch-client.service";
 import { createSubdivisionClient } from "../services/create-subdivision-client.service";
+import { QUERY_KEYS } from "@/config/query-key";
 
 export default function SubdivisionClientCreateForm() {
   const [backendError, setBackendError] = useState<string | null>(null);
@@ -29,7 +30,7 @@ export default function SubdivisionClientCreateForm() {
     isLoading: loadingClients,
     error: clientError,
   } = useQuery({
-    queryKey: ["clients"],
+    queryKey: QUERY_KEYS.CLIENTS_LISTS,
     queryFn: fetchClients,
   });
 
@@ -53,7 +54,7 @@ export default function SubdivisionClientCreateForm() {
     mutationFn: (data: SubdivisionClientFormData) => createSubdivisionClient(data),
     onSuccess: () => {
       setBackendError(null);
-      queryClient.invalidateQueries({ queryKey: ["createSubdivisions"] });
+      queryClient.invalidateQueries({ queryKey: QUERY_KEYS.SUBDIVISION_CLIENTS });
       navigate({ to: "/pilotages/subdivision-clients" });
     },
     onError: (error: { message: string }) => {

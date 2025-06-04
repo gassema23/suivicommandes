@@ -164,8 +164,8 @@ export class AuthService {
       lastName,
       email,
       password: hashedPassword,
-      teamId,
-      roleId,
+      team: teamId ? ({ id: teamId } as any) : undefined,
+      role: roleId ? ({ id: roleId } as any) : undefined,
     });
 
     await this.userRepository.save(user);
@@ -184,12 +184,10 @@ export class AuthService {
     try {
       const payload = this.jwtService.verify(token);
 
-
       const user = await this.userRepository.findOne({
         select: ['id', 'emailVerifiedAt', 'firstName', 'lastName', 'email'],
         where: { id: payload.sub },
       });
-
 
       if (!user) {
         throw new NotFoundException('Utilisateur non trouvé');
@@ -338,7 +336,7 @@ export class AuthService {
       email: user.email,
       firstName: user.firstName,
       lastName: user.lastName,
-      teamId: user.teamId,
+      teamId: user.team?.id,
     };
 
     const [accessToken, refreshToken] = await Promise.all([
@@ -380,11 +378,10 @@ export class AuthService {
     return user.role.permissions || [];
   }
 
-  async resendEmailVerification(data:{
+  async resendEmailVerification(data: {
     token: string;
     email: string;
   }): Promise<{ message: string }> {
-
     const user = await this.verifyEmail(data.token);
 
     /*
@@ -425,5 +422,4 @@ export class AuthService {
 
     //return { message: 'Onboarding réussi' };
   }
-  
 }

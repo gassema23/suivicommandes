@@ -1,7 +1,8 @@
 import type { BackendRole, Role } from "@/features/roles/types/role.type";
 import type { Team } from "@/features/teams/types/team.type";
+import type { PaginatedResponse } from "@/types/paginate-response.type";
 
-export interface BackendUser {
+export type BackendUser = {
   id: string;
   email: string;
   firstName: string;
@@ -21,9 +22,9 @@ export interface BackendUser {
   createdById: string | null;
   deletedAt: string | null;
   deletedById: string | null;
-}
+};
 
-export interface User {
+export type User = {
   id: string;
   fullName: string;
   firstName: string;
@@ -35,4 +36,6 @@ export interface User {
   createdAt: string;
   role: Role;
   team: Team;
-}
+};
+
+export type UserResponse = PaginatedResponse<User>;

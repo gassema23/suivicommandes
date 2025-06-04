@@ -11,6 +11,7 @@ import { Label } from "@/components/ui/shadcn/label";
 import { Controller, useForm } from "react-hook-form";
 import { Switch } from "@/components/ui/shadcn/switch";
 import { createSector } from "../services/create-sector.service";
+import { QUERY_KEYS } from "@/config/query-key";
 
 export default function SectorCreateForm() {
   const [backendError, setBackendError] = useState<string | null>(null);
@@ -40,7 +41,7 @@ export default function SectorCreateForm() {
     mutationFn: (data: SectorFormData) => createSector(data),
     onSuccess: () => {
       setBackendError(null);
-      queryClient.invalidateQueries({ queryKey: ["sectors"] });
+      queryClient.invalidateQueries({ queryKey: QUERY_KEYS.SECTORS });
       navigate({ to: "/pilotages/sectors" });
     },
     onError: (error: { message: string }) => {

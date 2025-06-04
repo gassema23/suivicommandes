@@ -1,3 +1,4 @@
+import type { PaginatedResponse } from "@/types/paginate-response.type";
 import type { BackendPermission, Permission } from "./permission.type";
 
 export interface BackendRole {
@@ -16,3 +17,5 @@ export interface Role {
   roleName:string;
   permissions: Permission[];
 }
+
+export type RoleResponse = PaginatedResponse<Role>;

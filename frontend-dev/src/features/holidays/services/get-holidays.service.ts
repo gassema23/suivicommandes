@@ -1,7 +1,7 @@
 import { API_ROUTE } from "@/config";
-import type { Holiday } from "../types/holiday.type";
+import type { HolidayResponse } from "../types/holiday.type";
 
-export const getHolidays = async (): Promise<Holiday[]> => {
+export const getHolidays = async (): Promise<HolidayResponse> => {
   const response = await fetch(`${API_ROUTE}/holidays`, {
     method: "GET",
     credentials: "include",

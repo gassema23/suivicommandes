@@ -1,20 +1,11 @@
 import { LoadingProgress } from "@/components/ui/loader/LoadingProgress";
 import { Button } from "@/components/ui/quebec/Button";
-import { APP_NAME } from "@/config";
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 
 export const Route = createFileRoute("/_authenticated/")({
   head: () => ({
-    meta: [
-      {
-        name: "description",
-        content: "",
-      },
-      {
-        title: `Tableau de bord | ${APP_NAME}`,
-      },
-    ],
+    meta: [{ title: "Tableau de bord" }],
   }),
   component: RouteComponent,
 });

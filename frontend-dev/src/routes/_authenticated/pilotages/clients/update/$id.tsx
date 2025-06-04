@@ -1,16 +1,16 @@
 import LoadingPage from "@/components/ui/loader/LoadingPage";
 import FormError from "@/components/ui/shadcn/form-error";
-import { APP_NAME } from "@/config";
-import { createPermissionGuard } from "@/features/authorizations/helpers/createPermissionGuard";
-import { PERMISSIONS } from "@/features/authorizations/types/auth.types";
+import { createPermissionGuard } from "@/features/common/authorizations/helpers/createPermissionGuard";
+import { PERMISSIONS } from "@/features/common/authorizations/types/auth.types";
 import ClientUpdateForm from "@/features/clients/components/ClientUpdateForm";
 import { fetchClient } from "@/features/clients/services/fetch-client.service";
 import { queryOptions, useSuspenseQuery } from "@tanstack/react-query";
 import { createFileRoute, useParams } from "@tanstack/react-router";
+import { QUERY_KEYS } from "@/config/query-key";
 
 const clientsQueryOptions = (id: string) =>
   queryOptions({
-    queryKey: ["clients", id],
+    queryKey: QUERY_KEYS.CLIENTS_WITH_ID(id),
     queryFn: () => fetchClient(id),
   });
 
@@ -22,7 +22,7 @@ export const Route = createFileRoute(
   loader: ({ context, params }) =>
     context.queryClient.ensureQueryData(clientsQueryOptions(params.id)),
   head: () => ({
-    meta: [{ title: `Modifier le client | ${APP_NAME}` }],
+    meta: [{ title: "Modifier le client" }],
   }),
   errorComponent: ({ error }) => (
     <FormError

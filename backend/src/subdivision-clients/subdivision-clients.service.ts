@@ -11,6 +11,7 @@ import { PaginationDto } from 'src/common/dto/pagination.dto';
 import { PaginatedResult } from 'src/common/interfaces/paginated-result.interface';
 import { CreateSubdivisionClientDto } from './dto/create-subdivision-client.dto';
 import { User } from 'src/users/entities/user.entity';
+import { UpdateSubdivisionClientDto } from './dto/update-subdivision-client.dto';
 
 @Injectable()
 export class SubdivisionClientsService {
@@ -111,5 +112,68 @@ export class SubdivisionClientsService {
     }
 
     return subdivisionClient;
+  }
+
+  async update(
+    id: string,
+    updateSubdivisionClientDto: UpdateSubdivisionClientDto,
+    updatedBy: string,
+  ): Promise<SubdivisionClient> {
+    const subdivisionClient = await this.subdivisionClientRepository.findOne({
+      where: { id },
+      relations: ['client', 'createdBy'],
+    });
+
+    if (!subdivisionClient) {
+      throw new BadRequestException('Subdivision client introuvable');
+    }
+
+    if (
+      updateSubdivisionClientDto.subdivisionClientName &&
+      updateSubdivisionClientDto.subdivisionClientName !==
+        subdivisionClient.subdivisionClientName
+    ) {
+      const existingSubdivisionClient =
+        await this.subdivisionClientRepository.findOne({
+          where: {
+            subdivisionClientName:
+              updateSubdivisionClientDto.subdivisionClientName,
+            client: { id: updateSubdivisionClientDto.clientId },
+          },
+        });
+      if (existingSubdivisionClient) {
+        throw new BadRequestException(
+          'Une subdivision client avec ce nom existe déjà',
+        );
+      }
+    }
+
+    if (
+      updateSubdivisionClientDto.clientId &&
+      (!subdivisionClient.client ||
+        subdivisionClient.client.id !== updateSubdivisionClientDto.clientId)
+    ) {
+      const newClient = await this.clientRepository.findOne({
+        where: { id: updateSubdivisionClientDto.clientId },
+      });
+      if (!newClient) {
+        throw new BadRequestException('Client introuvable');
+      }
+      subdivisionClient.client = newClient;
+    }
+
+    Object.assign(subdivisionClient, updateSubdivisionClientDto, {
+      updatedBy: { id: updatedBy } as User,
+    });
+
+    return this.subdivisionClientRepository.save(subdivisionClient);
+  }
+
+  async remove(id: string, deletedBy: string): Promise<void> {
+    const subdivisionClient = await this.findOne(id);
+    subdivisionClient.deletedBy = { id: deletedBy } as User;
+
+    await this.subdivisionClientRepository.save(subdivisionClient);
+    await this.subdivisionClientRepository.softDelete(id);
   }
 }

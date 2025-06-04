@@ -76,28 +76,15 @@ export class User {
   @IsString()
   rememberToken?: string;
 
-  @Column({ name: 'team_id', nullable: true })
-  @IsOptional()
-  teamId?: string;
-
-  // Relations
   @ManyToOne(() => Team, (team) => team.users, { nullable: true })
   @JoinColumn({ name: 'team_id' })
   @IsOptional()
-  team?: Partial<Team>;
-
-  @RelationId((user: User) => user.team)
-  teamIdRelation?: string;
-
-  @Column({ name: 'role_id', nullable: true })
-  @IsOptional()
-  roleId?: string;
+  team?: Team;
 
   @ManyToOne(() => Role, { nullable: true, eager: true })
   @JoinColumn({ name: 'role_id' })
   @IsOptional()
   role?: Role;
-
 
   @ManyToOne(() => User, { nullable: true })
   @JoinColumn({ name: 'created_by' })

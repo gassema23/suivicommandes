@@ -9,49 +9,21 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Label } from "@/components/ui/shadcn/label";
 import { Controller, useForm } from "react-hook-form";
 import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/shadcn/select";
-import { Skeleton } from "@/components/ui/shadcn/skeleton";
-import {
   serviceCategorySchema,
   type ServiceCategoryFormData,
 } from "../schemas/service-category.schema";
-import { fetchSectors } from "@/features/services/services/fetch-sectors.service";
-import { fetchServicesBySector } from "../services/fetch-services-by-sector.service";
+import { fetchSectorsList } from "@/features/sectors/services/fetch-sectors-list.service";
 import { createServiceCategory } from "../services/create-service-category.service";
 import { Switch } from "@/components/ui/shadcn/switch";
+import { DependentSelect } from "@/features/common/dependant-select/components/DependentSelect";
+import { useDependentQuery } from "@/features/common/dependant-select/hooks/useDependentQuery";
+import { fetchServicesBySector } from "@/features/services/services/fetch-services-by-sector.service";
+import { QUERY_KEYS } from "@/config/query-key";
 
 export default function ServiceCategoryCreateForm() {
   const [backendError, setBackendError] = useState<string | null>(null);
-  const [selectedSectorId, setSelectedSectorId] = useState<string | null>(null);
   const navigate = useNavigate();
   const queryClient = useQueryClient();
-
-  const {
-    data: sectorsData = [],
-    isLoading: loadingSectors,
-    error: sectorError,
-  } = useQuery({
-    queryKey: ["sectors"],
-    queryFn: fetchSectors,
-  });
-
-  const {
-    data: servicesData = [],
-    isLoading: loadingServices,
-    error: serviceError,
-  } = useQuery({
-    queryKey: ["services", selectedSectorId],
-    queryFn: () =>
-      selectedSectorId
-        ? fetchServicesBySector(selectedSectorId)
-        : Promise.resolve([]),
-    enabled: !!selectedSectorId,
-  });
 
   const form = useForm<ServiceCategoryFormData>({
     resolver: zodResolver(serviceCategorySchema),
@@ -70,6 +42,8 @@ export default function ServiceCategoryCreateForm() {
     register,
     handleSubmit,
     control,
+    watch,
+    setValue,
     formState: { errors },
   } = form;
 
@@ -77,16 +51,34 @@ export default function ServiceCategoryCreateForm() {
     mutationFn: (data: ServiceCategoryFormData) => createServiceCategory(data),
     onSuccess: () => {
       setBackendError(null);
-      queryClient.invalidateQueries({ queryKey: ["serviceCategories"] });
+      queryClient.invalidateQueries({ queryKey: QUERY_KEYS.SERVICE_CATEGORIES });
       navigate({ to: "/pilotages/service-categories" });
     },
     onError: (error: { message: string }) => {
       setBackendError(error.message);
     },
   });
+
   const onSubmit = (data: ServiceCategoryFormData) => {
     createTeamMutation.mutate(data);
   };
+
+  const sectorId = watch("sectorId");
+
+  const {
+    data: sectors,
+    isLoading: isLoadingSectors,
+    isError: isErrorSectors,
+  } = useQuery({
+    queryKey: ["sectorsLists"],
+    queryFn: fetchSectorsList,
+  });
+
+  const {
+    data: services,
+    isLoading: isLoadingServices,
+    isError: isErrorServices,
+  } = useDependentQuery(["servicesLists"], fetchServicesBySector, sectorId);
 
   return (
     <form
@@ -100,42 +92,22 @@ export default function ServiceCategoryCreateForm() {
         />
       )}
       <div className="grid grid-cols-12 gap-2 items-center">
-        <Label className="col-span-12 xl:col-span-4" htmlFor="ownerId">
-          Secteurs
+        <Label className="col-span-12 xl:col-span-4" htmlFor="sectorId">
+          Secteur
         </Label>
         <div className="col-span-12 xl:col-span-8">
-          <Controller
-            control={control}
-            name="sectorId"
-            render={({ field }) =>
-              loadingSectors ? (
-                <Skeleton className="h-9" />
-              ) : sectorError ? (
-                <div className="bg-muted/50 border h-9 flex w-full px-3 items-center text-destructive/80">
-                  Erreur de chargement
-                </div>
-              ) : (
-                <Select
-                  value={field.value}
-                  onValueChange={(value) => {
-                    setSelectedSectorId(value);
-                    field.onChange(value);
-                    form.setValue("serviceId", ""); // reset le service quand le secteur change
-                  }}
-                >
-                  <SelectTrigger className="w-full">
-                    <SelectValue placeholder="Sélectionner un secteur" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {sectorsData.map((sector) => (
-                      <SelectItem key={sector.id} value={sector.id}>
-                        {sector.sectorName}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              )
-            }
+          <DependentSelect
+            value={watch("sectorId")}
+            onChange={(value) => {
+              setValue("sectorId", value);
+              setValue("serviceId", "");
+            }}
+            data={sectors}
+            isLoading={isLoadingSectors}
+            isError={isErrorSectors}
+            placeholder="Sélectionner un secteur"
+            getOptionValue={(s) => s.id}
+            getOptionLabel={(s) => s.sectorName}
           />
           {errors.sectorId && (
             <p className="text-destructive text-sm mt-1">
@@ -145,37 +117,19 @@ export default function ServiceCategoryCreateForm() {
         </div>
       </div>
       <div className="grid grid-cols-12 gap-2 items-center">
-        <Label className="col-span-12 xl:col-span-4">Services</Label>
+        <Label className="col-span-12 xl:col-span-4" htmlFor="serviceId">
+          Services
+        </Label>
         <div className="col-span-12 xl:col-span-8">
-          <Controller
-            control={control}
-            name="serviceId"
-            render={({ field }) =>
-              loadingServices ? (
-                <Skeleton className="h-9" />
-              ) : serviceError ? (
-                <div className="bg-muted/50 border h-9 flex w-full px-3 items-center text-destructive/80">
-                  Erreur de chargement
-                </div>
-              ) : (
-                <Select
-                  value={field.value}
-                  onValueChange={field.onChange}
-                  disabled={!selectedSectorId || servicesData.length === 0}
-                >
-                  <SelectTrigger className="w-full">
-                    <SelectValue placeholder="Sélectionner un service" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {servicesData.map((service) => (
-                      <SelectItem key={service.id} value={service.id}>
-                        {service.serviceName}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              )
-            }
+          <DependentSelect
+            value={watch("serviceId")}
+            onChange={(value) => setValue("serviceId", value)}
+            data={services}
+            isLoading={isLoadingServices}
+            isError={isErrorServices}
+            placeholder="Sélectionner un service"
+            getOptionValue={(s) => s.id}
+            getOptionLabel={(s) => s.serviceName}
           />
           {errors.serviceId && (
             <p className="text-destructive text-sm mt-1">
@@ -184,7 +138,6 @@ export default function ServiceCategoryCreateForm() {
           )}
         </div>
       </div>
-
       <div className="grid grid-cols-12 gap-2 items-center">
         <Label
           className="col-span-12 xl:col-span-4"
@@ -253,7 +206,10 @@ export default function ServiceCategoryCreateForm() {
         </div>
       </div>
       <div className="grid grid-cols-12 gap-2 items-center">
-        <Label className="col-span-12 xl:col-span-4" htmlFor="isRequiredExpertise">
+        <Label
+          className="col-span-12 xl:col-span-4"
+          htmlFor="isRequiredExpertise"
+        >
           Expertise requise
         </Label>
         <div className="col-span-12 xl:col-span-8">

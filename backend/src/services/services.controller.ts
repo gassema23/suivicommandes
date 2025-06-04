@@ -27,6 +27,7 @@ import { PaginationDto } from 'src/common/dto/pagination.dto';
 import { User } from 'src/users/entities/user.entity';
 import { CurrentUser } from 'src/auth/decorators/current-user.decorator';
 import { CreateServiceDto } from './dto/create-service.dto';
+import { UpdateServiceDto } from './dto/update-service.dto';
 
 @Controller('services')
 @ApiTags('Services')
@@ -65,7 +66,7 @@ export class ServicesController {
   @ApiResponse({ status: 200, description: 'Service mis à jour avec succès' })
   async update(
     @Param('id', ParseUUIDPipe) id: string,
-    @Body() updateServiceDto: CreateServiceDto,
+    @Body() updateServiceDto: UpdateServiceDto,
     @CurrentUser() currentUser: User,
   ) {
     return this.servicesService.update(id, updateServiceDto, currentUser.id);

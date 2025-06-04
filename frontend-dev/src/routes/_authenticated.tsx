@@ -4,7 +4,7 @@ import { QuebecFooter } from "@/components/ui/quebec/Footer";
 import { QuebecHeader } from "@/components/ui/quebec/QuebecHeader";
 import ActionButton from "@/components/ui/shadcn/action-button";
 import { SidebarProvider } from "@/components/ui/shadcn/sidebar";
-import { AppSidebar } from "@/features/navigations/app-sidebar";
+import { AppSidebar } from "@/features/common/navigations/app-sidebar";
 import {
   createFileRoute,
   Outlet,

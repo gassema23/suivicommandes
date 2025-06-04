@@ -1,4 +1,3 @@
-import * as React from "react";
 import {
   Dialog,
   DialogContent,
@@ -9,6 +8,7 @@ import {
 } from "@/components/ui/shadcn/dialog";
 import { Button } from "@/components/ui/quebec/Button";
 import { API_ROUTE } from "@/config";
+import { useEffect, useState } from "react";
 
 interface DeleteModalProps {
   open: boolean;
@@ -29,8 +29,8 @@ export function DeleteModal({
   title = "Confirmer la suppression",
   description = "Êtes-vous sûr de vouloir supprimer cette donnée ? Cette action est irréversible.",
 }: DeleteModalProps) {
-  const [loading, setLoading] = React.useState(false);
-  const [error, setError] = React.useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const handleDelete = async () => {
     setLoading(true);
@@ -44,7 +44,11 @@ export function DeleteModal({
         },
         body: JSON.stringify({ id: deleteId }),
       });
-      if (!res.ok) throw new Error("Erreur lors de la suppression");
+
+      if (!res.ok) {
+        const errorData = await res.json();
+        throw new Error(errorData.message || "Erreur lors de la suppression");
+      }
       onOpenChange(false);
       onSuccess?.();
     } catch (err: any) {
@@ -53,6 +57,13 @@ export function DeleteModal({
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    if (!open) {
+      setLoading(false);
+      setError(null);
+    }
+  }, [open]);
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>

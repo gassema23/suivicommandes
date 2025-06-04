@@ -1,5 +1,6 @@
 import LoadingPage from "@/components/ui/loader/LoadingPage";
 import FormError from "@/components/ui/shadcn/form-error";
+import { QUERY_KEYS } from "@/config/query-key";
 import ProfileBanner from "@/features/profile/components/ProfileBanner";
 import ProfileMenu from "@/features/profile/components/ProfileMenu";
 import { getProfile } from "@/features/profile/services/get-profile.service";
@@ -7,7 +8,7 @@ import { queryOptions, useSuspenseQuery } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
 
 const profileQueryOptions = queryOptions({
-  queryKey: ["profile"],
+  queryKey: QUERY_KEYS.PROFILE,
   queryFn: () => getProfile(),
 });
 

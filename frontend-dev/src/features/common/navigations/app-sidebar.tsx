@@ -18,8 +18,9 @@ import {
 import { ChevronDown } from "lucide-react";
 import { sidebarMenu } from "./config/sidebar-menu";
 import AppLogo from "@/components/ui/quebec/AppLogo";
-import { ProtectedNavLink } from "../authorizations/components/ProtectedNavLink";
 import { usePermissions } from "../authorizations/hooks/usePermissions";
+import { ProtectedNavLink } from "../authorizations/components/ProtectedNavLink";
+import type { ComponentProps } from "react";
 
 type Permission = {
   resource: string;
@@ -34,18 +35,23 @@ type SidebarItem = {
 };
 type SidebarGroupType = {
   title: string;
+  url?: string;
   items: SidebarItem[];
-  permission?: Permission;
-  role?: string;
   requiredPermissions?: Permission[];
   permissionLogic?: "AND" | "OR";
+  role?: string;
+  permission?: Permission;
 };
 
-export function AppSidebar(props: React.ComponentProps<typeof Sidebar>) {
-  const { hasPermission, hasRole, hasAnyPermission, hasAllPermissions } = usePermissions();
+export function AppSidebar(props: ComponentProps<typeof Sidebar>) {
+  const { hasPermission, hasRole, hasAnyPermission, hasAllPermissions } =
+    usePermissions();
 
   const canAccessGroup = (group: SidebarGroupType): boolean => {
-    if (group.permission && !hasPermission(group.permission.resource, group.permission.action)) {
+    if (
+      group.permission &&
+      !hasPermission(group.permission.resource, group.permission.action)
+    ) {
       return false;
     }
     if (group.role && !hasRole(group.role)) {
@@ -60,7 +66,10 @@ export function AppSidebar(props: React.ComponentProps<typeof Sidebar>) {
   };
 
   const canAccessItem = (item: SidebarItem): boolean => {
-    if (item.permission && !hasPermission(item.permission.resource, item.permission.action)) {
+    if (
+      item.permission &&
+      !hasPermission(item.permission.resource, item.permission.action)
+    ) {
       return false;
     }
     if (item.role && !hasRole(item.role)) {
@@ -77,11 +86,11 @@ export function AppSidebar(props: React.ComponentProps<typeof Sidebar>) {
 
       <SidebarContent className="gap-0 p-0 m-0">
         {sidebarMenu.navMain
-          .filter((group: SidebarGroupType) => {
+          .filter((group) => {
             if (!canAccessGroup(group)) return false;
             return group.items.some(canAccessItem);
           })
-          .map((group: SidebarGroupType) => {
+          .map((group) => {
             const visibleItems = group.items.filter(canAccessItem);
             if (visibleItems.length === 0) return null;
 

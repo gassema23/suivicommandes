@@ -19,6 +19,8 @@ import FormError from "@/components/ui/shadcn/form-error";
 import { getTeamsList } from "@/features/teams/services/get-teams-list.service";
 import { createUser } from "../services/create-user.service";
 import { Label } from "@/components/ui/shadcn/label";
+import { capitalizeFirstLetter } from "@/lib/utils";
+import { QUERY_KEYS } from "@/config/query-key";
 
 export default function CreateUserForm() {
   const [backendError, setBackendError] = useState<string | null>(null);
@@ -29,7 +31,7 @@ export default function CreateUserForm() {
     isLoading: loadingRoles,
     error: roleError,
   } = useQuery({
-    queryKey: ["roles"],
+    queryKey: QUERY_KEYS.ROLES_LISTS,
     queryFn: getRolesList,
   });
 
@@ -38,7 +40,7 @@ export default function CreateUserForm() {
     isLoading: loadingTeams,
     error: teamError,
   } = useQuery({
-    queryKey: ["teams"],
+    queryKey: QUERY_KEYS.TEAMS_LISTS,
     queryFn: getTeamsList,
   });
 
@@ -64,7 +66,7 @@ export default function CreateUserForm() {
     mutationFn: (data: UserFormData) => createUser(data),
     onSuccess: () => {
       setBackendError(null);
-      queryClient.invalidateQueries({ queryKey: ["users"] });
+      queryClient.invalidateQueries({ queryKey: QUERY_KEYS.USERS });
       navigate({ to: "/pilotages/users" });
     },
     onError: (error: { message: string }) => {
@@ -159,8 +161,8 @@ export default function CreateUserForm() {
                     </div>
                   ) : (
                     roleData.map((role) => (
-                      <SelectItem key={role.id} value={role.id} className="capitalize">
-                        {role.roleName}
+                      <SelectItem key={role.id} value={role.id}>
+                        {capitalizeFirstLetter(role.roleName)}
                       </SelectItem>
                     ))
                   )}

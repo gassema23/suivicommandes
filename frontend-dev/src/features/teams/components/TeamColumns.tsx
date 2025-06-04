@@ -2,8 +2,8 @@ import type { ColumnDef } from "@tanstack/react-table";
 import type { Team } from "../types/team.type";
 import moment from "moment";
 import { momentFr } from "@/lib/momentFr";
-import DataTableAction from "@/features/table/components/DataTableAction";
-import { DataTableColumnHeader } from "@/features/table/components/DataTableColumnHeader";
+import DataTableAction from "@/features/common/table/components/DataTableAction";
+import { DataTableColumnHeader } from "@/features/common/table/components/DataTableColumnHeader";
 
 momentFr();
 

@@ -1,12 +1,10 @@
 import LoadingPage from "@/components/ui/loader/LoadingPage";
 import { DeleteModal } from "@/components/ui/quebec/DeleteModal";
 import FormError from "@/components/ui/shadcn/form-error";
-import { APP_NAME } from "@/config";
-import { createPermissionGuard } from "@/features/authorizations/helpers/createPermissionGuard";
-import { PERMISSIONS } from "@/features/authorizations/types/auth.types";
+import { createPermissionGuard } from "@/features/common/authorizations/helpers/createPermissionGuard";
+import { PERMISSIONS } from "@/features/common/authorizations/types/auth.types";
 import { SectorColumns } from "@/features/sectors/components/SectorColumns";
-import { getSectors } from "@/features/sectors/services/get-sectors.service";
-import { DataTable } from "@/features/table/DataTable";
+import { DataTable } from "@/features/common/table/DataTable";
 import {
   queryOptions,
   useQueryClient,
@@ -14,16 +12,19 @@ import {
 } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
+import { getSectors } from "@/features/sectors/services/get-sectors.service";
+import type { SectorsResponse } from "@/features/sectors/types/sector.type";
+import { QUERY_KEYS } from "@/config/query-key";
 
-const sectorsQueryOptions = queryOptions({
-  queryKey: ["sectors"],
+const sectorsQueryOptions = queryOptions<SectorsResponse>({
+  queryKey: QUERY_KEYS.SECTORS,
   queryFn: () => getSectors(),
 });
 
 export const Route = createFileRoute("/_authenticated/pilotages/sectors/")({
   beforeLoad: createPermissionGuard([PERMISSIONS.SECTORS.READ]),
   head: () => ({
-    meta: [{ title: `Secteurs | ${APP_NAME}` }],
+    meta: [{ title: "Secteurs" }],
   }),
   loader: ({ context }) =>
     context.queryClient.ensureQueryData(sectorsQueryOptions),
@@ -46,17 +47,21 @@ export const Route = createFileRoute("/_authenticated/pilotages/sectors/")({
 });
 
 function RouteComponent() {
-  const { data } = useSuspenseQuery(sectorsQueryOptions);
+  const { data: sectors } =
+    useSuspenseQuery<SectorsResponse>(sectorsQueryOptions);
   const [deleteId, setDeleteId] = useState<string | null>(null);
   const queryClient = useQueryClient();
-  // Ajoute la fonction onDelete à chaque ligne
+
   const dataWithDelete = {
-    ...data,
-    data: data.data.map((sector) => ({
+    ...sectors,
+    data: (sectors.data ?? []).map((sector) => ({
       ...sector,
       onDelete: () => setDeleteId(sector.id),
     })),
   };
+
+  console.log("dataWithDelete", sectors);
+
   return (
     <>
       <DataTable data={dataWithDelete} columns={SectorColumns} />
@@ -67,7 +72,7 @@ function RouteComponent() {
         deleteId={deleteId}
         onSuccess={() => {
           setDeleteId(null);
-          queryClient.invalidateQueries({ queryKey: ["sectors"] });
+          queryClient.invalidateQueries({ queryKey: QUERY_KEYS.SECTORS });
         }}
       />
     </>

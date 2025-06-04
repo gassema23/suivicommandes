@@ -12,6 +12,7 @@ import { Controller, useForm } from "react-hook-form";
 import { Switch } from "@/components/ui/shadcn/switch";
 import { updateSector } from "../services/update-sector.service";
 import type { Sector } from "../types/sector.type";
+import { QUERY_KEYS } from "@/config/query-key";
 
 interface SectorFormProps {
   sector: Sector;
@@ -45,7 +46,7 @@ export default function SectorUpdateForm({ sector }: SectorFormProps) {
     mutationFn: (data: SectorFormData) => updateSector(sector.id, data),
     onSuccess: () => {
       setBackendError(null);
-      queryClient.invalidateQueries({ queryKey: ["sectors"] });
+      queryClient.invalidateQueries({ queryKey: QUERY_KEYS.SECTORS });
       navigate({ to: "/pilotages/sectors" });
     },
     onError: (error: { message: string }) => {

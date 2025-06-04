@@ -1,4 +1,4 @@
-import { PERMISSIONS } from "@/features/authorizations/types/auth.types";
+import { PERMISSIONS } from "@/features/common/authorizations/types/auth.types";
 
 export const sidebarMenu = {
   navMain: [
@@ -44,6 +44,16 @@ export const sidebarMenu = {
           title: "Catégories de services",
           url: "/pilotages/service-categories",
           permission: PERMISSIONS.SERVICE_CATEGORIES.READ,
+        },
+        {
+          title: "Fournisseurs",
+          url: "/pilotages/providers",
+          permission: PERMISSIONS.PROVIDERS.READ,
+        },
+        {
+          title: "Fournisseur par services",
+          url: "/pilotages/provider-service-categories",
+          permission: PERMISSIONS.PROVIDER_SERVICE_CATEGORIES.READ,
         },
         {
           title: "Clients",

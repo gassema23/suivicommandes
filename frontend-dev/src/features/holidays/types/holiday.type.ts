@@ -1,7 +1,10 @@
+import type { PaginatedResponse } from "@/types/paginate-response.type";
 
-export interface Holiday {
+export type Holiday = {
   id: string;
   holidayName: string;
   holidayDate: Date;
   holidayDescription?: string;
-}
+};
+
+export type HolidayResponse = PaginatedResponse<Holiday>;

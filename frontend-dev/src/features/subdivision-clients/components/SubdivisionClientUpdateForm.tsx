@@ -20,11 +20,12 @@ import {
   type SubdivisionClientFormData,
 } from "../schemas/subdivision-client.schema";
 import { fetchClients } from "../services/fetch-client.service";
-import { createSubdivisionClient } from "../services/create-subdivision-client.service";
 import type { SubdivisionClient } from "../types/subdivision-client.type";
+import { updateSubdivisionClient } from "../services/update-subdivision-client.service";
+import { QUERY_KEYS } from "@/config/query-key";
 
 interface SubdivisionClientUpdateFormProps {
-  subdivisionClient?: SubdivisionClient;
+  subdivisionClient: SubdivisionClient;
 }
 
 export default function SubdivisionClientUpdateForm({
@@ -38,16 +39,16 @@ export default function SubdivisionClientUpdateForm({
     isLoading: loadingClients,
     error: clientError,
   } = useQuery({
-    queryKey: ["clients"],
+    queryKey: QUERY_KEYS.CLIENTS_LISTS,
     queryFn: fetchClients,
   });
 
   const form = useForm<SubdivisionClientFormData>({
     resolver: zodResolver(subdivisionClientSchema),
     defaultValues: {
-      subdivisionClientName: subdivisionClient?.subdivisionClientName ?? "",
-      subdivisionClientNumber: subdivisionClient?.subdivisionClientNumber ?? "",
-      clientId: subdivisionClient?.client.id ?? "",
+      subdivisionClientName: subdivisionClient.subdivisionClientName ?? "",
+      subdivisionClientNumber: subdivisionClient.subdivisionClientNumber ?? "",
+      clientId: subdivisionClient.client.id ?? "",
     },
   });
 
@@ -60,10 +61,10 @@ export default function SubdivisionClientUpdateForm({
 
   const createTeamMutation = useMutation({
     mutationFn: (data: SubdivisionClientFormData) =>
-      createSubdivisionClient(data),
+      updateSubdivisionClient(subdivisionClient.id, data),
     onSuccess: () => {
       setBackendError(null);
-      queryClient.invalidateQueries({ queryKey: ["createSubdivisions"] });
+      queryClient.invalidateQueries({ queryKey: QUERY_KEYS.SUBDIVISION_CLIENTS });
       navigate({ to: "/pilotages/subdivision-clients" });
     },
     onError: (error: { message: string }) => {

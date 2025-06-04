@@ -15,11 +15,12 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@/components/ui/quebec/Button";
 import { useNavigate } from "@tanstack/react-router";
 import { teamSchema, type TeamFormData } from "../schemas/team.schema";
-import { updateTeam } from "../services/updateTeam";
+import { updateTeam } from "../services/update-team.service";
 import FormError from "@/components/ui/shadcn/form-error";
 import { useState } from "react";
 import { Textarea } from "@/components/ui/shadcn/textarea";
 import { Label } from "@/components/ui/shadcn/label";
+import { QUERY_KEYS } from "@/config/query-key";
 
 interface TeamUpdateFormProps {
   team: Team;
@@ -34,7 +35,7 @@ export default function TeamUpdateForm({ team }: TeamUpdateFormProps) {
     isLoading: loadingOwners,
     error: ownerError,
   } = useQuery({
-    queryKey: ["owners"],
+    queryKey: QUERY_KEYS.USERS_LISTS,
     queryFn: fetchOwners,
   });
 
@@ -58,7 +59,7 @@ export default function TeamUpdateForm({ team }: TeamUpdateFormProps) {
     mutationFn: (data: TeamFormData) => updateTeam(team.id, data),
     onSuccess: () => {
       setBackendError(null);
-      queryClient.invalidateQueries({ queryKey: ["teams"] });
+      queryClient.invalidateQueries({ queryKey: QUERY_KEYS.TEAMS });
       navigate({ to: "/pilotages/teams" });
     },
     onError: (error: { message: string }) => {

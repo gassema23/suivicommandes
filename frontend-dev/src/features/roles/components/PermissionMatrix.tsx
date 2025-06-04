@@ -1,4 +1,5 @@
 import { Checkbox } from '@/components/ui/shadcn/checkbox';
+import { capitalizeFirstLetter } from '@/lib/utils';
 import React from 'react';
 
 interface PermissionMatrixProps {
@@ -31,8 +32,8 @@ export const PermissionMatrix: React.FC<PermissionMatrixProps> = ({
             <th className="text-center p-3 font-medium w-20">Tout</th>
             {actions.map((action) => (
               <th key={action} className="last:pr-0 text-center p-3 min-w-[80px]">
-                <div className="bg-foreground text-muted px-3 py-2 rounded-md text-sm font-medium capitalize">
-                  {action}
+                <div className="bg-foreground text-muted px-3 py-2 rounded-md text-sm font-medium">
+                  {capitalizeFirstLetter(action)}
                 </div>
               </th>
             ))}
@@ -44,8 +45,8 @@ export const PermissionMatrix: React.FC<PermissionMatrixProps> = ({
               key={resource}
               className={index % 2 === 0 ? "bg-muted/30" : "bg-background"}
             >
-              <td className="p-3 font-medium capitalize">
-                {resource}
+              <td className="p-3 font-medium">
+                {capitalizeFirstLetter(resource)}
               </td>
               
               <td className="text-center p-3">

@@ -35,7 +35,7 @@ export class TeamsService {
     if (existingTeam) {
       throw new BadRequestException('Une équipe avec ce nom existe déjà');
     }
-    
+
     const team = this.teamRepository.create({
       ...createTeamDto,
       createdBy: { id: createdBy } as User,
@@ -226,35 +226,37 @@ export class TeamsService {
       throw new NotFoundException('Utilisateur non trouvé');
     }
 
-    if (user.teamId) {
+    if (user.team?.id) {
       throw new BadRequestException(
         "L'utilisateur fait déjà partie d'une équipe",
       );
     }
 
-    user.teamId = teamId;
+    user.team = team;
     await this.userRepository.save(user);
   }
 
   async removeUserFromTeam(teamId: string, userId: string): Promise<void> {
-    const [team, user] = await Promise.all([
-      this.findOne(teamId),
-      this.userRepository.findOne({ where: { id: userId, teamId } }),
-    ]);
+  const [team, user] = await Promise.all([
+    this.findOne(teamId),
+    this.userRepository.findOne({
+      where: { id: userId, team: { id: teamId } },
+    }),
+  ]);
 
-    if (!user) {
-      throw new NotFoundException('Utilisateur non trouvé dans cette équipe');
-    }
-
-    user.teamId = ''; // Retirer l'utilisateur de l'équipe
-    await this.userRepository.save(user);
+  if (!user) {
+    throw new NotFoundException('Utilisateur non trouvé dans cette équipe');
   }
 
+  user.team = undefined;
+  await this.userRepository.save(user);
+}
+
   async getTeamMembers(teamId: string): Promise<User[]> {
-    await this.findOne(teamId); // Vérifier que l'équipe existe
+    await this.findOne(teamId);
 
     return this.userRepository.find({
-      where: { teamId },
+      where: { team: { id: teamId } },
       order: { firstName: 'ASC' },
     });
   }

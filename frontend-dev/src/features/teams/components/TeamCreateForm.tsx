@@ -19,6 +19,7 @@ import { useState } from "react";
 import FormError from "@/components/ui/shadcn/form-error";
 import { Textarea } from "@/components/ui/shadcn/textarea";
 import { Label } from "@/components/ui/shadcn/label";
+import { QUERY_KEYS } from "@/config/query-key";
 
 export default function TeamCreateForm() {
   const [backendError, setBackendError] = useState<string | null>(null);
@@ -29,7 +30,7 @@ export default function TeamCreateForm() {
     isLoading: loadingOwners,
     error: ownerError,
   } = useQuery({
-    queryKey: ["owners"],
+    queryKey: QUERY_KEYS.USERS_LISTS,
     queryFn: fetchOwners,
   });
 
@@ -53,7 +54,7 @@ export default function TeamCreateForm() {
     mutationFn: (data: TeamFormData) => createTeam(data),
     onSuccess: () => {
       setBackendError(null);
-      queryClient.invalidateQueries({ queryKey: ["teams"] });
+      queryClient.invalidateQueries({ queryKey: QUERY_KEYS.TEAMS });
       navigate({ to: "/pilotages/teams" });
     },
     onError: (error: { message: string }) => {

@@ -1,6 +1,7 @@
 import type { Service } from "@/features/services/types/service.type";
+import type { PaginatedResponse } from "@/types/paginate-response.type";
 
-export interface ServiceCategory {
+export type ServiceCategory = {
   id: string;
   serviceId?: string;
   serviceCategoryName: string;
@@ -9,4 +10,6 @@ export interface ServiceCategory {
   isRequiredExpertise?: boolean;
   serviceCategoryDescription?: string;
   service: Service;
-}
+};
+
+export type ServiceCategoryResponse = PaginatedResponse<ServiceCategory>;

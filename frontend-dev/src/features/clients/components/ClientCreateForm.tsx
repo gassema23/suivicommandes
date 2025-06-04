@@ -9,6 +9,7 @@ import { Input } from "@/components/ui/shadcn/input";
 import { Label } from "@/components/ui/shadcn/label";
 import { clientSchema, type ClientFormData } from "../schemas/clients.schema";
 import { createClient } from "../services/create-client.service";
+import { QUERY_KEYS } from "@/config/query-key";
 
 export default function ClientCreateForm() {
   const [backendError, setBackendError] = useState<string | null>(null);
@@ -19,7 +20,7 @@ export default function ClientCreateForm() {
     resolver: zodResolver(clientSchema),
     defaultValues: {
       clientName: "",
-      clientNumber:""
+      clientNumber: "",
     },
   });
 
@@ -33,7 +34,7 @@ export default function ClientCreateForm() {
     mutationFn: (data: ClientFormData) => createClient(data),
     onSuccess: () => {
       setBackendError(null);
-      queryClient.invalidateQueries({ queryKey: ["clients"] });
+      queryClient.invalidateQueries({ queryKey: QUERY_KEYS.CLIENTS });
       navigate({ to: "/pilotages/clients" });
     },
     onError: (error: { message: string }) => {
@@ -56,7 +57,9 @@ export default function ClientCreateForm() {
         />
       )}
       <div className="grid grid-cols-12 gap-2 items-center">
-        <Label className="col-span-12 xl:col-span-4" htmlFor="clientName">Client</Label>
+        <Label className="col-span-12 xl:col-span-4" htmlFor="clientName">
+          Client
+        </Label>
         <div className="col-span-12 xl:col-span-8">
           <Input
             className="block w-full"
@@ -71,7 +74,9 @@ export default function ClientCreateForm() {
         </div>
       </div>
       <div className="grid grid-cols-12 gap-2 items-center">
-        <Label className="col-span-12 xl:col-span-4" htmlFor="clientNumber">Identifiant du client</Label>
+        <Label className="col-span-12 xl:col-span-4" htmlFor="clientNumber">
+          Identifiant du client
+        </Label>
         <div className="col-span-12 xl:col-span-8">
           <Input
             className="block w-full"

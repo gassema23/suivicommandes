@@ -80,5 +80,5 @@ export class Sector {
   readonly deletedAt?: Date;
 
   @OneToMany(() => Service, (service) => service.sector)
-  services?: Service[];
+  services: Service[];
 }

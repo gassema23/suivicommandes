@@ -4,7 +4,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useNavigate } from "@tanstack/react-router";
 
-import { ACTIONS } from "@/features/authorizations/types/auth.types";
+import { ACTIONS } from "@/features/common/authorizations/types/auth.types";
 import {
   Card,
   CardContent,
@@ -23,6 +23,7 @@ import {
 } from "../schemas/role.schema";
 import { fetchResources } from "../services/fetch-resources.service";
 import FormError from "@/components/ui/shadcn/form-error";
+import { QUERY_KEYS } from "@/config/query-key";
 
 export default function CreateRolePage() {
   const navigate = useNavigate();
@@ -35,7 +36,7 @@ export default function CreateRolePage() {
     isLoading: loadingResources,
     error: resourcesError,
   } = useQuery({
-    queryKey: ["resources"],
+    queryKey: QUERY_KEYS.RESOURCE,
     queryFn: fetchResources,
   });
   const resourceValues = resourcesRaw.map((r) => r.value);
@@ -69,7 +70,7 @@ export default function CreateRolePage() {
     mutationFn: createRole,
     onSuccess: () => {
       setBackendError(null);
-      queryClient.invalidateQueries({ queryKey: ["roles"] });
+      queryClient.invalidateQueries({ queryKey: QUERY_KEYS.ROLES });
       navigate({ to: "/administrations/roles" });
     },
     onError: (error: { message: string }) => {

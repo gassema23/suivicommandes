@@ -4,7 +4,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useNavigate } from "@tanstack/react-router";
 
-import { ACTIONS } from "@/features/authorizations/types/auth.types";
+import { ACTIONS } from "@/features/common/authorizations/types/auth.types";
 import {
   Card,
   CardContent,
@@ -24,6 +24,7 @@ import { API_ROUTE } from "@/config";
 import type { Role } from "../types/role.type";
 import { updateRole } from "../services/update-role.service";
 import FormError from "@/components/ui/shadcn/form-error";
+import { QUERY_KEYS } from "@/config/query-key";
 
 // Fetch resources depuis le backend
 const fetchResources = async (): Promise<
@@ -51,7 +52,7 @@ export default function RoleUpdateForm({ role }: RoleUpdateFormProps) {
     isLoading: loadingResources,
     error: resourcesError,
   } = useQuery({
-    queryKey: ["resources"],
+    queryKey: QUERY_KEYS.RESOURCE,
     queryFn: fetchResources,
   });
   const resourceValues = resourcesRaw.map((r) => r.value);
@@ -99,7 +100,7 @@ export default function RoleUpdateForm({ role }: RoleUpdateFormProps) {
     mutationFn: (data: CreateRoleFormData) => updateRole(role.id, data),
     onSuccess: () => {
       setBackendError(null);
-      queryClient.invalidateQueries({ queryKey: ["roles"] });
+      queryClient.invalidateQueries({ queryKey: QUERY_KEYS.ROLES });
       navigate({ to: "/administrations/roles" });
     },
     onError: (error: { message: string }) => {

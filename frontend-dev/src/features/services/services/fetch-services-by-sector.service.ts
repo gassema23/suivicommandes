@@ -2,8 +2,8 @@ import { API_ROUTE } from "@/config";
 import type { Service } from "@/features/services/types/service.type";
 
 // Fetch resources depuis le backend
-export const fetchServicesBySector = async (sectorId: string): Promise<Service[]> => {
-  const res = await fetch(`${API_ROUTE}/sectors/${sectorId}/services`, {
+export async function fetchServicesBySector(id?: string): Promise<Service[]> {
+  const res = await fetch(`${API_ROUTE}/sectors/${id}/services`, {
     method: "GET",
     credentials: "include",
   });

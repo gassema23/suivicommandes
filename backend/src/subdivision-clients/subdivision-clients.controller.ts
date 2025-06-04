@@ -1,4 +1,15 @@
-import { Body, Controller, Get, Param, ParseUUIDPipe, Post, Query, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  ParseUUIDPipe,
+  Patch,
+  Post,
+  Query,
+  UseGuards,
+} from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import {
   ApiBearerAuth,
@@ -17,6 +28,7 @@ import { instanceToPlain } from 'class-transformer';
 import { User } from 'src/users/entities/user.entity';
 import { CurrentUser } from 'src/auth/decorators/current-user.decorator';
 import { CreateSubdivisionClientDto } from './dto/create-subdivision-client.dto';
+import { UpdateSubdivisionClientDto } from './dto/update-subdivision-client.dto';
 
 @Controller('subdivision-clients')
 @ApiTags('Subdivision clients')
@@ -56,7 +68,10 @@ export class SubdivisionClientsController {
     { resource: Resource.SUBDIVISION_CLIENTS, actions: [Action.CREATE] },
   ])
   @ApiOperation({ summary: 'Créer une Subdivision client' })
-  @ApiResponse({ status: 201, description: 'Subdivision client créé avec succès' })
+  @ApiResponse({
+    status: 201,
+    description: 'Subdivision client créé avec succès',
+  })
   async create(
     @Body() createSubdivisionClientDto: CreateSubdivisionClientDto,
     @CurrentUser() currentUser: User,
@@ -68,7 +83,9 @@ export class SubdivisionClientsController {
   }
 
   @Get(':id')
-  @Permissions([{ resource: Resource.SUBDIVISION_CLIENTS, actions: [Action.READ] }])
+  @Permissions([
+    { resource: Resource.SUBDIVISION_CLIENTS, actions: [Action.READ] },
+  ])
   @ApiOperation({ summary: 'Afficher une Subdivision client par son ID' })
   @ApiResponse({
     status: 200,
@@ -77,5 +94,32 @@ export class SubdivisionClientsController {
   async findOne(@Param('id', ParseUUIDPipe) id: string) {
     const subdivisionClient = await this.subdivisionClientsService.findOne(id);
     return instanceToPlain(subdivisionClient);
+  }
+
+  @Patch(':id')
+  @Permissions([{ resource: Resource.SUBDIVISION_CLIENTS, actions: [Action.UPDATE] }])
+  @ApiOperation({ summary: 'Mettre à jour la subdivision client' })
+  @ApiResponse({
+    status: 200,
+    description: 'Subdivision client mis à jour avec succès',
+  })
+  async update(
+    @Param('id', ParseUUIDPipe) id: string,
+    @Body() updateSubdivisionClientDto: UpdateSubdivisionClientDto,
+    @CurrentUser() currentUser: User,
+  ) {
+    return this.subdivisionClientsService.update(
+      id,
+      updateSubdivisionClientDto,
+      currentUser.id,
+    );
+  }
+
+  @Delete()
+  @Permissions([{ resource: Resource.SUBDIVISION_CLIENTS, actions: [Action.DELETE] }])
+  @ApiOperation({ summary: 'Supprimer un jour férié' })
+  @ApiResponse({ status: 200, description: 'Jour férié supprimé avec succès' })
+  async remove(@Body('id') id: string, @CurrentUser() currentUser: User) {
+    return this.subdivisionClientsService.remove(id, currentUser.id);
   }
 }

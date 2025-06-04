@@ -1,12 +1,11 @@
 import LoadingPage from "@/components/ui/loader/LoadingPage";
 import { DeleteModal } from "@/components/ui/quebec/DeleteModal";
 import FormError from "@/components/ui/shadcn/form-error";
-import { APP_NAME } from "@/config";
-import { createPermissionGuard } from "@/features/authorizations/helpers/createPermissionGuard";
-import { PERMISSIONS } from "@/features/authorizations/types/auth.types";
+import { createPermissionGuard } from "@/features/common/authorizations/helpers/createPermissionGuard";
+import { PERMISSIONS } from "@/features/common/authorizations/types/auth.types";
 import { ServiceColumns } from "@/features/services/components/ServiceColumns";
 import { getServices } from "@/features/services/services/get-services.service";
-import { DataTable } from "@/features/table/DataTable";
+import { DataTable } from "@/features/common/table/DataTable";
 import {
   queryOptions,
   useQueryClient,
@@ -14,16 +13,18 @@ import {
 } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
+import type { ServiceResponse } from "@/features/services/types/service.type";
+import { QUERY_KEYS } from "@/config/query-key";
 
-const servicesQueryOptions = queryOptions({
-  queryKey: ["services"],
+const servicesQueryOptions = queryOptions<ServiceResponse>({
+  queryKey: QUERY_KEYS.SERVICES,
   queryFn: () => getServices(),
 });
 
 export const Route = createFileRoute("/_authenticated/pilotages/services/")({
   beforeLoad: createPermissionGuard([PERMISSIONS.SERVICES.READ]),
   head: () => ({
-    meta: [{ title: `Services | ${APP_NAME}` }],
+    meta: [{ title: "Services" }],
   }),
   loader: ({ context }) =>
     context.queryClient.ensureQueryData(servicesQueryOptions),
@@ -46,13 +47,14 @@ export const Route = createFileRoute("/_authenticated/pilotages/services/")({
 });
 
 function RouteComponent() {
-  const { data } = useSuspenseQuery(servicesQueryOptions);
+  const { data: services } =
+    useSuspenseQuery<ServiceResponse>(servicesQueryOptions);
   const [deleteId, setDeleteId] = useState<string | null>(null);
   const queryClient = useQueryClient();
 
   const dataWithDelete = {
-    ...data,
-    data: data.data.map((service) => ({
+    ...services,
+    data: (services.data ?? []).map((service) => ({
       ...service,
       onDelete: () => setDeleteId(service.id),
     })),
@@ -67,7 +69,7 @@ function RouteComponent() {
         deleteId={deleteId}
         onSuccess={() => {
           setDeleteId(null);
-          queryClient.invalidateQueries({ queryKey: ["services"] });
+          queryClient.invalidateQueries({ queryKey: QUERY_KEYS.SERVICES });
         }}
       />
     </>

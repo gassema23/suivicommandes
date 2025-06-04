@@ -63,7 +63,7 @@ export class ServicesService {
   async findOne(id: string): Promise<Service> {
     const service = await this.serviceRepository.findOne({
       where: { id },
-      relations: ['sector', 'createdBy'],
+      relations: ['sector', 'createdBy','serviceCategories'],
     });
 
     if (!service) {
@@ -114,7 +114,7 @@ export class ServicesService {
     id: string,
     updateServiceDto: UpdateServiceDto,
     updatedBy: string,
-  ): Promise<Sector> {
+  ): Promise<Service> {
     const service = await this.serviceRepository.findOne({
       where: { id },
       relations: ['sector', 'createdBy'],
@@ -131,8 +131,9 @@ export class ServicesService {
       const existingService = await this.serviceRepository.findOne({
         where: {
           serviceName: updateServiceDto.serviceName,
-          sectorId: updateServiceDto.sectorId,
+          sector: { id: updateServiceDto.sectorId },
         },
+        relations: ['sector'],
       });
       if (existingService) {
         throw new BadRequestException('Un secteur avec ce nom existe déjà');
@@ -161,6 +162,12 @@ export class ServicesService {
 
   async remove(id: string, deletedBy: string): Promise<void> {
     const service = await this.findOne(id);
+
+    if (service.serviceCategories && service.serviceCategories.length > 0) {
+      throw new BadRequestException(
+        'Impossible de supprimer un service qui contient des catégories',
+      );
+    }
 
     service.deletedBy = { id: deletedBy } as User;
     await this.serviceRepository.save(service);

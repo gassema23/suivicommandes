@@ -1,8 +1,8 @@
 import LoadingPage from "@/components/ui/loader/LoadingPage";
 import FormError from "@/components/ui/shadcn/form-error";
-import { APP_NAME } from "@/config";
-import { createPermissionGuard } from "@/features/authorizations/helpers/createPermissionGuard";
-import { PERMISSIONS } from "@/features/authorizations/types/auth.types";
+import { QUERY_KEYS } from "@/config/query-key";
+import { createPermissionGuard } from "@/features/common/authorizations/helpers/createPermissionGuard";
+import { PERMISSIONS } from "@/features/common/authorizations/types/auth.types";
 import ServiceCategoryUpdateForm from "@/features/service-categories/components/ServiceCategoryUpdateForm";
 import { fetchServiceCategory } from "@/features/service-categories/services/fetch-service-category.service";
 import { queryOptions, useSuspenseQuery } from "@tanstack/react-query";
@@ -10,7 +10,7 @@ import { createFileRoute, useParams } from "@tanstack/react-router";
 
 const serviceCategoriesQueryOptions = (id: string) =>
   queryOptions({
-    queryKey: ["serviceCategories", id],
+    queryKey: QUERY_KEYS.SERVICE_CATEGORY_WITH_ID(id),
     queryFn: () => fetchServiceCategory(id),
   });
 
@@ -24,7 +24,7 @@ export const Route = createFileRoute(
       serviceCategoriesQueryOptions(params.id)
     ),
   head: () => ({
-    meta: [{ title: `Modifier la catégorie de service | ${APP_NAME}` }],
+    meta: [{ title: "Modifier la catégorie de service" }],
   }),
   errorComponent: ({ error }) => (
     <FormError

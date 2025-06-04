@@ -1,10 +1,13 @@
 import type { Client } from "@/features/clients/types/client.type";
+import type { PaginatedResponse } from "@/types/paginate-response.type";
 
-export interface SubdivisionClient {
+export type SubdivisionClient = {
   id: string;
   clientId?: string;
   subdivisionClientName?: string;
   subdivisionClientNumber: string;
   virtualSubdivisionClientName?: string;
   client: Client;
-}
+};
+
+export type SubdivisionClientResponse = PaginatedResponse<SubdivisionClient>;

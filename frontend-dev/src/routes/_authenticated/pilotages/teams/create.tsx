@@ -1,18 +1,14 @@
 import LoadingPage from "@/components/ui/loader/LoadingPage";
 import FormError from "@/components/ui/shadcn/form-error";
-import { APP_NAME } from "@/config";
-import { createPermissionGuard } from "@/features/authorizations/helpers/createPermissionGuard";
-import { PERMISSIONS } from "@/features/authorizations/types/auth.types";
+import { createPermissionGuard } from "@/features/common/authorizations/helpers/createPermissionGuard";
+import { PERMISSIONS } from "@/features/common/authorizations/types/auth.types";
 import TeamCreateForm from "@/features/teams/components/TeamCreateForm";
 import { createFileRoute } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/_authenticated/pilotages/teams/create")({
   beforeLoad: createPermissionGuard([PERMISSIONS.TEAMS.CREATE]),
   head: () => ({
-    meta: [
-      { name: "description", content: "" },
-      { title: `Ajouter une équipe | ${APP_NAME}` },
-    ],
+    meta: [{ title: "Ajouter une équipe" }],
   }),
   errorComponent: ({ error }) => (
     <FormError title="Erreur lors du chargement" message={error.message} />

@@ -1,4 +1,6 @@
-export interface Sector {
+import type { PaginatedResponse } from "@/types/paginate-response.type";
+
+export type Sector = {
   id: string;
   sectorName: string;
   sectorDescription?: string;
@@ -7,3 +9,5 @@ export interface Sector {
   isAutoCalculate?: boolean;
   isConformity?: boolean;
 }
+
+export type SectorsResponse = PaginatedResponse<Sector>;

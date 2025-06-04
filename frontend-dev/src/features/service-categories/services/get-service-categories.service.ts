@@ -1,7 +1,7 @@
 import { API_ROUTE } from "@/config";
-import type { ServiceCategory } from "../types/service-category.type";
+import type { ServiceCategoryResponse } from "../types/service-category.type";
 
-export const getServiceCategories = async (): Promise<ServiceCategory> => {
+export const getServiceCategories = async (): Promise<ServiceCategoryResponse> => {
   const response = await fetch(`${API_ROUTE}/service-categories`, {
     method: "GET",
     credentials: "include",

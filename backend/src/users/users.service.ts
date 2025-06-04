@@ -234,7 +234,7 @@ export class UsersService {
 
   async getUsersByTeam(teamId: string): Promise<User[]> {
     return this.userRepository.find({
-      where: { teamId },
+      where: { team: { id: teamId } },
       relations: ['team'],
       order: { firstName: 'ASC' },
     });
@@ -245,7 +245,7 @@ export class UsersService {
       this.userRepository.count(),
       // Correction: utilisation correcte de Not avec IsNull
       this.userRepository.count({ where: { emailVerifiedAt: Not(IsNull()) } }),
-      this.userRepository.count({ where: { teamId: Not(IsNull()) } }),
+      this.userRepository.count({ where: { team: { id: Not(IsNull()) } } }),
     ]);
 
     return {

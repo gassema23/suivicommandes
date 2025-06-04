@@ -19,6 +19,8 @@ import { ServicesModule } from './services/services.module';
 import { ServiceCategoriesModule } from './service-categories/service-categories.module';
 import { ClientsModule } from './clients/clients.module';
 import { SubdivisionClientsModule } from './subdivision-clients/subdivision-clients.module';
+import { ProvidersModule } from './providers/providers.module';
+import { ProviderServiceCategoriesModule } from './provider-service-categories/provider-service-categories.module';
 
 @Module({
   imports: [
@@ -110,6 +112,8 @@ import { SubdivisionClientsModule } from './subdivision-clients/subdivision-clie
     ServiceCategoriesModule,
     ClientsModule,
     SubdivisionClientsModule,
+    ProvidersModule,
+    ProviderServiceCategoriesModule,
   ],
 })
 export class AppModule {}

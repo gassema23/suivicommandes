@@ -13,6 +13,7 @@ import {
 import { updateUserInformation } from "../services/update-user-information.service";
 import type { User } from "@/features/users/types/user.type";
 import { Label } from "@/components/ui/shadcn/label";
+import { QUERY_KEYS } from "@/config/query-key";
 
 interface InformationFormProps {
   user: User;
@@ -49,11 +50,13 @@ export default function InformationForm({ user }: InformationFormProps) {
   const updateUserMutation = useMutation({
     mutationFn: (data: UserInformationFormData) =>
       updateUserInformation(user.id, data),
-    onSuccess: () => {
+    onSuccess: async () => {
       setBackendError(null);
-      queryClient.invalidateQueries({ queryKey: ["profile"] });
-      queryClient.invalidateQueries({ queryKey: ["me"] });
-      queryClient.invalidateQueries({ queryKey: ["users"] });
+      await Promise.all([
+        queryClient.invalidateQueries({ queryKey: QUERY_KEYS.PROFILE }),
+        queryClient.invalidateQueries({ queryKey: QUERY_KEYS.ME }),
+        queryClient.invalidateQueries({ queryKey: QUERY_KEYS.USERS }),
+      ]);
 
       setSuccessMessage("Vos informations ont été mises à jour avec succès.");
       navigate({ to: "/profile" });
@@ -90,7 +93,9 @@ export default function InformationForm({ user }: InformationFormProps) {
         />
       )}
       <div className="grid grid-cols-12 gap-2 items-center">
-        <Label className="col-span-12 xl:col-span-4" htmlFor="firstName">Prénom</Label>
+        <Label className="col-span-12 xl:col-span-4" htmlFor="firstName">
+          Prénom
+        </Label>
         <div className="col-span-12 xl:col-span-8">
           <Input
             className="block w-full"
@@ -106,7 +111,9 @@ export default function InformationForm({ user }: InformationFormProps) {
         </div>
       </div>
       <div className="grid grid-cols-12 gap-2 items-center">
-        <Label className="col-span-12 xl:col-span-4" htmlFor="lastName">Nom</Label>
+        <Label className="col-span-12 xl:col-span-4" htmlFor="lastName">
+          Nom
+        </Label>
         <div className="col-span-12 xl:col-span-8">
           <Input
             className="block w-full"
@@ -122,7 +129,9 @@ export default function InformationForm({ user }: InformationFormProps) {
         </div>
       </div>
       <div className="grid grid-cols-12 gap-2 items-center">
-        <Label className="col-span-12 xl:col-span-4" htmlFor="email">Email</Label>
+        <Label className="col-span-12 xl:col-span-4" htmlFor="email">
+          Email
+        </Label>
         <div className="col-span-12 xl:col-span-8">
           <Input
             className="block w-full"

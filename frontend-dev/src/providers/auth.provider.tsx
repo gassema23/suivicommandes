@@ -1,6 +1,7 @@
 import LoadingPage from "@/components/ui/loader/LoadingPage";
 import { LoadingProgress } from "@/components/ui/loader/LoadingProgress";
 import { API_ROUTE } from "@/config";
+import { QUERY_KEYS } from "@/config/query-key";
 import type { User } from "@/features/users/types/user.type";
 import logoutUser from "@/lib/logout-user";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
@@ -36,7 +37,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   } = useQuery({
     // Utilise le cache de React Query pour éviter les appels réseau inutiles
     staleTime: 5 * 60 * 1000, // 5 minutes
-    queryKey: ["me"],
+    queryKey: QUERY_KEYS.ME,
     queryFn: async () => {
       const res = await fetch(`${API_ROUTE}/auth/me`, {
         credentials: "include",
@@ -49,7 +50,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const logout = React.useCallback(async () => {
     await logoutUser();
-    queryClient.invalidateQueries({ queryKey: ["me"] });
+    queryClient.invalidateQueries({ queryKey: QUERY_KEYS.ME });
     queryClient.clear();
     window.location.href = "/login";
   }, [queryClient]);

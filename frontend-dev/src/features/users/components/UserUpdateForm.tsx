@@ -19,6 +19,7 @@ import { updateUser } from "../services/update-user.service";
 import { useState } from "react";
 import FormError from "@/components/ui/shadcn/form-error";
 import { Label } from "@/components/ui/shadcn/label";
+import { QUERY_KEYS } from "@/config/query-key";
 
 interface UpdateUserFormProps {
   user: User;
@@ -33,7 +34,7 @@ export default function UserUpdateForm({ user }: UpdateUserFormProps) {
     isLoading: loadingRoles,
     error: roleError,
   } = useQuery({
-    queryKey: ["roles"],
+    queryKey: QUERY_KEYS.ROLES_LISTS,
     queryFn: getRoles,
   });
 
@@ -58,7 +59,7 @@ export default function UserUpdateForm({ user }: UpdateUserFormProps) {
     mutationFn: (data: UserFormData) => updateUser(user.id, data),
     onSuccess: () => {
       setBackendError(null);
-      queryClient.invalidateQueries({ queryKey: ["users"] });
+      queryClient.invalidateQueries({ queryKey: QUERY_KEYS.USERS });
       navigate({ to: "/pilotages/users" });
     },
     onError: (error: { message: string }) => {

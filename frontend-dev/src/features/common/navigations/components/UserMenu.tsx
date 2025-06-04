@@ -8,8 +8,8 @@ import {
 } from "@/components/ui/shadcn/dropdown-menu";
 import { Link } from "@tanstack/react-router";
 import { Spinner } from "@/components/ui/loader/Spinner";
-import UserAvatar from "../../../components/ui/quebec/UserAvatar";
 import { useAuth } from "@/providers/auth.provider";
+import UserAvatar from "@/components/ui/quebec/UserAvatar";
 
 export default function UserMenu() {
   const { logout, user } = useAuth();

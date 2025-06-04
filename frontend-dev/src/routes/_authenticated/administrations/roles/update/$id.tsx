@@ -1,16 +1,16 @@
 import LoadingPage from "@/components/ui/loader/LoadingPage";
 import FormError from "@/components/ui/shadcn/form-error";
-import { APP_NAME } from "@/config";
-import { createPermissionGuard } from "@/features/authorizations/helpers/createPermissionGuard";
-import { PERMISSIONS } from "@/features/authorizations/types/auth.types";
+import { createPermissionGuard } from "@/features/common/authorizations/helpers/createPermissionGuard";
+import { PERMISSIONS } from "@/features/common/authorizations/types/auth.types";
 import { fetchRole } from "@/features/roles/services/fetch-role.service";
 import { createFileRoute, useParams } from "@tanstack/react-router";
 import RoleUpdateForm from "@/features/roles/components/role-update-form";
 import { queryOptions, useSuspenseQuery } from "@tanstack/react-query";
+import { QUERY_KEYS } from "@/config/query-key";
 
 const rolesQueryOptions = (id: string) =>
   queryOptions({
-    queryKey: ["roles", id],
+    queryKey: QUERY_KEYS.ROLE_WITH_ID(id),
     queryFn: () => fetchRole(id),
   });
 
@@ -22,15 +22,7 @@ export const Route = createFileRoute(
     context.queryClient.ensureQueryData(rolesQueryOptions(params.id)),
   component: RouteComponent,
   head: () => ({
-    meta: [
-      {
-        name: "description",
-        content: "",
-      },
-      {
-        title: `Modifier le rôles | ${APP_NAME}`,
-      },
-    ],
+    meta: [{ title: "Modifier le rôles" }],
   }),
   errorComponent: ({ error }) => (
     <FormError
