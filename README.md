@@ -47,18 +47,9 @@ Application de gestion et de suivi des commandes, équipes et utilisateurs.
 - [Docker](https://www.docker.com/)
 - [Docker Compose](https://docs.docker.com/compose/)
 
-### Lancer l’application
-
-```bash
-git clone https://github.com/votre-utilisateur/suivicommandes.git
-cd suivicommandes
-docker-compose up --build
-```
-
 ## Utilisation
 
-- Accédez à l’interface web sur [http://localhost:4010](http://localhost:4010) (ou le port configuré).
-- Utilisez PgAdmin ou un autre outil pour explorer la base PostgreSQL si besoin.
+- 
 
 ## Seeders & Données de test
 
