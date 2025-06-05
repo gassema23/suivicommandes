@@ -36,23 +36,9 @@ export const providerServiceCategoryColumns: ColumnDef<ProviderServiceCategory>[
     enableColumnFilter: true,
   },
   {
-    accessorKey: "serviceCategoryId",
-    cell: ({ row }) => {
-        return row.original.serviceCategory.serviceCategoryName;
-    },
-    header: ({ column }) => (
-      <DataTableColumnHeader
-        column={column}
-        title="Identifiant du fournisseur"
-      />
-    ),
-    enableSorting: true,
-    enableColumnFilter: true,
-  },
-  {
     accessorKey: "providerId",
     cell: ({ row }) => {
-      return row.original.provider.providerName;
+      return row.original.provider.virtualProviderName;
     },
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Fournisseur" />
@@ -79,9 +65,9 @@ export const providerServiceCategoryColumns: ColumnDef<ProviderServiceCategory>[
       return (
         <DataTableAction
           id={row.original.id}
-          baseUrl="/pilotages/providers/update/$id"
+          baseUrl="/pilotages/provider-service-categories/update/$id"
           onDelete={row.original.onDelete}
-          resource="providers"
+          resource="provider_service_categories"
         />
       );
     },

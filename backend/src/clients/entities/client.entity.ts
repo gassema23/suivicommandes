@@ -12,7 +12,7 @@ import {
 } from 'typeorm';
 import { User } from '../../users/entities/user.entity';
 import { IsOptional, IsString, Max, MaxLength } from 'class-validator';
-import { SubdivisionClient } from 'src/subdivision-clients/entities/subdivision-client.entity';
+import { SubdivisionClient } from '../../subdivision-clients/entities/subdivision-client.entity';
 import { Expose } from 'class-transformer';
 
 @Entity('clients')

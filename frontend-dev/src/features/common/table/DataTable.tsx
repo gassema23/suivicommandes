@@ -22,15 +22,24 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/shadcn/table";
-import { DataTablePagination } from "./components/DataTablePagination";
 import NoData from "@/components/ui/quebec/NoData";
+import { Pagination } from "@/components/ui/quebec/Pagination";
 
 type DataTableProps<TData> = {
-  data: { data: TData[] | TData[] }; // <-- note the nested data
+  data: { data: TData[]; meta?: { totalPages: number } };
   columns: ColumnDef<TData, any>[];
+  currentPage: number;
+  totalPages: number;
+  onPageChange: (page: number) => void;
 };
 
-export function DataTable<TData>({ data, columns }: DataTableProps<TData>) {
+export function DataTable<TData>({
+  data,
+  columns,
+  currentPage,
+  totalPages,
+  onPageChange,
+}: DataTableProps<TData>) {
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
@@ -50,11 +59,17 @@ export function DataTable<TData>({ data, columns }: DataTableProps<TData>) {
     getFilteredRowModel: getFilteredRowModel(),
     onColumnVisibilityChange: setColumnVisibility,
     onRowSelectionChange: setRowSelection,
+    manualPagination: true,
+    pageCount: totalPages,
     state: {
       sorting,
       columnFilters,
       columnVisibility,
       rowSelection,
+      pagination: {
+        pageIndex: currentPage - 1,
+        pageSize: 10, // adapte si besoin
+      },
     },
   });
 
@@ -65,18 +80,16 @@ export function DataTable<TData>({ data, columns }: DataTableProps<TData>) {
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>
-                {headerGroup.headers.map((header) => {
-                  return (
-                    <TableHead key={header.id}>
-                      {header.isPlaceholder
-                        ? null
-                        : flexRender(
-                            header.column.columnDef.header,
-                            header.getContext()
-                          )}
-                    </TableHead>
-                  );
-                })}
+                {headerGroup.headers.map((header) => (
+                  <TableHead key={header.id}>
+                    {header.isPlaceholder
+                      ? null
+                      : flexRender(
+                          header.column.columnDef.header,
+                          header.getContext()
+                        )}
+                  </TableHead>
+                ))}
               </TableRow>
             ))}
           </TableHeader>
@@ -110,7 +123,13 @@ export function DataTable<TData>({ data, columns }: DataTableProps<TData>) {
           </TableBody>
         </Table>
       </div>
-      <DataTablePagination table={table} />
+      <div className="flex items-center justify-between px-2">
+        <Pagination
+          currentPage={currentPage}
+          totalPages={totalPages}
+          onPageChange={onPageChange}
+        />
+      </div>
     </>
   );
 }

@@ -12,6 +12,7 @@ import { Controller, useForm } from "react-hook-form";
 import { Switch } from "@/components/ui/shadcn/switch";
 import { createSector } from "../services/create-sector.service";
 import { QUERY_KEYS } from "@/config/query-key";
+import { toast } from "sonner";
 
 export default function SectorCreateForm() {
   const [backendError, setBackendError] = useState<string | null>(null);
@@ -41,8 +42,10 @@ export default function SectorCreateForm() {
     mutationFn: (data: SectorFormData) => createSector(data),
     onSuccess: () => {
       setBackendError(null);
+      toast.success("Le secteur a été créé avec succès.");
       queryClient.invalidateQueries({ queryKey: QUERY_KEYS.SECTORS });
-      navigate({ to: "/pilotages/sectors" });
+
+      navigate({ to: "/pilotages/sectors", search: { page: 1 } });
     },
     onError: (error: { message: string }) => {
       setBackendError(error.message);

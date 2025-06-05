@@ -11,9 +11,9 @@ import {
   OneToMany,
 } from 'typeorm';
 import { User } from '../../users/entities/user.entity';
-import { IsOptional, IsString, IsUUID, MaxLength } from 'class-validator';
-import { Service } from 'src/services/entities/service.entity';
-import { ProviderServiceCategory } from 'src/provider-service-categories/entities/provider-service-category.entity';
+import { IsOptional, IsString, MaxLength } from 'class-validator';
+import { Service } from '../../services/entities/service.entity';
+import { ProviderServiceCategory } from '../../provider-service-categories/entities/provider-service-category.entity';
 
 @Entity('service_categories')
 @Index(['serviceCategoryName'])

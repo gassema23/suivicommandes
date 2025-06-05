@@ -27,7 +27,7 @@ export class RolesController {
   constructor(private readonly rolesService: RolesService) {}
 
   @Post()
-  @Permissions([{ resource: Resource.ROLES, actions: [Action.CREATE] }])
+  //@Permissions([{ resource: Resource.ROLES, actions: [Action.CREATE] }])
   async createRole(@Body() role: CreateRoleDto) {
     return this.rolesService.create(role);
   }

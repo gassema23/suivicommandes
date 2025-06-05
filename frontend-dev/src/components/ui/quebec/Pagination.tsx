@@ -113,7 +113,7 @@ export function Pagination({
         {pageNumbers.map((page, index) => (
           <div key={`page-${index}`}>
             {page === "..." ? (
-              <span className="text-gray-600">...</span>
+              <span className="text-muted-foreground">...</span>
             ) : (
               <Link
                 to={baseUrl ? `${baseUrl}/${page}` : "#"}

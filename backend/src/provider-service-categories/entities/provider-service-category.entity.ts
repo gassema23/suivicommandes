@@ -10,10 +10,9 @@ import {
   Index,
 } from 'typeorm';
 import { User } from '../../users/entities/user.entity';
-import { IsOptional, IsString, IsUUID, MaxLength } from 'class-validator';
-import { Service } from 'src/services/entities/service.entity';
-import { Provider } from 'src/providers/entities/provider.entity';
-import { ServiceCategory } from 'src/service-categories/entities/service-category.entity';
+import { IsOptional } from 'class-validator';
+import { Provider } from '../../providers/entities/provider.entity';
+import { ServiceCategory } from '../../service-categories/entities/service-category.entity';
 
 @Entity('provider_service_categories')
 @Index(['deletedAt'])

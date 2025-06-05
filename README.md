@@ -9,6 +9,7 @@ Application de gestion et de suivi des commandes, équipes et utilisateurs.
 - [Architecture](#architecture)
 - [Installation](#installation)
 - [Utilisation](#utilisation)
+- [Seeders & Données de test](#seeders--données-de-test)
 - [Technologies](#technologies)
 - [Développement](#développement)
 - [Conventions](#conventions)
@@ -53,6 +54,44 @@ git clone https://github.com/votre-utilisateur/suivicommandes.git
 cd suivicommandes
 docker-compose up --build
 ```
+
+## Utilisation
+
+- Accédez à l’interface web sur [http://localhost:4010](http://localhost:4010) (ou le port configuré).
+- Utilisez PgAdmin ou un autre outil pour explorer la base PostgreSQL si besoin.
+
+## Seeders & Données de test
+
+Pour générer des données de test dans la base (sectors, services, etc.) :
+
+### Lancer les seeders
+
+**Depuis Docker** :
+```bash
+docker-compose exec backend npm run seed
+```
+
+**Depuis votre machine (hors Docker)** :
+```bash
+cd backend
+npm run seed
+```
+
+- Une barre de progression s’affiche pour chaque entité seedée.
+- Les tables sont vidées avant chaque seed (TRUNCATE ... CASCADE).
+- Les seeders sont configurés dans `src/seeding/`.
+
+## Technologies
+
+- **Frontend** : React, TanStack Router, React Query, shadcn/ui
+- **Backend** : NestJS, TypeORM
+- **Base de données** : PostgreSQL
+- **Autres** : Redis, Docker, PgAdmin, RedisInsight
+
+## Développement
+
+- Utilisez des branches pour chaque fonctionnalité ou correctif.
+- Respectez la structure des dossiers et les conventions de nommage.
 
 ### Push sur github
 ```bash
@@ -132,3 +171,9 @@ src/
 | Compilé par TypeScript ? | ✅ Oui                       | ❌ Non (analyse uniquement)        |
 | Doit exporter ?          | ✅ Oui (`export`) souvent    | ❌ Pas nécessaire (`declare`)      |
 | Cas d’usage typique      | Types + logique métier      | Types globaux ou modules JS       |
+
+---
+
+## Auteurs
+
+- [Mathieu Gasse](https://github.com/gassema23)

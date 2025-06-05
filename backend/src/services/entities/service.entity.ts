@@ -12,8 +12,8 @@ import {
 } from 'typeorm';
 import { User } from '../../users/entities/user.entity';
 import { IsOptional, IsString, MaxLength } from 'class-validator';
-import { Sector } from 'src/sectors/entities/sectors.entity';
-import { ServiceCategory } from 'src/service-categories/entities/service-category.entity';
+import { Sector } from '../../sectors/entities/sectors.entity';
+import { ServiceCategory } from '../../service-categories/entities/service-category.entity';
 
 @Entity('services')
 @Index(['serviceName'])
@@ -24,7 +24,7 @@ export class Service {
 
   @ManyToOne(() => Sector, (sector) => sector.services, { nullable: false })
   @JoinColumn({ name: 'sector_id' })
-  sector: Sector;
+  sector: Partial<Sector>;
 
   @Column({ name: 'service_name', length: 125, nullable: true })
   @IsOptional()

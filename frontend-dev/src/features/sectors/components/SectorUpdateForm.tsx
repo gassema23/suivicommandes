@@ -13,6 +13,7 @@ import { Switch } from "@/components/ui/shadcn/switch";
 import { updateSector } from "../services/update-sector.service";
 import type { Sector } from "../types/sector.type";
 import { QUERY_KEYS } from "@/config/query-key";
+import { toast } from "sonner";
 
 interface SectorFormProps {
   sector: Sector;
@@ -46,8 +47,9 @@ export default function SectorUpdateForm({ sector }: SectorFormProps) {
     mutationFn: (data: SectorFormData) => updateSector(sector.id, data),
     onSuccess: () => {
       setBackendError(null);
+      toast.success("Le secteur a été mis à jour avec succès.");
       queryClient.invalidateQueries({ queryKey: QUERY_KEYS.SECTORS });
-      navigate({ to: "/pilotages/sectors" });
+      navigate({ to: "/pilotages/sectors", search: { page: 1 } });
     },
     onError: (error: { message: string }) => {
       setBackendError(error.message);

@@ -8,6 +8,7 @@ import { PaginatedResult } from 'src/common/interfaces/paginated-result.interfac
 import { CreateServiceDto } from './dto/create-service.dto';
 import { User } from 'src/users/entities/user.entity';
 import { UpdateServiceDto } from './dto/update-service.dto';
+import { ServiceCategory } from 'src/service-categories/entities/service-category.entity';
 
 @Injectable()
 export class ServicesService {
@@ -78,6 +79,19 @@ export class ServicesService {
       select: ['id', 'serviceName'],
       order: { serviceName: 'ASC' },
     });
+  }
+
+  async getServiceCategoriesByServiceId(id: string): Promise<ServiceCategory[]> {
+    const service = await this.serviceRepository.findOne({
+      where: { id },
+      relations: ['serviceCategories'],
+    });
+
+    if (!service?.serviceCategories) {
+      throw new BadRequestException('Catégorie de services non trouvé');
+    }
+
+    return service.serviceCategories;
   }
 
   async create(createServiceDto: CreateServiceDto, createdBy: string) {

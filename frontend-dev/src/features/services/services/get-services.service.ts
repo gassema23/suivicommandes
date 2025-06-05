@@ -1,8 +1,8 @@
 import { API_ROUTE } from "@/config";
 import type { ServiceResponse } from "@/features/services/types/service.type";
 
-export const getServices = async (): Promise<ServiceResponse> => {
-  const response = await fetch(`${API_ROUTE}/services`, {
+export const getServices = async (page:number): Promise<ServiceResponse> => {
+  const response = await fetch(`${API_ROUTE}/services?page=${page}`, {
     method: "GET",
     credentials: "include",
   });

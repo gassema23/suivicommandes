@@ -10,8 +10,8 @@ import {
   Index,
 } from 'typeorm';
 import { User } from '../../users/entities/user.entity';
-import { IsOptional, IsString, IsUUID, MaxLength } from 'class-validator';
-import { Client } from 'src/clients/entities/client.entity';
+import { IsOptional, IsString,MaxLength } from 'class-validator';
+import { Client } from '../../clients/entities/client.entity';
 import { Expose } from 'class-transformer';
 
 @Entity('subdivision_clients')

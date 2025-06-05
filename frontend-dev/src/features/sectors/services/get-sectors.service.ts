@@ -1,8 +1,9 @@
 import { API_ROUTE } from "@/config";
 import type { SectorsResponse } from "../types/sector.type";
 
-export const getSectors = async (): Promise<SectorsResponse> => {
-  const response = await fetch(`${API_ROUTE}/sectors`, {
+export const getSectors = async (page:number): Promise<SectorsResponse> => {
+  console.log("Fetching sectors for page:", page);
+  const response = await fetch(`${API_ROUTE}/sectors?page=${page}`, {
     method: "GET",
     credentials: "include",
   });

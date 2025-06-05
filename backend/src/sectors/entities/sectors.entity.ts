@@ -12,7 +12,7 @@ import {
 } from 'typeorm';
 import { User } from '../../users/entities/user.entity';
 import { IsOptional, IsString, MaxLength } from 'class-validator';
-import { Service } from 'src/services/entities/service.entity';
+import { Service } from '../../services/entities/service.entity';
 
 @Entity('sectors')
 @Index(['sectorName'])

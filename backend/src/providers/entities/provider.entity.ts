@@ -9,13 +9,11 @@ import {
   JoinColumn,
   Index,
   OneToMany,
-  ManyToMany,
-  JoinTable,
 } from 'typeorm';
 import { User } from '../../users/entities/user.entity';
 import { IsOptional, IsString, MaxLength } from 'class-validator';
-import { ServiceCategory } from 'src/service-categories/entities/service-category.entity';
-import { ProviderServiceCategory } from 'src/provider-service-categories/entities/provider-service-category.entity';
+import { ProviderServiceCategory } from '../../provider-service-categories/entities/provider-service-category.entity';
+import { Expose } from 'class-transformer';
 
 @Entity('providers')
 @Index(['providerName', 'providerCode'])
@@ -67,4 +65,19 @@ export class Provider {
     (providerServiceCategory) => providerServiceCategory.provider,
   )
   providerServiceCategories: ProviderServiceCategory[];
+
+  // Virtual properties
+  @Expose()
+  get virtualProviderName(): string {
+    if (this.providerName && this.providerCode) {
+      return `${this.providerName} (${this.providerCode})`;
+    }
+    if (this.providerName) {
+      return this.providerName;
+    }
+    if (this.providerCode) {
+      return this.providerCode;
+    }
+    return '';
+  }
 }

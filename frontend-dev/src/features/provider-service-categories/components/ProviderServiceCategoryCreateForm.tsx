@@ -2,73 +2,104 @@ import { QUERY_KEYS } from "@/config/query-key";
 import { fetchSectorsList } from "@/features/sectors/services/fetch-sectors-list.service";
 import { fetchServicesBySector } from "@/features/services/services/fetch-services-by-sector.service";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
+import {
+  providerServiceCategorySchema,
+  type ProviderServiceCategoryFormData,
+} from "../schemas/provider-service-category.schema";
+import FormError from "@/components/ui/shadcn/form-error";
+import { Label } from "@/components/ui/shadcn/label";
+import { Button } from "@/components/ui/quebec/Button";
+import { DependentSelect } from "@/features/common/dependant-select/components/DependentSelect";
+import { useDependentQuery } from "@/features/common/dependant-select/hooks/useDependentQuery";
+import { fetchServiceCategoriesByService } from "@/features/service-categories/services/fetch-service-category-by-service.service";
+import { fetchProvidersList } from "@/features/providers/services/fetch-providers-list.service";
+import { createProviderServiceCategory } from "../services/create-provider-service-category.service";
 
 export default function ProviderServiceCategoryCreateForm() {
   const [backendError, setBackendError] = useState<string | null>(null);
-  const [selectedSectorId, setSelectedSectorId] = useState<string | null>(null);
   const navigate = useNavigate();
   const queryClient = useQueryClient();
 
+  const form = useForm<ProviderServiceCategoryFormData>({
+    resolver: zodResolver(providerServiceCategorySchema),
+    defaultValues: {
+      providerId: "",
+      sectorId: "",
+      serviceId: "",
+      serviceCategoryId: "",
+    },
+  });
+
   const {
-    data: sectorsData = [],
-    isLoading: loadingSectors,
-    error: sectorError,
+    handleSubmit,
+    watch,
+    setValue,
+    formState: { errors },
+  } = form;
+
+  const createTeamMutation = useMutation({
+    mutationFn: (data: ProviderServiceCategoryFormData) =>
+      createProviderServiceCategory(data),
+    onSuccess: () => {
+      setBackendError(null);
+      queryClient.invalidateQueries({
+        queryKey: QUERY_KEYS.PROVIDER_SERVICE_CATEGORIES,
+      });
+      navigate({ to: "/pilotages/provider-service-categories" });
+    },
+    onError: (error: { message: string }) => {
+      setBackendError(error.message);
+    },
+  });
+
+  const onSubmit = (data: ProviderServiceCategoryFormData) => {
+    createTeamMutation.mutate(data);
+  };
+
+  const sectorId = watch("sectorId");
+  const serviceId = watch("serviceId");
+
+  const {
+    data: sectors,
+    isLoading: isLoadingSectors,
+    isError: isErrorSectors,
   } = useQuery({
     queryKey: QUERY_KEYS.SECTORS_LISTS,
     queryFn: fetchSectorsList,
   });
 
   const {
-    data: servicesData = [],
-    isLoading: loadingServices,
-    error: serviceError,
+    data: providers,
+    isLoading: isLoadingProviders,
+    isError: isErrorProviders,
   } = useQuery({
-    queryKey: QUERY_KEYS.SERVICE_BY_SECTOR(selectedSectorId),
-    queryFn: () =>
-      selectedSectorId
-        ? fetchServicesBySector(selectedSectorId)
-        : Promise.resolve([]),
-    enabled: !!selectedSectorId,
-  });
-
-  const form = useForm<ServiceCategoryFormData>({
-    resolver: zodResolver(serviceCategorySchema),
-    defaultValues: {
-      serviceCategoryName: "",
-      serviceCategoryDescription: "",
-      sectorId: "",
-      serviceId: "",
-      isMultiLink: false,
-      isMultiProvider: false,
-      isRequiredExpertise: false,
-    },
+    queryKey: QUERY_KEYS.PROVIDERS_LISTS,
+    queryFn: fetchProvidersList,
   });
 
   const {
-    register,
-    handleSubmit,
-    control,
-    formState: { errors },
-  } = form;
+    data: services,
+    isLoading: isLoadingServices,
+    isError: isErrorServices,
+  } = useDependentQuery(
+    QUERY_KEYS.SERVICE_BY_SECTOR(sectorId),
+    fetchServicesBySector,
+    sectorId
+  );
 
-  const createTeamMutation = useMutation({
-    mutationFn: (data: ServiceCategoryFormData) => createServiceCategory(data),
-    onSuccess: () => {
-      setBackendError(null);
-      queryClient.invalidateQueries({ queryKey: QUERY_KEYS.SERVICE_CATEGORIES });
-      navigate({ to: "/pilotages/service-categories" });
-    },
-    onError: (error: { message: string }) => {
-      setBackendError(error.message);
-    },
-  });
-  const onSubmit = (data: ServiceCategoryFormData) => {
-    createTeamMutation.mutate(data);
-  };
+  const {
+    data: serviceCategories,
+    isLoading: isLoadingServiceCategories,
+    isError: isErrorServiceCategories,
+  } = useDependentQuery(
+    QUERY_KEYS.SERVICE_CATEGORY_BY_SERVICE(serviceId),
+    fetchServiceCategoriesByService,
+    serviceId
+  );
 
   return (
     <form
@@ -86,38 +117,19 @@ export default function ProviderServiceCategoryCreateForm() {
           Secteurs
         </Label>
         <div className="col-span-12 xl:col-span-8">
-          <Controller
-            control={control}
-            name="sectorId"
-            render={({ field }) =>
-              loadingSectors ? (
-                <Skeleton className="h-9" />
-              ) : sectorError ? (
-                <div className="bg-muted/50 border h-9 flex w-full px-3 items-center text-destructive/80">
-                  Erreur de chargement
-                </div>
-              ) : (
-                <Select
-                  value={field.value}
-                  onValueChange={(value) => {
-                    setSelectedSectorId(value);
-                    field.onChange(value);
-                    form.setValue("serviceId", ""); // reset le service quand le secteur change
-                  }}
-                >
-                  <SelectTrigger className="w-full">
-                    <SelectValue placeholder="Sélectionner un secteur" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {sectorsData.map((sector) => (
-                      <SelectItem key={sector.id} value={sector.id}>
-                        {sector.sectorName}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              )
-            }
+          <DependentSelect
+            value={sectorId}
+            onChange={(value) => {
+              setValue("sectorId", value);
+              setValue("serviceId", "");
+              setValue("serviceCategoryId", "");
+            }}
+            data={sectors}
+            isLoading={isLoadingSectors}
+            isError={isErrorSectors}
+            placeholder="Sélectionner un secteur"
+            getOptionValue={(s) => s.id}
+            getOptionLabel={(s) => s.sectorName}
           />
           {errors.sectorId && (
             <p className="text-destructive text-sm mt-1">
@@ -126,38 +138,22 @@ export default function ProviderServiceCategoryCreateForm() {
           )}
         </div>
       </div>
+
       <div className="grid grid-cols-12 gap-2 items-center">
         <Label className="col-span-12 xl:col-span-4">Services</Label>
         <div className="col-span-12 xl:col-span-8">
-          <Controller
-            control={control}
-            name="serviceId"
-            render={({ field }) =>
-              loadingServices ? (
-                <Skeleton className="h-9" />
-              ) : serviceError ? (
-                <div className="bg-muted/50 border h-9 flex w-full px-3 items-center text-destructive/80">
-                  Erreur de chargement
-                </div>
-              ) : (
-                <Select
-                  value={field.value}
-                  onValueChange={field.onChange}
-                  disabled={!selectedSectorId || servicesData.length === 0}
-                >
-                  <SelectTrigger className="w-full">
-                    <SelectValue placeholder="Sélectionner un service" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {servicesData.map((service) => (
-                      <SelectItem key={service.id} value={service.id}>
-                        {service.serviceName}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              )
-            }
+          <DependentSelect
+            value={watch("serviceId")}
+            onChange={(value) => {
+              setValue("serviceId", value);
+              setValue("serviceCategoryId", "");
+            }}
+            data={services}
+            isLoading={isLoadingServices}
+            isError={isErrorServices}
+            placeholder="Sélectionner un service"
+            getOptionValue={(s) => s.id}
+            getOptionLabel={(s) => s.serviceName}
           />
           {errors.serviceId && (
             <p className="text-destructive text-sm mt-1">
@@ -168,125 +164,55 @@ export default function ProviderServiceCategoryCreateForm() {
       </div>
 
       <div className="grid grid-cols-12 gap-2 items-center">
-        <Label
-          className="col-span-12 xl:col-span-4"
-          htmlFor="serviceCategoryName"
-        >
-          Catégorie du service
+        <Label className="col-span-12 xl:col-span-4">
+          Catégorie de services
         </Label>
         <div className="col-span-12 xl:col-span-8">
-          <Input
-            className="block w-full"
-            id="serviceCategoryName"
-            {...register("serviceCategoryName")}
-            required
+          <DependentSelect
+            value={watch("serviceCategoryId")}
+            onChange={(value) => setValue("serviceCategoryId", value)}
+            data={serviceCategories}
+            isLoading={isLoadingServiceCategories}
+            isError={isErrorServiceCategories}
+            placeholder="Sélectionner une catégorie de service"
+            getOptionValue={(s) => s.id}
+            getOptionLabel={(s) => s.serviceCategoryName}
           />
-          {errors.serviceCategoryName && (
+          {errors.serviceCategoryId && (
             <p className="text-destructive text-sm mt-1">
-              {errors.serviceCategoryName.message}
+              {errors.serviceCategoryId.message}
             </p>
           )}
         </div>
       </div>
+
       <div className="grid grid-cols-12 gap-2 items-center">
-        <Label className="col-span-12 xl:col-span-4" htmlFor="isMultiLink">
-          Multi-liens
-        </Label>
+        <Label className="col-span-12 xl:col-span-4">Fournisseurs</Label>
         <div className="col-span-12 xl:col-span-8">
-          <Controller
-            control={control}
-            name="isMultiLink"
-            render={({ field }) => (
-              <Switch
-                id="isMultiLink"
-                checked={!!field.value}
-                onCheckedChange={field.onChange}
-              />
-            )}
+          <DependentSelect
+            value={watch("providerId")}
+            onChange={(value) => setValue("providerId", value)}
+            data={providers}
+            isLoading={isLoadingProviders}
+            isError={isErrorProviders}
+            placeholder="Sélectionner un fournisseur"
+            getOptionValue={(s) => s.id}
+            getOptionLabel={(s) => s.virtualProviderName}
           />
-          {errors.isMultiLink && (
+          {errors.providerId && (
             <p className="text-destructive text-sm mt-1">
-              {errors.isMultiLink.message}
+              {errors.providerId.message}
             </p>
           )}
         </div>
       </div>
-      <div className="grid grid-cols-12 gap-2 items-center">
-        <Label className="col-span-12 xl:col-span-4" htmlFor="isMultiProvider">
-          Multi-fournisseurs
-        </Label>
-        <div className="col-span-12 xl:col-span-8">
-          <Controller
-            control={control}
-            name="isMultiProvider"
-            render={({ field }) => (
-              <Switch
-                id="isMultiProvider"
-                checked={!!field.value}
-                onCheckedChange={field.onChange}
-              />
-            )}
-          />
-          {errors.isMultiProvider && (
-            <p className="text-destructive text-sm mt-1">
-              {errors.isMultiProvider.message}
-            </p>
-          )}
-        </div>
-      </div>
-      <div className="grid grid-cols-12 gap-2 items-center">
-        <Label
-          className="col-span-12 xl:col-span-4"
-          htmlFor="isRequiredExpertise"
-        >
-          Expertise requise
-        </Label>
-        <div className="col-span-12 xl:col-span-8">
-          <Controller
-            control={control}
-            name="isRequiredExpertise"
-            render={({ field }) => (
-              <Switch
-                id="isRequiredExpertise"
-                checked={!!field.value}
-                onCheckedChange={field.onChange}
-              />
-            )}
-          />
-          {errors.isRequiredExpertise && (
-            <p className="text-destructive text-sm mt-1">
-              {errors.isRequiredExpertise.message}
-            </p>
-          )}
-        </div>
-      </div>
-      <div className="grid grid-cols-12 gap-2 items-center">
-        <Label
-          className="col-span-12 xl:col-span-4"
-          htmlFor="serviceCategoryDescription"
-        >
-          Description
-        </Label>
-        <div className="col-span-12 xl:col-span-8">
-          <Textarea
-            rows={3}
-            className="block w-full"
-            id="serviceCategoryDescription"
-            {...register("serviceCategoryDescription")}
-          />
-          {errors.serviceCategoryDescription && (
-            <p className="text-destructive text-sm mt-1">
-              {errors.serviceCategoryDescription.message}
-            </p>
-          )}
-        </div>
-      </div>
+
       {/* Actions du formulaire */}
       <div className="flex gap-4 justify-end">
         <Button
           type="button"
           variant="outline"
-          onClick={() => navigate({ to: "/pilotages/service-categories" })}
+          onClick={() => navigate({ to: "/pilotages/provider-service-categories" })}
           disabled={form.formState.isSubmitting}
         >
           Annuler

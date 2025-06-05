@@ -91,6 +91,13 @@ export class ProvidersService {
     return provider;
   }
 
+  async providersList(): Promise<Provider[]> {
+    return this.providerRepository.find({
+      select: ['id', 'providerName', 'providerCode'],
+      order: { providerName: 'ASC' },
+    });
+  }
+
   async update(
     id: string,
     updateProviderDto: UpdateProviderDto,

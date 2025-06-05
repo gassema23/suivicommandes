@@ -15,19 +15,28 @@ import { useState } from "react";
 import { getSectors } from "@/features/sectors/services/get-sectors.service";
 import type { SectorsResponse } from "@/features/sectors/types/sector.type";
 import { QUERY_KEYS } from "@/config/query-key";
+import { toast } from "sonner";
 
-const sectorsQueryOptions = queryOptions<SectorsResponse>({
-  queryKey: QUERY_KEYS.SECTORS,
-  queryFn: () => getSectors(),
-});
+const sectorsQueryOptions = (pageNumber: number) =>
+  queryOptions<SectorsResponse>({
+    queryKey: QUERY_KEYS.SECTORS_WITH_PAGE(pageNumber),
+    queryFn: () => getSectors(pageNumber),
+  });
 
 export const Route = createFileRoute("/_authenticated/pilotages/sectors/")({
   beforeLoad: createPermissionGuard([PERMISSIONS.SECTORS.READ]),
   head: () => ({
     meta: [{ title: "Secteurs" }],
   }),
-  loader: ({ context }) =>
-    context.queryClient.ensureQueryData(sectorsQueryOptions),
+  validateSearch: (search) => ({
+    page: Number(search.page ?? 1),
+  }),
+  loader: (args) => {
+    const { context, search } = args as any;
+    return context.queryClient.ensureQueryData(
+      sectorsQueryOptions(Number(search?.page ?? "1"))
+    );
+  },
   errorComponent: ({ error }) => (
     <FormError
       title="Erreur lors du chargement des secteurs"
@@ -47,8 +56,13 @@ export const Route = createFileRoute("/_authenticated/pilotages/sectors/")({
 });
 
 function RouteComponent() {
-  const { data: sectors } =
-    useSuspenseQuery<SectorsResponse>(sectorsQueryOptions);
+  const navigate = Route.useNavigate();
+  const { page = 1 } = Route.useSearch();
+  const pageNumber = Number(page);
+
+  const { data: sectors } = useSuspenseQuery<SectorsResponse>(
+    sectorsQueryOptions(pageNumber)
+  );
   const [deleteId, setDeleteId] = useState<string | null>(null);
   const queryClient = useQueryClient();
 
@@ -60,11 +74,15 @@ function RouteComponent() {
     })),
   };
 
-  console.log("dataWithDelete", sectors);
-
   return (
     <>
-      <DataTable data={dataWithDelete} columns={SectorColumns} />
+      <DataTable
+        data={dataWithDelete}
+        columns={SectorColumns}
+        currentPage={pageNumber}
+        totalPages={sectors.meta.totalPages}
+        onPageChange={(page) => navigate({ search: { page } })}
+      />
       <DeleteModal
         open={!!deleteId}
         onOpenChange={(open) => !open && setDeleteId(null)}
@@ -72,6 +90,7 @@ function RouteComponent() {
         deleteId={deleteId}
         onSuccess={() => {
           setDeleteId(null);
+          toast.success("Le secteur a été supprimé avec succès.");
           queryClient.invalidateQueries({ queryKey: QUERY_KEYS.SECTORS });
         }}
       />

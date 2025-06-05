@@ -70,7 +70,7 @@ export default function ServiceCategoryCreateForm() {
     isLoading: isLoadingSectors,
     isError: isErrorSectors,
   } = useQuery({
-    queryKey: ["sectorsLists"],
+    queryKey: QUERY_KEYS.SECTORS_LISTS,
     queryFn: fetchSectorsList,
   });
 
@@ -78,7 +78,7 @@ export default function ServiceCategoryCreateForm() {
     data: services,
     isLoading: isLoadingServices,
     isError: isErrorServices,
-  } = useDependentQuery(["servicesLists"], fetchServicesBySector, sectorId);
+  } = useDependentQuery(QUERY_KEYS.SERVICE_BY_SECTOR(sectorId), fetchServicesBySector, sectorId);
 
   return (
     <form

@@ -28,6 +28,7 @@ import { CreateProviderDto } from './dto/create-provider.dto';
 import { User } from 'src/users/entities/user.entity';
 import { CurrentUser } from 'src/auth/decorators/current-user.decorator';
 import { UpdateProviderDto } from './dto/update-provider.dto';
+import { instanceToPlain } from 'class-transformer';
 
 @ApiTags('Providers')
 @Controller('providers')
@@ -45,7 +46,14 @@ export class ProvidersController {
     description: 'Recherche par nom/date',
   })
   async findAll(@Query() paginationDto: PaginationDto) {
-    return this.providersService.findAll(paginationDto, paginationDto.search);
+    const result = await this.providersService.findAll(
+      paginationDto,
+      paginationDto.search,
+    );
+    return {
+      ...result,
+      data: result.data.map((provider) => instanceToPlain(provider)),
+    };
   }
 
   @Post()
@@ -57,6 +65,14 @@ export class ProvidersController {
     @CurrentUser() currentUser: User,
   ) {
     return this.providersService.create(createProviderDto, currentUser.id);
+  }
+
+  @Get('providersList')
+  @Permissions([{ resource: Resource.PROVIDERS, actions: [Action.READ] }])
+  @ApiOperation({ summary: 'Afficher la liste des fournisseurs' })
+  async sectorsList() {
+    const providers = await this.providersService.providersList();
+    return providers.map((provider) => instanceToPlain(provider));
   }
 
   @Get(':id')

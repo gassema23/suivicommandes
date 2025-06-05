@@ -12,7 +12,7 @@ import {
 } from 'typeorm';
 import { Resource } from '../enums/resource.enum';
 import { Action } from '../enums/action.enum';
-import { User } from 'src/users/entities/user.entity';
+import { User } from '../../users/entities/user.entity';
 import { Role } from './role.entity';
 
 @Entity('permissions')

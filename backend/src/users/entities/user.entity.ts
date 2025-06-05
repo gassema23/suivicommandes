@@ -13,7 +13,7 @@ import {
 import { Exclude, Expose } from 'class-transformer';
 import { IsEmail, IsOptional, IsString, IsBoolean } from 'class-validator';
 import { Team } from '../../teams/entities/team.entity';
-import { Role } from 'src/roles/entities/role.entity';
+import { Role } from '../../roles/entities/role.entity';
 
 @Entity('users')
 @Index(['email'])

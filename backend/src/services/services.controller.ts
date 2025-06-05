@@ -75,9 +75,26 @@ export class ServicesController {
   @Get('servicesList')
   @Permissions([{ resource: Resource.SERVICES, actions: [Action.READ] }])
   @ApiOperation({ summary: 'Obtenir la liste des services pour un select' })
-  @ApiResponse({ status: 200, description: 'Liste des services pour un select' })
+  @ApiResponse({
+    status: 200,
+    description: 'Liste des services pour un select',
+  })
   async getServicesList() {
     return this.servicesService.getServicesList();
+  }
+
+  @Get(':id/service-categories')
+  @Permissions([
+    { resource: Resource.SECTORS, actions: [Action.READ] },
+    { resource: Resource.SERVICES, actions: [Action.READ] },
+  ])
+  @ApiOperation({ summary: 'Obtenir les catégories de services d’un service par son ID' })
+  @ApiResponse({
+    status: 200,
+    description: 'Catégorie de service récupérés avec succès',
+  })
+  async getServicesBySectorId(@Param('id', ParseUUIDPipe) id: string) {
+    return this.servicesService.getServiceCategoriesByServiceId(id);
   }
 
   @Get(':id')

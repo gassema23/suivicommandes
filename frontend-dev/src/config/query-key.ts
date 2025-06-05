@@ -1,6 +1,7 @@
 export const QUERY_KEYS = {
   // Secteurs
   SECTORS: ["sectors"] as const,
+  SECTORS_WITH_PAGE: (page: number) => ["sectors", page] as const,
   SECTORS_LISTS: ["sectorsLists"] as const,
   SECTOR_WITH_ID: (sectorId?: string | null) => ["sectorWithId", sectorId] as const,
 
@@ -8,14 +9,18 @@ export const QUERY_KEYS = {
   SERVICES: ["services"] as const,
   SERVICE_BY_SECTOR: (sectorId?: string | null) => ["serviceBySector", sectorId] as const,
   SERVICE_WITH_ID: (serviceId?: string | null) => ["serviceWithId", serviceId] as const,
+  SERVICES_WITH_PAGE: (page: number) => ["servicesWithPage", page] as const,
   SERVICE_CATEGORIES: ["serviceCategories"] as const,
   SERVICE_CATEGORY_WITH_ID: (serviceCategoryId?: string | null) =>
     ["serviceCategoryWithId", serviceCategoryId] as const,
+  SERVICE_CATEGORY_BY_SERVICE: (serviceId?: string | null) =>
+    ["serviceCategoryByService", serviceId] as const,
 
   // Fournisseurs
   PROVIDERS: ["providers"] as const,
   PROVIDER_WITH_ID: (providerId?: string | null) => ["providerWithId", providerId] as const,
   PROVIDER_SERVICE_CATEGORIES: ["providerServiceCategories"] as const,
+  PROVIDERS_LISTS: ["providersLists"] as const,
 
   // Clients
   CLIENTS: ["clients"] as const,

@@ -27,6 +27,7 @@ import { Action } from 'src/roles/enums/action.enum';
 import { CurrentUser } from 'src/auth/decorators/current-user.decorator';
 import { User } from 'src/users/entities/user.entity';
 import { CreateProviderServiceCategoryDto } from './dto/create-provider-service-category.dto';
+import { instanceToPlain } from 'class-transformer';
 
 @Controller('provider-service-categories')
 @ApiTags('Catégories de services fournisseurs')
@@ -54,10 +55,14 @@ export class ProviderServiceCategoriesController {
     description: 'Recherche par nom',
   })
   async findAll(@Query() paginationDto: PaginationDto) {
-    return this.providerServiceCategoriesService.findAll(
+    const result = await this.providerServiceCategoriesService.findAll(
       paginationDto,
       paginationDto.search,
     );
+    return {
+      ...result,
+      data: result.data.map((item) => instanceToPlain(item)),
+    };
   }
 
   @Post()

@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 
 export function useDependentQuery<T>(
-  queryKey: string[],
+  queryKey: any,
   fetchFn: (id?: string) => Promise<T[]>,
   id?: string
 ) {

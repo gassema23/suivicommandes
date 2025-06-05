@@ -16,18 +16,26 @@ import { useState } from "react";
 import type { ServiceResponse } from "@/features/services/types/service.type";
 import { QUERY_KEYS } from "@/config/query-key";
 
-const servicesQueryOptions = queryOptions<ServiceResponse>({
-  queryKey: QUERY_KEYS.SERVICES,
-  queryFn: () => getServices(),
-});
+const servicesQueryOptions = (pageNumber: number) =>
+  queryOptions<ServiceResponse>({
+    queryKey: QUERY_KEYS.SERVICES_WITH_PAGE(pageNumber),
+    queryFn: () => getServices(pageNumber),
+  });
 
 export const Route = createFileRoute("/_authenticated/pilotages/services/")({
   beforeLoad: createPermissionGuard([PERMISSIONS.SERVICES.READ]),
   head: () => ({
     meta: [{ title: "Services" }],
   }),
-  loader: ({ context }) =>
-    context.queryClient.ensureQueryData(servicesQueryOptions),
+  validateSearch: (search) => ({
+    page: Number(search.page ?? 1),
+  }),
+  loader: (args) => {
+    const { context, search } = args as any;
+    return context.queryClient.ensureQueryData(
+      servicesQueryOptions(Number(search?.page ?? "1"))
+    );
+  },
   errorComponent: ({ error }) => (
     <FormError
       title="Erreur lors du chargement des services"
@@ -47,8 +55,13 @@ export const Route = createFileRoute("/_authenticated/pilotages/services/")({
 });
 
 function RouteComponent() {
-  const { data: services } =
-    useSuspenseQuery<ServiceResponse>(servicesQueryOptions);
+  const navigate = Route.useNavigate();
+  const { page = 1 } = Route.useSearch();
+  const pageNumber = Number(page);
+
+  const { data: services } = useSuspenseQuery<ServiceResponse>(
+    servicesQueryOptions(pageNumber)
+  );
   const [deleteId, setDeleteId] = useState<string | null>(null);
   const queryClient = useQueryClient();
 
@@ -59,9 +72,16 @@ function RouteComponent() {
       onDelete: () => setDeleteId(service.id),
     })),
   };
+
   return (
     <>
-      <DataTable data={dataWithDelete} columns={ServiceColumns} />
+      <DataTable
+        data={dataWithDelete}
+        columns={ServiceColumns}
+        currentPage={pageNumber}
+        totalPages={services.meta.totalPages}
+        onPageChange={(page) => navigate({ search: { page } })}
+      />
       <DeleteModal
         open={!!deleteId}
         onOpenChange={(open) => !open && setDeleteId(null)}
