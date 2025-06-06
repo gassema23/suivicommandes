@@ -33,7 +33,6 @@ import { User } from '../users/entities/user.entity';
 import { EnableTwoFactorDto } from './dto/enable-two-factor.dto';
 import { RefreshTokenDto } from './dto/refresh-token.dto';
 import { instanceToPlain } from 'class-transformer';
-import { parseDurationToMs } from '../common/utils/parse-duration';
 import { OnboardingDto } from './dto/onboarding.dto';
 
 @ApiTags('Authentication')
@@ -199,7 +198,6 @@ export class AuthController {
   @ApiResponse({ status: 200, description: 'Informations utilisateur' })
   async getProfile(@CurrentUser() user: User) {
 
-  console.log('User returned to frontend:', user);
     return { user: instanceToPlain(user) };
   }
 

@@ -23,7 +23,7 @@ import { ChangePasswordDto } from './dto/change-password.dto';
 import { instanceToPlain } from 'class-transformer';
 import { VerifyEmailInterface } from './interfaces/verify-email.interface';
 import { OnboardingDto } from './dto/onboarding.dto';
-import { parseDurationToMs } from 'src/common/utils/parse-duration';
+import { parseDurationToMs } from '../common/utils/parse-duration';
 import { Response } from 'express';
 
 export interface JwtPayload {
@@ -59,8 +59,6 @@ export class AuthService {
       where: { email },
       relations: ['team'],
     });
-
-    console.log('User found in validateUser:', user);
 
     if (user && (await bcrypt.compare(password, user.password))) {
       return user;

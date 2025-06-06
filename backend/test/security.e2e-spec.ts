@@ -2,8 +2,6 @@ import * as request from 'supertest';
 import { INestApplication } from '@nestjs/common';
 import { Test } from '@nestjs/testing';
 import { AppModule } from './../src/app.module';
-import { first } from 'rxjs';
-import { verify } from 'crypto';
 
 describe('🛡️ Security E2E Tests', () => {
   let app: INestApplication;
@@ -18,18 +16,18 @@ describe('🛡️ Security E2E Tests', () => {
     await app.init();
 
     // Créer un utilisateur non admin
-    await request(app.getHttpServer()).post('/api/auth/register').send({
-      email: 'admin@example.com',
+    await request(app.getHttpServer()).post('/auth/register').send({
+      email: 'test@example.com',
       password: '!Password123',
       confirmPassword: '!Password123',
       firstName: 'Admin',
       lastName: 'User',
-      verifyEmail: '2010-01-01 00:00:00',
+      emailVerifiedAt: '2010-01-01 00:00:00',
     });
 
     const loginRes = await request(app.getHttpServer())
-      .post('/api/auth/login')
-      .send({ email: 'admin@example.com', password: '!Password123' });
+      .post('/auth/login')
+      .send({ email: 'test@example.com', password: '!Password123' });
 
     userToken = loginRes.body.access_token;
   });
@@ -39,8 +37,17 @@ describe('🛡️ Security E2E Tests', () => {
   });
 
   const protectedRoutes = [
-    //'api/providers',
-    // ...autres routes...
+    'sectors',
+    'services',
+    'users',
+    'service-categories',
+    'providers',
+    'provider-service-categories',
+    'clients',
+    'subdivision-clients',
+    'teams',
+    'holidays',
+    'roles'
   ];
 
   it.each(protectedRoutes)(
@@ -55,20 +62,20 @@ describe('🛡️ Security E2E Tests', () => {
     async (route) => {
       await request(app.getHttpServer())
         .post(`/${route}`)
-        .set('Authorization', `Bearer ${userToken}`)
+        .set('Cookie', [`accessToken=${userToken}`])
         .send({ name: 'Test' })
         .expect((res) => {
           expect([401, 403]).toContain(res.statusCode);
         });
     },
   );
-
+  
   it.each(protectedRoutes)(
     '🧪 %s - SQL injection attempt should fail',
     async (route) => {
       await request(app.getHttpServer())
         .post(`/${route}`)
-        .set('Authorization', `Bearer ${userToken}`)
+        .set('Cookie', [`accessToken=${userToken}`])
         .send({ name: "' OR 1=1 --" })
         .expect((res) => {
           expect(res.statusCode).toBeGreaterThanOrEqual(400);
@@ -81,7 +88,7 @@ describe('🛡️ Security E2E Tests', () => {
     async (route) => {
       await request(app.getHttpServer())
         .post(`/${route}`)
-        .set('Authorization', `Bearer ${userToken}`)
+        .set('Cookie', [`accessToken=${userToken}`])
         .send({ name: '<script>alert("XSS")</script>' })
         .expect((res) => {
           expect(res.text).not.toContain('<script>');
@@ -99,21 +106,21 @@ describe('🛡️ Security E2E Tests', () => {
 
       await request(app.getHttpServer())
         .get(`/${route}`)
-        .set('Authorization', `Bearer ${forgedToken}`)
+        .set('Cookie', [`accessToken=${forgedToken}`])
         .expect(401);
     },
   );
 
-  it('📦 /api/auth/login - reject SQL injection in login form', async () => {
+  it('📦 /auth/login - reject SQL injection in login form', async () => {
     await request(app.getHttpServer())
-      .post('/api/auth/login')
+      .post('/auth/login')
       .send({ email: "' OR 1=1 --", password: 'x' })
       .expect(401);
   });
 
-  it('📦 /api/auth/register - reject malformed email or injection', async () => {
+  it('📦 /auth/register - reject malformed email or injection', async () => {
     await request(app.getHttpServer())
-      .post('/api/auth/register')
+      .post('/auth/register')
       .send({
         email: "<img src='x' onerror='alert(1)'>",
         password: 'x',
@@ -126,4 +133,5 @@ describe('🛡️ Security E2E Tests', () => {
         expect(res.statusCode).toBeGreaterThanOrEqual(400);
       });
   });
+  
 });

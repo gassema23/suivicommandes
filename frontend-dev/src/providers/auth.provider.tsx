@@ -43,7 +43,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       if (res.status === 401) return null;
       if (!res.ok) return null;
       const data = await res.json();
-      console.log("User data fetched:", data.user);
       return data.user;
     },
   });

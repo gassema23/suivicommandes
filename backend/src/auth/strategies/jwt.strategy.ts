@@ -40,12 +40,10 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
   }
 
   async validate(req: Request, payload: JwtPayload): Promise<User> {
-  console.log('JWT payload received in validate:', payload.sub);
   const user = await this.userRepository.findOne({
     where: { id: payload.sub },
     relations: ['team'],
   });
-  console.log('User found in DB:', user);
   if (!user || !user.emailVerifiedAt) {
     throw new UnauthorizedException(
       'Utilisateur non trouvé ou email non vérifié',
