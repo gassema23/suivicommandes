@@ -18,15 +18,15 @@ import {
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
-import { AuthorizationsGuard } from 'src/auth/guards/authorizations.guard';
+import { AuthorizationsGuard } from '../auth/guards/authorizations.guard';
 import { SubdivisionClientsService } from './subdivision-clients.service';
-import { Resource } from 'src/roles/enums/resource.enum';
-import { Action } from 'src/roles/enums/action.enum';
-import { Permissions } from 'src/roles/decorators/permission.decorator';
-import { PaginationDto } from 'src/common/dto/pagination.dto';
+import { Resource } from '../roles/enums/resource.enum';
+import { Action } from '../roles/enums/action.enum';
+import { Permissions } from '../roles/decorators/permission.decorator';
+import { PaginationDto } from '../common/dto/pagination.dto';
 import { instanceToPlain } from 'class-transformer';
-import { User } from 'src/users/entities/user.entity';
-import { CurrentUser } from 'src/auth/decorators/current-user.decorator';
+import { User } from '../users/entities/user.entity';
+import { CurrentUser } from '../auth/decorators/current-user.decorator';
 import { CreateSubdivisionClientDto } from './dto/create-subdivision-client.dto';
 import { UpdateSubdivisionClientDto } from './dto/update-subdivision-client.dto';
 

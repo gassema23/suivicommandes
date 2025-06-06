@@ -4,6 +4,10 @@ import { sectorSeed } from './seeders/sector.seed';
 import { serviceSeed } from './seeders/service.seed';
 import { truncateSeed } from './seeders/truncate.seed';
 import { serviceCategorySeed } from './seeders/service-category.seed';
+import { providerSeed } from './seeders/provider.seed';
+import { providerServiceCategorySeed } from './seeders/provider-service-category.seed';
+import { clientSeed } from './seeders/client.seed';
+import { subdivisionClientSeed } from './seeders/subdivision-client.seed';
 
 export class MainSeeder implements Seeder {
   public async run(
@@ -11,9 +15,13 @@ export class MainSeeder implements Seeder {
     factoryManager: SeederFactoryManager,
   ): Promise<any> {
     
-    const sectorCount = 1000;
-    const serviceCount = 5000;
-    const serviceCategoryCount = 10000;
+    const sectorCount = 10;
+    const serviceCount = 50;
+    const serviceCategoryCount = 100;
+    const providerCount = 20;
+    const providerServiceCategoryCount = 20;
+    const clientCount = 50;
+    const subdivisionClientCount = 100;
 
     // Truncate existing data
     await truncateSeed(dataSource);
@@ -22,6 +30,13 @@ export class MainSeeder implements Seeder {
     // Seed services
     const services = await serviceSeed(dataSource, factoryManager, serviceCount, sectors);
     // Seed service categories
-    return await serviceCategorySeed(dataSource, factoryManager, serviceCategoryCount, services);
+    const serviceCategories =  await serviceCategorySeed(dataSource, factoryManager, serviceCategoryCount, services);
+
+    const providers = await providerSeed(dataSource, factoryManager, providerCount);
+
+    const providerServiceCategories = await providerServiceCategorySeed(dataSource, factoryManager, providerServiceCategoryCount, providers, serviceCategories);
+
+    const clients = await clientSeed(dataSource, factoryManager, clientCount);
+    return await subdivisionClientSeed(dataSource, factoryManager, subdivisionClientCount, clients);
   }
 }

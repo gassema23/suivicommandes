@@ -7,7 +7,7 @@ import { Repository } from 'typeorm';
 import { Request } from 'express';
 
 import { JwtPayload } from '../auth.service';
-import { User } from 'src/users/entities/user.entity';
+import { User } from '../../users/entities/user.entity';
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
@@ -39,16 +39,18 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     });
   }
 
-  async validate(payload: JwtPayload): Promise<User> {
-    const user = await this.userRepository.findOne({
-      where: { id: payload.sub },
-      relations: ['team'],
-    });
-    if (!user || !user.emailVerifiedAt) {
-      throw new UnauthorizedException(
-        'Utilisateur non trouvé ou email non vérifié',
-      );
-    }
-    return user;
+  async validate(req: Request, payload: JwtPayload): Promise<User> {
+  console.log('JWT payload received in validate:', payload.sub);
+  const user = await this.userRepository.findOne({
+    where: { id: payload.sub },
+    relations: ['team'],
+  });
+  console.log('User found in DB:', user);
+  if (!user || !user.emailVerifiedAt) {
+    throw new UnauthorizedException(
+      'Utilisateur non trouvé ou email non vérifié',
+    );
   }
+  return user;
+}
 }

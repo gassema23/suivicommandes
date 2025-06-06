@@ -18,14 +18,14 @@ import {
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
-import { AuthorizationsGuard } from 'src/auth/guards/authorizations.guard';
+import { AuthorizationsGuard } from '../auth/guards/authorizations.guard';
 import { ProviderServiceCategoriesService } from './provider-service-categories.service';
-import { Resource } from 'src/roles/enums/resource.enum';
-import { Permissions } from 'src/roles/decorators/permission.decorator';
-import { PaginationDto } from 'src/common/dto/pagination.dto';
-import { Action } from 'src/roles/enums/action.enum';
-import { CurrentUser } from 'src/auth/decorators/current-user.decorator';
-import { User } from 'src/users/entities/user.entity';
+import { Resource } from '../roles/enums/resource.enum';
+import { Permissions } from '../roles/decorators/permission.decorator';
+import { PaginationDto } from '../common/dto/pagination.dto';
+import { Action } from '../roles/enums/action.enum';
+import { CurrentUser } from '../auth/decorators/current-user.decorator';
+import { User } from '../users/entities/user.entity';
 import { CreateProviderServiceCategoryDto } from './dto/create-provider-service-category.dto';
 import { instanceToPlain } from 'class-transformer';
 

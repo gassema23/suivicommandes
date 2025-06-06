@@ -47,6 +47,7 @@ import { Route as AuthenticatedPilotagesServicesUpdateIdImport } from './routes/
 import { Route as AuthenticatedPilotagesServiceCategoriesUpdateIdImport } from './routes/_authenticated/pilotages/service-categories/update/$id'
 import { Route as AuthenticatedPilotagesSectorsUpdateIdImport } from './routes/_authenticated/pilotages/sectors/update/$id'
 import { Route as AuthenticatedPilotagesProvidersUpdateIdImport } from './routes/_authenticated/pilotages/providers/update/$id'
+import { Route as AuthenticatedPilotagesProviderServiceCategoriesUpdateIdImport } from './routes/_authenticated/pilotages/provider-service-categories/update/$id'
 import { Route as AuthenticatedPilotagesHolidaysUpdateIdImport } from './routes/_authenticated/pilotages/holidays/update/$id'
 import { Route as AuthenticatedPilotagesClientsUpdateIdImport } from './routes/_authenticated/pilotages/clients/update/$id'
 import { Route as AuthenticatedAdministrationsRolesUpdateIdImport } from './routes/_authenticated/administrations/roles/update/$id'
@@ -292,6 +293,13 @@ const AuthenticatedPilotagesProvidersUpdateIdRoute =
   AuthenticatedPilotagesProvidersUpdateIdImport.update({
     id: '/pilotages/providers/update/$id',
     path: '/pilotages/providers/update/$id',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+
+const AuthenticatedPilotagesProviderServiceCategoriesUpdateIdRoute =
+  AuthenticatedPilotagesProviderServiceCategoriesUpdateIdImport.update({
+    id: '/pilotages/provider-service-categories/update/$id',
+    path: '/pilotages/provider-service-categories/update/$id',
     getParentRoute: () => AuthenticatedRoute,
   } as any)
 
@@ -551,6 +559,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedPilotagesHolidaysUpdateIdImport
       parentRoute: typeof AuthenticatedImport
     }
+    '/_authenticated/pilotages/provider-service-categories/update/$id': {
+      id: '/_authenticated/pilotages/provider-service-categories/update/$id'
+      path: '/pilotages/provider-service-categories/update/$id'
+      fullPath: '/pilotages/provider-service-categories/update/$id'
+      preLoaderRoute: typeof AuthenticatedPilotagesProviderServiceCategoriesUpdateIdImport
+      parentRoute: typeof AuthenticatedImport
+    }
     '/_authenticated/pilotages/providers/update/$id': {
       id: '/_authenticated/pilotages/providers/update/$id'
       path: '/pilotages/providers/update/$id'
@@ -626,6 +641,7 @@ interface AuthenticatedRouteChildren {
   AuthenticatedAdministrationsRolesUpdateIdRoute: typeof AuthenticatedAdministrationsRolesUpdateIdRoute
   AuthenticatedPilotagesClientsUpdateIdRoute: typeof AuthenticatedPilotagesClientsUpdateIdRoute
   AuthenticatedPilotagesHolidaysUpdateIdRoute: typeof AuthenticatedPilotagesHolidaysUpdateIdRoute
+  AuthenticatedPilotagesProviderServiceCategoriesUpdateIdRoute: typeof AuthenticatedPilotagesProviderServiceCategoriesUpdateIdRoute
   AuthenticatedPilotagesProvidersUpdateIdRoute: typeof AuthenticatedPilotagesProvidersUpdateIdRoute
   AuthenticatedPilotagesSectorsUpdateIdRoute: typeof AuthenticatedPilotagesSectorsUpdateIdRoute
   AuthenticatedPilotagesServiceCategoriesUpdateIdRoute: typeof AuthenticatedPilotagesServiceCategoriesUpdateIdRoute
@@ -685,6 +701,8 @@ const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
     AuthenticatedPilotagesClientsUpdateIdRoute,
   AuthenticatedPilotagesHolidaysUpdateIdRoute:
     AuthenticatedPilotagesHolidaysUpdateIdRoute,
+  AuthenticatedPilotagesProviderServiceCategoriesUpdateIdRoute:
+    AuthenticatedPilotagesProviderServiceCategoriesUpdateIdRoute,
   AuthenticatedPilotagesProvidersUpdateIdRoute:
     AuthenticatedPilotagesProvidersUpdateIdRoute,
   AuthenticatedPilotagesSectorsUpdateIdRoute:
@@ -750,6 +768,7 @@ export interface FileRoutesByFullPath {
   '/administrations/roles/update/$id': typeof AuthenticatedAdministrationsRolesUpdateIdRoute
   '/pilotages/clients/update/$id': typeof AuthenticatedPilotagesClientsUpdateIdRoute
   '/pilotages/holidays/update/$id': typeof AuthenticatedPilotagesHolidaysUpdateIdRoute
+  '/pilotages/provider-service-categories/update/$id': typeof AuthenticatedPilotagesProviderServiceCategoriesUpdateIdRoute
   '/pilotages/providers/update/$id': typeof AuthenticatedPilotagesProvidersUpdateIdRoute
   '/pilotages/sectors/update/$id': typeof AuthenticatedPilotagesSectorsUpdateIdRoute
   '/pilotages/service-categories/update/$id': typeof AuthenticatedPilotagesServiceCategoriesUpdateIdRoute
@@ -791,6 +810,7 @@ export interface FileRoutesByTo {
   '/administrations/roles/update/$id': typeof AuthenticatedAdministrationsRolesUpdateIdRoute
   '/pilotages/clients/update/$id': typeof AuthenticatedPilotagesClientsUpdateIdRoute
   '/pilotages/holidays/update/$id': typeof AuthenticatedPilotagesHolidaysUpdateIdRoute
+  '/pilotages/provider-service-categories/update/$id': typeof AuthenticatedPilotagesProviderServiceCategoriesUpdateIdRoute
   '/pilotages/providers/update/$id': typeof AuthenticatedPilotagesProvidersUpdateIdRoute
   '/pilotages/sectors/update/$id': typeof AuthenticatedPilotagesSectorsUpdateIdRoute
   '/pilotages/service-categories/update/$id': typeof AuthenticatedPilotagesServiceCategoriesUpdateIdRoute
@@ -834,6 +854,7 @@ export interface FileRoutesById {
   '/_authenticated/administrations/roles/update/$id': typeof AuthenticatedAdministrationsRolesUpdateIdRoute
   '/_authenticated/pilotages/clients/update/$id': typeof AuthenticatedPilotagesClientsUpdateIdRoute
   '/_authenticated/pilotages/holidays/update/$id': typeof AuthenticatedPilotagesHolidaysUpdateIdRoute
+  '/_authenticated/pilotages/provider-service-categories/update/$id': typeof AuthenticatedPilotagesProviderServiceCategoriesUpdateIdRoute
   '/_authenticated/pilotages/providers/update/$id': typeof AuthenticatedPilotagesProvidersUpdateIdRoute
   '/_authenticated/pilotages/sectors/update/$id': typeof AuthenticatedPilotagesSectorsUpdateIdRoute
   '/_authenticated/pilotages/service-categories/update/$id': typeof AuthenticatedPilotagesServiceCategoriesUpdateIdRoute
@@ -877,6 +898,7 @@ export interface FileRouteTypes {
     | '/administrations/roles/update/$id'
     | '/pilotages/clients/update/$id'
     | '/pilotages/holidays/update/$id'
+    | '/pilotages/provider-service-categories/update/$id'
     | '/pilotages/providers/update/$id'
     | '/pilotages/sectors/update/$id'
     | '/pilotages/service-categories/update/$id'
@@ -917,6 +939,7 @@ export interface FileRouteTypes {
     | '/administrations/roles/update/$id'
     | '/pilotages/clients/update/$id'
     | '/pilotages/holidays/update/$id'
+    | '/pilotages/provider-service-categories/update/$id'
     | '/pilotages/providers/update/$id'
     | '/pilotages/sectors/update/$id'
     | '/pilotages/service-categories/update/$id'
@@ -958,6 +981,7 @@ export interface FileRouteTypes {
     | '/_authenticated/administrations/roles/update/$id'
     | '/_authenticated/pilotages/clients/update/$id'
     | '/_authenticated/pilotages/holidays/update/$id'
+    | '/_authenticated/pilotages/provider-service-categories/update/$id'
     | '/_authenticated/pilotages/providers/update/$id'
     | '/_authenticated/pilotages/sectors/update/$id'
     | '/_authenticated/pilotages/service-categories/update/$id'
@@ -1024,6 +1048,7 @@ export const routeTree = rootRoute
         "/_authenticated/administrations/roles/update/$id",
         "/_authenticated/pilotages/clients/update/$id",
         "/_authenticated/pilotages/holidays/update/$id",
+        "/_authenticated/pilotages/provider-service-categories/update/$id",
         "/_authenticated/pilotages/providers/update/$id",
         "/_authenticated/pilotages/sectors/update/$id",
         "/_authenticated/pilotages/service-categories/update/$id",
@@ -1161,6 +1186,10 @@ export const routeTree = rootRoute
     },
     "/_authenticated/pilotages/holidays/update/$id": {
       "filePath": "_authenticated/pilotages/holidays/update/$id.tsx",
+      "parent": "/_authenticated"
+    },
+    "/_authenticated/pilotages/provider-service-categories/update/$id": {
+      "filePath": "_authenticated/pilotages/provider-service-categories/update/$id.tsx",
       "parent": "/_authenticated"
     },
     "/_authenticated/pilotages/providers/update/$id": {

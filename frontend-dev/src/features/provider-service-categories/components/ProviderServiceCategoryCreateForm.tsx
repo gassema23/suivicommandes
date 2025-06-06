@@ -11,13 +11,14 @@ import {
   type ProviderServiceCategoryFormData,
 } from "../schemas/provider-service-category.schema";
 import FormError from "@/components/ui/shadcn/form-error";
-import { Label } from "@/components/ui/shadcn/label";
-import { Button } from "@/components/ui/quebec/Button";
 import { DependentSelect } from "@/features/common/dependant-select/components/DependentSelect";
 import { useDependentQuery } from "@/features/common/dependant-select/hooks/useDependentQuery";
 import { fetchServiceCategoriesByService } from "@/features/service-categories/services/fetch-service-category-by-service.service";
 import { fetchProvidersList } from "@/features/providers/services/fetch-providers-list.service";
 import { createProviderServiceCategory } from "../services/create-provider-service-category.service";
+import { FormActions } from "@/features/common/forms/components/FormActions";
+import InputContainer from "@/features/common/forms/components/InputContainer";
+import { providerServiceCategoryFields } from "../configs/provider-service-category-fields";
 
 export default function ProviderServiceCategoryCreateForm() {
   const [backendError, setBackendError] = useState<string | null>(null);
@@ -41,7 +42,7 @@ export default function ProviderServiceCategoryCreateForm() {
     formState: { errors },
   } = form;
 
-  const createTeamMutation = useMutation({
+  const createMutation = useMutation({
     mutationFn: (data: ProviderServiceCategoryFormData) =>
       createProviderServiceCategory(data),
     onSuccess: () => {
@@ -49,7 +50,10 @@ export default function ProviderServiceCategoryCreateForm() {
       queryClient.invalidateQueries({
         queryKey: QUERY_KEYS.PROVIDER_SERVICE_CATEGORIES,
       });
-      navigate({ to: "/pilotages/provider-service-categories" });
+      navigate({
+        to: "/pilotages/provider-service-categories",
+        search: { page: 1 },
+      });
     },
     onError: (error: { message: string }) => {
       setBackendError(error.message);
@@ -57,7 +61,7 @@ export default function ProviderServiceCategoryCreateForm() {
   });
 
   const onSubmit = (data: ProviderServiceCategoryFormData) => {
-    createTeamMutation.mutate(data);
+    createMutation.mutate(data);
   };
 
   const sectorId = watch("sectorId");
@@ -112,116 +116,81 @@ export default function ProviderServiceCategoryCreateForm() {
           message={backendError}
         />
       )}
-      <div className="grid grid-cols-12 gap-2 items-center">
-        <Label className="col-span-12 xl:col-span-4" htmlFor="ownerId">
-          Secteurs
-        </Label>
-        <div className="col-span-12 xl:col-span-8">
-          <DependentSelect
-            value={sectorId}
-            onChange={(value) => {
-              setValue("sectorId", value);
-              setValue("serviceId", "");
-              setValue("serviceCategoryId", "");
-            }}
-            data={sectors}
-            isLoading={isLoadingSectors}
-            isError={isErrorSectors}
-            placeholder="Sélectionner un secteur"
-            getOptionValue={(s) => s.id}
-            getOptionLabel={(s) => s.sectorName}
-          />
-          {errors.sectorId && (
-            <p className="text-destructive text-sm mt-1">
-              {errors.sectorId.message}
-            </p>
-          )}
-        </div>
-      </div>
 
-      <div className="grid grid-cols-12 gap-2 items-center">
-        <Label className="col-span-12 xl:col-span-4">Services</Label>
-        <div className="col-span-12 xl:col-span-8">
-          <DependentSelect
-            value={watch("serviceId")}
-            onChange={(value) => {
-              setValue("serviceId", value);
-              setValue("serviceCategoryId", "");
-            }}
-            data={services}
-            isLoading={isLoadingServices}
-            isError={isErrorServices}
-            placeholder="Sélectionner un service"
-            getOptionValue={(s) => s.id}
-            getOptionLabel={(s) => s.serviceName}
-          />
-          {errors.serviceId && (
-            <p className="text-destructive text-sm mt-1">
-              {errors.serviceId.message}
-            </p>
-          )}
-        </div>
-      </div>
-
-      <div className="grid grid-cols-12 gap-2 items-center">
-        <Label className="col-span-12 xl:col-span-4">
-          Catégorie de services
-        </Label>
-        <div className="col-span-12 xl:col-span-8">
-          <DependentSelect
-            value={watch("serviceCategoryId")}
-            onChange={(value) => setValue("serviceCategoryId", value)}
-            data={serviceCategories}
-            isLoading={isLoadingServiceCategories}
-            isError={isErrorServiceCategories}
-            placeholder="Sélectionner une catégorie de service"
-            getOptionValue={(s) => s.id}
-            getOptionLabel={(s) => s.serviceCategoryName}
-          />
-          {errors.serviceCategoryId && (
-            <p className="text-destructive text-sm mt-1">
-              {errors.serviceCategoryId.message}
-            </p>
-          )}
-        </div>
-      </div>
-
-      <div className="grid grid-cols-12 gap-2 items-center">
-        <Label className="col-span-12 xl:col-span-4">Fournisseurs</Label>
-        <div className="col-span-12 xl:col-span-8">
-          <DependentSelect
-            value={watch("providerId")}
-            onChange={(value) => setValue("providerId", value)}
-            data={providers}
-            isLoading={isLoadingProviders}
-            isError={isErrorProviders}
-            placeholder="Sélectionner un fournisseur"
-            getOptionValue={(s) => s.id}
-            getOptionLabel={(s) => s.virtualProviderName}
-          />
-          {errors.providerId && (
-            <p className="text-destructive text-sm mt-1">
-              {errors.providerId.message}
-            </p>
-          )}
-        </div>
-      </div>
-
-      {/* Actions du formulaire */}
-      <div className="flex gap-4 justify-end">
-        <Button
-          type="button"
-          variant="outline"
-          onClick={() => navigate({ to: "/pilotages/provider-service-categories" })}
-          disabled={form.formState.isSubmitting}
+      {providerServiceCategoryFields.map((field) => (
+        <InputContainer
+          key={field.name}
+          label={field.label}
+          error={errors[field.name]?.message}
+          htmlFor={field.name}
         >
-          Annuler
-        </Button>
+          {field.component === "select-sector" && (
+            <DependentSelect
+              value={watch("sectorId")}
+              onChange={(value) => {
+                setValue("sectorId", value);
+                setValue("serviceId", "");
+                setValue("serviceCategoryId", "");
+              }}
+              data={sectors}
+              isLoading={isLoadingSectors}
+              isError={isErrorSectors}
+              placeholder={field.placeholder}
+              getOptionValue={(s) => s.id}
+              getOptionLabel={(s) => s.sectorName}
+            />
+          )}
+          {field.component === "select-service" && (
+            <DependentSelect
+              value={watch("serviceId")}
+              onChange={(value) => {
+                setValue("serviceId", value);
+                setValue("serviceCategoryId", "");
+              }}
+              data={services}
+              isLoading={isLoadingServices}
+              isError={isErrorServices}
+              placeholder={field.placeholder}
+              getOptionValue={(s) => s.id}
+              getOptionLabel={(s) => s.serviceName}
+            />
+          )}
+          {field.component === "select-service-category" && (
+            <DependentSelect
+              value={watch("serviceCategoryId")}
+              onChange={(value) => setValue("serviceCategoryId", value)}
+              data={serviceCategories}
+              isLoading={isLoadingServiceCategories}
+              isError={isErrorServiceCategories}
+              placeholder={field.placeholder}
+              getOptionValue={(s) => s.id}
+              getOptionLabel={(s) => s.serviceCategoryName}
+            />
+          )}
+          {field.component === "select-provider" && (
+            <DependentSelect
+              value={watch("providerId")}
+              onChange={(value) => setValue("providerId", value)}
+              data={providers}
+              isLoading={isLoadingProviders}
+              isError={isErrorProviders}
+              placeholder={field.placeholder}
+              getOptionValue={(s) => s.id}
+              getOptionLabel={(s) => s.virtualProviderName}
+            />
+          )}
+        </InputContainer>
+      ))}
 
-        <Button type="submit" disabled={form.formState.isSubmitting}>
-          {form.formState.isSubmitting ? "Enregistrement..." : "Enregistrer"}
-        </Button>
-      </div>
+      <FormActions
+        isLoading={createMutation.isPending}
+        onCancel={() =>
+          navigate({
+            to: "/pilotages/provider-service-categories",
+            search: { page: 1 },
+          })
+        }
+      />
     </form>
   );
 }

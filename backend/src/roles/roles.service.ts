@@ -3,9 +3,9 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Role } from './entities/role.entity';
 import { FindOptionsWhere, ILike, Not, Repository } from 'typeorm';
 import { CreateRoleDto } from './dto/create-role.dto';
-import { PaginationDto } from 'src/common/dto/pagination.dto';
-import { PaginatedResult } from 'src/common/interfaces/paginated-result.interface';
-import { User } from 'src/users/entities/user.entity';
+import { PaginationDto } from '../common/dto/pagination.dto';
+import { PaginatedResult } from '../common/interfaces/paginated-result.interface';
+import { User } from '../users/entities/user.entity';
 import { Permission } from './entities/permission.entity';
 
 @Injectable()

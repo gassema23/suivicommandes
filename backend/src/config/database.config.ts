@@ -1,4 +1,3 @@
-// src/config/database.config.ts - Configuration corrigée pour TypeORM
 import { DataSource, DataSourceOptions } from 'typeorm';
 import * as dotenv from 'dotenv';
 

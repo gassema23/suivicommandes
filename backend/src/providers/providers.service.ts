@@ -2,10 +2,10 @@ import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Provider } from './entities/provider.entity';
 import { FindOptionsWhere, ILike, Repository } from 'typeorm';
-import { PaginationDto } from 'src/common/dto/pagination.dto';
-import { PaginatedResult } from 'src/common/interfaces/paginated-result.interface';
+import { PaginationDto } from '../common/dto/pagination.dto';
+import { PaginatedResult } from '../common/interfaces/paginated-result.interface';
 import { CreateProviderDto } from './dto/create-provider.dto';
-import { User } from 'src/users/entities/user.entity';
+import { User } from '../users/entities/user.entity';
 import { UpdateProviderDto } from './dto/update-provider.dto';
 
 @Injectable()
@@ -126,7 +126,20 @@ export class ProvidersService {
   }
 
   async remove(id: string, deletedBy: string): Promise<void> {
-    const provider = await this.findOne(id);
+    const provider = await this.providerRepository.findOne({
+      where: { id },
+      relations:['providerServiceCategories', 'deletedBy'],
+    });
+
+    if (!provider) {
+      throw new BadRequestException('Client non trouvé');
+    }
+
+    if (provider.providerServiceCategories && provider.providerServiceCategories.length > 0) {
+      throw new BadRequestException(
+        'Impossible de supprimer le fournisseur car il est associé à des catégories de services',
+      );
+    }
 
     provider.deletedBy = { id: deletedBy } as User;
     await this.providerRepository.save(provider);

@@ -1,20 +1,19 @@
-
 import * as cliProgress from 'cli-progress';
 import { DataSource } from 'typeorm';
 
 export async function truncateSeed(dataSource: DataSource): Promise<void> {
-    // Progress bar simulée pour le truncate
-    const truncateBar = new cliProgress.SingleBar(
-      { format: '{bar} | {name} | {value}/{total}' },
-      cliProgress.Presets.shades_classic,
-    );
-    truncateBar.start(1, 0, { name: 'Truncate' });
+  // Progress bar simulée pour le truncate
+  const truncateBar = new cliProgress.SingleBar(
+    { format: '{bar} | {name} | {value}/{total}' },
+    cliProgress.Presets.shades_classic,
+  );
+  truncateBar.start(1, 0, { name: 'Truncate' });
 
-    await dataSource.query(
-      'TRUNCATE TABLE "service_categories", "services", "sectors" RESTART IDENTITY CASCADE;',
-    );
-    // Petite pause pour l'effet visuel (optionnel)
-    await new Promise((resolve) => setTimeout(resolve, 300));
-    truncateBar.update(1);
-    truncateBar.stop();
+  await dataSource.query(
+    'TRUNCATE TABLE "service_categories", "services", "sectors", "provider_service_categories","providers", "subdivision_clients","clients" RESTART IDENTITY CASCADE;',
+  );
+  // Petite pause pour l'effet visuel (optionnel)
+  await new Promise((resolve) => setTimeout(resolve, 300));
+  truncateBar.update(1);
+  truncateBar.stop();
 }

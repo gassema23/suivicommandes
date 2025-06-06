@@ -18,15 +18,15 @@ import {
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
-import { AuthorizationsGuard } from 'src/auth/guards/authorizations.guard';
+import { AuthorizationsGuard } from '../auth/guards/authorizations.guard';
 import { HolidaysService } from './holidays.service';
-import { Permissions } from 'src/roles/decorators/permission.decorator';
-import { Resource } from 'src/roles/enums/resource.enum';
-import { Action } from 'src/roles/enums/action.enum';
-import { CurrentUser } from 'src/auth/decorators/current-user.decorator';
-import { User } from 'src/users/entities/user.entity';
+import { Permissions } from '../roles/decorators/permission.decorator';
+import { Resource } from '../roles/enums/resource.enum';
+import { Action } from '../roles/enums/action.enum';
+import { CurrentUser } from '../auth/decorators/current-user.decorator';
+import { User } from '../users/entities/user.entity';
 import { CreateHolidayDto } from './dto/create-holiday.dto';
-import { PaginationDto } from 'src/common/dto/pagination.dto';
+import { PaginationDto } from '../common/dto/pagination.dto';
 import { UpdateHolidayDto } from './dto/update-holiday.dto';
 
 @ApiTags('Holidays')

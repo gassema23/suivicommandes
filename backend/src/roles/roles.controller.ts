@@ -12,11 +12,10 @@ import {
 } from '@nestjs/common';
 import { RolesService } from './roles.service';
 import { CreateRoleDto } from './dto/create-role.dto';
-import { Permissions } from 'src/roles/decorators/permission.decorator';
-import { Resource } from 'src/roles/enums/resource.enum';
-import { Action } from 'src/roles/enums/action.enum';
-import { AuthorizationsGuard } from 'src/auth/guards/authorizations.guard';
-import { PaginationDto } from 'src/common/dto/pagination.dto';
+import { Permissions } from '../roles/decorators/permission.decorator';
+import { Resource } from '../roles/enums/resource.enum';
+import { Action } from '../roles/enums/action.enum';
+import { PaginationDto } from '../common/dto/pagination.dto';
 import { instanceToPlain } from 'class-transformer';
 import { AuthGuard } from '@nestjs/passport';
 

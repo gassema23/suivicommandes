@@ -10,6 +10,10 @@ import { Label } from "@/components/ui/shadcn/label";
 import { providerSchema, type ProviderFormData } from "../schemas/provider.schema";
 import { createProvider } from "../services/create-provider.service";
 import { QUERY_KEYS } from "@/config/query-key";
+import { toast } from "sonner";
+import { FormActions } from "@/features/common/forms/components/FormActions";
+import InputContainer from "@/features/common/forms/components/InputContainer";
+import { providerFields } from "../configs/provider-fields";
 
 export default function ProviderCreateForm() {
   const [backendError, setBackendError] = useState<string | null>(null);
@@ -30,19 +34,20 @@ export default function ProviderCreateForm() {
     formState: { errors },
   } = form;
 
-  const createFournisseurMutation = useMutation({
+  const createProviderMutation = useMutation({
     mutationFn: (data: ProviderFormData) => createProvider(data),
     onSuccess: () => {
       setBackendError(null);
       queryClient.invalidateQueries({ queryKey: QUERY_KEYS.PROVIDERS });
-      navigate({ to: "/pilotages/providers" });
+      toast.success("Fournisseur créé avec succès");
+      navigate({ to: "/pilotages/providers", search: { page: 1 } });
     },
     onError: (error: { message: string }) => {
       setBackendError(error.message);
     },
   });
   const onSubmit = (data: ProviderFormData) => {
-    createFournisseurMutation.mutate(data);
+    createProviderMutation.mutate(data);
   };
 
   return (
@@ -56,52 +61,29 @@ export default function ProviderCreateForm() {
           message={backendError}
         />
       )}
-      <div className="grid grid-cols-12 gap-2 items-center">
-        <Label className="col-span-12 xl:col-span-4" htmlFor="providerName">Fournisseur</Label>
-        <div className="col-span-12 xl:col-span-8">
-          <Input
-            className="block w-full"
-            id="providerName"
-            {...register("providerName")}
-            required
-          />
-          {errors.providerName && (
-            <p className="text-destructive text-sm mt-1">
-              {errors.providerName.message}
-            </p>
-          )}
-        </div>
-      </div>
-      <div className="grid grid-cols-12 gap-2 items-center">
-        <Label className="col-span-12 xl:col-span-4" htmlFor="providerCode">Identifiant du fournisseur</Label>
-        <div className="col-span-12 xl:col-span-8">
-          <Input
-            className="block w-full"
-            id="providerCode"
-            {...register("providerCode")}
-          />
-          {errors.providerCode && (
-            <p className="text-destructive text-sm mt-1">
-              {errors.providerCode.message}
-            </p>
-          )}
-        </div>
-      </div>
-      {/* Actions du formulaire */}
-      <div className="flex gap-4 justify-end">
-        <Button
-          type="button"
-          variant="outline"
-          onClick={() => navigate({ to: "/pilotages/providers" })}
-          disabled={form.formState.isSubmitting}
-        >
-          Annuler
-        </Button>
 
-        <Button type="submit" disabled={form.formState.isSubmitting}>
-          {form.formState.isSubmitting ? "Enregistrement..." : "Enregistrer"}
-        </Button>
-      </div>
+      {providerFields.map((field) => (
+        <InputContainer
+          key={field.name}
+          label={field.label}
+          error={errors[field.name]?.message}
+          htmlFor={field.name}
+        >
+          <Input
+            type={field.type}
+            className="block w-full"
+            id={field.name}
+            placeholder={field.placeholder}
+            {...register(field.name)}
+            required={field.required}
+          />
+        </InputContainer>
+      ))}
+
+      <FormActions
+        isLoading={createProviderMutation.isPending}
+        onCancel={() => navigate({ to: "/pilotages/providers", search: { page: 1 } })}
+      />
     </form>
   );
 }

@@ -1,8 +1,8 @@
 import { API_ROUTE } from "@/config";
 import type { ClientResponse } from "../types/client.type";
 
-export const getClients = async (): Promise<ClientResponse> => {
-  const response = await fetch(`${API_ROUTE}/clients`, {
+export const getClients = async (page:number): Promise<ClientResponse> => {
+  const response = await fetch(`${API_ROUTE}/clients?page=${page}`, {
     method: "GET",
     credentials: "include",
   });

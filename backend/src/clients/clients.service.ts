@@ -2,10 +2,10 @@ import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Client } from './entities/client.entity';
 import { FindOptionsWhere, ILike, Repository } from 'typeorm';
-import { PaginationDto } from 'src/common/dto/pagination.dto';
-import { PaginatedResult } from 'src/common/interfaces/paginated-result.interface';
+import { PaginationDto } from '../common/dto/pagination.dto';
+import { PaginatedResult } from '../common/interfaces/paginated-result.interface';
 import { CreateClientDto } from './dto/create-client.dto';
-import { User } from 'src/users/entities/user.entity';
+import { User } from '../users/entities/user.entity';
 import { UpdateClientDto } from './dto/update-client.dto';
 
 @Injectable()
@@ -125,7 +125,20 @@ export class ClientsService {
   }
 
   async remove(id: string, deletedBy: string): Promise<void> {
-    const client = await this.findOne(id);
+    const client = await this.clientRepository.findOne({
+      where: { id },
+      relations: ['subdivisionClients', 'deletedBy'],
+    });
+
+    if (!client) {
+      throw new BadRequestException('Client non trouvé');
+    }
+
+    if (client.subdivisionClients && client.subdivisionClients.length > 0) {
+      throw new BadRequestException(
+        'Impossible de supprimer ce client car il est associé à des subdivisions',
+      );
+    }
 
     client.deletedBy = { id: deletedBy } as User;
     await this.clientRepository.save(client);

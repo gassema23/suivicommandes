@@ -1,13 +1,13 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Provider } from 'src/providers/entities/provider.entity';
-import { ServiceCategory } from 'src/service-categories/entities/service-category.entity';
+import { Provider } from '../providers/entities/provider.entity';
+import { ServiceCategory } from '../service-categories/entities/service-category.entity';
 import { FindOptionsWhere, ILike, Repository } from 'typeorm';
 import { ProviderServiceCategory } from './entities/provider-service-category.entity';
-import { PaginationDto } from 'src/common/dto/pagination.dto';
-import { PaginatedResult } from 'src/common/interfaces/paginated-result.interface';
+import { PaginationDto } from '../common/dto/pagination.dto';
+import { PaginatedResult } from '../common/interfaces/paginated-result.interface';
 import { CreateProviderServiceCategoryDto } from './dto/create-provider-service-category.dto';
-import { User } from 'src/users/entities/user.entity';
+import { User } from '../users/entities/user.entity';
 import { UpdateProviderServiceCategoryDto } from './dto/update-provider-service-category.dto';
 
 @Injectable()

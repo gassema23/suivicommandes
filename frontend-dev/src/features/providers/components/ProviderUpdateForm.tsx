@@ -1,6 +1,4 @@
-import { Button } from "@/components/ui/quebec/Button";
 import { Input } from "@/components/ui/shadcn/input";
-import { Label } from "@/components/ui/shadcn/label";
 import FormError from "@/components/ui/shadcn/form-error";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useNavigate } from "@tanstack/react-router";
@@ -8,9 +6,16 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import type { Provider } from "../types/provider.type";
-import { providerSchema, type ProviderFormData } from "../schemas/provider.schema";
+import {
+  providerSchema,
+  type ProviderFormData,
+} from "../schemas/provider.schema";
 import { updateProvider } from "../services/update-provider.service";
 import { QUERY_KEYS } from "@/config/query-key";
+import { FormActions } from "@/features/common/forms/components/FormActions";
+import InputContainer from "@/features/common/forms/components/InputContainer";
+import { providerFields } from "../configs/provider-fields";
+import { toast } from "sonner";
 
 interface ProviderFormProps {
   provider: Provider;
@@ -24,8 +29,8 @@ export default function ProviderUpdateForm({ provider }: ProviderFormProps) {
   const form = useForm<ProviderFormData>({
     resolver: zodResolver(providerSchema),
     defaultValues: {
-      providerName: provider?.providerName ?? "",
-      providerCode: provider?.providerCode ?? "",
+      providerName: provider.providerName ?? "",
+      providerCode: provider.providerCode ?? "",
     },
   });
 
@@ -39,8 +44,9 @@ export default function ProviderUpdateForm({ provider }: ProviderFormProps) {
     mutationFn: (data: ProviderFormData) => updateProvider(provider.id, data),
     onSuccess: () => {
       setBackendError(null);
+      toast.success("Fournisseur mis à jour avec succès");
       queryClient.invalidateQueries({ queryKey: QUERY_KEYS.PROVIDERS });
-      navigate({ to: "/pilotages/providers" });
+      navigate({ to: "/pilotages/providers", search: { page: 1 } });
     },
     onError: (error: { message: string }) => {
       setBackendError(error.message);
@@ -62,58 +68,31 @@ export default function ProviderUpdateForm({ provider }: ProviderFormProps) {
           message={backendError}
         />
       )}
-      <div className="grid grid-cols-12 gap-2 items-center">
-        <Label className="col-span-12 xl:col-span-4" htmlFor="providerName">
-          Fournisseur
-        </Label>
-        <div className="col-span-12 xl:col-span-8">
-          <Input
-            className="block w-full"
-            id="providerName"
-            {...register("providerName")}
-            required
-          />
-          {errors.providerName && (
-            <p className="text-destructive text-sm mt-1">
-              {errors.providerName.message}
-            </p>
-          )}
-        </div>
-      </div>
-      <div className="grid grid-cols-12 gap-2 items-center">
-        <Label className="col-span-12 xl:col-span-4" htmlFor="providerCode">
-          Identifiant du fournisseur
-        </Label>
-        <div className="col-span-12 xl:col-span-8">
-          <Input
-            className="block w-full"
-            id="providerCode"
-            {...register("providerCode")}
-            required
-          />
-          {errors.providerCode && (
-            <p className="text-destructive text-sm mt-1">
-              {errors.providerCode.message}
-            </p>
-          )}
-        </div>
-      </div>
 
-      {/* Actions du formulaire */}
-      <div className="flex gap-4 justify-end">
-        <Button
-          type="button"
-          variant="outline"
-          onClick={() => navigate({ to: "/pilotages/providers" })}
-          disabled={form.formState.isSubmitting}
+      {providerFields.map((field) => (
+        <InputContainer
+          key={field.name}
+          label={field.label}
+          error={errors[field.name]?.message}
+          htmlFor={field.name}
         >
-          Annuler
-        </Button>
+          <Input
+            type={field.type}
+            className="block w-full"
+            id={field.name}
+            placeholder={field.placeholder}
+            {...register(field.name)}
+            required={field.required}
+          />
+        </InputContainer>
+      ))}
 
-        <Button type="submit" disabled={form.formState.isSubmitting}>
-          {form.formState.isSubmitting ? "Mise à jour..." : "Mettre à jour"}
-        </Button>
-      </div>
+      <FormActions
+        isLoading={updateProviderMutation.isPending}
+        onCancel={() =>
+          navigate({ to: "/pilotages/providers", search: { page: 1 } })
+        }
+      />
     </form>
   );
 }

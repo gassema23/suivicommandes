@@ -15,11 +15,13 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 import type { ServiceCategoryResponse } from "@/features/service-categories/types/service-category.type";
 import { QUERY_KEYS } from "@/config/query-key";
+import { toast } from "sonner";
 
-const serviceCategoriesQueryOptions = queryOptions<ServiceCategoryResponse>({
-  queryKey: QUERY_KEYS.SERVICE_CATEGORIES,
-  queryFn: () => getServiceCategories(),
-});
+const serviceCategoriesQueryOptions = (pageNumber: number) =>
+  queryOptions<ServiceCategoryResponse>({
+    queryKey: QUERY_KEYS.SERVICE_CATEGORIES_WITH_PAGE(pageNumber),
+    queryFn: () => getServiceCategories(pageNumber),
+  });
 
 export const Route = createFileRoute(
   "/_authenticated/pilotages/service-categories/"
@@ -28,8 +30,15 @@ export const Route = createFileRoute(
   head: () => ({
     meta: [{ title: "Catégories de services" }],
   }),
-  loader: ({ context }) =>
-    context.queryClient.ensureQueryData(serviceCategoriesQueryOptions),
+  validateSearch: (search) => ({
+    page: Number(search.page ?? 1),
+  }),
+  loader: (args) => {
+    const { context, search } = args as any;
+    return context.queryClient.ensureQueryData(
+      serviceCategoriesQueryOptions(Number(search?.page ?? "1"))
+    );
+  },
   errorComponent: ({ error }) => (
     <FormError
       title="Erreur lors du chargement des catégories de services"
@@ -53,8 +62,12 @@ export const Route = createFileRoute(
 });
 
 function RouteComponent() {
+  const navigate = Route.useNavigate();
+  const { page = 1 } = Route.useSearch();
+  const pageNumber = Number(page);
+
   const { data: serviceCategories } = useSuspenseQuery<ServiceCategoryResponse>(
-    serviceCategoriesQueryOptions
+    serviceCategoriesQueryOptions(pageNumber)
   );
   const [deleteId, setDeleteId] = useState<string | null>(null);
   const queryClient = useQueryClient();
@@ -68,7 +81,13 @@ function RouteComponent() {
   };
   return (
     <>
-      <DataTable data={dataWithDelete} columns={ServiceCategoryColumns} />
+    <DataTable
+        data={dataWithDelete}
+        columns={ServiceCategoryColumns}
+        currentPage={pageNumber}
+        totalPages={serviceCategories.meta.totalPages}
+        onPageChange={(page) => navigate({ search: { page } })}
+      />
       <DeleteModal
         open={!!deleteId}
         onOpenChange={(open) => !open && setDeleteId(null)}
@@ -76,6 +95,7 @@ function RouteComponent() {
         deleteId={deleteId}
         onSuccess={() => {
           setDeleteId(null);
+          toast.success("Catégorie de service supprimée avec succès");
           queryClient.invalidateQueries({ queryKey: QUERY_KEYS.SERVICE_CATEGORIES });
         }}
       />

@@ -15,11 +15,12 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 import type { ProviderServiceCategoryResponse } from "@/features/provider-service-categories/types/provider-service-category.type";
 import { QUERY_KEYS } from "@/config/query-key";
+import { toast } from "sonner";
 
-const providerServiceCategoriesQueryOptions =
+const providerServiceCategoriesQueryOptions = (pageNumber: number) =>
   queryOptions<ProviderServiceCategoryResponse>({
-    queryKey: QUERY_KEYS.PROVIDER_SERVICE_CATEGORIES,
-    queryFn: () => getProviderServiceCategories(),
+    queryKey: QUERY_KEYS.PROVIDER_SERVICE_CATEGORIES_WITH_PAGE(pageNumber),
+    queryFn: () => getProviderServiceCategories(pageNumber),
   });
 
 export const Route = createFileRoute(
@@ -31,8 +32,15 @@ export const Route = createFileRoute(
   head: () => ({
     meta: [{ title: "Fournisseurs par services" }],
   }),
-  loader: ({ context }) =>
-    context.queryClient.ensureQueryData(providerServiceCategoriesQueryOptions),
+  validateSearch: (search) => ({
+    page: Number(search.page ?? 1),
+  }),
+  loader: (args) => {
+    const { context, search } = args as any;
+    return context.queryClient.ensureQueryData(
+      providerServiceCategoriesQueryOptions(Number(search?.page ?? "1"))
+    );
+  },
   errorComponent: ({ error }) => (
     <FormError
       title="Erreur lors du chargement des fournisseurs par services"
@@ -56,12 +64,17 @@ export const Route = createFileRoute(
 });
 
 function RouteComponent() {
+  const navigate = Route.useNavigate();
+  const { page = 1 } = Route.useSearch();
+  const pageNumber = Number(page);
+
   const { data: providerServiceCategories } =
     useSuspenseQuery<ProviderServiceCategoryResponse>(
-      providerServiceCategoriesQueryOptions
+      providerServiceCategoriesQueryOptions(pageNumber)
     );
   const [deleteId, setDeleteId] = useState<string | null>(null);
   const queryClient = useQueryClient();
+
   // Ajoute la fonction onDelete à chaque ligne
   const dataWithDelete = {
     ...providerServiceCategories,
@@ -78,6 +91,9 @@ function RouteComponent() {
       <DataTable
         data={dataWithDelete}
         columns={providerServiceCategoryColumns}
+        currentPage={pageNumber}
+        totalPages={providerServiceCategories.meta.totalPages}
+        onPageChange={(page) => navigate({ search: { page } })}
       />
       <DeleteModal
         open={!!deleteId}
@@ -86,6 +102,9 @@ function RouteComponent() {
         deleteId={deleteId}
         onSuccess={() => {
           setDeleteId(null);
+          toast.success(
+            "Le fournisseur par service a été supprimé avec succès."
+          );
           queryClient.invalidateQueries({
             queryKey: QUERY_KEYS.PROVIDER_SERVICE_CATEGORIES,
           });

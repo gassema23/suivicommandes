@@ -15,6 +15,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 import type { ServiceResponse } from "@/features/services/types/service.type";
 import { QUERY_KEYS } from "@/config/query-key";
+import { toast } from "sonner";
 
 const servicesQueryOptions = (pageNumber: number) =>
   queryOptions<ServiceResponse>({
@@ -89,6 +90,7 @@ function RouteComponent() {
         deleteId={deleteId}
         onSuccess={() => {
           setDeleteId(null);
+          toast.success("Service supprimé avec succès !");
           queryClient.invalidateQueries({ queryKey: QUERY_KEYS.SERVICES });
         }}
       />

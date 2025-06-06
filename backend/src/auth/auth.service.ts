@@ -20,17 +20,17 @@ import { TwoFactorAuthService } from './two-factor-auth.service';
 import { ForgotPasswordDto } from './dto/forgot-password.dto';
 import { ResetPasswordDto } from './dto/reset-password.dto';
 import { ChangePasswordDto } from './dto/change-password.dto';
-import { RolesModule } from 'src/roles/roles.module';
 import { instanceToPlain } from 'class-transformer';
 import { VerifyEmailInterface } from './interfaces/verify-email.interface';
 import { OnboardingDto } from './dto/onboarding.dto';
+import { parseDurationToMs } from 'src/common/utils/parse-duration';
+import { Response } from 'express';
 
 export interface JwtPayload {
   sub: string;
   email: string;
-  firstName: string;
-  lastName: string;
-  teamId?: string;
+  firstName?: string;
+  lastName?: string;
   iat?: number;
   exp?: number;
 }
@@ -60,10 +60,47 @@ export class AuthService {
       relations: ['team'],
     });
 
+    console.log('User found in validateUser:', user);
+
     if (user && (await bcrypt.compare(password, user.password))) {
       return user;
     }
     return null;
+  }
+
+  async loginAndSetCookies(loginDto: LoginDto, res: Response) {
+    const { email, password, twoFactorCode } = loginDto;
+
+    // Authentification et vérification 2FA via la méthode login existante
+    const result = await this.login(loginDto);
+
+    // Si 2FA requis, ne pose pas les cookies, retourne juste l'info
+    if (result.requiresTwoFactor) {
+      return { user: result.user, requiresTwoFactor: true };
+    }
+
+    // Pose les cookies avec les bons tokens
+    const jwtExpirationAcessToken = process.env.JWT_EXPIRATION || '8h';
+    const jwtExpirationRefreshToken =
+      process.env.JWT_REFRESH_EXPIRATION || '30d';
+
+    const maxAgeAcessToken = parseDurationToMs(jwtExpirationAcessToken);
+    const maxAgeRefreshToken = parseDurationToMs(jwtExpirationRefreshToken);
+
+    res.cookie('accessToken', result.accessToken, {
+      httpOnly: true,
+      sameSite: 'strict',
+      secure: process.env.NODE_ENV === 'production',
+      maxAge: maxAgeAcessToken,
+    });
+    res.cookie('refreshToken', result.refreshToken, {
+      httpOnly: true,
+      sameSite: 'strict',
+      secure: process.env.NODE_ENV === 'production',
+      maxAge: maxAgeRefreshToken,
+    });
+
+    return { user: result.user, requiresTwoFactor: false };
   }
 
   async login(loginDto: LoginDto): Promise<AuthResult> {
@@ -331,12 +368,12 @@ export class AuthService {
   private async generateTokens(
     user: User,
   ): Promise<{ accessToken: string; refreshToken: string }> {
+    
     const payload: JwtPayload = {
       sub: user.id,
       email: user.email,
       firstName: user.firstName,
       lastName: user.lastName,
-      teamId: user.team?.id,
     };
 
     const [accessToken, refreshToken] = await Promise.all([

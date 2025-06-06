@@ -2,8 +2,8 @@ import { API_ROUTE } from "@/config";
 import type { ProviderServiceCategoryResponse } from "../types/provider-service-category.type";
 
 export const getProviderServiceCategories =
-  async (): Promise<ProviderServiceCategoryResponse> => {
-    const response = await fetch(`${API_ROUTE}/provider-service-categories`, {
+  async (page:number): Promise<ProviderServiceCategoryResponse> => {
+    const response = await fetch(`${API_ROUTE}/provider-service-categories?page=${page}`, {
       method: "GET",
       credentials: "include",
     });

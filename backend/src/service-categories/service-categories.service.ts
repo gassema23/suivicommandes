@@ -1,12 +1,12 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Service } from 'src/services/entities/service.entity';
+import { Service } from '../services/entities/service.entity';
 import { FindOptionsWhere, ILike, Repository } from 'typeorm';
 import { ServiceCategory } from './entities/service-category.entity';
-import { PaginationDto } from 'src/common/dto/pagination.dto';
-import { PaginatedResult } from 'src/common/interfaces/paginated-result.interface';
+import { PaginationDto } from '../common/dto/pagination.dto';
+import { PaginatedResult } from '../common/interfaces/paginated-result.interface';
 import { CreateServiceCategoryDto } from './dto/create-service-category.dto';
-import { User } from 'src/users/entities/user.entity';
+import { User } from '../users/entities/user.entity';
 
 @Injectable()
 export class ServiceCategoriesService {
@@ -133,11 +133,25 @@ export class ServiceCategoriesService {
   }
 
   async remove(id: string, deletedBy: string): Promise<void> {
-    const service = await this.findOne(id);
+    const serviceCategory = await this.serviceCategoryRepository.findOne({
+      where: { id },
+      relations: ['providerServiceCategories', 'deletedBy'],
+    });
 
-    service.deletedBy = { id: deletedBy } as User;
-    await this.serviceCategoryRepository.save(service);
+    if (!serviceCategory) {
+      throw new BadRequestException('Client non trouvé');
+    }
+    if (
+      serviceCategory.providerServiceCategories &&
+      serviceCategory.providerServiceCategories.length > 0
+    ) {
+      throw new BadRequestException(
+        'Impossible de supprimer cette catégorie de service car elle est liée à des fournisseurs',
+      );
+    }
 
+    serviceCategory.deletedBy = { id: deletedBy } as User;
+    await this.serviceCategoryRepository.save(serviceCategory);
     await this.serviceCategoryRepository.softDelete(id);
   }
 }

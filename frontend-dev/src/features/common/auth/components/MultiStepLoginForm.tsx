@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useSearch } from "@tanstack/react-router";
@@ -18,6 +18,7 @@ import {
   InputOTPGroup,
   InputOTPSlot,
 } from "@/components/ui/shadcn/input-otp";
+import { QUERY_KEYS } from "@/config/query-key";
 
 // Schémas Zod
 const Step1Schema = z.object({
@@ -37,7 +38,9 @@ export default function MultiStepLoginForm({
   const [backendError, setBackendError] = useState<string | null>(null);
   const [email, setEmail] = useState("");
   const search = useSearch({ from: "/_guest/(login)/login" });
-  const { login } = useAuth();
+
+  const { login, refetchUser } = useAuth();
+  const queryClient = useQueryClient();
 
   const formStep1 = useForm<z.infer<typeof Step1Schema>>({
     resolver: zodResolver(Step1Schema),
@@ -57,23 +60,29 @@ export default function MultiStepLoginForm({
   };
 
   const checkMutation = useMutation({
-    mutationFn: async (data: z.infer<typeof Step1Schema>) => {
+    mutationFn: async (credentials: { email: string; password: string }) => {
       const res = await fetch(`${API_ROUTE}/auth/login`, {
         method: "POST",
+        credentials: "include", // IMPORTANT pour recevoir le cookie
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data),
-        credentials: "include",
+        body: JSON.stringify(credentials),
       });
-
-      const result = await res.json();
-      if (!res.ok) throw new Error(result.message || "Erreur de connexion.");
-      return result;
+      if (!res.ok) throw new Error("Login failed");
+      return res.json();
     },
-    onSuccess: (data, variables) => {
+    onSuccess: async (data, variables) => {
       setEmail(variables.email);
       if (data.twoFactorEnabled) {
         setStep(2);
       } else {
+        // Attendre un court instant pour s'assurer que le cookie est bien enregistré (optionnel)
+        await new Promise((resolve) => setTimeout(resolve, 500));
+        // Refetch l'utilisateur courant avec le nouveau cookie
+        await refetchUser();
+        // Invalide d'autres queries si besoin
+        await queryClient.invalidateQueries({ queryKey: QUERY_KEYS.USERS });
+        await queryClient.invalidateQueries({ queryKey: QUERY_KEYS.ME });
+        // Redirige
         login(search.redirect);
       }
     },
@@ -86,14 +95,24 @@ export default function MultiStepLoginForm({
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, code: data.code }),
-        credentials: "include",
+        credentials: "include", // IMPORTANT pour recevoir le cookie 2FA
       });
 
       const result = await res.json();
       if (!res.ok) throw new Error(result.message || "Code 2FA invalide.");
       return result;
     },
-    onSuccess: () => login(search.redirect),
+    onSuccess: async () => {
+      // (Optionnel) Attendre un court instant pour s'assurer que le cookie est bien enregistré
+      await new Promise((resolve) => setTimeout(resolve, 500));
+      // Refetch l'utilisateur courant avec le nouveau cookie
+      await refetchUser();
+      // Invalide d'autres queries si besoin
+      await queryClient.invalidateQueries({ queryKey: QUERY_KEYS.USERS });
+      await queryClient.invalidateQueries({ queryKey: QUERY_KEYS.ME });
+      // Redirige
+      login(search.redirect);
+    },
     onError: (error) => setBackendError(extractErrorMessage(error)),
   });
 

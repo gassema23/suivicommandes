@@ -12,7 +12,6 @@ import { AuthService } from './auth.service';
 import { TwoFactorAuthService } from './two-factor-auth.service';
 import { LocalStrategy } from './strategies/local.strategy';
 import { AuthController } from './auth.controller';
-import { RolesModule } from 'src/roles/roles.module';
 
 @Module({
   imports: [

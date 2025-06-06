@@ -4,7 +4,6 @@ import {
   Body,
   Get,
   UseGuards,
-  Request,
   Query,
   HttpCode,
   HttpStatus,
@@ -34,7 +33,7 @@ import { User } from '../users/entities/user.entity';
 import { EnableTwoFactorDto } from './dto/enable-two-factor.dto';
 import { RefreshTokenDto } from './dto/refresh-token.dto';
 import { instanceToPlain } from 'class-transformer';
-import { parseDurationToMs } from 'src/common/utils/parse-duration';
+import { parseDurationToMs } from '../common/utils/parse-duration';
 import { OnboardingDto } from './dto/onboarding.dto';
 
 @ApiTags('Authentication')
@@ -64,12 +63,16 @@ export class AuthController {
     @Body() loginDto: LoginDto,
     @Res({ passthrough: true }) res: Response,
   ) {
+
+    return this.authService.loginAndSetCookies(loginDto, res);
+    /*
     const jwtExpirationAcessToken = process.env.JWT_EXPIRATION || '8h';
     const jwtExpirationRefreshToken =
       process.env.JWT_REFRESH_EXPIRATION || '30d';
 
     const { user, accessToken, refreshToken, requiresTwoFactor } =
-      await this.authService.login(loginDto);
+    
+    //await this.authService.login(loginDto);
 
     const maxAgeAcessToken = parseDurationToMs(jwtExpirationAcessToken);
     const maxAgeRefreshToken = parseDurationToMs(jwtExpirationRefreshToken);
@@ -87,6 +90,7 @@ export class AuthController {
       maxAge: maxAgeRefreshToken,
     });
     return { user, requiresTwoFactor: !!requiresTwoFactor };
+    */
   }
 
   @Patch('onboard/:id')
@@ -194,6 +198,8 @@ export class AuthController {
   })
   @ApiResponse({ status: 200, description: 'Informations utilisateur' })
   async getProfile(@CurrentUser() user: User) {
+
+  console.log('User returned to frontend:', user);
     return { user: instanceToPlain(user) };
   }
 

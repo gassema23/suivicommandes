@@ -23,12 +23,12 @@ import { TeamsService } from './teams.service';
 import { CurrentUser } from '../auth/decorators/current-user.decorator';
 import { User } from '../users/entities/user.entity';
 import { CreateTeamDto } from './dto/create-team.dto';
-import { PaginationDto } from 'src/common/dto/pagination.dto';
+import { PaginationDto } from '../common/dto/pagination.dto';
 import { UpdateTeamDto } from './dto/update-team.dto';
-import { Permissions } from 'src/roles/decorators/permission.decorator';
-import { Resource } from 'src/roles/enums/resource.enum';
-import { Action } from 'src/roles/enums/action.enum';
-import { AuthorizationsGuard } from 'src/auth/guards/authorizations.guard';
+import { Permissions } from '../roles/decorators/permission.decorator';
+import { Resource } from '../roles/enums/resource.enum';
+import { Action } from '../roles/enums/action.enum';
+import { AuthorizationsGuard } from '../auth/guards/authorizations.guard';
 
 @ApiTags('Teams')
 @Controller('teams')

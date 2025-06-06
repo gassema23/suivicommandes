@@ -10,8 +10,8 @@ import { Team } from './entities/team.entity';
 import { User } from '../users/entities/user.entity';
 import { CreateTeamDto } from './dto/create-team.dto';
 import { UpdateTeamDto } from './dto/update-team.dto';
-import { PaginationDto } from 'src/common/dto/pagination.dto';
-import { PaginatedResult } from 'src/common/interfaces/paginated-result.interface';
+import { PaginationDto } from '../common/dto/pagination.dto';
+import { PaginatedResult } from '../common/interfaces/paginated-result.interface';
 import { instanceToPlain } from 'class-transformer';
 
 type TeamWithVirtuals = Team & {

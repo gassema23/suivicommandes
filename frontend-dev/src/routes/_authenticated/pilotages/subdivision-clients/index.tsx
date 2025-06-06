@@ -15,11 +15,13 @@ import {
 } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
+import { toast } from "sonner";
 
-const subdivisionClientsQueryOptions = queryOptions<SubdivisionClientResponse>({
-  queryKey: QUERY_KEYS.SUBDIVISION_CLIENTS,
-  queryFn: () => getSubdivisionClients(),
-});
+const subdivisionClientsQueryOptions = (pageNumber: number) =>
+  queryOptions<SubdivisionClientResponse>({
+    queryKey: QUERY_KEYS.SUBDIVISION_CLIENTS_WITH_PAGE(pageNumber),
+    queryFn: () => getSubdivisionClients(pageNumber),
+  });
 
 export const Route = createFileRoute(
   "/_authenticated/pilotages/subdivision-clients/"
@@ -28,8 +30,15 @@ export const Route = createFileRoute(
   head: () => ({
     meta: [{ title: "Subdivisions clients" }],
   }),
-  loader: ({ context }) =>
-    context.queryClient.ensureQueryData(subdivisionClientsQueryOptions),
+  validateSearch: (search) => ({
+    page: Number(search.page ?? 1),
+  }),
+  loader: (args) => {
+    const { context, search } = args as any;
+    return context.queryClient.ensureQueryData(
+      subdivisionClientsQueryOptions(Number(search?.page ?? "1"))
+    );
+  },
   errorComponent: ({ error }) => (
     <FormError
       title="Erreur lors du chargement des subdivisions clients"
@@ -53,8 +62,15 @@ export const Route = createFileRoute(
 });
 
 function RouteComponent() {
+  const navigate = Route.useNavigate();
+  const { page = 1 } = Route.useSearch();
+  const pageNumber = Number(page);
+
   const { data: subdivisionClients } =
-    useSuspenseQuery<SubdivisionClientResponse>(subdivisionClientsQueryOptions);
+    useSuspenseQuery<SubdivisionClientResponse>(
+      subdivisionClientsQueryOptions(pageNumber)
+    );
+
   const [deleteId, setDeleteId] = useState<string | null>(null);
   const queryClient = useQueryClient();
   // Ajoute la fonction onDelete à chaque ligne
@@ -68,7 +84,13 @@ function RouteComponent() {
 
   return (
     <>
-      <DataTable data={dataWithDelete} columns={SubdivisionClientColumns} />
+      <DataTable
+        data={dataWithDelete}
+        columns={SubdivisionClientColumns}
+        currentPage={pageNumber}
+        totalPages={subdivisionClients.meta.totalPages}
+        onPageChange={(page) => navigate({ search: { page } })}
+      />
       <DeleteModal
         open={!!deleteId}
         onOpenChange={(open) => !open && setDeleteId(null)}
@@ -76,7 +98,10 @@ function RouteComponent() {
         deleteId={deleteId}
         onSuccess={() => {
           setDeleteId(null);
-          queryClient.invalidateQueries({ queryKey: QUERY_KEYS.SUBDIVISION_CLIENTS });
+          toast.success("Subdivision client supprimée avec succès");
+          queryClient.invalidateQueries({
+            queryKey: QUERY_KEYS.SUBDIVISION_CLIENTS,
+          });
         }}
       />
     </>

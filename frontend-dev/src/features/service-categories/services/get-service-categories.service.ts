@@ -1,8 +1,8 @@
 import { API_ROUTE } from "@/config";
 import type { ServiceCategoryResponse } from "../types/service-category.type";
 
-export const getServiceCategories = async (): Promise<ServiceCategoryResponse> => {
-  const response = await fetch(`${API_ROUTE}/service-categories`, {
+export const getServiceCategories = async (page:number): Promise<ServiceCategoryResponse> => {
+  const response = await fetch(`${API_ROUTE}/service-categories?page=${page}`, {
     method: "GET",
     credentials: "include",
   });

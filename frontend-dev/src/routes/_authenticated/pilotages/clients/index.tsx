@@ -15,19 +15,28 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 import type { ClientResponse } from "@/features/clients/types/client.type";
 import { QUERY_KEYS } from "@/config/query-key";
+import { toast } from "sonner";
 
-const clientsQueryOptions = queryOptions<ClientResponse>({
-  queryKey: QUERY_KEYS.CLIENTS,
-  queryFn: () => getClients(),
-});
+const clientsQueryOptions = (pageNumber: number) =>
+  queryOptions<ClientResponse>({
+    queryKey: QUERY_KEYS.CLIENTS_WITH_PAGE(pageNumber),
+    queryFn: () => getClients(pageNumber),
+  });
 
 export const Route = createFileRoute("/_authenticated/pilotages/clients/")({
   beforeLoad: createPermissionGuard([PERMISSIONS.CLIENTS.READ]),
   head: () => ({
     meta: [{ title: "Clients" }],
   }),
-  loader: ({ context }) =>
-    context.queryClient.ensureQueryData(clientsQueryOptions),
+  validateSearch: (search) => ({
+    page: Number(search.page ?? 1),
+  }),
+  loader: (args) => {
+    const { context, search } = args as any;
+    return context.queryClient.ensureQueryData(
+      clientsQueryOptions(Number(search?.page ?? "1"))
+    );
+  },
   errorComponent: ({ error }) => (
     <FormError
       title="Erreur lors du chargement des clients"
@@ -47,11 +56,16 @@ export const Route = createFileRoute("/_authenticated/pilotages/clients/")({
 });
 
 function RouteComponent() {
-  const { data: clients } =
-    useSuspenseQuery<ClientResponse>(clientsQueryOptions);
+  const navigate = Route.useNavigate();
+  const { page = 1 } = Route.useSearch();
+  const pageNumber = Number(page);
+
+  const { data: clients } = useSuspenseQuery<ClientResponse>(
+    clientsQueryOptions(pageNumber)
+  );
   const [deleteId, setDeleteId] = useState<string | null>(null);
   const queryClient = useQueryClient();
-  // Ajoute la fonction onDelete à chaque ligne
+
   const dataWithDelete = {
     ...clients,
     data: (clients.data ?? []).map((client) => ({
@@ -62,7 +76,13 @@ function RouteComponent() {
 
   return (
     <>
-      <DataTable data={dataWithDelete} columns={clientColumns} />
+      <DataTable
+        data={dataWithDelete}
+        columns={clientColumns}
+        currentPage={pageNumber}
+        totalPages={clients.meta.totalPages}
+        onPageChange={(page) => navigate({ search: { page } })}
+      />
       <DeleteModal
         open={!!deleteId}
         onOpenChange={(open) => !open && setDeleteId(null)}
@@ -70,6 +90,7 @@ function RouteComponent() {
         deleteId={deleteId}
         onSuccess={() => {
           setDeleteId(null);
+          toast.success("Client supprimé avec succès");
           queryClient.invalidateQueries({ queryKey: QUERY_KEYS.CLIENTS });
         }}
       />

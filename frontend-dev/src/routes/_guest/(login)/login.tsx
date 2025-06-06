@@ -17,7 +17,7 @@ export const Route = createFileRoute("/_guest/(login)/login")({
           "Connectez-vous à votre compte pour accéder à toutes les fonctionnalités.",
       },
       {
-        title: `Connexion | ${APP_NAME}`,
+        title: `Connexion`,
       },
     ],
   }),

@@ -18,7 +18,6 @@ export const Route = createFileRoute(
   "/_authenticated/pilotages/services/update/$id"
 )({
   beforeLoad: createPermissionGuard([PERMISSIONS.SERVICES.UPDATE]),
-
   loader: ({ context, params }) =>
     context.queryClient.ensureQueryData(servicesQueryOptions(params.id)),
   head: () => ({

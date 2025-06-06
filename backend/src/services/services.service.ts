@@ -2,13 +2,13 @@ import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Service } from './entities/service.entity';
 import { FindOptionsWhere, ILike, Repository } from 'typeorm';
-import { Sector } from 'src/sectors/entities/sectors.entity';
-import { PaginationDto } from 'src/common/dto/pagination.dto';
-import { PaginatedResult } from 'src/common/interfaces/paginated-result.interface';
+import { Sector } from '../sectors/entities/sectors.entity';
+import { PaginationDto } from '../common/dto/pagination.dto';
+import { PaginatedResult } from '../common/interfaces/paginated-result.interface';
 import { CreateServiceDto } from './dto/create-service.dto';
-import { User } from 'src/users/entities/user.entity';
+import { User } from '../users/entities/user.entity';
 import { UpdateServiceDto } from './dto/update-service.dto';
-import { ServiceCategory } from 'src/service-categories/entities/service-category.entity';
+import { ServiceCategory } from '../service-categories/entities/service-category.entity';
 
 @Injectable()
 export class ServicesService {
@@ -64,7 +64,7 @@ export class ServicesService {
   async findOne(id: string): Promise<Service> {
     const service = await this.serviceRepository.findOne({
       where: { id },
-      relations: ['sector', 'createdBy','serviceCategories'],
+      relations: ['sector', 'createdBy', 'serviceCategories'],
     });
 
     if (!service) {
@@ -81,7 +81,9 @@ export class ServicesService {
     });
   }
 
-  async getServiceCategoriesByServiceId(id: string): Promise<ServiceCategory[]> {
+  async getServiceCategoriesByServiceId(
+    id: string,
+  ): Promise<ServiceCategory[]> {
     const service = await this.serviceRepository.findOne({
       where: { id },
       relations: ['serviceCategories'],
@@ -175,11 +177,18 @@ export class ServicesService {
   }
 
   async remove(id: string, deletedBy: string): Promise<void> {
-    const service = await this.findOne(id);
+    const service = await this.serviceRepository.findOne({
+      where: { id },
+      relations: ['serviceCategories', 'deletedBy'],
+    });
+
+    if (!service) {
+      throw new BadRequestException('Service introuvable');
+    }
 
     if (service.serviceCategories && service.serviceCategories.length > 0) {
       throw new BadRequestException(
-        'Impossible de supprimer un service qui contient des catégories',
+        'Impossible de supprimer le service car il est lié à des catégories de services',
       );
     }
 

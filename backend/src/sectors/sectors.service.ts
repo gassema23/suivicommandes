@@ -2,12 +2,12 @@ import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Sector } from './entities/sectors.entity';
 import { FindOptionsWhere, ILike, Repository } from 'typeorm';
-import { PaginationDto } from 'src/common/dto/pagination.dto';
-import { PaginatedResult } from 'src/common/interfaces/paginated-result.interface';
+import { PaginationDto } from '../common/dto/pagination.dto';
+import { PaginatedResult } from '../common/interfaces/paginated-result.interface';
 import { CreateSectorDto } from './dto/create-sector.dto';
-import { User } from 'src/users/entities/user.entity';
+import { User } from '../users/entities/user.entity';
 import { UpdateSectorDto } from './dto/update-sector.dto';
-import { Service } from 'src/services/entities/service.entity';
+import { Service } from '../services/entities/service.entity';
 
 @Injectable()
 export class SectorsService {
@@ -131,7 +131,19 @@ export class SectorsService {
   }
 
   async remove(id: string, deletedBy: string): Promise<void> {
-    const sector = await this.findOne(id);
+    const sector = await this.sectorRepository.findOne({
+      where: { id },
+      relations: ['services', 'deletedBy'],
+    });
+
+    if (!sector) {
+      throw new BadRequestException('Secteur non trouvé');
+    }
+    if (sector.services && sector.services.length > 0) {
+      throw new BadRequestException(
+        'Impossible de supprimer un secteur avec des services associés',
+      );
+    }
 
     sector.deletedBy = { id: deletedBy } as User;
     await this.sectorRepository.save(sector);

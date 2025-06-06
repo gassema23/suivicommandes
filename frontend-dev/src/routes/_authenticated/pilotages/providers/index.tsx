@@ -15,19 +15,28 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 import type { ProviderResponse } from "@/features/providers/types/provider.type";
 import { QUERY_KEYS } from "@/config/query-key";
+import { toast } from "sonner";
 
-const providersQueryOptions = queryOptions<ProviderResponse>({
-  queryKey: QUERY_KEYS.PROVIDERS,
-  queryFn: () => getProviders(),
-});
+const providersQueryOptions = (pageNumber: number) =>
+  queryOptions<ProviderResponse>({
+    queryKey: QUERY_KEYS.PROVIDERS_WITH_PAGE(pageNumber),
+    queryFn: () => getProviders(pageNumber),
+  });
 
 export const Route = createFileRoute("/_authenticated/pilotages/providers/")({
   beforeLoad: createPermissionGuard([PERMISSIONS.PROVIDERS.READ]),
   head: () => ({
     meta: [{ title: "Fournisseurs" }],
   }),
-  loader: ({ context }) =>
-    context.queryClient.ensureQueryData(providersQueryOptions),
+  validateSearch: (search) => ({
+    page: Number(search.page ?? 1),
+  }),
+  loader: (args) => {
+    const { context, search } = args as any;
+    return context.queryClient.ensureQueryData(
+      providersQueryOptions(Number(search?.page ?? "1"))
+    );
+  },
   errorComponent: ({ error }) => (
     <FormError
       title="Erreur lors du chargement des fournisseurs"
@@ -47,12 +56,16 @@ export const Route = createFileRoute("/_authenticated/pilotages/providers/")({
 });
 
 function RouteComponent() {
+  const navigate = Route.useNavigate();
+  const { page = 1 } = Route.useSearch();
+  const pageNumber = Number(page);
+
   const { data: providers } = useSuspenseQuery<ProviderResponse>(
-    providersQueryOptions
+    providersQueryOptions(pageNumber)
   );
   const [deleteId, setDeleteId] = useState<string | null>(null);
   const queryClient = useQueryClient();
-  // Ajoute la fonction onDelete à chaque ligne
+
   const dataWithDelete = {
     ...providers,
     data: (providers.data ?? []).map((provider) => ({
@@ -63,7 +76,13 @@ function RouteComponent() {
 
   return (
     <>
-      <DataTable data={dataWithDelete} columns={providerColumns} />
+      <DataTable
+        data={dataWithDelete}
+        columns={providerColumns}
+        currentPage={pageNumber}
+        totalPages={providers.meta.totalPages}
+        onPageChange={(page) => navigate({ search: { page } })}
+      />
       <DeleteModal
         open={!!deleteId}
         onOpenChange={(open) => !open && setDeleteId(null)}
@@ -71,6 +90,7 @@ function RouteComponent() {
         deleteId={deleteId}
         onSuccess={() => {
           setDeleteId(null);
+          toast.success("Fournisseur supprimé avec succès");
           queryClient.invalidateQueries({ queryKey: QUERY_KEYS.PROVIDERS });
         }}
       />
