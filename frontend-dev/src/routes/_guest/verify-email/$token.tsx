@@ -1,5 +1,5 @@
 import LoadingPage from "@/components/ui/loader/LoadingPage";
-import { APP_NAME } from "@/config";
+import { APP_NAME } from "@/features/common/constants/app-name.constant";
 import type { User } from "@/features/users/types/user.type";
 import ResendVerificationEmailForm from "@/features/verify-email/components/ResendVerificationEmailForm";
 import VerifyEmailExpiredErrorForm from "@/features/verify-email/components/ResendVerificationEmailForm";

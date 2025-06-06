@@ -1,4 +1,4 @@
-import { API_ROUTE } from "@/config";
+import { API_ROUTE } from "@/features/common/constants/api-route.constant";
 
 export async function getProfile() {
   const res = await fetch(`${API_ROUTE}/auth/me`, {

@@ -13,7 +13,7 @@ import {
 import { updateUserInformation } from "../services/update-user-information.service";
 import type { User } from "@/features/users/types/user.type";
 import { Label } from "@/components/ui/shadcn/label";
-import { QUERY_KEYS } from "@/config/query-key";
+import { QUERY_KEYS } from "@/features/common/constants/query-key.constant";
 
 interface InformationFormProps {
   user: User;

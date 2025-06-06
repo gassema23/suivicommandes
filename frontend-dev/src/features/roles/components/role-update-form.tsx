@@ -20,11 +20,11 @@ import {
   createRoleSchema,
   type CreateRoleFormData,
 } from "../schemas/role.schema";
-import { API_ROUTE } from "@/config";
 import type { Role } from "../types/role.type";
 import { updateRole } from "../services/update-role.service";
 import FormError from "@/components/ui/shadcn/form-error";
-import { QUERY_KEYS } from "@/config/query-key";
+import { QUERY_KEYS } from "@/features/common/constants/query-key.constant";
+import { API_ROUTE } from "@/features/common/constants/api-route.constant";
 
 // Fetch resources depuis le backend
 const fetchResources = async (): Promise<
@@ -96,6 +96,11 @@ export default function RoleUpdateForm({ role }: RoleUpdateFormProps) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [matrix]);
 
+  const sortedActions = [...ACTIONS].sort();
+  const sortedResources = [...resourceValues].sort((a, b) =>
+    a.localeCompare(b)
+  );
+
   const updateRoleMutation = useMutation({
     mutationFn: (data: CreateRoleFormData) => updateRole(role.id, data),
     onSuccess: () => {
@@ -163,17 +168,17 @@ export default function RoleUpdateForm({ role }: RoleUpdateFormProps) {
         </CardHeader>
         <CardContent>
           <PermissionMatrix
-            resources={resourceValues}
-            actions={ACTIONS}
+            resources={sortedResources}
+            actions={sortedActions}
             isActionSelected={isActionSelected}
             isResourceFullySelected={(resource) =>
-              isResourceFullySelected(resource, ACTIONS)
+              isResourceFullySelected(resource, sortedActions)
             }
             isResourcePartiallySelected={(resource) =>
-              isResourcePartiallySelected(resource, ACTIONS)
+              isResourcePartiallySelected(resource, sortedActions)
             }
             onActionToggle={toggleAction}
-            onResourceToggle={(resource) => toggleResource(resource, ACTIONS)}
+            onResourceToggle={(resource) => toggleResource(resource, sortedActions)}
             disabled={form.formState.isSubmitting}
           />
 

@@ -1,4 +1,4 @@
-import { API_ROUTE } from "@/config";
+import { API_ROUTE } from "@/features/common/constants/api-route.constant";
 import type { ServiceCategory } from "../types/service-category.type";
 
 export async function fetchServiceCategoriesByService(id?: string): Promise<ServiceCategory[]> {

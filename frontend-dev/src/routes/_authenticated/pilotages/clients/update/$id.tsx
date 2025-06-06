@@ -6,7 +6,7 @@ import ClientUpdateForm from "@/features/clients/components/ClientUpdateForm";
 import { fetchClient } from "@/features/clients/services/fetch-client.service";
 import { queryOptions, useSuspenseQuery } from "@tanstack/react-query";
 import { createFileRoute, useParams } from "@tanstack/react-router";
-import { QUERY_KEYS } from "@/config/query-key";
+import { QUERY_KEYS } from "@/features/common/constants/query-key.constant";
 
 const clientsQueryOptions = (id: string) =>
   queryOptions({

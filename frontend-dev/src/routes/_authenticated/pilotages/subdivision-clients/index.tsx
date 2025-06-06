@@ -1,7 +1,7 @@
 import LoadingPage from "@/components/ui/loader/LoadingPage";
 import { DeleteModal } from "@/components/ui/quebec/DeleteModal";
 import FormError from "@/components/ui/shadcn/form-error";
-import { QUERY_KEYS } from "@/config/query-key";
+import { QUERY_KEYS } from "@/features/common/constants/query-key.constant";
 import { createPermissionGuard } from "@/features/common/authorizations/helpers/createPermissionGuard";
 import { PERMISSIONS } from "@/features/common/authorizations/types/auth.types";
 import { DataTable } from "@/features/common/table/DataTable";
@@ -16,6 +16,7 @@ import {
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 import { toast } from "sonner";
+import { SUCCESS_MESSAGES } from "@/features/common/constants/messages.constant";
 
 const subdivisionClientsQueryOptions = (pageNumber: number) =>
   queryOptions<SubdivisionClientResponse>({
@@ -98,7 +99,7 @@ function RouteComponent() {
         deleteId={deleteId}
         onSuccess={() => {
           setDeleteId(null);
-          toast.success("Subdivision client supprimée avec succès");
+          toast.success(SUCCESS_MESSAGES.delete("Subdivision client"));
           queryClient.invalidateQueries({
             queryKey: QUERY_KEYS.SUBDIVISION_CLIENTS,
           });

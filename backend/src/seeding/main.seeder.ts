@@ -8,6 +8,7 @@ import { providerSeed } from './seeders/provider.seed';
 import { providerServiceCategorySeed } from './seeders/provider-service-category.seed';
 import { clientSeed } from './seeders/client.seed';
 import { subdivisionClientSeed } from './seeders/subdivision-client.seed';
+import { holidaySeed } from './seeders/holiday.seed';
 
 export class MainSeeder implements Seeder {
   public async run(
@@ -22,6 +23,7 @@ export class MainSeeder implements Seeder {
     const providerServiceCategoryCount = 20;
     const clientCount = 50;
     const subdivisionClientCount = 100;
+    const holidayCount = 100;
 
     // Truncate existing data
     await truncateSeed(dataSource);
@@ -37,6 +39,8 @@ export class MainSeeder implements Seeder {
     const providerServiceCategories = await providerServiceCategorySeed(dataSource, factoryManager, providerServiceCategoryCount, providers, serviceCategories);
 
     const clients = await clientSeed(dataSource, factoryManager, clientCount);
-    return await subdivisionClientSeed(dataSource, factoryManager, subdivisionClientCount, clients);
+    const subdivisionClients = await subdivisionClientSeed(dataSource, factoryManager, subdivisionClientCount, clients);
+    
+    return await holidaySeed(dataSource, factoryManager, holidayCount);
   }
 }

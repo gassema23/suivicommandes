@@ -11,7 +11,6 @@ import { ClientsModule } from '../clients/clients.module';
   imports: [
       TypeOrmModule.forFeature([SubdivisionClient, Client]), 
       AuthModule,
-      ClientsModule
     ],
   controllers: [SubdivisionClientsController],
   providers: [SubdivisionClientsService],

@@ -1,4 +1,4 @@
-import { API_ROUTE } from "@/config";
+import { API_ROUTE } from "@/features/common/constants/api-route.constant";
 import type { User } from "../types/user.type";
 
 export const fetchUser = async (id: string): Promise<User> => {

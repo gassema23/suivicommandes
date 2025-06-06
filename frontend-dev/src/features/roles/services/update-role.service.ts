@@ -1,4 +1,4 @@
-import { API_ROUTE } from "@/config";
+import { API_ROUTE } from "@/features/common/constants/api-route.constant";
 import type { CreateRoleFormData } from "../schemas/role.schema";
 
 export async function updateRole(roleId: string, data: CreateRoleFormData) {

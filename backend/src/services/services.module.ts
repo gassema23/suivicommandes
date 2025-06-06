@@ -11,7 +11,6 @@ import { SectorsModule } from '../sectors/sectors.module';
   imports: [
     TypeOrmModule.forFeature([Service, Sector]), 
     AuthModule,
-    SectorsModule
   ],
   controllers: [ServicesController],
   providers: [ServicesService],

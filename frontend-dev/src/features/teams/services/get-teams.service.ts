@@ -1,8 +1,8 @@
-import { API_ROUTE } from "@/config";
+import { API_ROUTE } from "@/features/common/constants/api-route.constant";
 import type { TeamResponse } from "../types/team.type";
 
-export const getTeams = async (): Promise<TeamResponse> => {
-  const res = await fetch(`${API_ROUTE}/teams`, {
+export const getTeams = async (page: number): Promise<TeamResponse> => {
+  const res = await fetch(`${API_ROUTE}/teams?page=${page}`, {
     method: "GET",
     credentials: "include",
   });

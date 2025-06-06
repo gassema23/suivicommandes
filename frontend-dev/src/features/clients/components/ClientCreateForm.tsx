@@ -7,11 +7,12 @@ import FormError from "@/components/ui/shadcn/form-error";
 import { Input } from "@/components/ui/shadcn/input";
 import { clientSchema, type ClientFormData } from "../schemas/clients.schema";
 import { createClient } from "../services/create-client.service";
-import { QUERY_KEYS } from "@/config/query-key";
+import { QUERY_KEYS } from "@/features/common/constants/query-key.constant";
 import { toast } from "sonner";
 import { FormActions } from "@/features/common/forms/components/FormActions";
 import InputContainer from "@/features/common/forms/components/InputContainer";
 import { clientFields } from "../configs/client-fields";
+import { SUCCESS_MESSAGES } from "@/features/common/constants/messages.constant";
 
 export default function ClientCreateForm() {
   const [backendError, setBackendError] = useState<string | null>(null);
@@ -36,7 +37,7 @@ export default function ClientCreateForm() {
     mutationFn: (data: ClientFormData) => createClient(data),
     onSuccess: () => {
       setBackendError(null);
-      toast.success("Client créé avec succès");
+      toast.success(SUCCESS_MESSAGES.create("Client"));
       queryClient.invalidateQueries({ queryKey: QUERY_KEYS.CLIENTS });
       navigate({ to: "/pilotages/clients", search: { page: 1 } });
     },

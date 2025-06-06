@@ -23,7 +23,7 @@ import {
 } from "../schemas/role.schema";
 import { fetchResources } from "../services/fetch-resources.service";
 import FormError from "@/components/ui/shadcn/form-error";
-import { QUERY_KEYS } from "@/config/query-key";
+import { QUERY_KEYS } from "@/features/common/constants/query-key.constant";
 
 export default function CreateRolePage() {
   const navigate = useNavigate();

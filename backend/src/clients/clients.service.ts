@@ -107,13 +107,13 @@ export class ClientsService {
       updateClientDto.clientName &&
       updateClientDto.clientName !== client.clientName
     ) {
-      const existingHoliday = await this.clientRepository.findOne({
+      const existingClient = await this.clientRepository.findOne({
         where: {
           clientName: updateClientDto.clientName,
           clientNumber: updateClientDto.clientNumber,
         },
       });
-      if (existingHoliday) {
+      if (existingClient) {
         throw new BadRequestException('Un client avec ce nom existe déjà');
       }
     }

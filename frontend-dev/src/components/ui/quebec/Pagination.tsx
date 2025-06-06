@@ -38,6 +38,10 @@ export function Pagination({
   totalItems = 1,
   onLetterChange,
 }: PaginationProps) {
+
+  if (totalPages <= 1 || totalItems <= 0) {
+    return null // Ne pas afficher la pagination si aucune page ou élément
+  }
   // Gestion des clics sur les pages numériques
   const handlePageClick = (page: number) => {
     if (page !== currentPage && page > 0 && page <= totalPages) {

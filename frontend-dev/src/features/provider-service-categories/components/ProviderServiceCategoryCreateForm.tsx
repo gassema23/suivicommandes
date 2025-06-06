@@ -1,4 +1,4 @@
-import { QUERY_KEYS } from "@/config/query-key";
+import { QUERY_KEYS } from "@/features/common/constants/query-key.constant";
 import { fetchSectorsList } from "@/features/sectors/services/fetch-sectors-list.service";
 import { fetchServicesBySector } from "@/features/services/services/fetch-services-by-sector.service";
 import { zodResolver } from "@hookform/resolvers/zod";

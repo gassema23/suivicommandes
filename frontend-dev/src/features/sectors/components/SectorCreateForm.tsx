@@ -9,11 +9,12 @@ import { sectorSchema, type SectorFormData } from "../schemas/sector.schema";
 import { Controller, useForm } from "react-hook-form";
 import { Switch } from "@/components/ui/shadcn/switch";
 import { createSector } from "../services/create-sector.service";
-import { QUERY_KEYS } from "@/config/query-key";
+import { QUERY_KEYS } from "@/features/common/constants/query-key.constant";
 import { toast } from "sonner";
 import { FormActions } from "@/features/common/forms/components/FormActions";
 import InputContainer from "@/features/common/forms/components/InputContainer";
 import { sectorFields } from "../configs/sector-fields";
+import { SUCCESS_MESSAGES } from "@/features/common/constants/messages.constant";
 
 export default function SectorCreateForm() {
   const [backendError, setBackendError] = useState<string | null>(null);
@@ -43,7 +44,7 @@ export default function SectorCreateForm() {
     mutationFn: (data: SectorFormData) => createSector(data),
     onSuccess: () => {
       setBackendError(null);
-      toast.success("Le secteur a été créé avec succès.");
+      toast.success(SUCCESS_MESSAGES.create("Secteur"));
       queryClient.invalidateQueries({ queryKey: QUERY_KEYS.SECTORS });
 
       navigate({ to: "/pilotages/sectors", search: { page: 1 } });
@@ -74,6 +75,7 @@ export default function SectorCreateForm() {
           label={field.label}
           error={errors[field.name]?.message}
           htmlFor={field.name}
+          required={field.required}
         >
           {field.component === "input" && (
             <Input

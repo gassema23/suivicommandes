@@ -1,4 +1,4 @@
-import { API_ROUTE } from "@/config";
+import { API_ROUTE } from "@/features/common/constants/api-route.constant";
 import type { ProviderFormData } from "../schemas/provider.schema";
 
 export const createProvider = async (

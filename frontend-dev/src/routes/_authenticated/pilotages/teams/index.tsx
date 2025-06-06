@@ -1,7 +1,7 @@
 import LoadingPage from "@/components/ui/loader/LoadingPage";
 import { DeleteModal } from "@/components/ui/quebec/DeleteModal";
 import FormError from "@/components/ui/shadcn/form-error";
-import { QUERY_KEYS } from "@/config/query-key";
+import { QUERY_KEYS } from "@/features/common/constants/query-key.constant";
 import { createPermissionGuard } from "@/features/common/authorizations/helpers/createPermissionGuard";
 import { PERMISSIONS } from "@/features/common/authorizations/types/auth.types";
 import { DataTable } from "@/features/common/table/DataTable";
@@ -16,19 +16,26 @@ import {
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 
-const teamsQueryOptions = queryOptions<TeamResponse>({
-  queryKey: QUERY_KEYS.TEAMS,
-  queryFn: () => getTeams(),
-});
+const teamsQueryOptions = (pageNumber: number) =>
+  queryOptions<TeamResponse>({
+    queryKey: QUERY_KEYS.TEAMS_WITH_PAGE(pageNumber),
+    queryFn: () => getTeams(pageNumber),
+  });
 
 export const Route = createFileRoute("/_authenticated/pilotages/teams/")({
   beforeLoad: createPermissionGuard([PERMISSIONS.TEAMS.READ]),
   head: () => ({
     meta: [{ title: "Équipes" }],
   }),
-
-  loader: ({ context }) =>
-    context.queryClient.ensureQueryData(teamsQueryOptions),
+  validateSearch: (search) => ({
+    page: Number(search.page ?? 1),
+  }),
+  loader: (args) => {
+    const { context, search } = args as any;
+    return context.queryClient.ensureQueryData(
+      teamsQueryOptions(Number(search?.page ?? "1"))
+    );
+  },
 
   component: TeamsPage,
 
@@ -51,10 +58,16 @@ export const Route = createFileRoute("/_authenticated/pilotages/teams/")({
 });
 
 function TeamsPage() {
-  const { data: teams } = useSuspenseQuery<TeamResponse>(teamsQueryOptions);
+  const navigate = Route.useNavigate();
+  const { page = 1 } = Route.useSearch();
+  const pageNumber = Number(page);
+
+  const { data: teams } = useSuspenseQuery<TeamResponse>(
+    teamsQueryOptions(pageNumber)
+  );
   const [deleteId, setDeleteId] = useState<string | null>(null);
   const queryClient = useQueryClient();
-  // Ajoute la fonction onDelete à chaque ligne
+
   const dataWithDelete = {
     ...teams,
     data: (teams.data ?? []).map((team) => ({
@@ -65,7 +78,13 @@ function TeamsPage() {
 
   return (
     <>
-      <DataTable data={dataWithDelete} columns={teamColumns} />
+      <DataTable
+        data={dataWithDelete}
+        columns={teamColumns}
+        currentPage={pageNumber}
+        totalPages={teams.meta.totalPages}
+        onPageChange={(page) => navigate({ search: { page } })}
+      />
       <DeleteModal
         open={!!deleteId}
         onOpenChange={(open) => !open && setDeleteId(null)}

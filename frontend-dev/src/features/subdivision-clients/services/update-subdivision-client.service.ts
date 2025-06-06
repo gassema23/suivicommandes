@@ -1,4 +1,4 @@
-import { API_ROUTE } from "@/config";
+import { API_ROUTE } from "@/features/common/constants/api-route.constant";
 import type { SubdivisionClientFormData } from "../schemas/subdivision-client.schema";
 
 export async function updateSubdivisionClient(

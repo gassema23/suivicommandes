@@ -1,6 +1,6 @@
 import LoadingPage from "@/components/ui/loader/LoadingPage";
 import FormError from "@/components/ui/shadcn/form-error";
-import { QUERY_KEYS } from "@/config/query-key";
+import { QUERY_KEYS } from "@/features/common/constants/query-key.constant";
 import ProfileBanner from "@/features/profile/components/ProfileBanner";
 import ProfileMenu from "@/features/profile/components/ProfileMenu";
 import { getProfile } from "@/features/profile/services/get-profile.service";

@@ -1,6 +1,5 @@
 import LoadingPage from "@/components/ui/loader/LoadingPage";
 import FormError from "@/components/ui/shadcn/form-error";
-import { APP_NAME } from "@/config";
 import { queryOptions, useSuspenseQuery } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
 import { getRoles } from "@/features/roles/services/get-roles.service";
@@ -8,7 +7,8 @@ import { createPermissionGuard } from "@/features/common/authorizations/helpers/
 import { PERMISSIONS } from "@/features/common/authorizations/types/auth.types";
 import { RoleList } from "@/features/roles/components/RoleList";
 import type { RoleResponse } from "@/features/roles/types/role.type";
-import { QUERY_KEYS } from "@/config/query-key";
+import { QUERY_KEYS } from "@/features/common/constants/query-key.constant";
+import { APP_NAME } from "@/features/common/constants/app-name.constant";
 
 const rolesQueryOptions = queryOptions<RoleResponse>({
   queryKey: QUERY_KEYS.ROLES,

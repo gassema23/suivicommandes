@@ -25,6 +25,7 @@ import { VerifyEmailInterface } from './interfaces/verify-email.interface';
 import { OnboardingDto } from './dto/onboarding.dto';
 import { parseDurationToMs } from '../common/utils/parse-duration';
 import { Response } from 'express';
+import { isEmail } from 'validator';
 
 export interface JwtPayload {
   sub: string;
@@ -78,7 +79,7 @@ export class AuthService {
     }
 
     // Pose les cookies avec les bons tokens
-    const jwtExpirationAcessToken = process.env.JWT_EXPIRATION || '8h';
+    const jwtExpirationAcessToken = process.env.JWT_EXPIRATION || '1m';
     const jwtExpirationRefreshToken =
       process.env.JWT_REFRESH_EXPIRATION || '30d';
 
@@ -97,6 +98,18 @@ export class AuthService {
       secure: process.env.NODE_ENV === 'production',
       maxAge: maxAgeRefreshToken,
     });
+
+    const decoded = this.jwtService.decode(result.accessToken) as {
+      exp?: number;
+    };
+    if (decoded?.exp) {
+      res.cookie('accessTokenExpiresAt', decoded.exp * 1000, {
+        httpOnly: false,
+        sameSite: 'strict',
+        secure: process.env.NODE_ENV === 'production',
+        maxAge: maxAgeAcessToken,
+      });
+    }
 
     return { user: result.user, requiresTwoFactor: false };
   }
@@ -149,31 +162,22 @@ export class AuthService {
   }
 
   async register(registerDto: RegisterDto): Promise<{ message: string }> {
-    const {
-      email,
-      password,
-      confirmPassword,
-      firstName,
-      lastName,
-      teamId,
-      roleId,
-    } = registerDto;
     let hashedPassword: string;
     // Vérifier si l'utilisateur existe déjà
     const existingUser = await this.userRepository.findOne({
-      where: { email },
+      where: { email: registerDto.email },
     });
     if (existingUser) {
       throw new ConflictException('Un utilisateur avec cet email existe déjà');
     }
 
-    if (password) {
+    if (registerDto.password) {
       // vérifier si le password et confirmpassword correspondent
-      if (password !== registerDto.confirmPassword) {
+      if (registerDto.password !== registerDto.confirmPassword) {
         throw new BadRequestException('Les mots de passe ne correspondent pas');
       }
       // Hasher le mot de passe
-      hashedPassword = await bcrypt.hash(password, 12);
+      hashedPassword = await bcrypt.hash(registerDto.password, 12);
     } else {
       // générer un mot de passe aléatoire si non fourni
       const randomPassword = Math.random().toString(36).slice(-8);
@@ -195,12 +199,16 @@ export class AuthService {
 
     // Créer l'utilisateur
     const user = this.userRepository.create({
-      firstName,
-      lastName,
-      email,
+      firstName: registerDto.firstName,
+      lastName: registerDto.lastName,
+      email: registerDto.email,
       password: hashedPassword,
-      team: teamId ? ({ id: teamId } as any) : undefined,
-      role: roleId ? ({ id: roleId } as any) : undefined,
+      team: registerDto.teamId
+        ? ({ id: registerDto.teamId } as any)
+        : undefined,
+      role: registerDto.roleId
+        ? ({ id: registerDto.roleId } as any)
+        : undefined,
     });
 
     await this.userRepository.save(user);
@@ -366,7 +374,6 @@ export class AuthService {
   private async generateTokens(
     user: User,
   ): Promise<{ accessToken: string; refreshToken: string }> {
-    
     const payload: JwtPayload = {
       sub: user.id,
       email: user.email,

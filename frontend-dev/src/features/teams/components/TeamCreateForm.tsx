@@ -1,36 +1,33 @@
 import { Input } from "@/components/ui/shadcn/input";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { fetchOwners } from "../services/fetch-owners.service";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/shadcn/select";
-import { Skeleton } from "@/components/ui/shadcn/skeleton";
-import { Controller, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Button } from "@/components/ui/quebec/Button";
 import { useNavigate } from "@tanstack/react-router";
 import { teamSchema, type TeamFormData } from "../schemas/team.schema";
 import { createTeam } from "../services/create-team.service";
 import { useState } from "react";
 import FormError from "@/components/ui/shadcn/form-error";
 import { Textarea } from "@/components/ui/shadcn/textarea";
-import { Label } from "@/components/ui/shadcn/label";
-import { QUERY_KEYS } from "@/config/query-key";
+import { QUERY_KEYS } from "@/features/common/constants/query-key.constant";
+import { toast } from "sonner";
+import { SUCCESS_MESSAGES } from "@/features/common/constants/messages.constant";
+import InputContainer from "@/features/common/forms/components/InputContainer";
+import { teamFields } from "../configs/team-fields";
+import { DependentSelect } from "@/features/common/dependant-select/components/DependentSelect";
+import { FormActions } from "@/features/common/forms/components/FormActions";
 
 export default function TeamCreateForm() {
   const [backendError, setBackendError] = useState<string | null>(null);
   const navigate = useNavigate();
   const queryClient = useQueryClient();
+
   const {
-    data: ownerData = [],
-    isLoading: loadingOwners,
-    error: ownerError,
+    data: owners = [],
+    isLoading: isLoadingOwners,
+    isError: isErrorOwners,
   } = useQuery({
-    queryKey: QUERY_KEYS.USERS_LISTS,
+    queryKey: QUERY_KEYS.OWNER_LISTS,
     queryFn: fetchOwners,
   });
 
@@ -46,23 +43,25 @@ export default function TeamCreateForm() {
   const {
     register,
     handleSubmit,
-    control,
+    watch,
+    setValue,
     formState: { errors },
   } = form;
 
-  const createTeamMutation = useMutation({
+  const createMutation = useMutation({
     mutationFn: (data: TeamFormData) => createTeam(data),
     onSuccess: () => {
       setBackendError(null);
+      toast.success(SUCCESS_MESSAGES.create("Équipe"));
       queryClient.invalidateQueries({ queryKey: QUERY_KEYS.TEAMS });
-      navigate({ to: "/pilotages/teams" });
+      navigate({ to: "/pilotages/teams", search: { page: 1 } });
     },
     onError: (error: { message: string }) => {
       setBackendError(error.message);
     },
   });
   const onSubmit = (data: TeamFormData) => {
-    createTeamMutation.mutate(data);
+    createMutation.mutate(data);
   };
 
   return (
@@ -76,95 +75,54 @@ export default function TeamCreateForm() {
           message={backendError}
         />
       )}
-      <div className="grid grid-cols-12 gap-2 items-center">
-        <Label className="col-span-12 xl:col-span-4" htmlFor="teamName">
-          Nom de l'équipe
-        </Label>
-        <div className="col-span-12 xl:col-span-8">
-          <Input
-            className="block w-full"
-            id="teamName"
-            {...register("teamName")}
-            required
-          />
-          {errors.teamName && (
-            <p className="text-destructive text-sm mt-1">
-              {errors.teamName.message}
-            </p>
-          )}
-        </div>
-      </div>
 
-      <div className="grid grid-cols-12 gap-2 items-center">
-        <Label className="col-span-12 xl:col-span-4" htmlFor="ownerId">
-          Propriétaire
-        </Label>
-        <div className="col-span-12 xl:col-span-8">
-          <Controller
-            control={control}
-            name="ownerId"
-            render={({ field }) =>
-              loadingOwners ? (
-                <Skeleton className="h-9" />
-              ) : ownerError ? (
-                <div className="bg-muted/50 border h-9 flex w-full px-3 items-center text-destructive/80">
-                  Erreur de chargement
-                </div>
-              ) : (
-                <Select value={field.value} onValueChange={field.onChange}>
-                  <SelectTrigger className="w-full">
-                    <SelectValue placeholder="Sélectionner une option" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {ownerData.map((owner) => (
-                      <SelectItem key={owner.id} value={owner.id}>
-                        {owner.fullName}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              )
-            }
-          />
-          {errors.ownerId && (
-            <p className="text-destructive text-sm mt-1">
-              {errors.ownerId.message}
-            </p>
-          )}
-        </div>
-      </div>
-      <div className="grid grid-cols-12 gap-2 items-center">
-        <Label className="col-span-12 xl:col-span-4" htmlFor="teamDescription">
-          Description
-        </Label>
-        <div className="col-span-12 xl:col-span-8">
-          <Textarea
-            className="block w-full"
-            id="teamDescription"
-            {...register("teamDescription")}
-          />
-          {errors.teamDescription && (
-            <p className="text-destructive text-sm mt-1">
-              {errors.teamDescription.message}
-            </p>
-          )}
-        </div>
-      </div>
-      {/* Actions du formulaire */}
-      <div className="flex gap-4 justify-end">
-        <Button
-          type="button"
-          variant="outline"
-          onClick={() => navigate({ to: "/pilotages/teams" })}
-          disabled={form.formState.isSubmitting}
+      {teamFields.map((field) => (
+        <InputContainer
+          key={field.name}
+          label={field.label}
+          error={errors[field.name]?.message}
+          htmlFor={field.name}
         >
-          Annuler
-        </Button>
+          {field.component === "select" && (
+            <DependentSelect
+              value={watch("ownerId")}
+              onChange={(value) => setValue("ownerId", value)}
+              data={owners}
+              isLoading={isLoadingOwners}
+              isError={isErrorOwners}
+              placeholder={field.placeholder}
+              getOptionValue={(s) => s.id}
+              getOptionLabel={(s) => s.fullName}
+            />
+          )}
+          {field.component === "input" && (
+            <Input
+              type={field.type}
+              className="block w-full"
+              id={field.name}
+              placeholder={field.placeholder}
+              {...register(field.name)}
+              required
+            />
+          )}
+          {field.component === "textarea" && (
+            <Textarea
+              rows={field.rows}
+              className="block w-full"
+              id={field.name}
+              placeholder={field.placeholder}
+              {...register(field.name)}
+            />
+          )}
+        </InputContainer>
+      ))}
 
-        <Button type="submit" disabled={form.formState.isSubmitting}>
-          {form.formState.isSubmitting ? "Enregistrement..." : "Enregistrer"}
-        </Button>
-      </div>
+      <FormActions
+        isLoading={createMutation.isPending}
+        onCancel={() =>
+          navigate({ to: "/pilotages/teams", search: { page: 1 } })
+        }
+      />
     </form>
   );
 }

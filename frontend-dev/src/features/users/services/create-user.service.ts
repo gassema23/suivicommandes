@@ -1,4 +1,4 @@
-import { API_ROUTE } from "@/config";
+import { API_ROUTE } from "@/features/common/constants/api-route.constant";
 import type { UserFormData } from "../schemas/user.schema";
 
 export async function createUser(data: UserFormData) {

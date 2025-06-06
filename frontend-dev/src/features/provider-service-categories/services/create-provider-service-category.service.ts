@@ -1,4 +1,4 @@
-import { API_ROUTE } from "@/config";
+import { API_ROUTE } from "@/features/common/constants/api-route.constant";
 import type { ProviderServiceCategoryFormData } from "../schemas/provider-service-category.schema";
 
 export async function createProviderServiceCategory(data: ProviderServiceCategoryFormData) {

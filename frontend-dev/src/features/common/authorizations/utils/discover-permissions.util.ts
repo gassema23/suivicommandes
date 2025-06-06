@@ -1,6 +1,6 @@
-import { API_ROUTE } from "@/config";
 import type { BackendPermission } from "@/features/roles/types/permission.type";
 import type { BackendUser } from "@/features/users/types/user.type";
+import { API_ROUTE } from "../../constants/api-route.constant";
 
 export const discoverBackendPermissions = async (): Promise<void> => {
   try {

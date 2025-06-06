@@ -11,7 +11,6 @@ import { ServiceCategory } from './entities/service-category.entity';
   imports: [
     TypeOrmModule.forFeature([ServiceCategory, Service]), 
     AuthModule,
-    ServicesModule
   ],
   controllers: [ServiceCategoriesController],
   providers: [ServiceCategoriesService],

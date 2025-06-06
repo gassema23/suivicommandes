@@ -11,11 +11,12 @@ import {
   type ProviderFormData,
 } from "../schemas/provider.schema";
 import { updateProvider } from "../services/update-provider.service";
-import { QUERY_KEYS } from "@/config/query-key";
+import { QUERY_KEYS } from "@/features/common/constants/query-key.constant";
 import { FormActions } from "@/features/common/forms/components/FormActions";
 import InputContainer from "@/features/common/forms/components/InputContainer";
 import { providerFields } from "../configs/provider-fields";
 import { toast } from "sonner";
+import { SUCCESS_MESSAGES } from "@/features/common/constants/messages.constant";
 
 interface ProviderFormProps {
   provider: Provider;
@@ -44,7 +45,7 @@ export default function ProviderUpdateForm({ provider }: ProviderFormProps) {
     mutationFn: (data: ProviderFormData) => updateProvider(provider.id, data),
     onSuccess: () => {
       setBackendError(null);
-      toast.success("Fournisseur mis à jour avec succès");
+      toast.success(SUCCESS_MESSAGES.update("Fournisseur"));
       queryClient.invalidateQueries({ queryKey: QUERY_KEYS.PROVIDERS });
       navigate({ to: "/pilotages/providers", search: { page: 1 } });
     },

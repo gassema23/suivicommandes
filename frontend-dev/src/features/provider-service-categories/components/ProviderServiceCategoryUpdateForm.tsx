@@ -1,4 +1,4 @@
-import { QUERY_KEYS } from "@/config/query-key";
+import { QUERY_KEYS } from "@/features/common/constants/query-key.constant";
 import { fetchSectorsList } from "@/features/sectors/services/fetch-sectors-list.service";
 import { fetchServicesBySector } from "@/features/services/services/fetch-services-by-sector.service";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -21,6 +21,7 @@ import type { ProviderServiceCategory } from "../types/provider-service-category
 import { toast } from "sonner";
 import { providerServiceCategoryFields } from "../configs/provider-service-category-fields";
 import { updateProviderServiceCategory } from "../services/update-provider-service-category.service";
+import { SUCCESS_MESSAGES } from "@/features/common/constants/messages.constant";
 
 interface ProviderServiceCategoryUpdateFormProps {
   providerServiceCategory: ProviderServiceCategory;
@@ -58,7 +59,7 @@ export default function ProviderServiceCategoryUpdateForm({
       queryClient.invalidateQueries({
         queryKey: QUERY_KEYS.PROVIDER_SERVICE_CATEGORIES,
       });
-      toast.success("Association mise à jour avec succès");
+      toast.success(SUCCESS_MESSAGES.update("Association"));
       navigate({
         to: "/pilotages/provider-service-categories",
         search: { page: 1 },

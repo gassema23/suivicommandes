@@ -10,11 +10,12 @@ import { serviceSchema, type ServiceFormData } from "../schemas/service.schema";
 import { createService } from "../services/create-service.service";
 import { fetchSectorsList } from "@/features/sectors/services/fetch-sectors-list.service";
 import { DependentSelect } from "@/features/common/dependant-select/components/DependentSelect";
-import { QUERY_KEYS } from "@/config/query-key";
+import { QUERY_KEYS } from "@/features/common/constants/query-key.constant";
 import { toast } from "sonner";
 import { FormActions } from "@/features/common/forms/components/FormActions";
 import InputContainer from "@/features/common/forms/components/InputContainer";
 import { serviceFields } from "../configs/service-fields";
+import { SUCCESS_MESSAGES } from "@/features/common/constants/messages.constant";
 
 export default function ServiceCreateForm() {
   const [backendError, setBackendError] = useState<string | null>(null);
@@ -51,7 +52,7 @@ export default function ServiceCreateForm() {
     mutationFn: (data: ServiceFormData) => createService(data),
     onSuccess: () => {
       setBackendError(null);
-      toast.success("Service créé avec succès !");
+      toast.success(SUCCESS_MESSAGES.create("Service"));
       queryClient.invalidateQueries({ queryKey: QUERY_KEYS.SERVICES });
       navigate({ to: "/pilotages/services", search: { page: 1 } });
     },

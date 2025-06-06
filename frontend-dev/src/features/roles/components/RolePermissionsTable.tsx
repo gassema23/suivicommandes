@@ -1,4 +1,4 @@
-import { Check } from "lucide-react";
+import { Check, X } from "lucide-react";
 import type { Role } from "../types/role.type";
 import { capitalizeFirstLetter } from "@/lib/utils";
 
@@ -41,9 +41,13 @@ export function RolePermissionsTable({
               </td>
               {sortedActions.map((action) => (
                 <td key={action} className="text-center p-3">
-                  {hasPermission(permission.resource, action) && (
+                  {hasPermission(permission.resource, action) ? (
                     <div className="inline-flex items-center justify-center w-6 h-6 bg-success rounded-full">
                       <Check className="w-4 h-4 text-muted" />
+                    </div>
+                  ) : (
+                    <div className="inline-flex items-center justify-center w-6 h-6 bg-destructive rounded-full">
+                      <X className="w-4 h-4 text-muted" />
                     </div>
                   )}
                 </td>

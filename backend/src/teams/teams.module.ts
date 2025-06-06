@@ -10,7 +10,6 @@ import { AuthModule } from '../auth/auth.module';
 @Module({
   imports: [
     TypeOrmModule.forFeature([Team, User]),
-    UsersModule,
     AuthModule,
   ],
   providers: [TeamsService],

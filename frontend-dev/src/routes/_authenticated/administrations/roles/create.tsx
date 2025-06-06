@@ -1,7 +1,7 @@
 import LoadingPage from "@/components/ui/loader/LoadingPage";
-import { APP_NAME } from "@/config";
 import { createPermissionGuard } from "@/features/common/authorizations/helpers/createPermissionGuard";
 import { PERMISSIONS } from "@/features/common/authorizations/types/auth.types";
+import { APP_NAME } from "@/features/common/constants/app-name.constant";
 import RoleCreateForm from "@/features/roles/components/role-create-form";
 import { createFileRoute } from "@tanstack/react-router";
 

@@ -7,8 +7,8 @@ import {
   DialogDescription,
 } from "@/components/ui/shadcn/dialog";
 import { Button } from "@/components/ui/quebec/Button";
-import { API_ROUTE } from "@/config";
 import { useEffect, useState } from "react";
+import { API_ROUTE } from "@/features/common/constants/api-route.constant";
 
 interface DeleteModalProps {
   open: boolean;

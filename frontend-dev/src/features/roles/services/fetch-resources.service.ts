@@ -1,4 +1,4 @@
-import { API_ROUTE } from "@/config";
+import { API_ROUTE } from "@/features/common/constants/api-route.constant";
 
 // Fetch resources depuis le backend
 export const fetchResources = async (): Promise<string[]> => {

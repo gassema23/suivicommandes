@@ -1,4 +1,4 @@
-import { API_ROUTE } from "@/config";
+import { API_ROUTE } from "@/features/common/constants/api-route.constant";
 import type { Provider } from "../types/provider.type";
 
 export const fetchProvidersList= async (): Promise<Provider> => {

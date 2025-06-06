@@ -21,6 +21,14 @@ import { ClientsModule } from './clients/clients.module';
 import { SubdivisionClientsModule } from './subdivision-clients/subdivision-clients.module';
 import { ProvidersModule } from './providers/providers.module';
 import { ProviderServiceCategoriesModule } from './provider-service-categories/provider-service-categories.module';
+import { DelayTypesModule } from './delay-types/delay-types.module';
+import { RequisitionTypesModule } from './requisition-types/requisition-types.module';
+import { RequestTypesModule } from './request-types/request-types.module';
+import { ConformityTypesModule } from './conformity-types/conformity-types.module';
+import { DeliverablesModule } from './deliverables/deliverables.module';
+import { FlowsModule } from './flows/flows.module';
+import { ProviderDisponibilitiesModule } from './provider-disponibilities/provider-disponibilities.module';
+import { RequestTypeServiceCategoriesModule } from './request-type-service-categories/request-type-service-categories.module';
 
 @Module({
   imports: [
@@ -114,6 +122,14 @@ import { ProviderServiceCategoriesModule } from './provider-service-categories/p
     SubdivisionClientsModule,
     ProvidersModule,
     ProviderServiceCategoriesModule,
+    DelayTypesModule,
+    RequisitionTypesModule,
+    RequestTypesModule,
+    ConformityTypesModule,
+    DeliverablesModule,
+    FlowsModule,
+    ProviderDisponibilitiesModule,
+    RequestTypeServiceCategoriesModule,
   ],
 })
 export class AppModule {}

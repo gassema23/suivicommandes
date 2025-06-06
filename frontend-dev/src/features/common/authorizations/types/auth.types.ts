@@ -30,6 +30,13 @@ export const PERMISSIONS = {
   SUBDIVISION_CLIENTS: makePermissions("subdivision_clients"),
   PROVIDERS: makePermissions("providers"),
   PROVIDER_SERVICE_CATEGORIES: makePermissions("provider_service_categories"),
+  DELAY_TYPES: makePermissions("delay_types"),
+  REQUISITION_TYPES: makePermissions("requisition_types"),
+  REQUEST_TYPES: makePermissions("request_types"),
+  CONFORMITY_TYPES: makePermissions("conformity_types"),
+  DELIVERABLES: makePermissions("deliverables"),
+  FLOWS: makePermissions("flows"),
+  PROVIDER_DISPONIBILITIES: makePermissions("provider_disponibilities"),
 } as const;
 
 export const ROLES = {

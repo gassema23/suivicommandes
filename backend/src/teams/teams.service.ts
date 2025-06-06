@@ -29,15 +29,32 @@ export class TeamsService {
   ) {}
 
   async create(createTeamDto: CreateTeamDto, createdBy: string): Promise<Team> {
-    const existingTeam = await this.teamRepository.findOne({
-      where: { teamName: createTeamDto.teamName },
+    const existing = await this.teamRepository.findOne({
+      where: {
+        owner: {
+          id: createTeamDto.ownerId,
+        },
+      },
+      relations: ['owner'],
     });
-    if (existingTeam) {
-      throw new BadRequestException('Une équipe avec ce nom existe déjà');
+
+    if (existing) {
+      throw new BadRequestException(
+        'Une équipe avec ce propriétaire existe déjà',
+      );
+    }
+
+    const owner = await this.userRepository.findOne({
+      where: { id: createTeamDto.ownerId },
+    });
+
+    if (!owner) {
+      throw new BadRequestException('Utilisateur introuvable');
     }
 
     const team = this.teamRepository.create({
       ...createTeamDto,
+      owner,
       createdBy: { id: createdBy } as User,
     });
 
@@ -47,55 +64,15 @@ export class TeamsService {
   async findAll(
     paginationDto: PaginationDto,
     search?: string,
-  ): Promise<PaginatedResult<TeamWithVirtuals>> {
+  ): Promise<PaginatedResult<Team>> {
     const {
       page = 1,
       limit = 10,
       sort = 'createdAt',
       order = 'DESC',
     } = paginationDto;
+
     const skip = (page - 1) * limit;
-
-    // Si on veut trier par le nom du propriétaire
-    if (sort?.toLowerCase() === 'ownerid') {
-      const qb = this.teamRepository
-        .createQueryBuilder('team')
-        .leftJoinAndSelect('team.owner', 'owner')
-        .leftJoinAndSelect('team.users', 'users')
-        .leftJoinAndSelect('team.createdBy', 'createdBy')
-        .skip(skip)
-        .take(limit);
-
-      if (search) {
-        qb.where('team.teamName ILIKE :search', { search: `%${search}%` });
-      }
-
-      // Trie sur le nom complet du propriétaire
-      qb.orderBy({
-        'owner.firstName': order.toUpperCase() === 'ASC' ? 'ASC' : 'DESC',
-        'owner.lastName': order.toUpperCase() === 'ASC' ? 'ASC' : 'DESC',
-      });
-
-      const [teams, total] = await qb.getManyAndCount();
-
-      const teamsWithVirtuals: TeamWithVirtuals[] = teams.map((team) => ({
-        ...team,
-        owner: team.owner
-          ? (instanceToPlain(team.owner) as Partial<User>)
-          : undefined,
-        memberCount: team.users ? team.users.length : 0,
-      }));
-
-      return {
-        data: teamsWithVirtuals,
-        meta: {
-          page,
-          limit,
-          total,
-          totalPages: Math.ceil(total / limit),
-        },
-      };
-    }
 
     // Sinon, tri classique
     const whereCondition: FindOptionsWhere<Team> = {};
@@ -110,22 +87,14 @@ export class TeamsService {
 
     const [teams, total] = await this.teamRepository.findAndCount({
       where: whereCondition,
-      relations: ['owner', 'users', 'createdBy'],
+      relations: ['createdBy', 'owner'],
       skip,
       take: limit,
       order: orderBy,
     });
 
-    const teamsWithVirtuals: TeamWithVirtuals[] = teams.map((team) => ({
-      ...team,
-      owner: team.owner
-        ? (instanceToPlain(team.owner) as Partial<User>)
-        : undefined,
-      memberCount: team.users ? team.users.length : 0,
-    }));
-
     return {
-      data: teamsWithVirtuals,
+      data: teams,
       meta: {
         page,
         limit,
@@ -161,32 +130,22 @@ export class TeamsService {
     updateTeamDto: UpdateTeamDto,
     updatedBy: string,
   ): Promise<Team> {
+    
     const team = await this.findOne(id);
-    if (updateTeamDto.teamName && updateTeamDto.teamName !== team.teamName) {
-      const existingTeam = await this.teamRepository.findOne({
-        where: { teamName: updateTeamDto.teamName },
-      });
-      if (existingTeam) {
-        throw new BadRequestException('Une équipe avec ce nom existe déjà');
-      }
-    }
 
-    if (
-      updateTeamDto.ownerId &&
-      (!team.owner || team.owner.id !== updateTeamDto.ownerId)
-    ) {
-      const newOwner = await this.userRepository.findOne({
+    if (updateTeamDto.ownerId) {
+      const owner = await this.userRepository.findOne({
         where: { id: updateTeamDto.ownerId },
       });
-      if (!newOwner) {
-        throw new BadRequestException('Propriétaire introuvable');
+
+      if (!owner) {
+        throw new BadRequestException('Utilisateur introuvable');
       }
-      team.owner = newOwner;
+      team.owner = owner;
     }
 
-    Object.assign(team, updateTeamDto, {
-      updatedBy: { id: updatedBy } as User,
-    });
+    Object.assign(team, updateTeamDto);
+    team.updatedBy = { id: updatedBy } as User;
 
     return this.teamRepository.save(team);
   }
@@ -237,20 +196,20 @@ export class TeamsService {
   }
 
   async removeUserFromTeam(teamId: string, userId: string): Promise<void> {
-  const [team, user] = await Promise.all([
-    this.findOne(teamId),
-    this.userRepository.findOne({
-      where: { id: userId, team: { id: teamId } },
-    }),
-  ]);
+    const [team, user] = await Promise.all([
+      this.findOne(teamId),
+      this.userRepository.findOne({
+        where: { id: userId, team: { id: teamId } },
+      }),
+    ]);
 
-  if (!user) {
-    throw new NotFoundException('Utilisateur non trouvé dans cette équipe');
+    if (!user) {
+      throw new NotFoundException('Utilisateur non trouvé dans cette équipe');
+    }
+
+    user.team = undefined;
+    await this.userRepository.save(user);
   }
-
-  user.team = undefined;
-  await this.userRepository.save(user);
-}
 
   async getTeamMembers(teamId: string): Promise<User[]> {
     await this.findOne(teamId);

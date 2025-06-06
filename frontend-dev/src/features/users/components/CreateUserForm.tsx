@@ -20,7 +20,7 @@ import { getTeamsList } from "@/features/teams/services/get-teams-list.service";
 import { createUser } from "../services/create-user.service";
 import { Label } from "@/components/ui/shadcn/label";
 import { capitalizeFirstLetter } from "@/lib/utils";
-import { QUERY_KEYS } from "@/config/query-key";
+import { QUERY_KEYS } from "@/features/common/constants/query-key.constant";
 
 export default function CreateUserForm() {
   const [backendError, setBackendError] = useState<string | null>(null);

@@ -1,4 +1,4 @@
-import { API_ROUTE } from "@/config";
+import { API_ROUTE } from "@/features/common/constants/api-route.constant";
 import type { SectorFormData } from "../schemas/sector.schema";
 
 export async function updateSector(sectorId: string, data: SectorFormData) {

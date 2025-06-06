@@ -14,20 +14,30 @@ import {
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 import type { HolidayResponse } from "@/features/holidays/types/holiday.type";
-import { QUERY_KEYS } from "@/config/query-key";
+import { QUERY_KEYS } from "@/features/common/constants/query-key.constant";
+import { SUCCESS_MESSAGES } from "@/features/common/constants/messages.constant";
+import { toast } from "sonner";
 
-const holidaysQueryOptions = queryOptions<HolidayResponse>({
-  queryKey: QUERY_KEYS.HOLIDAYS,
-  queryFn: () => getHolidays(),
-});
+const holidaysQueryOptions = (pageNumber: number) =>
+  queryOptions<HolidayResponse>({
+    queryKey: QUERY_KEYS.HOLIDAYS_WITH_PAGE(pageNumber),
+    queryFn: () => getHolidays(pageNumber),
+  });
 
 export const Route = createFileRoute("/_authenticated/pilotages/holidays/")({
   beforeLoad: createPermissionGuard([PERMISSIONS.HOLIDAYS.READ]),
   head: () => ({
     meta: [{ title: "Jour férié" }],
   }),
-  loader: ({ context }) =>
-    context.queryClient.ensureQueryData(holidaysQueryOptions),
+  validateSearch: (search) => ({
+    page: Number(search.page ?? 1),
+  }),
+  loader: (args) => {
+    const { context, search } = args as any;
+    return context.queryClient.ensureQueryData(
+      holidaysQueryOptions(Number(search?.page ?? "1"))
+    );
+  },
   errorComponent: ({ error }) => (
     <FormError
       title="Erreur lors du chargement des jours fériés"
@@ -47,11 +57,16 @@ export const Route = createFileRoute("/_authenticated/pilotages/holidays/")({
 });
 
 function RouteComponent() {
-  const { data: holidays } =
-    useSuspenseQuery<HolidayResponse>(holidaysQueryOptions);
+  const navigate = Route.useNavigate();
+  const { page = 1 } = Route.useSearch();
+  const pageNumber = Number(page);
+
+  const { data: holidays } = useSuspenseQuery<HolidayResponse>(
+    holidaysQueryOptions(pageNumber)
+  );
   const [deleteId, setDeleteId] = useState<string | null>(null);
   const queryClient = useQueryClient();
-  // Ajoute la fonction onDelete à chaque ligne
+
   const dataWithDelete = {
     ...holidays,
     data: (holidays.data ?? []).map((holiday) => ({
@@ -62,7 +77,13 @@ function RouteComponent() {
 
   return (
     <>
-      <DataTable data={dataWithDelete} columns={holidayColumns} />
+      <DataTable
+        data={dataWithDelete}
+        columns={holidayColumns}
+        currentPage={pageNumber}
+        totalPages={holidays.meta.totalPages}
+        onPageChange={(page) => navigate({ search: { page } })}
+      />
       <DeleteModal
         open={!!deleteId}
         onOpenChange={(open) => !open && setDeleteId(null)}
@@ -70,6 +91,7 @@ function RouteComponent() {
         deleteId={deleteId}
         onSuccess={() => {
           setDeleteId(null);
+          toast.success(SUCCESS_MESSAGES.delete("Jour férié"));
           queryClient.invalidateQueries({ queryKey: QUERY_KEYS.HOLIDAYS });
         }}
       />

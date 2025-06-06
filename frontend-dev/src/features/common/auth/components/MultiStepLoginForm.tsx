@@ -10,7 +10,6 @@ import PasswordInput from "@/components/ui/shadcn/password-input";
 import FormError from "@/components/ui/shadcn/form-error";
 import ErrorMessage from "@/components/ui/shadcn/error-message";
 import { useAuth } from "@/providers/auth.provider";
-import { API_ROUTE } from "@/config";
 import { QuebecLink } from "@/components/ui/quebec/QuebecLink";
 import { Label } from "@/components/ui/shadcn/label";
 import {
@@ -18,7 +17,8 @@ import {
   InputOTPGroup,
   InputOTPSlot,
 } from "@/components/ui/shadcn/input-otp";
-import { QUERY_KEYS } from "@/config/query-key";
+import { QUERY_KEYS } from "@/features/common/constants/query-key.constant";
+import { API_ROUTE } from "../../constants/api-route.constant";
 
 // Schémas Zod
 const Step1Schema = z.object({

@@ -8,7 +8,7 @@ import { Input } from "@/components/ui/shadcn/input";
 import { clientSchema, type ClientFormData } from "../schemas/clients.schema";
 import type { Client } from "../types/client.type";
 import { updateClient } from "../services/update-client.service";
-import { QUERY_KEYS } from "@/config/query-key";
+import { QUERY_KEYS } from "@/features/common/constants/query-key.constant";
 import { FormActions } from "@/features/common/forms/components/FormActions";
 import InputContainer from "@/features/common/forms/components/InputContainer";
 import { clientFields } from "../configs/client-fields";

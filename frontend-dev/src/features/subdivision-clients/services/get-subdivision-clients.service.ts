@@ -1,4 +1,4 @@
-import { API_ROUTE } from "@/config";
+import { API_ROUTE } from "@/features/common/constants/api-route.constant";
 import type { SubdivisionClientResponse } from "../types/subdivision-client.type";
 
 export const getSubdivisionClients =

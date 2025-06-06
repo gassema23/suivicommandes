@@ -1,6 +1,6 @@
 import LoadingPage from "@/components/ui/loader/LoadingPage";
 import FormError from "@/components/ui/shadcn/form-error";
-import { QUERY_KEYS } from "@/config/query-key";
+import { QUERY_KEYS } from "@/features/common/constants/query-key.constant";
 import { createPermissionGuard } from "@/features/common/authorizations/helpers/createPermissionGuard";
 import { PERMISSIONS } from "@/features/common/authorizations/types/auth.types";
 import TeamUpdateForm from "@/features/teams/components/TeamUpdateForm";

@@ -19,8 +19,11 @@ type RoleCardProps = {
   hasPermission: (permission: string) => boolean;
 };
 
-
-export default function RoleCard({ role, handleDelete, hasPermission }:RoleCardProps) {
+export default function RoleCard({
+  role,
+  handleDelete,
+  hasPermission,
+}: RoleCardProps) {
   return (
     <Card key={role.id} elevation={1}>
       <CardHeader>
@@ -37,6 +40,7 @@ export default function RoleCard({ role, handleDelete, hasPermission }:RoleCardP
                   to={`/administrations/roles/update/$id`}
                   params={{ id: role.id }}
                 >
+                  
                   <Edit className="w-4 h-4" />
                 </Link>
               </Button>
@@ -58,7 +62,7 @@ export default function RoleCard({ role, handleDelete, hasPermission }:RoleCardP
       <CardContent>
         <RolePermissionsTable
           permissions={role.permissions}
-          actions={[...ACTIONS]} 
+          actions={[...ACTIONS]}
           hasPermission={hasPermission}
         />
       </CardContent>

@@ -1,4 +1,4 @@
-import { API_ROUTE } from "@/config";
+import { API_ROUTE } from "@/features/common/constants/api-route.constant";
 import type { Team } from "../types/team.type";
 
 export const getTeamsList = async (): Promise<Team> => {

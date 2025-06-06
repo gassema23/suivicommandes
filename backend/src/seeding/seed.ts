@@ -9,6 +9,7 @@ import { ProviderFactory } from './factories/provider.factory';
 import { ProviderServiceCategoryFactory } from './factories/provider-service-catefory.factory';
 import { ClientFactory } from './factories/client.factory';
 import { SubdivisionClientFactory } from './factories/subdivision-client.factory';
+import { HolidayFactory } from './factories/holiday.factory';
 
 const options: DataSourceOptions & SeederOptions = {
   ...DatabaseConfig,
@@ -20,6 +21,7 @@ const options: DataSourceOptions & SeederOptions = {
     ProviderServiceCategoryFactory,
     ClientFactory,
     SubdivisionClientFactory,
+    HolidayFactory
   ],
   seeds: [MainSeeder],
 };

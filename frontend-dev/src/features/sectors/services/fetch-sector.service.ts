@@ -1,4 +1,4 @@
-import { API_ROUTE } from "@/config";
+import { API_ROUTE } from "@/features/common/constants/api-route.constant";
 import type { Sector } from "../types/sector.type";
 
 export const fetchSector = async (id: string): Promise<Sector> => {

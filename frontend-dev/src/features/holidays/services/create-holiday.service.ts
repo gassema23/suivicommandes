@@ -1,4 +1,4 @@
-import { API_ROUTE } from "@/config";
+import { API_ROUTE } from "@/features/common/constants/api-route.constant";
 import type { HolidayFormData } from "../schemas/holiday.schema";
 
 export const createHoliday = async (

@@ -1,4 +1,4 @@
-import { API_ROUTE } from "@/config";
+import { API_ROUTE } from "@/features/common/constants/api-route.constant";
 import type { Sector } from "@/features/sectors/types/sector.type";
 
 // Fetch resources depuis le backend

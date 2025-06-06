@@ -22,7 +22,11 @@ import {
 import { fetchClients } from "../services/fetch-client.service";
 import type { SubdivisionClient } from "../types/subdivision-client.type";
 import { updateSubdivisionClient } from "../services/update-subdivision-client.service";
-import { QUERY_KEYS } from "@/config/query-key";
+import { QUERY_KEYS } from "@/features/common/constants/query-key.constant";
+import { FormActions } from "@/features/common/forms/components/FormActions";
+import { DependentSelect } from "@/features/common/dependant-select/components/DependentSelect";
+import InputContainer from "@/features/common/forms/components/InputContainer";
+import { subdivisionClientFields } from "../configs/subdivision-client.fields";
 
 interface SubdivisionClientUpdateFormProps {
   subdivisionClient: SubdivisionClient;
@@ -34,10 +38,11 @@ export default function SubdivisionClientUpdateForm({
   const [backendError, setBackendError] = useState<string | null>(null);
   const navigate = useNavigate();
   const queryClient = useQueryClient();
+
   const {
-    data: clientData = [],
-    isLoading: loadingClients,
-    error: clientError,
+    data: clients,
+    isLoading: isLoadingClients,
+    isError: isErrorClients,
   } = useQuery({
     queryKey: QUERY_KEYS.CLIENTS_LISTS,
     queryFn: fetchClients,
@@ -54,132 +59,83 @@ export default function SubdivisionClientUpdateForm({
 
   const {
     register,
+    watch,
+    setValue,
     handleSubmit,
-    control,
     formState: { errors },
   } = form;
 
-  const createTeamMutation = useMutation({
+  const updateMutation = useMutation({
     mutationFn: (data: SubdivisionClientFormData) =>
       updateSubdivisionClient(subdivisionClient.id, data),
     onSuccess: () => {
       setBackendError(null);
-      queryClient.invalidateQueries({ queryKey: QUERY_KEYS.SUBDIVISION_CLIENTS });
-      navigate({ to: "/pilotages/subdivision-clients" });
+      queryClient.invalidateQueries({
+        queryKey: QUERY_KEYS.SUBDIVISION_CLIENTS,
+      });
+      navigate({ to: "/pilotages/subdivision-clients", search: { page: 1 } });
     },
     onError: (error: { message: string }) => {
       setBackendError(error.message);
     },
   });
   const onSubmit = (data: SubdivisionClientFormData) => {
-    createTeamMutation.mutate(data);
+    updateMutation.mutate(data);
   };
 
   return (
     <form
-      className="xl:w-3xl w-full space-y-4"
-      onSubmit={handleSubmit(onSubmit)}
-    >
-      {backendError && (
-        <FormError
-          title="Erreur lors de l'envoie du formulaire"
-          message={backendError}
-        />
-      )}
-      <div className="grid grid-cols-12 gap-2 items-center">
-        <Label className="col-span-12 xl:col-span-4" htmlFor="clientId">
-          Clients
-        </Label>
-        <div className="col-span-12 xl:col-span-8">
-          <Controller
-            control={control}
-            name="clientId"
-            render={({ field }) =>
-              loadingClients ? (
-                <Skeleton className="h-9" />
-              ) : clientError ? (
-                <div className="bg-muted/50 border h-9 flex w-full px-3 items-center text-destructive/80">
-                  Erreur de chargement
-                </div>
-              ) : (
-                <Select value={field.value} onValueChange={field.onChange}>
-                  <SelectTrigger className="w-full">
-                    <SelectValue placeholder="Sélectionner une option" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {clientData.map((client) => (
-                      <SelectItem key={client.id} value={client.id}>
-                        {client.virtualClientName}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              )
+          className="xl:w-3xl w-full space-y-4"
+          onSubmit={handleSubmit(onSubmit)}
+        >
+          {backendError && (
+            <FormError
+              title="Erreur lors de l'envoie du formulaire"
+              message={backendError}
+            />
+          )}
+    
+          {subdivisionClientFields.map((field) => (
+            <InputContainer
+              key={field.name}
+              label={field.label}
+              error={errors[field.name]?.message}
+              htmlFor={field.name}
+              required={field.required}
+            >
+              {field.component === "select-client" && (
+                <DependentSelect
+                  value={watch("clientId")}
+                  onChange={(value) => {
+                    setValue("clientId", value);
+                  }}
+                  data={clients}
+                  isLoading={isLoadingClients}
+                  isError={isErrorClients}
+                  placeholder={field.placeholder}
+                  getOptionValue={(s) => s.id}
+                  getOptionLabel={(s) => s.virtualClientName}
+                />
+              )}
+              {field.component === "input" && (
+                <Input
+                  type={field.type}
+                  className="block w-full"
+                  id={field.name}
+                  placeholder={field.placeholder}
+                  {...register(field.name)}
+                  required={field.required}
+                />
+              )}
+            </InputContainer>
+          ))}
+    
+          <FormActions
+            isLoading={updateMutation.isPending}
+            onCancel={() =>
+              navigate({ to: "/pilotages/subdivision-clients", search: { page: 1 } })
             }
           />
-          {errors.clientId && (
-            <p className="text-destructive text-sm mt-1">
-              {errors.clientId.message}
-            </p>
-          )}
-        </div>
-      </div>
-      <div className="grid grid-cols-12 gap-2 items-center">
-        <Label
-          className="col-span-12 xl:col-span-4"
-          htmlFor="subdivisionClientName"
-        >
-          Subdivision client
-        </Label>
-        <div className="col-span-12 xl:col-span-8">
-          <Input
-            className="block w-full"
-            id="subdivisionClientName"
-            {...register("subdivisionClientName")}
-            required
-          />
-          {errors.subdivisionClientName && (
-            <p className="text-destructive text-sm mt-1">
-              {errors.subdivisionClientName.message}
-            </p>
-          )}
-        </div>
-      </div>
-      <div className="grid grid-cols-12 gap-2 items-center">
-        <Label
-          className="col-span-12 xl:col-span-4"
-          htmlFor="subdivisionClientNumber"
-        >
-          Identifiant de la subdivision client
-        </Label>
-        <div className="col-span-12 xl:col-span-8">
-          <Input
-            className="block w-full"
-            id="subdivisionClientNumber"
-            {...register("subdivisionClientNumber")}
-          />
-          {errors.subdivisionClientNumber && (
-            <p className="text-destructive text-sm mt-1">
-              {errors.subdivisionClientNumber.message}
-            </p>
-          )}
-        </div>
-      </div>
-      {/* Actions du formulaire */}
-      <div className="flex gap-4 justify-end">
-        <Button
-          type="button"
-          variant="outline"
-          onClick={() => navigate({ to: "/pilotages/subdivision-clients" })}
-          disabled={form.formState.isSubmitting}
-        >
-          Annuler
-        </Button>
-
-        <Button type="submit" disabled={form.formState.isSubmitting}>
-          {form.formState.isSubmitting ? "Enregistrement..." : "Enregistrer"}
-        </Button>
-      </div>
-    </form>
+        </form>
   );
 }

@@ -29,6 +29,7 @@ import { Permissions } from '../roles/decorators/permission.decorator';
 import { Resource } from '../roles/enums/resource.enum';
 import { Action } from '../roles/enums/action.enum';
 import { AuthorizationsGuard } from '../auth/guards/authorizations.guard';
+import { instanceToPlain } from 'class-transformer';
 
 @ApiTags('Teams')
 @Controller('teams')
@@ -67,7 +68,15 @@ export class TeamsController {
     description: 'Recherche par nom',
   })
   async findAll(@Query() paginationDto: PaginationDto) {
-    return this.teamsService.findAll(paginationDto, paginationDto.search);
+    const result = await this.teamsService.findAll(
+      paginationDto,
+      paginationDto.search,
+    );
+    return {
+      ...result,
+      data: result.data.map((team) => instanceToPlain(team)),
+    };
+
   }
 
   @Get(':id')
@@ -97,10 +106,7 @@ export class TeamsController {
   @ApiOperation({ summary: 'Supprimer une équipe' })
   @ApiResponse({ status: 200, description: 'Équipe supprimée' })
   @ApiResponse({ status: 404, description: 'Équipe non trouvée' })
-  async remove(
-    @Body('id') id: string,
-    @CurrentUser() currentUser: User,
-  ) {
+  async remove(@Body('id') id: string, @CurrentUser() currentUser: User) {
     await this.teamsService.remove(id, currentUser.id);
     return { message: 'Équipe supprimée avec succès' };
   }

@@ -1,4 +1,4 @@
-import { API_ROUTE } from "@/config";
+import { API_ROUTE } from "@/features/common/constants/api-route.constant";
 import type { ProviderServiceCategory } from "../types/provider-service-category.type";
 
 export const fetchProviderServiceCategory= async (id: string): Promise<ProviderServiceCategory> => {

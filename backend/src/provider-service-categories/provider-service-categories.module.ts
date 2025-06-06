@@ -17,8 +17,6 @@ import { ServiceCategory } from '../service-categories/entities/service-category
       ProviderServiceCategory,
     ]),
     AuthModule,
-    ServiceCategoriesModule,
-    ProvidersModule,
   ],
   controllers: [ProviderServiceCategoriesController],
   providers: [ProviderServiceCategoriesService],

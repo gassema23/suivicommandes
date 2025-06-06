@@ -1,4 +1,4 @@
-import { API_ROUTE } from "@/config";
+import { API_ROUTE } from "@/features/common/constants/api-route.constant";
 import type { ClientFormData } from "../schemas/clients.schema";
 
 export const createClient = async (client: ClientFormData): Promise<void> => {

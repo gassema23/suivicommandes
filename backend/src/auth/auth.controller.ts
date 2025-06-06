@@ -62,34 +62,7 @@ export class AuthController {
     @Body() loginDto: LoginDto,
     @Res({ passthrough: true }) res: Response,
   ) {
-
     return this.authService.loginAndSetCookies(loginDto, res);
-    /*
-    const jwtExpirationAcessToken = process.env.JWT_EXPIRATION || '8h';
-    const jwtExpirationRefreshToken =
-      process.env.JWT_REFRESH_EXPIRATION || '30d';
-
-    const { user, accessToken, refreshToken, requiresTwoFactor } =
-    
-    //await this.authService.login(loginDto);
-
-    const maxAgeAcessToken = parseDurationToMs(jwtExpirationAcessToken);
-    const maxAgeRefreshToken = parseDurationToMs(jwtExpirationRefreshToken);
-    // Pose les cookies ici
-    res.cookie('accessToken', accessToken, {
-      httpOnly: true,
-      sameSite: 'strict',
-      secure: process.env.NODE_ENV === 'production',
-      maxAge: maxAgeAcessToken,
-    });
-    res.cookie('refreshToken', refreshToken, {
-      httpOnly: true,
-      sameSite: 'strict',
-      secure: process.env.NODE_ENV === 'production',
-      maxAge: maxAgeRefreshToken,
-    });
-    return { user, requiresTwoFactor: !!requiresTwoFactor };
-    */
   }
 
   @Patch('onboard/:id')

@@ -6,7 +6,7 @@ import { fetchRole } from "@/features/roles/services/fetch-role.service";
 import { createFileRoute, useParams } from "@tanstack/react-router";
 import RoleUpdateForm from "@/features/roles/components/role-update-form";
 import { queryOptions, useSuspenseQuery } from "@tanstack/react-query";
-import { QUERY_KEYS } from "@/config/query-key";
+import { QUERY_KEYS } from "@/features/common/constants/query-key.constant";
 
 const rolesQueryOptions = (id: string) =>
   queryOptions({

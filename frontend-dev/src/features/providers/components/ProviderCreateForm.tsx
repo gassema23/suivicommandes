@@ -7,13 +7,17 @@ import { Button } from "@/components/ui/shadcn/button";
 import FormError from "@/components/ui/shadcn/form-error";
 import { Input } from "@/components/ui/shadcn/input";
 import { Label } from "@/components/ui/shadcn/label";
-import { providerSchema, type ProviderFormData } from "../schemas/provider.schema";
+import {
+  providerSchema,
+  type ProviderFormData,
+} from "../schemas/provider.schema";
 import { createProvider } from "../services/create-provider.service";
-import { QUERY_KEYS } from "@/config/query-key";
+import { QUERY_KEYS } from "@/features/common/constants/query-key.constant";
 import { toast } from "sonner";
 import { FormActions } from "@/features/common/forms/components/FormActions";
 import InputContainer from "@/features/common/forms/components/InputContainer";
 import { providerFields } from "../configs/provider-fields";
+import { SUCCESS_MESSAGES } from "@/features/common/constants/messages.constant";
 
 export default function ProviderCreateForm() {
   const [backendError, setBackendError] = useState<string | null>(null);
@@ -39,7 +43,7 @@ export default function ProviderCreateForm() {
     onSuccess: () => {
       setBackendError(null);
       queryClient.invalidateQueries({ queryKey: QUERY_KEYS.PROVIDERS });
-      toast.success("Fournisseur créé avec succès");
+      toast.success(SUCCESS_MESSAGES.create("Fournisseur"));
       navigate({ to: "/pilotages/providers", search: { page: 1 } });
     },
     onError: (error: { message: string }) => {
@@ -82,7 +86,9 @@ export default function ProviderCreateForm() {
 
       <FormActions
         isLoading={createProviderMutation.isPending}
-        onCancel={() => navigate({ to: "/pilotages/providers", search: { page: 1 } })}
+        onCancel={() =>
+          navigate({ to: "/pilotages/providers", search: { page: 1 } })
+        }
       />
     </form>
   );

@@ -14,6 +14,7 @@ import { User } from '../../users/entities/user.entity';
 import { IsOptional, IsString, MaxLength } from 'class-validator';
 import { Service } from '../../services/entities/service.entity';
 import { ProviderServiceCategory } from '../../provider-service-categories/entities/provider-service-category.entity';
+import { RequestTypeServiceCategory } from '../../request-type-service-categories/entities/request-type-service-category.entity';
 
 @Entity('service_categories')
 @Index(['serviceCategoryName'])
@@ -85,4 +86,10 @@ export class ServiceCategory {
     (providerServiceCategory) => providerServiceCategory.serviceCategory,
   )
   providerServiceCategories: ProviderServiceCategory[];
+
+  @OneToMany(
+    () => RequestTypeServiceCategory,
+    (rtServiceCategory) => rtServiceCategory.serviceCategory,
+  )
+  requestTypeServiceCategories: RequestTypeServiceCategory[];
 }

@@ -27,6 +27,18 @@ export const sidebarMenu = {
         PERMISSIONS.HOLIDAYS.READ,
         PERMISSIONS.SECTORS.READ,
         PERMISSIONS.SERVICES.READ,
+        PERMISSIONS.SERVICE_CATEGORIES.READ,
+        PERMISSIONS.PROVIDERS.READ,
+        PERMISSIONS.PROVIDER_SERVICE_CATEGORIES.READ,
+        PERMISSIONS.CLIENTS.READ,
+        PERMISSIONS.SUBDIVISION_CLIENTS.READ,
+        PERMISSIONS.DELAY_TYPES.READ,
+        PERMISSIONS.REQUISITION_TYPES.READ,
+        PERMISSIONS.REQUEST_TYPES.READ,
+        PERMISSIONS.CONFORMITY_TYPES.READ,
+        PERMISSIONS.DELIVERABLES.READ,
+        PERMISSIONS.FLOWS.READ,
+        PERMISSIONS.PROVIDER_DISPONIBILITIES.READ,
       ],
       permissionLogic: "OR",
       items: [
@@ -46,6 +58,36 @@ export const sidebarMenu = {
           permission: PERMISSIONS.SERVICE_CATEGORIES.READ,
         },
         {
+          title: "Types de délai",
+          url: "/pilotages/delay-types",
+          permission: PERMISSIONS.DELAY_TYPES.READ,
+        },
+        {
+          title: "Types de réquisition",
+          url: "/pilotages/requisition-types",
+          permission: PERMISSIONS.REQUISITION_TYPES.READ,
+        },
+        {
+          title: "Types de demande",
+          url: "/pilotages/request-types",
+          permission: PERMISSIONS.REQUEST_TYPES.READ,
+        },
+        {
+          title: "Types de conformité",
+          url: "/pilotages/conformity-types",
+          permission: PERMISSIONS.CONFORMITY_TYPES.READ,
+        },
+        {
+          title: "Livrabes",
+          url: "/pilotages/deliverables",
+          permission: PERMISSIONS.DELIVERABLES.READ,
+        },
+        {
+          title: "Flux de transmission",
+          url: "/pilotages/flows",
+          permission: PERMISSIONS.FLOWS.READ,
+        },
+        {
           title: "Fournisseurs",
           url: "/pilotages/providers",
           permission: PERMISSIONS.PROVIDERS.READ,
@@ -54,6 +96,11 @@ export const sidebarMenu = {
           title: "Fournisseur par services",
           url: "/pilotages/provider-service-categories",
           permission: PERMISSIONS.PROVIDER_SERVICE_CATEGORIES.READ,
+        },
+        {
+          title: "Disponibilités fournisseur",
+          url: "/pilotages/provider-disponibilities",
+          permission: PERMISSIONS.PROVIDER_DISPONIBILITIES.READ,
         },
         {
           title: "Clients",

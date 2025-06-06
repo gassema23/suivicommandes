@@ -22,7 +22,7 @@ import { Pagination } from "@/components/ui/quebec/Pagination";
 import NoData from "@/components/ui/quebec/NoData";
 import { capitalizeFirstLetter } from "@/lib/utils";
 import type { UserResponse } from "@/features/users/types/user.type";
-import { QUERY_KEYS } from "@/config/query-key";
+import { QUERY_KEYS } from "@/features/common/constants/query-key.constant";
 
 const usersQueryOptions = queryOptions<UserResponse>({
   queryKey: QUERY_KEYS.USERS,

@@ -1,5 +1,5 @@
-import { API_ROUTE } from "@/config";
 import type { Client } from "@/features/clients/types/client.type";
+import { API_ROUTE } from "@/features/common/constants/api-route.constant";
 
 // Fetch resources depuis le backend
 export const fetchClients = async (): Promise<Client[]> => {

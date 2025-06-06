@@ -14,8 +14,9 @@ import {
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 import type { ServiceCategoryResponse } from "@/features/service-categories/types/service-category.type";
-import { QUERY_KEYS } from "@/config/query-key";
+import { QUERY_KEYS } from "@/features/common/constants/query-key.constant";
 import { toast } from "sonner";
+import { SUCCESS_MESSAGES } from "@/features/common/constants/messages.constant";
 
 const serviceCategoriesQueryOptions = (pageNumber: number) =>
   queryOptions<ServiceCategoryResponse>({
@@ -95,7 +96,7 @@ function RouteComponent() {
         deleteId={deleteId}
         onSuccess={() => {
           setDeleteId(null);
-          toast.success("Catégorie de service supprimée avec succès");
+          toast.success(SUCCESS_MESSAGES.delete("Catégorie de service"));
           queryClient.invalidateQueries({ queryKey: QUERY_KEYS.SERVICE_CATEGORIES });
         }}
       />

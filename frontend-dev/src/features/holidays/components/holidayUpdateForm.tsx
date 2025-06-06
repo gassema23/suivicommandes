@@ -12,7 +12,12 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import DatePicker from "@/components/ui/shadcn/date-picker";
 import { Textarea } from "@/components/ui/shadcn/textarea";
 import { updateHoliday } from "../services/update-holiday.service";
-import { QUERY_KEYS } from "@/config/query-key";
+import { QUERY_KEYS } from "@/features/common/constants/query-key.constant";
+import { FormActions } from "@/features/common/forms/components/FormActions";
+import InputContainer from "@/features/common/forms/components/InputContainer";
+import { holidayFields } from "../configs/holiday-fields";
+import { SUCCESS_MESSAGES } from "@/features/common/constants/messages.constant";
+import { toast } from "sonner";
 
 interface HolidayFormProps {
   holiday: Holiday;
@@ -39,10 +44,11 @@ export default function HolidayUpdateForm({ holiday }: HolidayFormProps) {
     formState: { errors },
   } = form;
 
-  const updateHolidayMutation = useMutation({
+  const updateMutation = useMutation({
     mutationFn: (data: HolidayFormData) => updateHoliday(holiday.id, data),
     onSuccess: () => {
       setBackendError(null);
+      toast.success(SUCCESS_MESSAGES.update("Jour férié"));
       queryClient.invalidateQueries({ queryKey: QUERY_KEYS.HOLIDAYS });
       navigate({ to: "/pilotages/holidays" });
     },
@@ -52,7 +58,8 @@ export default function HolidayUpdateForm({ holiday }: HolidayFormProps) {
   });
 
   const onSubmit = (data: HolidayFormData) => {
-    updateHolidayMutation.mutate(data);
+    console.log("Submitting data:", data);
+    updateMutation.mutate(data);
   };
 
   return (
@@ -66,82 +73,58 @@ export default function HolidayUpdateForm({ holiday }: HolidayFormProps) {
           message={backendError}
         />
       )}
-      <div className="grid grid-cols-12 gap-2 items-center">
-        <Label className="col-span-12 xl:col-span-4" htmlFor="holidayName">
-          Jour férié
-        </Label>
-        <div className="col-span-12 xl:col-span-8">
-          <Input
-            className="block w-full"
-            id="holidayName"
-            {...register("holidayName")}
-            required
-          />
-          {errors.holidayName && (
-            <p className="text-destructive text-sm mt-1">
-              {errors.holidayName.message}
-            </p>
-          )}
-        </div>
-      </div>
-      <div className="grid grid-cols-12 gap-2 items-center">
-        <Label className="col-span-12 xl:col-span-4">Date du jour férié</Label>
-        <div className="col-span-12 xl:col-span-8">
-          <Controller
-            control={control}
-            name="holidayDate"
-            render={({ field }) => (
-              <DatePicker
-                mode="single"
-                value={field.value}
-                onChange={(date) => field.onChange(date)}
-              />
-            )}
-          />
-          {errors.holidayDate && (
-            <p className="text-destructive text-sm mt-1">
-              {errors.holidayDate.message}
-            </p>
-          )}
-        </div>
-      </div>
-      <div className="grid grid-cols-12 gap-2 items-center">
-        <Label
-          className="col-span-12 xl:col-span-4"
-          htmlFor="holidayDescription"
-        >
-          Description
-        </Label>
-        <div className="col-span-12 xl:col-span-8">
-          <Textarea
-            rows={3}
-            className="block w-full"
-            id="holidayDescription"
-            {...register("holidayDescription")}
-          />
-          {errors.holidayDescription && (
-            <p className="text-destructive text-sm mt-1">
-              {errors.holidayDescription.message}
-            </p>
-          )}
-        </div>
-      </div>
 
-      {/* Actions du formulaire */}
-      <div className="flex gap-4 justify-end">
-        <Button
-          type="button"
-          variant="outline"
-          onClick={() => navigate({ to: "/pilotages/holidays" })}
-          disabled={form.formState.isSubmitting}
+      {holidayFields.map((field) => (
+        <InputContainer
+          key={field.name}
+          label={field.label}
+          error={errors[field.name]?.message}
+          htmlFor={field.name}
+          required={field.required}
         >
-          Annuler
-        </Button>
+          {field.component === "input" && (
+            <Input
+              type={field.type}
+              className="block w-full"
+              id={field.name}
+              placeholder={field.placeholder}
+              {...register(field.name)}
+            />
+          )}
+          {field.component === "textarea" && (
+            <Textarea
+              rows={field.rows}
+              className="block w-full"
+              id={field.name}
+              placeholder={field.placeholder}
+              {...register(field.name)}
+            />
+          )}
+          {field.component === "date-picker" && (
+            <Controller
+              control={control}
+              name="holidayDate"
+              render={({ field }) => (
+                <DatePicker
+                  mode="single"
+                  value={field.value}
+                  onChange={(date) => field.onChange(date)}
+                />
+              )}
+            />
+          )}
+        </InputContainer>
+      ))}
 
-        <Button type="submit" disabled={form.formState.isSubmitting}>
-          {form.formState.isSubmitting ? "Mise à jour..." : "Mettre à jour"}
-        </Button>
-      </div>
+      <FormActions
+        isLoading={updateMutation.isPending}
+        onCancel={() =>
+          navigate({
+            to: "/pilotages/holidays",
+            search: { page: 1 },
+          })
+        }
+      />
     </form>
   );
 }

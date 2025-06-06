@@ -1,10 +1,12 @@
 import { LoadingProgress } from "@/components/ui/loader/LoadingProgress";
-import { API_ROUTE } from "@/config";
-import { QUERY_KEYS } from "@/config/query-key";
+import { SessionExpiryModal } from "@/features/common/auth/components/SessionExpiryModal";
+import { API_ROUTE } from "@/features/common/constants/api-route.constant";
+import { QUERY_KEYS } from "@/features/common/constants/query-key.constant";
 import type { User } from "@/features/users/types/user.type";
 import logoutUser from "@/lib/logout-user";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import * as React from "react";
+import Cookies from "js-cookie"; 
 
 export interface AuthContext {
   isAuthenticated: boolean;
@@ -28,6 +30,9 @@ const AuthContext = React.createContext<AuthContext | null>(null);
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const queryClient = useQueryClient();
+
+  const [modalOpen, setModalOpen] = React.useState(false);
+  const [secondsLeft, setSecondsLeft] = React.useState(30);
 
   const {
     data: user,
@@ -107,6 +112,37 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     [user]
   );
 
+  React.useEffect(() => {
+    const interval = setInterval(() => {
+      const expiresAt = Cookies.get("accessTokenExpiresAt");
+      if (expiresAt) {
+        const msLeft = parseInt(expiresAt, 10) - Date.now();
+        const seconds = Math.floor(msLeft / 1000);
+        if (seconds <= 30 && seconds > 0) {
+          setModalOpen(true);
+          setSecondsLeft(seconds);
+        } else if (seconds <= 0) {
+          setModalOpen(false);
+          logout();
+        } else {
+          setModalOpen(false);
+        }
+      }
+    }, 1000);
+    return () => clearInterval(interval);
+  }, [logout]);
+
+  // Rafraîchir le token
+  const handleContinue = async () => {
+    setModalOpen(false);
+    // Appelle ton endpoint de refresh
+    await fetch(`${API_ROUTE}/auth/refresh`, {
+      method: "POST",
+      credentials: "include",
+    });
+    refetchUser();
+  };
+
   const isAuthenticated = !!user;
 
   if (isLoading) {
@@ -132,6 +168,12 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       }}
     >
       {children}
+      <SessionExpiryModal
+        open={modalOpen}
+        timer={secondsLeft}
+        onLogout={logout}
+        onContinue={handleContinue}
+      />
     </AuthContext.Provider>
   );
 }

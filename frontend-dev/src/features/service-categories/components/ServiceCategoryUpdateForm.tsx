@@ -17,11 +17,12 @@ import { updateServiceCategory } from "../services/update-service-category.servi
 import { useDependentQuery } from "@/features/common/dependant-select/hooks/useDependentQuery";
 import { DependentSelect } from "@/features/common/dependant-select/components/DependentSelect";
 import { fetchServicesBySector } from "@/features/services/services/fetch-services-by-sector.service";
-import { QUERY_KEYS } from "@/config/query-key";
+import { QUERY_KEYS } from "@/features/common/constants/query-key.constant";
 import { toast } from "sonner";
 import { FormActions } from "@/features/common/forms/components/FormActions";
 import InputContainer from "@/features/common/forms/components/InputContainer";
 import { serviceCategoryFields } from "../configs/service-category-fields";
+import { SUCCESS_MESSAGES } from "@/features/common/constants/messages.constant";
 
 interface ServiceCategoryUpdateFormProps {
   serviceCategory: ServiceCategory;
@@ -65,7 +66,7 @@ export default function ServiceCategoryUpdateForm({
       updateServiceCategory(serviceCategory.id, data),
     onSuccess: () => {
       setBackendError(null);
-      toast.success("Catégorie de service mise à jour avec succès");
+      toast.success(SUCCESS_MESSAGES.update("Catégorie de service"));
       queryClient.invalidateQueries({
         queryKey: QUERY_KEYS.SERVICE_CATEGORIES,
       });

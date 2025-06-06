@@ -3,7 +3,7 @@ import type { User } from '../types/user.type';
 import type { ColumnDefinition } from '@/features/table/types/table.types';
 import { ReusableTable } from '@/features/table/ReusableTable';
 import { userService } from '../services/users-service.service';
-import { QUERY_KEYS } from '@/config/query-key';
+import { QUERY_KEYS } from '@/features/common/constants/query-key.constant';
 const UsersTable: React.FC = () => {
   const columns: ColumnDefinition<User>[] = [
     {

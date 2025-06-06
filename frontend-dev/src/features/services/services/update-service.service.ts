@@ -1,4 +1,4 @@
-import { API_ROUTE } from "@/config";
+import { API_ROUTE } from "@/features/common/constants/api-route.constant";
 import type { ServiceFormData } from "../schemas/service.schema";
 
 export async function updateService(serviceId: string, data: ServiceFormData) {

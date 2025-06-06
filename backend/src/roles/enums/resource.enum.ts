@@ -10,4 +10,12 @@ export enum Resource {
   SUBDIVISION_CLIENTS = 'subdivision_clients',
   PROVIDERS = 'providers',
   PROVIDER_SERVICE_CATEGORIES = 'provider_service_categories',
+  DELAY_TYPES = 'delay_types',
+  REQUISITION_TYPES = 'requisition_types',
+  REQUEST_TYPES = 'request_types',
+  CONFORMITY_TYPES = 'conformity_types',
+  DELIVERABLES = 'deliverables',
+  FLOWS = 'flows',
+  PROVIDER_DISPONIBILITIES = 'provider_disponibilities',
+  REQUEST_TYPE_SERVICE_CATEGORIES = 'request_type_service_categories',
 }

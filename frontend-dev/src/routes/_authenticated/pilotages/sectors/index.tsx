@@ -14,8 +14,9 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 import { getSectors } from "@/features/sectors/services/get-sectors.service";
 import type { SectorsResponse } from "@/features/sectors/types/sector.type";
-import { QUERY_KEYS } from "@/config/query-key";
+import { QUERY_KEYS } from "@/features/common/constants/query-key.constant";
 import { toast } from "sonner";
+import { SUCCESS_MESSAGES } from "@/features/common/constants/messages.constant";
 
 const sectorsQueryOptions = (pageNumber: number) =>
   queryOptions<SectorsResponse>({
@@ -90,7 +91,7 @@ function RouteComponent() {
         deleteId={deleteId}
         onSuccess={() => {
           setDeleteId(null);
-          toast.success("Le secteur a été supprimé avec succès.");
+          toast.success(SUCCESS_MESSAGES.delete("Secteur"));
           queryClient.invalidateQueries({ queryKey: QUERY_KEYS.SECTORS });
         }}
       />

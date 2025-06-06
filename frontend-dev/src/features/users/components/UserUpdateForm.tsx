@@ -19,7 +19,7 @@ import { updateUser } from "../services/update-user.service";
 import { useState } from "react";
 import FormError from "@/components/ui/shadcn/form-error";
 import { Label } from "@/components/ui/shadcn/label";
-import { QUERY_KEYS } from "@/config/query-key";
+import { QUERY_KEYS } from "@/features/common/constants/query-key.constant";
 
 interface UpdateUserFormProps {
   user: User;

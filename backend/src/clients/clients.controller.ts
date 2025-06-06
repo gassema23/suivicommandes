@@ -93,7 +93,7 @@ export class ClientsController {
   }
 
   @Patch(':id')
-  @Permissions([{ resource: Resource.HOLIDAYS, actions: [Action.UPDATE] }])
+  @Permissions([{ resource: Resource.CLIENTS, actions: [Action.UPDATE] }])
   @ApiOperation({ summary: 'Mettre à jour le jour férié' })
   @ApiResponse({ status: 200, description: 'Jour férié mise à jour' })
   @ApiResponse({ status: 404, description: 'Jour férié non trouvée' })

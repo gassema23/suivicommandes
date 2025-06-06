@@ -12,11 +12,12 @@ import { Controller, useForm } from "react-hook-form";
 import { Switch } from "@/components/ui/shadcn/switch";
 import { updateSector } from "../services/update-sector.service";
 import type { Sector } from "../types/sector.type";
-import { QUERY_KEYS } from "@/config/query-key";
+import { QUERY_KEYS } from "@/features/common/constants/query-key.constant";
 import { toast } from "sonner";
 import { FormActions } from "@/features/common/forms/components/FormActions";
 import { sectorFields } from "../configs/sector-fields";
 import InputContainer from "@/features/common/forms/components/InputContainer";
+import { SUCCESS_MESSAGES } from "@/features/common/constants/messages.constant";
 
 interface SectorFormProps {
   sector: Sector;
@@ -50,7 +51,7 @@ export default function SectorUpdateForm({ sector }: SectorFormProps) {
     mutationFn: (data: SectorFormData) => updateSector(sector.id, data),
     onSuccess: () => {
       setBackendError(null);
-      toast.success("Le secteur a été mis à jour avec succès.");
+      toast.success(SUCCESS_MESSAGES.update("Secteur"));
       queryClient.invalidateQueries({ queryKey: QUERY_KEYS.SECTORS });
       navigate({ to: "/pilotages/sectors", search: { page: 1 } });
     },

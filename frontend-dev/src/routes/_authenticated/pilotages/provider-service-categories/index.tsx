@@ -14,8 +14,9 @@ import {
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 import type { ProviderServiceCategoryResponse } from "@/features/provider-service-categories/types/provider-service-category.type";
-import { QUERY_KEYS } from "@/config/query-key";
+import { QUERY_KEYS } from "@/features/common/constants/query-key.constant";
 import { toast } from "sonner";
+import { SUCCESS_MESSAGES } from "@/features/common/constants/messages.constant";
 
 const providerServiceCategoriesQueryOptions = (pageNumber: number) =>
   queryOptions<ProviderServiceCategoryResponse>({
@@ -102,9 +103,7 @@ function RouteComponent() {
         deleteId={deleteId}
         onSuccess={() => {
           setDeleteId(null);
-          toast.success(
-            "Le fournisseur par service a été supprimé avec succès."
-          );
+          toast.success(SUCCESS_MESSAGES.delete("Fournisseur par service"));
           queryClient.invalidateQueries({
             queryKey: QUERY_KEYS.PROVIDER_SERVICE_CATEGORIES,
           });

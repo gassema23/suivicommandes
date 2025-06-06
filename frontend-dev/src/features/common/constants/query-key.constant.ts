@@ -39,6 +39,14 @@ export const QUERY_KEYS = {
   PROVIDER_SERVICE_CATEGORIES_WITH_PAGE: (page: number) =>
     ["providerServiceCategories", page] as const,
 
+  // Disponibilité des Fournisseurs
+  PROVIDER_DISPONIBILITIES: ["providerDisponibilities"] as const,
+  PROVIDER_DISPONIBILITY_WITH_ID: (providerId?: string | null) =>
+    ["providerDisponibilities", providerId] as const,
+  PROVIDER_DISPONIBILITIES_LISTS: ["providerDisponibilitiesLists"] as const,
+  PROVIDER_DISPONIBILITIES_WITH_PAGE: (page: number) =>
+    ["providerDisponibilities", page] as const,
+
   // Clients
   CLIENTS: ["clients"] as const,
   CLIENTS_LISTS: ["clientsLists"] as const,
@@ -56,6 +64,7 @@ export const QUERY_KEYS = {
   TEAMS: ["teams"] as const,
   TEAMS_LISTS: ["teamsLists"] as const,
   TEAM_WITH_ID: (teamId?: string | null) => ["teams", teamId] as const,
+  TEAMS_WITH_PAGE: (page: number) => ["teams", page] as const,
 
   // Utilisateurs
   USERS: ["users"] as const,
@@ -63,6 +72,7 @@ export const QUERY_KEYS = {
   USERS_WITH_PAGE: (page: number) => ["usersWithPage", page] as const,
   ME: ["me"] as const,
   PROFILE: ["profile"] as const,
+  OWNER_LISTS: ["ownerLists"] as const,
 
   // Rôles et ressources
   ROLES: ["roles"] as const,
@@ -74,4 +84,42 @@ export const QUERY_KEYS = {
   HOLIDAYS: ["holidays"] as const,
   HOLIDAY_WITH_ID: (holidayId?: string | null) =>
     ["holidays", holidayId] as const,
+  HOLIDAYS_WITH_PAGE: (page: number) => ["holidays", page] as const,
+
+  // Type de délai
+  DELAY_TYPES: ["delayTypes"] as const,
+  DELAY_TYPE_WITH_ID: (delayTypeId?: string | null) =>
+    ["delayTypes", delayTypeId] as const,
+  DELAY_TYPES_WITH_PAGE: (page: number) => ["delayTypes", page] as const,
+
+  // Type de réquisition
+  REQUISITION_TYPES: ["requisitionTypes"] as const,
+  REQUISITION_TYPE_WITH_ID: (requisitionTypeId?: string | null) =>
+    ["requisitionTypes", requisitionTypeId] as const,
+  REQUISITION_TYPES_WITH_PAGE: (page: number) =>
+    ["requisitionTypes", page] as const,
+
+  // Type de demande
+  REQUEST_TYPES: ["requestTypes"] as const,
+  REQUEST_TYPE_WITH_ID: (requestTypeId?: string | null) =>
+    ["requestTypes", requestTypeId] as const,
+  REQUEST_TYPES_WITH_PAGE: (page: number) => ["requestTypes", page] as const,
+
+  // Type de conformité
+  CONFORMITY_TYPES: ["conformityTypes"] as const,
+  CONFORMITY_TYPE_WITH_ID: (conformityTypeId?: string | null) =>
+    ["conformityTypes", conformityTypeId] as const,
+  CONFORMITY_TYPES_WITH_PAGE: (page: number) =>
+    ["conformityTypes", page] as const,
+
+  // Livrables
+  DELIVERABLES: ["deliverables"] as const,
+  DELIVERABLE_WITH_ID: (deliverableId?: string | null) =>
+    ["deliverables", deliverableId] as const,
+  DELIVERABLES_WITH_PAGE: (page: number) => ["deliverables", page] as const,
+
+  // Flux de transmission
+  FLOWS: ["flow"] as const,
+  FLOW_WITH_ID: (flowId?: string | null) => ["flow", flowId] as const,
+  FLOWS_WITH_PAGE: (page: number) => ["flow", page] as const,
 };

@@ -12,7 +12,14 @@ import {
   redirect,
   useMatches,
 } from "@tanstack/react-router";
-import { AlertOctagon, AlertTriangle, CheckCircle2, Info, Loader2, X } from "lucide-react";
+import {
+  AlertOctagon,
+  AlertTriangle,
+  CheckCircle2,
+  Info,
+  Loader2,
+  X,
+} from "lucide-react";
 
 export interface AuthLayoutProps {
   name?: string;
@@ -32,6 +39,9 @@ type StaticData = {
 };
 
 export const Route = createFileRoute("/_authenticated")({
+  head: () => ({
+    meta: [{ title: "OSCAR" }],
+  }),
   beforeLoad: ({ context, location }) => {
     if (!context.auth.isAuthenticated) {
       throw redirect({

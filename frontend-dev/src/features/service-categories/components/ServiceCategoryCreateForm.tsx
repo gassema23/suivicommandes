@@ -16,11 +16,12 @@ import { Switch } from "@/components/ui/shadcn/switch";
 import { DependentSelect } from "@/features/common/dependant-select/components/DependentSelect";
 import { useDependentQuery } from "@/features/common/dependant-select/hooks/useDependentQuery";
 import { fetchServicesBySector } from "@/features/services/services/fetch-services-by-sector.service";
-import { QUERY_KEYS } from "@/config/query-key";
+import { QUERY_KEYS } from "@/features/common/constants/query-key.constant";
 import { toast } from "sonner";
 import { FormActions } from "@/features/common/forms/components/FormActions";
 import InputContainer from "@/features/common/forms/components/InputContainer";
 import { serviceCategoryFields } from "../configs/service-category-fields";
+import { SUCCESS_MESSAGES } from "@/features/common/constants/messages.constant";
 
 export default function ServiceCategoryCreateForm() {
   const [backendError, setBackendError] = useState<string | null>(null);
@@ -53,7 +54,7 @@ export default function ServiceCategoryCreateForm() {
     mutationFn: (data: ServiceCategoryFormData) => createServiceCategory(data),
     onSuccess: () => {
       setBackendError(null);
-      toast.success("Catégorie de service créée avec succès");
+      toast.success(SUCCESS_MESSAGES.create("Catégorie de service"));
       queryClient.invalidateQueries({
         queryKey: QUERY_KEYS.SERVICE_CATEGORIES,
       });

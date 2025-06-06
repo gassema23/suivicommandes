@@ -1,4 +1,4 @@
-import { API_ROUTE } from "@/config";
+import { API_ROUTE } from "@/features/common/constants/api-route.constant";
 import type { Role, RoleResponse } from "../types/role.type";
 
 export const getRoles = async (): Promise<RoleResponse> => {

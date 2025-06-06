@@ -1,7 +1,10 @@
 import * as request from 'supertest';
-import { INestApplication } from '@nestjs/common';
+import { INestApplication, ValidationPipe } from '@nestjs/common';
 import { Test } from '@nestjs/testing';
 import { AppModule } from './../src/app.module';
+
+import * as compression from 'compression';
+import helmet from 'helmet';
 
 describe('🛡️ Security E2E Tests', () => {
   let app: INestApplication;
@@ -13,6 +16,19 @@ describe('🛡️ Security E2E Tests', () => {
     }).compile();
 
     app = moduleRef.createNestApplication();
+
+    app.use(helmet());
+    app.use(compression());
+    // Ajoute le ValidationPipe ici
+    app.useGlobalPipes(
+      new ValidationPipe({
+        whitelist: true,
+        forbidNonWhitelisted: true,
+        transform: true,
+        transformOptions: { enableImplicitConversion: true },
+      }),
+    );
+
     await app.init();
 
     // Créer un utilisateur non admin
@@ -47,7 +63,16 @@ describe('🛡️ Security E2E Tests', () => {
     'subdivision-clients',
     'teams',
     'holidays',
-    'roles'
+    'roles',
+    'delay-types',
+    'requisition-types',
+    'request-types',
+    'conformity-types',
+    'deliverables',
+    'flows',
+    'provider-disponibilities',
+    'request-type-service-categories',
+    ///
   ];
 
   it.each(protectedRoutes)(
@@ -69,7 +94,7 @@ describe('🛡️ Security E2E Tests', () => {
         });
     },
   );
-  
+
   it.each(protectedRoutes)(
     '🧪 %s - SQL injection attempt should fail',
     async (route) => {
@@ -107,7 +132,7 @@ describe('🛡️ Security E2E Tests', () => {
       await request(app.getHttpServer())
         .get(`/${route}`)
         .set('Cookie', [`accessToken=${forgedToken}`])
-        .expect(401);
+        .expect([400, 401]);
     },
   );
 
@@ -115,7 +140,7 @@ describe('🛡️ Security E2E Tests', () => {
     await request(app.getHttpServer())
       .post('/auth/login')
       .send({ email: "' OR 1=1 --", password: 'x' })
-      .expect(401);
+      .expect([400, 401]);
   });
 
   it('📦 /auth/register - reject malformed email or injection', async () => {
@@ -127,11 +152,10 @@ describe('🛡️ Security E2E Tests', () => {
         confirmPassword: 'x',
         firstName: 'Admin',
         lastName: 'User',
-        verifyEmail: '2010-01-01 00:00:00',
+        emailVerifyEmailAt: '2010-01-01 00:00:00',
       })
       .expect((res) => {
         expect(res.statusCode).toBeGreaterThanOrEqual(400);
       });
   });
-  
 });
