@@ -29,6 +29,7 @@ import { DeliverablesModule } from './deliverables/deliverables.module';
 import { FlowsModule } from './flows/flows.module';
 import { ProviderDisponibilitiesModule } from './provider-disponibilities/provider-disponibilities.module';
 import { RequestTypeServiceCategoriesModule } from './request-type-service-categories/request-type-service-categories.module';
+import { RequestTypeDelaysModule } from './request-type-delays/request-type-delays.module';
 
 @Module({
   imports: [
@@ -130,6 +131,7 @@ import { RequestTypeServiceCategoriesModule } from './request-type-service-categ
     FlowsModule,
     ProviderDisponibilitiesModule,
     RequestTypeServiceCategoriesModule,
+    RequestTypeDelaysModule,
   ],
 })
 export class AppModule {}

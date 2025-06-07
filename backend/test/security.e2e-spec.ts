@@ -72,6 +72,7 @@ describe('🛡️ Security E2E Tests', () => {
     'flows',
     'provider-disponibilities',
     'request-type-service-categories',
+    'request-type-delays'
     ///
   ];
 

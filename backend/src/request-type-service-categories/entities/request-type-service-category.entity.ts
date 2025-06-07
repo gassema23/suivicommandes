@@ -9,10 +9,12 @@ import {
   Entity,
   JoinColumn,
   ManyToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
   Unique,
   UpdateDateColumn,
 } from 'typeorm';
+import { RequestTypeDelay } from '../../request-type-delays/entities/request-type-delay.entity';
 
 @Entity('request_type_service_categories')
 @Unique(['serviceCategory', 'requestType'])
@@ -64,4 +66,10 @@ export class RequestTypeServiceCategory {
   @DeleteDateColumn({ name: 'deleted_at' })
   @IsOptional()
   readonly deletedAt?: Date;
+
+  @OneToMany(
+    () => RequestTypeDelay,
+    (requestTypeDelay) => requestTypeDelay.delayType,
+  )
+  requestTypeDelays: RequestTypeDelay[];
 }

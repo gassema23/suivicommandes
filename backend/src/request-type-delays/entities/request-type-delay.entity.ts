@@ -8,30 +8,36 @@ import {
   ManyToOne,
   JoinColumn,
   Index,
-  OneToMany,
 } from 'typeorm';
 import { User } from '../../users/entities/user.entity';
-import { IsDate, IsOptional, IsString, MaxLength } from 'class-validator';
-import { RequestTypeDelay } from '../../request-type-delays/entities/request-type-delay.entity';
+import { IsOptional } from 'class-validator';
+import { RequestTypeServiceCategory } from '../../request-type-service-categories/entities/request-type-service-category.entity';
+import { DelayType } from '../../delay-types/entities/delay-type.entity';
 
-@Entity('delay_types')
-@Index(['delayTypeName'])
+@Entity('request_type_delays')
 @Index(['deletedAt'])
-export class DelayType {
+export class RequestTypeDelay {
   @PrimaryGeneratedColumn('uuid')
   readonly id: string;
 
-  @Column({ name: 'delay_type_name', length: 125, nullable: true })
-  @IsOptional()
-  @IsString()
-  @MaxLength(125)
-  delayTypeName?: string;
+  @ManyToOne(
+    () => RequestTypeServiceCategory,
+    (requestTypeServiceCategory) =>
+      requestTypeServiceCategory.requestTypeDelays,
+    { nullable: false },
+  )
+  @JoinColumn({ name: 'request_type_service_category_id' })
+  requestTypeServiceCategory: RequestTypeServiceCategory;
 
-  @Column({ name: 'delay_type_description', length: 500, nullable: true })
+  @ManyToOne(() => DelayType, (delayType) => delayType.requestTypeDelays, {
+    nullable: false,
+  })
+  @JoinColumn({ name: 'delay_type_id' })
+  delayType: DelayType;
+
+  @Column({ name: 'delay_value', type: 'int', default: 0 })
   @IsOptional()
-  @IsString()
-  @MaxLength(500)
-  delayTypeDescription?: string;
+  delayValue?: number;
 
   // Relation vers l'utilisateur ayant créé l'équipe
   @ManyToOne(() => User, { nullable: true })
@@ -60,10 +66,4 @@ export class DelayType {
   @DeleteDateColumn({ name: 'deleted_at' })
   @IsOptional()
   readonly deletedAt?: Date;
-
-  @OneToMany(
-    () => RequestTypeDelay,
-    (requestTypeDelay) => requestTypeDelay.delayType,
-  )
-  requestTypeDelays: RequestTypeDelay[];
 }

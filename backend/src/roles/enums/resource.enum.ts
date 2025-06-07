@@ -18,4 +18,5 @@ export enum Resource {
   FLOWS = 'flows',
   PROVIDER_DISPONIBILITIES = 'provider_disponibilities',
   REQUEST_TYPE_SERVICE_CATEGORIES = 'request_type_service_categories',
+  REQUEST_TYPE_DELAYS = 'request_type_delays',
 }

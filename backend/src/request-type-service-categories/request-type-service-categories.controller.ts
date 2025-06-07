@@ -28,16 +28,25 @@ import { CurrentUser } from '../auth/decorators/current-user.decorator';
 import { User } from '../users/entities/user.entity';
 import { CreateRequestTypeServiceCategoryDto } from './dto/create-request-type-service-category.dto';
 import { instanceToPlain } from 'class-transformer';
+import { UpdateRequestTypeServiceCategoryDto } from './dto/update-request-type-service-category.dto';
 
 @Controller('request-type-service-categories')
-@ApiTags('Catégories de services fournisseurs')
+@ApiTags('Service Provider Categories')
 @UseGuards(AuthGuard('jwt'), AuthorizationsGuard)
 @ApiBearerAuth()
 export class RequestTypeServiceCategoriesController {
+  /**
+   * Controller for managing request type service categories, including CRUD operations and pagination.
+   * @param requestTypeServiceCategoriesService - Service for handling business logic related to request type service categories.
+   */
   constructor(
     private readonly requestTypeServiceCategoriesService: RequestTypeServiceCategoriesService,
   ) {}
 
+  /**
+   * Controller for managing request type service categories, including retrieving a paginated list with optional search.
+   * @param requestTypeServiceCategoriesService - Service for handling request type service categories.
+   */
   @Get()
   @Permissions([
     {
@@ -68,6 +77,12 @@ export class RequestTypeServiceCategoriesController {
     };
   }
 
+  /**
+   * Controller for creating a new request type service category.
+   * @param createRequestTypeServiceCategoryDto - DTO containing the data for the new request type service category.
+   * The `name` field is required and must be a string. The `description` field is optional and must be a string if provided.
+   * @param currentUser - The user creating the request type service category.
+   */
   @Post()
   @Permissions([
     {
@@ -93,6 +108,10 @@ export class RequestTypeServiceCategoriesController {
     );
   }
 
+  /**
+   * Controller for retrieving a specific request type service category by its ID.
+   * @param id - The ID of the request type service category to retrieve.
+   */
   @Get(':id')
   @Permissions([
     {
@@ -111,6 +130,13 @@ export class RequestTypeServiceCategoriesController {
     return this.requestTypeServiceCategoriesService.findOne(id);
   }
 
+  /**
+   * Controller for updating an existing request type service category.
+   * @param id - The ID of the request type service category to update.
+   * @param updateRequestTypeServiceCategoryDto - DTO containing the updated data for the request type service category.
+   * The `name` field is required and must be a string. The `description` field is optional and must be a string if provided.
+   * @param currentUser - The user updating the request type service category.
+   */
   @Patch(':id')
   @Permissions([
     {
@@ -128,7 +154,7 @@ export class RequestTypeServiceCategoriesController {
   async update(
     @Param('id', ParseUUIDPipe) id: string,
     @Body()
-    updateRequestTypeServiceCategoryDto: CreateRequestTypeServiceCategoryDto,
+    updateRequestTypeServiceCategoryDto: UpdateRequestTypeServiceCategoryDto,
     @CurrentUser() currentUser: User,
   ) {
     return this.requestTypeServiceCategoriesService.update(
@@ -138,6 +164,11 @@ export class RequestTypeServiceCategoriesController {
     );
   }
 
+  /**
+   * Controller for deleting a request type service category by its ID.
+   * @param id - The ID of the request type service category to delete.
+   * @param currentUser - The user performing the deletion.
+   */
   @Delete()
   @Permissions([
     {
