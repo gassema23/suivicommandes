@@ -6,7 +6,7 @@ import type { User } from "@/features/users/types/user.type";
 import logoutUser from "@/lib/logout-user";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import * as React from "react";
-import Cookies from "js-cookie"; 
+import Cookies from "js-cookie";
 
 export interface AuthContext {
   isAuthenticated: boolean;
@@ -33,6 +33,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const [modalOpen, setModalOpen] = React.useState(false);
   const [secondsLeft, setSecondsLeft] = React.useState(30);
+  const intervalRef = React.useRef<NodeJS.Timeout | null>(null);
 
   const {
     data: user,
@@ -54,6 +55,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const logout = React.useCallback(async () => {
     await logoutUser();
+
+    Cookies.remove("accessTokenExpiresAt");
     await queryClient.invalidateQueries();
     queryClient.clear();
     window.location.href = "/login";
@@ -111,9 +114,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     () => user?.role?.permissions || [],
     [user]
   );
-
   React.useEffect(() => {
-    const interval = setInterval(() => {
+    intervalRef.current = setInterval(() => {
       const expiresAt = Cookies.get("accessTokenExpiresAt");
       if (expiresAt) {
         const msLeft = parseInt(expiresAt, 10) - Date.now();
@@ -129,9 +131,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         }
       }
     }, 1000);
-    return () => clearInterval(interval);
+    return () => {
+      if (intervalRef.current) clearInterval(intervalRef.current);
+    };
   }, [logout]);
-
   // Rafraîchir le token
   const handleContinue = async () => {
     setModalOpen(false);

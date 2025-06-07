@@ -364,6 +364,43 @@ export class AuthService {
     }
   }
 
+  async setAuthCookies(
+    res: Response,
+    accessToken: string,
+    refreshToken: string,
+  ) {
+    const jwtExpirationAcessToken =
+      this.configService.getOrThrow<string>('JWT_EXPIRATION') || '1m';
+    const jwtExpirationRefreshToken =
+      this.configService.getOrThrow<string>('JWT_REFRESH_EXPIRATION') || '30d';
+
+    const maxAgeAcessToken = parseDurationToMs(jwtExpirationAcessToken);
+    const maxAgeRefreshToken = parseDurationToMs(jwtExpirationRefreshToken);
+
+    res.cookie('accessToken', accessToken, {
+      httpOnly: true,
+      sameSite: 'strict',
+      secure: process.env.NODE_ENV === 'production',
+      maxAge: maxAgeAcessToken,
+    });
+    res.cookie('refreshToken', refreshToken, {
+      httpOnly: true,
+      sameSite: 'strict',
+      secure: process.env.NODE_ENV === 'production',
+      maxAge: maxAgeRefreshToken,
+    });
+
+    const decoded = this.jwtService.decode(accessToken) as { exp?: number };
+    if (decoded?.exp) {
+      res.cookie('accessTokenExpiresAt', decoded.exp * 1000, {
+        httpOnly: false,
+        sameSite: 'strict',
+        secure: process.env.NODE_ENV === 'production',
+        maxAge: maxAgeAcessToken,
+      });
+    }
+  }
+
   async logout(userId: string): Promise<{ message: string }> {
     await this.userRepository.update(userId, {
       rememberToken: '',

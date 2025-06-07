@@ -10,6 +10,7 @@ import {
   Res,
   Param,
   Patch,
+  Req,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import {
@@ -19,7 +20,7 @@ import {
   ApiBearerAuth,
 } from '@nestjs/swagger';
 import { Throttle } from '@nestjs/throttler';
-import { Response } from 'express';
+import { Response, Request } from 'express';
 
 import { AuthService } from './auth.service';
 import { TwoFactorAuthService } from './two-factor-auth.service';
@@ -31,7 +32,6 @@ import { ResetPasswordDto } from './dto/reset-password.dto';
 import { CurrentUser } from './decorators/current-user.decorator';
 import { User } from '../users/entities/user.entity';
 import { EnableTwoFactorDto } from './dto/enable-two-factor.dto';
-import { RefreshTokenDto } from './dto/refresh-token.dto';
 import { instanceToPlain } from 'class-transformer';
 import { OnboardingDto } from './dto/onboarding.dto';
 
@@ -158,8 +158,16 @@ export class AuthController {
     status: 401,
     description: 'Token de rafraîchissement invalide',
   })
-  async refresh(@Body() refreshTokenDto: RefreshTokenDto) {
-    return this.authService.refreshToken(refreshTokenDto.refreshToken);
+  async refresh(@Req() req: Request, @Res() res: Response) {
+    // Assuming the refresh token is stored in a cookie named 'refreshToken'
+    const refreshToken = req.cookies?.refreshToken;
+    if (!refreshToken) {
+      return res.status(401).json({ message: 'Refresh token manquant' });
+    }
+    const { accessToken, refreshToken: newRefreshToken } =
+      await this.authService.refreshToken(refreshToken);
+    await this.authService.setAuthCookies(res, accessToken, newRefreshToken);
+    return res.json({ success: true });
   }
 
   @Get('me')
@@ -170,7 +178,6 @@ export class AuthController {
   })
   @ApiResponse({ status: 200, description: 'Informations utilisateur' })
   async getProfile(@CurrentUser() user: User) {
-
     return { user: instanceToPlain(user) };
   }
 
