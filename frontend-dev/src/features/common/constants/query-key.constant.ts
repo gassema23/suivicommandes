@@ -104,6 +104,7 @@ export const QUERY_KEYS = {
   REQUEST_TYPE_WITH_ID: (requestTypeId?: string | null) =>
     ["requestTypes", requestTypeId] as const,
   REQUEST_TYPES_WITH_PAGE: (page: number) => ["requestTypes", page] as const,
+  REQUEST_TYPES_LISTS: ["requestTypesLists"] as const,
 
   // Type de conformité
   CONFORMITY_TYPES: ["conformityTypes"] as const,
@@ -122,4 +123,12 @@ export const QUERY_KEYS = {
   FLOWS: ["flow"] as const,
   FLOW_WITH_ID: (flowId?: string | null) => ["flow", flowId] as const,
   FLOWS_WITH_PAGE: (page: number) => ["flow", page] as const,
+
+  // Request Type Service Categories
+  REQUEST_TYPE_SERVICE_CATEGORIES_WITH_PAGE: (page: number) =>
+    ["requestTypeServiceCategories", page] as const,
+  REQUEST_TYPE_SERVICE_CATEGORIES: ["requestTypeServiceCategories"] as const,
+  REQUEST_TYPE_SERVICE_CATEGORY_WITH_ID: (
+    requestTypeServiceCategoryId?: string | null
+  ) => ["requestTypeServiceCategories", requestTypeServiceCategoryId] as const,
 };

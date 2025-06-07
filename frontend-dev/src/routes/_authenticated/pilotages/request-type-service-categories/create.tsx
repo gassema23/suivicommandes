@@ -2,36 +2,36 @@ import LoadingPage from "@/components/ui/loader/LoadingPage";
 import FormError from "@/components/ui/shadcn/form-error";
 import { createPermissionGuard } from "@/features/common/authorizations/helpers/createPermissionGuard";
 import { PERMISSIONS } from "@/features/common/authorizations/types/auth.types";
-import ProviderServiceCategoryCreateForm from "@/features/provider-service-categories/components/ProviderServiceCategoryCreateForm";
+import RequestTypeServiceCategoryCreateForm from "@/features/request-type-service-categories/components/RequestTypeServiceCategoryCreateForm";
 import { createFileRoute } from "@tanstack/react-router";
 
 export const Route = createFileRoute(
-  "/_authenticated/pilotages/provider-service-categories/create"
+  "/_authenticated/pilotages/request-type-service-categories/create"
 )({
   beforeLoad: createPermissionGuard([
-    PERMISSIONS.PROVIDER_SERVICE_CATEGORIES.CREATE,
+    PERMISSIONS.REQUEST_TYPE_SERVICE_CATEGORIES.CREATE,
   ]),
   head: () => ({
-    meta: [{ title: "Associer fournisseur & service" }],
+    meta: [{ title: "Associer catégories de services & type de demande" }],
   }),
   component: RouteComponent,
   errorComponent: ({ error }) => (
     <FormError
-      title="Erreur lors du chargement du fournisseur par service"
+      title="Erreur lors du chargement de la catégorie de service par type de demande"
       message={error.message}
     />
   ),
   staticData: {
-    title: "Associer fournisseur & service",
+    title: "Associer catégories de services & type de demande",
     breadcrumb: [
       { label: "Tableau de bord", href: "/" },
       {
-        label: "Fournisseurs par services",
-        href: "/pilotages/provider-service-categories",
+        label: "Catégories de services par type de demande",
+        href: "/pilotages/request-type-service-categories",
       },
       {
-        label: "Associer fournisseur & service",
-        href: "/pilotages/provider-service-categories/create",
+        label: "Associer catégories de services & type de demande",
+        href: "/pilotages/request-type-service-categories/create",
         isCurrent: true,
       },
     ],
@@ -40,5 +40,5 @@ export const Route = createFileRoute(
 });
 
 function RouteComponent() {
-  return <ProviderServiceCategoryCreateForm />;
+  return <RequestTypeServiceCategoryCreateForm />;
 }

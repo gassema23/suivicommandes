@@ -118,10 +118,10 @@ export function AppSidebar(props: ComponentProps<typeof Sidebar>) {
                       <SidebarMenu>
                         {visibleItems.map((item) => (
                           <SidebarMenuItem key={item.url ?? item.title}>
-                            <SidebarMenuButton asChild className="pl-4">
+                            <SidebarMenuButton asChild className="pl-4 truncate w-full block">
                               <ProtectedNavLink
                                 to={item.url}
-                                activeClassName="text-sidebar-accent-foreground bg-sidebar-accent"
+                                activeClassName="text-sidebar-accent-foreground bg-sidebar-accent w-full "
                                 requiredPermission={item.permission}
                                 requiredRole={item.role}
                               >

@@ -37,6 +37,9 @@ export const PERMISSIONS = {
   DELIVERABLES: makePermissions("deliverables"),
   FLOWS: makePermissions("flows"),
   PROVIDER_DISPONIBILITIES: makePermissions("provider_disponibilities"),
+  REQUEST_TYPE_SERVICE_CATEGORIES: makePermissions(
+    "request_type_service_categories"
+  ),
 } as const;
 
 export const ROLES = {

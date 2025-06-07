@@ -42,7 +42,7 @@ export default function RequestTypeCreateForm() {
     onSuccess: () => {
       setBackendError(null);
       toast.success(SUCCESS_MESSAGES.create("Type de demande"));
-      queryClient.invalidateQueries({ queryKey: QUERY_KEYS.DELAY_TYPES });
+      queryClient.invalidateQueries({ queryKey: QUERY_KEYS.REQUEST_TYPES });
 
       navigate({ to: "/pilotages/request-types", search: { page: 1 } });
     },

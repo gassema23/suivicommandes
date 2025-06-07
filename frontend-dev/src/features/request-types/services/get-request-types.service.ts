@@ -9,9 +9,9 @@ export const getRequestTypes = async (
     credentials: "include",
   });
 
-  if (!response.ok) {
-    throw new Error("Erreur lors de la récupération des types de demande");
-  }
+  
+  const result = await response.json();
+  if (!response.ok) throw new Error(result.message || "Erreur lors du chargement des types de demande");
 
-  return response.json();
+  return result;
 };

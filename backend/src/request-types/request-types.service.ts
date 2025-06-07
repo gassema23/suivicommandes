@@ -94,6 +94,13 @@ export class RequestTypesService {
     return requestType;
   }
 
+  async getRequestTypeList(): Promise<RequestType[]> {
+    return this.requestTypeRepository.find({
+      select: ['id', 'requestTypeName'],
+      order: { requestTypeName: 'ASC' },
+    });
+  }
+
   async update(
     id: string,
     updateRequestTypeDto: UpdateRequestTypeDto,

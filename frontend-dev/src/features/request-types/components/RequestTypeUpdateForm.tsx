@@ -47,7 +47,7 @@ export default function RequestTypeUpdateForm({ requestType }: RequestTypeFormPr
     onSuccess: () => {
       setBackendError(null);
       toast.success(SUCCESS_MESSAGES.update('Type de demande'));
-      queryClient.invalidateQueries({ queryKey: QUERY_KEYS.DELAY_TYPES });
+      queryClient.invalidateQueries({ queryKey: QUERY_KEYS.REQUEST_TYPES });
       navigate({ to: "/pilotages/request-types", search: { page: 1 } });
     },
     onError: (error: { message: string }) => {

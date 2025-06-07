@@ -51,6 +51,14 @@ export class RequestTypesController {
     );
   }
 
+  @Get('requestTypeList')
+  @Permissions([{ resource: Resource.SECTORS, actions: [Action.READ] }])
+  @ApiOperation({ summary: 'Obtenir la liste des types de demande pour le sélecteur' })
+  @ApiResponse({ status: 200, description: 'Liste des types de demande pour le sélecteur' })
+  async getSectorsList() {
+    return this.requestTypesService.getRequestTypeList();
+  }
+
   @Post()
   @Permissions([{ resource: Resource.REQUEST_TYPES, actions: [Action.CREATE] }])
   @ApiOperation({ summary: 'Créer un type de demande' })

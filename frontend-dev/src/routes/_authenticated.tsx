@@ -88,7 +88,7 @@ function AuthLayout() {
         }}
       />
       <AppSidebar />
-      <div className="w-full h-full">
+      <div className="w-full h-full overflow-hidden">
         <QuebecHeader />
         <div className="flex flex-col min-h-screen">
           <main className="flex-1 px-8 py-4 lg:px-12 lg:py-6">
@@ -99,7 +99,7 @@ function AuthLayout() {
                   className="pb-2"
                 />
               )}
-            <div className="flex items-center justify-between mb-4">
+            <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between mb-4 gap-4">
               <div>
                 {currentRoute.staticData?.title && (
                   <h1 className="section-title">
