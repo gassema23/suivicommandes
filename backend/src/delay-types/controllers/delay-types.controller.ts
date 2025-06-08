@@ -18,24 +18,34 @@ import {
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
-import { AuthorizationsGuard } from '../auth/guards/authorizations.guard';
-import { DelayTypesService } from './delay-types.service';
-import { Permissions } from '../roles/decorators/permission.decorator';
-import { Resource } from '../roles/enums/resource.enum';
-import { Action } from '../roles/enums/action.enum';
-import { PaginationDto } from '../common/dto/pagination.dto';
-import { CreateDelayTypeDto } from './dto/create-delay-type.dto';
-import { User } from '../users/entities/user.entity';
-import { CurrentUser } from '../auth/decorators/current-user.decorator';
-import { UpdateDelayTypeDto } from './dto/update-delay-type.dto';
+import { AuthorizationsGuard } from '../../auth/guards/authorizations.guard';
+import { DelayTypesService } from '../services/delay-types.service';
+import { Permissions } from '../../roles/decorators/permission.decorator';
+import { Resource } from '../../roles/enums/resource.enum';
+import { Action } from '../../roles/enums/action.enum';
+import { PaginationDto } from '../../common/dto/pagination.dto';
+import { CreateDelayTypeDto } from '../dto/create-delay-type.dto';
+import { User } from '../../users/entities/user.entity';
+import { CurrentUser } from '../../auth/decorators/current-user.decorator';
+import { UpdateDelayTypeDto } from '../dto/update-delay-type.dto';
 
 @ApiTags('Delay types')
 @Controller('delay-types')
 @UseGuards(AuthGuard('jwt'), AuthorizationsGuard)
 @ApiBearerAuth()
 export class DelayTypesController {
+  /**
+   * Controller pour gérer les types de délais.
+   * Permet de créer, lire, mettre à jour et supprimer des types de délais.
+   * @param delayTypesService - Service pour gérer les opérations liées aux types de délais.
+   */
   constructor(private readonly delayTypesService: DelayTypesService) {}
 
+  /**
+   * Récupère tous les types de délais avec pagination et recherche.
+   * @param paginationDto - DTO de pagination contenant les paramètres de page, limite, tri et ordre.
+   * @returns Un objet PaginatedResult contenant les types de délais et les métadonnées de pagination.
+   */
   @Get()
   @Permissions([{ resource: Resource.DELAY_TYPES, actions: [Action.READ] }])
   @ApiOperation({ summary: 'Afficher la liste des types de délais' })
@@ -48,6 +58,12 @@ export class DelayTypesController {
     return this.delayTypesService.findAll(paginationDto, paginationDto.search);
   }
 
+  /**
+   * Crée un nouveau type de délai.
+   * @param createDelayTypeDto - DTO contenant les informations du type de délai à créer.
+   * @param currentUser - Utilisateur actuel effectuant la requête.
+   * @returns Le type de délai créé.
+   */
   @Post()
   @Permissions([{ resource: Resource.DELAY_TYPES, actions: [Action.CREATE] }])
   @ApiOperation({ summary: 'Créer un type de délai' })
@@ -59,6 +75,11 @@ export class DelayTypesController {
     return this.delayTypesService.create(createDelayTypeDto, currentUser.id);
   }
 
+  /**
+   * Récupère un type de délai par son ID.
+   * @param id - ID du type de délai à récupérer.
+   * @returns Le type de délai correspondant à l'ID fourni.
+   */
   @Get(':id')
   @Permissions([{ resource: Resource.DELAY_TYPES, actions: [Action.READ] }])
   @ApiOperation({ summary: 'Afficher un type de délai par son ID' })
@@ -70,6 +91,13 @@ export class DelayTypesController {
     return this.delayTypesService.findOne(id);
   }
 
+  /**
+   * Met à jour un type de délai existant.
+   * @param id  - ID du type de délai à mettre à jour.
+   * @param updateDelayTypeDto  - DTO contenant les informations à mettre à jour.
+   * @param currentUser  - Utilisateur actuel effectuant la requête.
+   * @returns Le type de délai mis à jour.
+   */
   @Patch(':id')
   @Permissions([{ resource: Resource.DELAY_TYPES, actions: [Action.UPDATE] }])
   @ApiOperation({ summary: 'Mettre à jour le type de délai' })
@@ -87,10 +115,19 @@ export class DelayTypesController {
     );
   }
 
+  /**
+   * Supprime un type de délai par son ID.
+   * @param id - ID du type de délai à supprimer.
+   * @param currentUser - Utilisateur actuel effectuant la requête.
+   * @returns Confirmation de la suppression du type de délai.
+   */
   @Delete()
   @Permissions([{ resource: Resource.DELAY_TYPES, actions: [Action.DELETE] }])
   @ApiOperation({ summary: 'Supprimer un type de délai' })
-  @ApiResponse({ status: 200, description: 'Type de délai supprimé avec succès' })
+  @ApiResponse({
+    status: 200,
+    description: 'Type de délai supprimé avec succès',
+  })
   async remove(@Body('id') id: string, @CurrentUser() currentUser: User) {
     return this.delayTypesService.remove(id, currentUser.id);
   }
