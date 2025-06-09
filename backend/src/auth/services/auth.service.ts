@@ -125,13 +125,16 @@ export class AuthService {
   async login(loginDto: LoginDto): Promise<AuthResult> {
     const { email, password, twoFactorCode } = loginDto;
 
+    const testValue = await this.cacheManager.get('test_key');
+    console.log('Test Redis:', testValue); // doit afficher 42
+
     const cacheKey = `login_attempts:${email}`;
     let attempts = (await this.cacheManager.get<number>(cacheKey)) || 0;
     console.log('Tentatives pour', email, ':', attempts);
 
     // Vérifie le seuil AVANT de valider l'utilisateur
     if (attempts >= 3) {
-      await this.cacheManager.set(cacheKey, attempts, 900);
+      await this.cacheManager.set(cacheKey, attempts, 900000);
       throw new UnauthorizedException(
         'Trop de tentatives, réessayez dans 15 minutes.',
       );
@@ -140,7 +143,7 @@ export class AuthService {
     const user = await this.validateUser(email, password);
     if (!user) {
       attempts++;
-      await this.cacheManager.set(cacheKey, attempts, 900); // 15 min
+      await this.cacheManager.set(cacheKey, attempts, 900000); // 15 min
       throw new UnauthorizedException(
         'Identifiants ou mot de passe incorrects.',
       );

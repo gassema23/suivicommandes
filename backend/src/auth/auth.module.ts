@@ -24,7 +24,6 @@ import * as redisStore from 'cache-manager-ioredis';
         store: redisStore,
         host: configService.getOrThrow<string>('REDIS_HOST'),
         port: configService.getOrThrow<number>('REDIS_PORT'),
-        ttl: 0,
       }),
     }),
     TypeOrmModule.forFeature([User]),
