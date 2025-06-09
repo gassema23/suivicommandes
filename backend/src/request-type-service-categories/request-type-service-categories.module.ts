@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
-import { RequestTypeServiceCategoriesController } from './request-type-service-categories.controller';
-import { RequestTypeServiceCategoriesService } from './request-type-service-categories.service';
+import { RequestTypeServiceCategoriesController } from './controllers/request-type-service-categories.controller';
+import { RequestTypeServiceCategoriesService } from './services/request-type-service-categories.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { RequestTypeServiceCategory } from './entities/request-type-service-category.entity';
 import { AuthModule } from '../auth/auth.module';

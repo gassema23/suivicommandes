@@ -7,8 +7,12 @@ export class CreateProviderDisponibilityDto {
     description: 'Disponibilité du fournisseur',
   })
   @IsOptional()
-  @IsString()
-  @MaxLength(125)
+  @IsString({
+    message: 'Le nom de la disponibilité doit être une chaîne de caractères.',
+  })
+  @MaxLength(125, {
+    message: 'Le nom de la disponibilité ne doit pas dépasser 125 caractères.',
+  })
   providerDisponibilityName?: string;
 
   @ApiPropertyOptional({
@@ -16,7 +20,13 @@ export class CreateProviderDisponibilityDto {
     description: 'Description de la disponibilité du fournisseur',
   })
   @IsOptional()
-  @IsString()
-  @MaxLength(500)
+  @IsString({
+    message:
+      'La description de la disponibilité doit être une chaîne de caractères.',
+  })
+  @MaxLength(500, {
+    message:
+      'La description de la disponibilité ne doit pas dépasser 500 caractères.',
+  })
   providerDisponibilityDescription?: string;
 }

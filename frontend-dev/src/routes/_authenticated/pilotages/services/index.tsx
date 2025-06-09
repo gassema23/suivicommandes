@@ -87,7 +87,7 @@ function RouteComponent() {
       <DeleteModal
         open={!!deleteId}
         onOpenChange={(open) => !open && setDeleteId(null)}
-        deleteUrl="services"
+        deleteUrl={`services/${deleteId}`}
         deleteId={deleteId}
         onSuccess={() => {
           setDeleteId(null);

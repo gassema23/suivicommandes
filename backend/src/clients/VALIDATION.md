@@ -6,5 +6,6 @@ Ce dossier a été vérifié et validé le 8 juin 2025.
 - Revue de code : OK
 - Fonctionnalités CRUD : OK
 - Commentaire dans le code: OK
+- Message d'erreur: OK
 
 Validé par : Mathieu Gasse

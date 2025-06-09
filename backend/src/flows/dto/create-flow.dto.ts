@@ -7,8 +7,14 @@ export class CreateFlowDto {
     description: 'Nom du flux de transmission',
   })
   @IsOptional()
-  @IsString()
-  @MaxLength(125)
+  @IsString({
+    message:
+      'Le nom du flux de transmission doit être une chaîne de caractères.',
+  })
+  @MaxLength(125, {
+    message:
+      'Le nom du flux de transmission ne doit pas dépasser 125 caractères.',
+  })
   flowName?: string;
 
   @ApiPropertyOptional({
@@ -16,7 +22,13 @@ export class CreateFlowDto {
     description: 'Description du flux de transmission',
   })
   @IsOptional()
-  @IsString()
-  @MaxLength(500)
+  @IsString({
+    message:
+      'La description du flux de transmission doit être une chaîne de caractères.',
+  })
+  @MaxLength(500, {
+    message:
+      'La description du flux de transmission ne doit pas dépasser 500 caractères.',
+  })
   flowDescription?: string;
 }

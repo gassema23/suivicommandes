@@ -14,7 +14,7 @@ import { ConfigService } from '@nestjs/config';
 import { User } from '../users/entities/user.entity';
 import { LoginDto } from './dto/login.dto';
 import { RegisterDto } from './dto/register.dto';
-import { UsersService } from '../users/users.service';
+import { UsersService } from '../users/services/users.service';
 import { EmailService } from '../email/email.service';
 import { TwoFactorAuthService } from './two-factor-auth.service';
 import { ForgotPasswordDto } from './dto/forgot-password.dto';
@@ -25,7 +25,6 @@ import { VerifyEmailInterface } from './interfaces/verify-email.interface';
 import { OnboardingDto } from './dto/onboarding.dto';
 import { parseDurationToMs } from '../common/utils/parse-duration';
 import { Response } from 'express';
-import { isEmail } from 'validator';
 
 export interface JwtPayload {
   sub: string;

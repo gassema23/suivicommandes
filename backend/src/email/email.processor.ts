@@ -11,14 +11,19 @@ export class EmailProcessor {
 
   @Process('send-email')
   async handleSendEmail(job: Job<EmailData>) {
-    this.logger.log(`Traitement de l'email pour: ${job.data.to}`);
-    
+    this.logger.log(`Traitement de l'email pour : ${job.data.to}`);
+
     try {
       await this.emailService.sendEmailDirect(job.data);
-      this.logger.log(`Email envoyé avec succès à: ${job.data.to}`);
+      this.logger.log(`Email envoyé avec succès à : ${job.data.to}`);
     } catch (error) {
-      this.logger.error(`Erreur lors de l'envoi de l'email à ${job.data.to}: ${error.message}`);
-      throw error; // Bull va réessayer automatiquement
+      this.logger.error(
+        `Échec de l'envoi de l'email à ${job.data.to} : ${error?.message || error}`,
+        error?.stack,
+      );
+      throw new Error(
+        `Impossible d'envoyer l'email à ${job.data.to} : ${error?.message || error}`,
+      );
     }
   }
 }

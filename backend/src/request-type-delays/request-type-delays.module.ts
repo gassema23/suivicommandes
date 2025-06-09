@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
-import { RequestTypeDelaysController } from './request-type-delays.controller';
-import { RequestTypeDelaysService } from './request-type-delays.service';
+import { RequestTypeDelaysController } from './controllers/request-type-delays.controller';
+import { RequestTypeDelaysService } from './services/request-type-delays.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { RequestTypeServiceCategory } from '../request-type-service-categories/entities/request-type-service-category.entity';
 import { DelayType } from '../delay-types/entities/delay-type.entity';
@@ -12,7 +12,7 @@ import { AuthModule } from '../auth/auth.module';
     TypeOrmModule.forFeature([
       RequestTypeServiceCategory,
       DelayType,
-      RequestTypeDelay
+      RequestTypeDelay,
     ]),
     AuthModule,
   ],

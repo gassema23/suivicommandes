@@ -1,17 +1,13 @@
 import { Module } from '@nestjs/common';
-import { ServicesController } from './services.controller';
-import { ServicesService } from './services.service';
+import { ServicesController } from './controllers/services.controller';
+import { ServicesService } from './services/services.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Service } from './entities/service.entity';
 import { AuthModule } from '../auth/auth.module';
 import { Sector } from '../sectors/entities/sectors.entity';
-import { SectorsModule } from '../sectors/sectors.module';
 
 @Module({
-  imports: [
-    TypeOrmModule.forFeature([Service, Sector]), 
-    AuthModule,
-  ],
+  imports: [TypeOrmModule.forFeature([Service, Sector]), AuthModule],
   controllers: [ServicesController],
   providers: [ServicesService],
   exports: [ServicesService],

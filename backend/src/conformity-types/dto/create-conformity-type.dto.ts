@@ -7,8 +7,8 @@ export class CreateConformityTypeDto {
     description: 'Nom du type de conformité',
   })
   @IsOptional()
-  @IsString()
-  @MaxLength(125)
+  @IsString({ message: 'Le nom du type de conformité doit être une chaîne de caractères.' })
+  @MaxLength(125, { message: 'Le nom du type de conformité ne doit pas dépasser 125 caractères.' })
   conformityTypeName?: string;
 
   @ApiPropertyOptional({
@@ -16,7 +16,7 @@ export class CreateConformityTypeDto {
     description: 'Description du type de conformité',
   })
   @IsOptional()
-  @IsString()
-  @MaxLength(500)
+  @IsString({ message: 'La description du type de conformité doit être une chaîne de caractères.' })
+  @MaxLength(500, { message: 'La description du type de conformité ne doit pas dépasser 500 caractères.' })
   conformityTypeDescription?: string;
 }

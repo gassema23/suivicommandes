@@ -9,8 +9,8 @@ export class CreateDelayTypeDto {
 
   @ApiProperty({ example: 'Service accéléré', description: 'Nom du type de délai' })
   @IsOptional()
-  @IsString()
-  @MaxLength(125)
+  @IsString({ message: 'Le nom du type de délai doit être une chaîne de caractères.' })
+  @MaxLength(125, { message: 'Le nom du type de délai ne doit pas dépasser 125 caractères.' })
   delayTypeName?: string;
 
   @ApiPropertyOptional({
@@ -18,7 +18,7 @@ export class CreateDelayTypeDto {
     description: 'Description du type de délai',
   })
   @IsOptional()
-  @IsString()
-  @MaxLength(500)
+  @IsString({ message: 'La description du type de délai doit être une chaîne de caractères.' })
+  @MaxLength(500, { message: 'La description du type de délai ne doit pas dépasser 500 caractères.' })
   delayTypeDescription?: string;
 }

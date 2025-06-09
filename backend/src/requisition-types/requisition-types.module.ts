@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
-import { RequisitionTypesController } from './requisition-types.controller';
-import { RequisitionTypesService } from './requisition-types.service';
+import { RequisitionTypesController } from './controllers/requisition-types.controller';
+import { RequisitionTypesService } from './services/requisition-types.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthModule } from '../auth/auth.module';
 import { RequisitionType } from './entities/requisition-type.entity';

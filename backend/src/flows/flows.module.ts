@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
-import { FlowsController } from './flows.controller';
-import { FlowsService } from './flows.service';
+import { FlowsController } from './controllers/flows.controller';
+import { FlowsService } from './services/flows.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Flow } from './entities/flow.entity';
 import { AuthModule } from '../auth/auth.module';

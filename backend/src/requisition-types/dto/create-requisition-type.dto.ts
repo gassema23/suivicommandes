@@ -1,16 +1,20 @@
-import {
-  IsString,
-  MaxLength,
-  IsOptional,
-} from 'class-validator';
+import { IsString, MaxLength, IsOptional } from 'class-validator';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 
 export class CreateRequisitionTypeDto {
-
-  @ApiProperty({ example: 'Exploitation', description: 'Nom du type de réquisition' })
+  @ApiProperty({
+    example: 'Exploitation',
+    description: 'Nom du type de réquisition',
+  })
   @IsOptional()
-  @IsString()
-  @MaxLength(125)
+  @IsString({
+    message:
+      'Le nom du type de réquisition doit être une chaîne de caractères.',
+  })
+  @MaxLength(125, {
+    message:
+      'Le nom du type de réquisition ne doit pas dépasser 125 caractères.',
+  })
   requisitionTypeName?: string;
 
   @ApiPropertyOptional({
@@ -18,7 +22,13 @@ export class CreateRequisitionTypeDto {
     description: 'Description du type de réquisition',
   })
   @IsOptional()
-  @IsString()
-  @MaxLength(500)
+  @IsString({
+    message:
+      'La description du type de réquisition doit être une chaîne de caractères.',
+  })
+  @MaxLength(500, {
+    message:
+      'La description du type de réquisition ne doit pas dépasser 500 caractères.',
+  })
   requisitionTypeDescription?: string;
 }

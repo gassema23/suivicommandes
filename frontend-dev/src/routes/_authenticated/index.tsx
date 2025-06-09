@@ -2,6 +2,7 @@ import { LoadingProgress } from "@/components/ui/loader/LoadingProgress";
 import { Button } from "@/components/ui/quebec/Button";
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
+import { Calendar } from "@/components/ui/shadcn/calendar";
 
 export const Route = createFileRoute("/_authenticated/")({
   head: () => ({
@@ -17,7 +18,7 @@ function RouteComponent() {
     setShow(false); // force un démontage/remontage
     setTimeout(() => setShow(true), 10);
   };
-
+  const [date, setDate] = useState<Date | undefined>(new Date());
   return (
     <div className="p-8">
       <Button onClick={handleClick}>Lancer le loading progress</Button>

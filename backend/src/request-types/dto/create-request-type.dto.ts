@@ -7,8 +7,8 @@ export class CreateRequestTypeDto {
     description: 'Nom du type de demande',
   })
   @IsOptional()
-  @IsString()
-  @MaxLength(125)
+  @IsString({ message: 'Le nom du type de demande doit être une chaîne de caractères.' })
+  @MaxLength(125, { message: 'Le nom du type de demande ne doit pas dépasser 125 caractères.' })
   requestTypeName?: string;
 
   @ApiPropertyOptional({
@@ -16,7 +16,7 @@ export class CreateRequestTypeDto {
     description: 'Description du type de demande',
   })
   @IsOptional()
-  @IsString()
-  @MaxLength(500)
+  @IsString({ message: 'La description du type de demande doit être une chaîne de caractères.' })
+  @MaxLength(500, { message: 'La description du type de demande ne doit pas dépasser 500 caractères.' })
   requestTypeDescription?: string;
 }
