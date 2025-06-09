@@ -8,13 +8,25 @@ import { User } from '../users/entities/user.entity';
 import { EmailModule } from '../email/email.module';
 import { JwtStrategy } from './strategies/jwt.strategy';
 import { UsersModule } from '../users/users.module';
-import { AuthService } from './auth.service';
-import { TwoFactorAuthService } from './two-factor-auth.service';
+import { AuthService } from './services/auth.service';
+import { TwoFactorAuthService } from './services/two-factor-auth.service';
 import { LocalStrategy } from './strategies/local.strategy';
-import { AuthController } from './auth.controller';
+import { AuthController } from './controllers/auth.controller';
+import { CacheModule } from '@nestjs/cache-manager';
+import * as redisStore from 'cache-manager-ioredis';
 
 @Module({
   imports: [
+    CacheModule.registerAsync({
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: async (configService: ConfigService) => ({
+        store: redisStore,
+        host: configService.getOrThrow<string>('REDIS_HOST'),
+        port: configService.getOrThrow<number>('REDIS_PORT'),
+        ttl: 0,
+      }),
+    }),
     TypeOrmModule.forFeature([User]),
     PassportModule.register({ defaultStrategy: 'jwt' }),
     JwtModule.registerAsync({

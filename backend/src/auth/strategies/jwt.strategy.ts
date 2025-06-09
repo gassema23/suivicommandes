@@ -6,7 +6,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Request } from 'express';
 
-import { JwtPayload } from '../auth.service';
+import { JwtPayload } from '../services/auth.service';
 import { User } from '../../users/entities/user.entity';
 
 @Injectable()

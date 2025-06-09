@@ -67,7 +67,13 @@ export default function MultiStepLoginForm({
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(credentials),
       });
-      if (!res.ok) throw new Error("Login failed");
+      if (!res.ok) {
+        const errorData = await res.json();
+        throw new Error(
+          errorData.message ||
+            "Erreur lors de la création du flux de transmission"
+        );
+      }
       return res.json();
     },
     onSuccess: async (data, variables) => {

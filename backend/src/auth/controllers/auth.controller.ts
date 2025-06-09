@@ -22,18 +22,18 @@ import {
 import { Throttle } from '@nestjs/throttler';
 import { Response, Request } from 'express';
 
-import { AuthService } from './auth.service';
-import { TwoFactorAuthService } from './two-factor-auth.service';
-import { LoginDto } from './dto/login.dto';
-import { RegisterDto } from './dto/register.dto';
-import { ChangePasswordDto } from './dto/change-password.dto';
-import { ForgotPasswordDto } from './dto/forgot-password.dto';
-import { ResetPasswordDto } from './dto/reset-password.dto';
-import { CurrentUser } from './decorators/current-user.decorator';
-import { User } from '../users/entities/user.entity';
-import { EnableTwoFactorDto } from './dto/enable-two-factor.dto';
+import { AuthService } from '../services/auth.service';
+import { TwoFactorAuthService } from '../services/two-factor-auth.service';
+import { LoginDto } from '../dto/login.dto';
+import { RegisterDto } from '../dto/register.dto';
+import { ChangePasswordDto } from '../dto/change-password.dto';
+import { ForgotPasswordDto } from '../dto/forgot-password.dto';
+import { ResetPasswordDto } from '../dto/reset-password.dto';
+import { CurrentUser } from '../decorators/current-user.decorator';
+import { User } from '../../users/entities/user.entity';
+import { EnableTwoFactorDto } from '../dto/enable-two-factor.dto';
 import { instanceToPlain } from 'class-transformer';
-import { OnboardingDto } from './dto/onboarding.dto';
+import { OnboardingDto } from '../dto/onboarding.dto';
 
 @ApiTags('Authentication')
 @Controller('auth')
@@ -57,7 +57,7 @@ export class AuthController {
   @ApiOperation({ summary: 'Se connecter' })
   @ApiResponse({ status: 200, description: 'Connexion réussie' })
   @ApiResponse({ status: 401, description: 'Identifiants invalides' })
-  @Throttle({ default: { limit: 10, ttl: 60000 } }) // 10 tentatives par minute
+  @Throttle({ default: { limit: 3, ttl: 60000 } }) // 10 tentatives par minute
   async login(
     @Body() loginDto: LoginDto,
     @Res({ passthrough: true }) res: Response,

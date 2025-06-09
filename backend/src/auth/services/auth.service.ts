@@ -4,6 +4,7 @@ import {
   BadRequestException,
   ConflictException,
   NotFoundException,
+  Inject,
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -11,20 +12,23 @@ import { Repository } from 'typeorm';
 import * as bcrypt from 'bcryptjs';
 import { ConfigService } from '@nestjs/config';
 
-import { User } from '../users/entities/user.entity';
-import { LoginDto } from './dto/login.dto';
-import { RegisterDto } from './dto/register.dto';
-import { UsersService } from '../users/services/users.service';
-import { EmailService } from '../email/email.service';
+import { User } from '../../users/entities/user.entity';
+import { LoginDto } from '../dto/login.dto';
+import { RegisterDto } from '../dto/register.dto';
+import { UsersService } from '../../users/services/users.service';
+import { EmailService } from '../../email/email.service';
 import { TwoFactorAuthService } from './two-factor-auth.service';
-import { ForgotPasswordDto } from './dto/forgot-password.dto';
-import { ResetPasswordDto } from './dto/reset-password.dto';
-import { ChangePasswordDto } from './dto/change-password.dto';
+import { ForgotPasswordDto } from '../dto/forgot-password.dto';
+import { ResetPasswordDto } from '../dto/reset-password.dto';
+import { ChangePasswordDto } from '../dto/change-password.dto';
 import { instanceToPlain } from 'class-transformer';
-import { VerifyEmailInterface } from './interfaces/verify-email.interface';
-import { OnboardingDto } from './dto/onboarding.dto';
-import { parseDurationToMs } from '../common/utils/parse-duration';
+import { VerifyEmailInterface } from '../interfaces/verify-email.interface';
+import { OnboardingDto } from '../dto/onboarding.dto';
+import { parseDurationToMs } from '../../common/utils/parse-duration';
 import { Response } from 'express';
+
+import { CACHE_MANAGER } from '@nestjs/cache-manager';
+import type { Cache } from 'cache-manager';
 
 export interface JwtPayload {
   sub: string;
@@ -44,6 +48,10 @@ export interface AuthResult {
 
 @Injectable()
 export class AuthService {
+  /**
+   * Service d'authentification pour gérer l'inscription, la connexion, la vérification d'email,
+   * la réinitialisation de mot de passe, et la gestion des tokens JWT.
+   */
   constructor(
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
@@ -52,6 +60,7 @@ export class AuthService {
     private readonly emailService: EmailService,
     private readonly twoFactorService: TwoFactorAuthService,
     private readonly configService: ConfigService,
+    @Inject(CACHE_MANAGER) private cacheManager: Cache,
   ) {}
 
   async validateUser(email: string, password: string): Promise<User | null> {
@@ -116,14 +125,33 @@ export class AuthService {
   async login(loginDto: LoginDto): Promise<AuthResult> {
     const { email, password, twoFactorCode } = loginDto;
 
+    const cacheKey = `login_attempts:${email}`;
+    let attempts = (await this.cacheManager.get<number>(cacheKey)) || 0;
+    console.log('Tentatives pour', email, ':', attempts);
+
+    // Vérifie le seuil AVANT de valider l'utilisateur
+    if (attempts >= 3) {
+      await this.cacheManager.set(cacheKey, attempts, 900);
+      throw new UnauthorizedException(
+        'Trop de tentatives, réessayez dans 15 minutes.',
+      );
+    }
+
     const user = await this.validateUser(email, password);
     if (!user) {
-      throw new UnauthorizedException('Identifiants invalides');
+      attempts++;
+      await this.cacheManager.set(cacheKey, attempts, 900); // 15 min
+      throw new UnauthorizedException(
+        'Identifiants ou mot de passe incorrects.',
+      );
     }
+
+    // Réinitialise le compteur en cas de succès
+    await this.cacheManager.del(cacheKey);
 
     if (!user.emailVerifiedAt) {
       throw new UnauthorizedException(
-        'Veuillez vérifier votre email avant de vous connecter',
+        'Veuillez vérifier votre adresse email avant de vous connecter.',
       );
     }
 
@@ -143,7 +171,9 @@ export class AuthService {
         twoFactorCode,
       );
       if (!isValidCode) {
-        throw new UnauthorizedException('Code de vérification invalide');
+        throw new UnauthorizedException(
+          'Le code de vérification 2FA est invalide.',
+        );
       }
     }
 
@@ -167,13 +197,17 @@ export class AuthService {
       where: { email: registerDto.email },
     });
     if (existingUser) {
-      throw new ConflictException('Un utilisateur avec cet email existe déjà');
+      throw new ConflictException(
+        'Un utilisateur avec cette adresse email existe déjà.',
+      );
     }
 
     if (registerDto.password) {
       // vérifier si le password et confirmpassword correspondent
       if (registerDto.password !== registerDto.confirmPassword) {
-        throw new BadRequestException('Les mots de passe ne correspondent pas');
+        throw new BadRequestException(
+          'Les mots de passe ne correspondent pas.',
+        );
       }
       // Hasher le mot de passe
       hashedPassword = await bcrypt.hash(registerDto.password, 12);
@@ -216,7 +250,8 @@ export class AuthService {
     await this.sendVerificationEmail(user);
 
     return {
-      message: 'Compte créé avec succès. Veuillez vérifier votre email.',
+      message:
+        'Compte créé avec succès. Veuillez vérifier votre adresse email.',
     };
   }
 
@@ -232,11 +267,15 @@ export class AuthService {
       });
 
       if (!user) {
-        throw new NotFoundException('Utilisateur non trouvé');
+        throw new NotFoundException(
+          'Aucun utilisateur trouvé avec cet identifiant.',
+        );
       }
 
       if (user.emailVerifiedAt) {
-        throw new BadRequestException('Email déjà vérifié');
+        throw new BadRequestException(
+          'Cette adresse email a déjà été vérifiée.',
+        );
       }
 
       // await this.userRepository.update(user.id, {
@@ -244,9 +283,14 @@ export class AuthService {
       // });
 
       const userPlain = instanceToPlain(user) as VerifyEmailInterface;
-      return { message: 'Email vérifié avec succès', user: userPlain };
+      return {
+        message: 'Adresse email vérifiée avec succès.',
+        user: userPlain,
+      };
     } catch (error) {
-      throw new BadRequestException('Token de vérification invalide ou expiré');
+      throw new BadRequestException(
+        'Le token de vérification est invalide ou expiré.',
+      );
     }
   }
 
@@ -257,10 +301,9 @@ export class AuthService {
     const user = await this.userRepository.findOne({ where: { email } });
 
     if (!user) {
-      // Ne pas révéler si l'email existe ou non
       return {
         message:
-          'Si cet email existe, un lien de réinitialisation a été envoyé.',
+          'Si cette adresse email existe, un lien de réinitialisation a été envoyé.',
       };
     }
 
@@ -288,14 +331,18 @@ export class AuthService {
       const payload = this.jwtService.verify(token);
 
       if (payload.type !== 'password-reset') {
-        throw new BadRequestException('Token invalide');
+        throw new BadRequestException(
+          'Le token de réinitialisation est invalide.',
+        );
       }
 
       const user = await this.userRepository.findOne({
         where: { id: payload.sub },
       });
       if (!user) {
-        throw new NotFoundException('Utilisateur non trouvé');
+        throw new NotFoundException(
+          'Aucun utilisateur trouvé avec cet identifiant.',
+        );
       }
 
       const hashedPassword = await bcrypt.hash(newPassword, 12);
@@ -304,10 +351,10 @@ export class AuthService {
         rememberToken: '', // Invalider les tokens existants
       });
 
-      return { message: 'Mot de passe réinitialisé avec succès' };
+      return { message: 'Mot de passe réinitialisé avec succès.' };
     } catch (error) {
       throw new BadRequestException(
-        'Token de réinitialisation invalide ou expiré',
+        'Le token de réinitialisation est invalide ou expiré.',
       );
     }
   }
@@ -320,7 +367,9 @@ export class AuthService {
 
     const user = await this.userRepository.findOne({ where: { id: userId } });
     if (!user) {
-      throw new NotFoundException('Utilisateur non trouvé');
+      throw new NotFoundException(
+        'Aucun utilisateur trouvé avec cet identifiant.',
+      );
     }
 
     const isCurrentPasswordValid = await bcrypt.compare(
@@ -328,7 +377,7 @@ export class AuthService {
       user.password,
     );
     if (!isCurrentPasswordValid) {
-      throw new BadRequestException('Mot de passe actuel incorrect');
+      throw new BadRequestException('Le mot de passe actuel est incorrect.');
     }
 
     const hashedPassword = await bcrypt.hash(newPassword, 12);
@@ -337,7 +386,7 @@ export class AuthService {
       rememberToken: '', // Invalider les tokens existants
     });
 
-    return { message: 'Mot de passe modifié avec succès' };
+    return { message: 'Mot de passe modifié avec succès.' };
   }
 
   async refreshToken(
@@ -354,12 +403,16 @@ export class AuthService {
       });
 
       if (!user) {
-        throw new UnauthorizedException('Token de rafraîchissement invalide');
+        throw new UnauthorizedException(
+          'Le token de rafraîchissement est invalide.',
+        );
       }
 
       return this.generateTokens(user);
     } catch (error) {
-      throw new UnauthorizedException('Token de rafraîchissement invalide');
+      throw new UnauthorizedException(
+        'Le token de rafraîchissement est invalide.',
+      );
     }
   }
 
