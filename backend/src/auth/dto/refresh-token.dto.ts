@@ -3,6 +3,8 @@ import { ApiProperty } from '@nestjs/swagger';
 
 export class RefreshTokenDto {
   @ApiProperty()
-  @IsString()
+  @IsString({
+    message: 'Le token de rafraîchissement doit être une chaîne de caractères.',
+  })
   refreshToken: string;
 }

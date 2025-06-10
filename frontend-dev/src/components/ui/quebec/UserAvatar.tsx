@@ -83,13 +83,14 @@ export default function UserAvatar({
     invisible: "Invisible",
   };
 
+
   const avatar = (
     <div className={cn("group relative", className)} {...props}>
       {showStatusIndicator && (
         <div className={`${statusVariant({ variant, size })} border-2`} />
       )}
       <Avatar className={avatarSizeVariant({ size })}>
-        <AvatarImage src={user?.profilePicture} alt={user?.fullName} />
+        <AvatarImage src={user?.profileImage} alt={user?.fullName} />
         <AvatarFallback className="bg-muted text-muted-foreground">
           {user.initials}
         </AvatarFallback>

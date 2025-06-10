@@ -38,11 +38,24 @@ import { TwoFactorAuthService } from '../services/two-factor-auth.service';
 @ApiTags('Authentication')
 @Controller('auth')
 export class AuthController {
+  /**
+   * Contrôleur pour gérer l'authentification des utilisateurs.
+   * Permet de s'inscrire, se connecter, se déconnecter, gérer les mots de passe,
+   * et activer/désactiver l'authentification à deux facteurs.
+   *
+   * @param authService Service pour gérer l'authentification.
+   * @param twoFactorService Service pour gérer l'authentification à deux facteurs.
+   */
   constructor(
     private readonly authService: AuthService,
     private readonly twoFactorService: TwoFactorAuthService,
   ) {}
 
+  /**
+   * Enregistre un nouvel utilisateur.
+   * @param registerDto DTO contenant les informations de l'utilisateur à enregistrer.
+   * @returns L'utilisateur enregistré.
+   */
   @Post('register')
   @ApiOperation({ summary: 'Créer un nouveau compte utilisateur' })
   @ApiResponse({ status: 201, description: 'Compte créé avec succès' })
@@ -52,12 +65,18 @@ export class AuthController {
     return this.authService.register(registerDto);
   }
 
+  /**
+   * Connecte un utilisateur existant.
+   * @param loginDto DTO contenant les informations de connexion de l'utilisateur.
+   * @param res Réponse HTTP pour définir les cookies d'authentification.
+   * @returns Les cookies d'authentification et l'utilisateur connecté.
+   */
   @Post('login')
   @HttpCode(HttpStatus.OK)
   @ApiOperation({ summary: 'Se connecter' })
   @ApiResponse({ status: 200, description: 'Connexion réussie' })
   @ApiResponse({ status: 401, description: 'Identifiants invalides' })
-  @Throttle({ default: { limit: 3, ttl: 60000 } }) // 10 tentatives par minute
+  @Throttle({ default: { limit: 3, ttl: 60000 } }) // 3 tentatives par minute
   async login(
     @Body() loginDto: LoginDto,
     @Res({ passthrough: true }) res: Response,
@@ -65,6 +84,12 @@ export class AuthController {
     return this.authService.loginAndSetCookies(loginDto, res);
   }
 
+  /**
+   * Onboard un nouvel utilisateur.
+   * @param id ID de l'utilisateur à onboarder.
+   * @param onboardingDto DTO contenant les informations d'onboarding.
+   * @returns L'utilisateur onboardé.
+   */
   @Patch('onboard/:id')
   @HttpCode(HttpStatus.OK)
   @ApiOperation({ summary: 'Onboard nouvel utilisateur' })
@@ -74,6 +99,12 @@ export class AuthController {
     return this.authService.onboard(id, onboardingDto);
   }
 
+  /**
+   * Déconnecte l'utilisateur en invalidant les tokens et en supprimant les cookies.
+   * @param user Utilisateur connecté à déconnecter.
+   * @param res Réponse HTTP pour supprimer les cookies d'authentification.
+   * @returns Un message de succès de déconnexion.
+   */
   @Post('logout')
   @UseGuards(AuthGuard('jwt'))
   @ApiBearerAuth()
@@ -83,24 +114,14 @@ export class AuthController {
     @CurrentUser() user: User,
     @Res({ passthrough: true }) res: Response,
   ) {
-    // Invalide le refreshToken côté base de données si besoin
-    await this.authService.logout(user.id);
-
-    // Détruit les cookies côté client
-    res.clearCookie('accessToken', {
-      httpOnly: true,
-      sameSite: 'strict',
-      secure: process.env.NODE_ENV === 'production',
-    });
-    res.clearCookie('refreshToken', {
-      httpOnly: true,
-      sameSite: 'strict',
-      secure: process.env.NODE_ENV === 'production',
-    });
-
-    return { message: 'Déconnexion réussie' };
+    return await this.authService.logout(user.id, res);
   }
 
+  /**
+   * Vérifie l'email de l'utilisateur avec le token fourni.
+   * @param token Token de vérification d'email.
+   * @returns Un message de succès ou une erreur si le token est invalide ou expiré.
+   */
   @Get('verify-email')
   @ApiOperation({ summary: "Vérifier l'email avec le token" })
   @ApiResponse({ status: 200, description: 'Email vérifié avec succès' })
@@ -109,6 +130,11 @@ export class AuthController {
     return this.authService.verifyEmail(token);
   }
 
+  /**
+   * Demande la réinitialisation du mot de passe en envoyant un email avec un lien de réinitialisation.
+   * @param forgotPasswordDto DTO contenant l'email de l'utilisateur.
+   * @returns Un message de succès ou une erreur si l'email n'est pas trouvé.
+   */
   @Post('forgot-password')
   @HttpCode(HttpStatus.OK)
   @ApiOperation({ summary: 'Demander la réinitialisation du mot de passe' })
@@ -118,6 +144,11 @@ export class AuthController {
     return this.authService.forgotPassword(forgotPasswordDto);
   }
 
+  /**
+   * Réinitialise le mot de passe de l'utilisateur avec le token fourni.
+   * @param resetPasswordDto DTO contenant le nouveau mot de passe et le token.
+   * @returns Un message de succès ou une erreur si le token est invalide ou expiré.
+   */
   @Post('reset-password')
   @HttpCode(HttpStatus.OK)
   @ApiOperation({ summary: 'Réinitialiser le mot de passe' })
@@ -127,6 +158,12 @@ export class AuthController {
     return this.authService.resetPassword(resetPasswordDto);
   }
 
+  /**
+   * Change le mot de passe de l'utilisateur connecté.
+   * @param user Utilisateur connecté dont le mot de passe doit être changé.
+   * @param changePasswordDto DTO contenant le mot de passe actuel et le nouveau mot de passe.
+   * @returns Un message de succès ou une erreur si le mot de passe actuel est incorrect.
+   */
   @Post('change-password')
   @UseGuards(AuthGuard('jwt'))
   @ApiBearerAuth()
@@ -140,6 +177,11 @@ export class AuthController {
     return this.authService.changePassword(user.id, changePasswordDto);
   }
 
+  /**
+   * Renvoie un nouvel email de vérification à l'utilisateur.
+   * @param data Contient l'email de l'utilisateur et le token de vérification.
+   * @returns Un message de succès ou une erreur si l'email n'est pas trouvé.
+   */
   @Post('resend-email-verification')
   @HttpCode(HttpStatus.OK)
   @ApiOperation({ summary: 'Retourner le courriel de vérification' })
@@ -150,6 +192,12 @@ export class AuthController {
     return this.authService.resendEmailVerification(data);
   }
 
+  /**
+   * Renouvelle les tokens d'authentification de l'utilisateur.
+   * @param req Requête HTTP contenant le token de rafraîchissement.
+   * @param res Réponse HTTP pour définir les nouveaux cookies d'authentification.
+   * @returns Un message de succès ou une erreur si le token de rafraîchissement est invalide.
+   */
   @Post('refresh')
   @HttpCode(HttpStatus.OK)
   @ApiOperation({ summary: 'Renouveler les tokens' })
@@ -170,6 +218,11 @@ export class AuthController {
     return res.json({ success: true });
   }
 
+  /**
+   * Obtient les informations de l'utilisateur connecté.
+   * @param user Utilisateur connecté dont les informations doivent être renvoyées.
+   * @returns Les informations de l'utilisateur connecté.
+   */
   @Get('me')
   @UseGuards(AuthGuard('jwt'))
   @ApiBearerAuth()
@@ -181,7 +234,12 @@ export class AuthController {
     return { user: instanceToPlain(user) };
   }
 
-  // Two Factor Authentication endpoints
+  /**
+   * Met à jour les informations de l'utilisateur connecté.
+   * @param user Utilisateur connecté dont les informations doivent être mises à jour.
+   * @param updateUserDto DTO contenant les nouvelles informations de l'utilisateur.
+   * @returns Les informations mises à jour de l'utilisateur.
+   */
   @Get('2fa/generate')
   @UseGuards(AuthGuard('jwt'))
   @ApiBearerAuth()
@@ -191,6 +249,12 @@ export class AuthController {
     return this.twoFactorService.generateTwoFactorSecret(user);
   }
 
+  /**
+   * Active l'authentification à deux facteurs (2FA) pour l'utilisateur connecté.
+   * @param user Utilisateur connecté pour lequel l'authentification 2FA doit être activée.
+   * @param enableTwoFactorDto  DTO contenant le secret et le code de vérification pour activer l'authentification 2FA.
+   * @returns Un message de succès indiquant que l'authentification 2FA a été activée.
+   */
   @Post('2fa/enable')
   @UseGuards(AuthGuard('jwt'))
   @ApiBearerAuth()
@@ -209,6 +273,11 @@ export class AuthController {
     return { message: 'Authentification à deux facteurs activée' };
   }
 
+  /**
+   * Désactive l'authentification à deux facteurs (2FA) pour l'utilisateur connecté.
+   * @param user Utilisateur connecté pour lequel l'authentification 2FA doit être désactivée.
+   * @returns Un message de succès indiquant que l'authentification 2FA a été désactivée.
+   */
   @Post('2fa/disable')
   @UseGuards(AuthGuard('jwt'))
   @ApiBearerAuth()
@@ -217,5 +286,17 @@ export class AuthController {
   async disableTwoFactor(@CurrentUser() user: User) {
     await this.twoFactorService.disableTwoFactor(user);
     return { message: 'Authentification à deux facteurs désactivée' };
+  }
+
+  @Patch('update-password/:id')
+  @UseGuards(AuthGuard('jwt'))
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Mettre à jour le mot de passe de l’utilisateur' })
+  @ApiResponse({ status: 200, description: 'Mot de passe mis à jour avec succès' })
+  async updatePassword(
+    @Param('id') id: string,
+    @Body() changePasswordDto: ChangePasswordDto,
+  ) {
+    return this.authService.changePassword(id, changePasswordDto);
   }
 }

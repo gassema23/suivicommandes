@@ -1,6 +1,6 @@
 import { createFileRoute, redirect } from "@tanstack/react-router";
 import { z } from "zod";
-import MultiStepLoginForm from "@/features/common/auth/components/MultiStepLoginForm";
+import LoginContainer from "@/features/common/auth/components/LoginContainer";
 
 const fallback = "/" as const;
 
@@ -9,16 +9,7 @@ export const Route = createFileRoute("/_guest/(login)/login")({
     redirect: z.string().optional().catch(""),
   }),
   head: () => ({
-    meta: [
-      {
-        name: "description",
-        content:
-          "Connectez-vous à votre compte pour accéder à toutes les fonctionnalités.",
-      },
-      {
-        title: `Connexion`,
-      },
-    ],
+    meta: [{ title: `Connexion` }],
   }),
   beforeLoad: ({ context, search }) => {
     if (context.auth.isAuthenticated) {
@@ -29,5 +20,6 @@ export const Route = createFileRoute("/_guest/(login)/login")({
 });
 
 function LoginPage() {
-  return <MultiStepLoginForm />;
+
+  return <LoginContainer />;
 }

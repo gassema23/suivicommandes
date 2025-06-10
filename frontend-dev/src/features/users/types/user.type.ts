@@ -29,7 +29,7 @@ export type User = {
   fullName: string;
   firstName: string;
   lastName: string;
-  profilePicture?: string;
+  profileImage?: string;
   emailVerifiedAt?: string | null;
   email?: string;
   initials?: string;

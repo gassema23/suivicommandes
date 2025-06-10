@@ -34,6 +34,7 @@ export const Route = createFileRoute("/_authenticated/profile/")({
 
 function RouteComponent() {
   const { data } = useSuspenseQuery(profileQueryOptions);
+
   return (
     <div>
       <ProfileBanner data={data.user} />

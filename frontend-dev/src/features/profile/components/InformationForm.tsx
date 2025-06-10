@@ -14,6 +14,8 @@ import { updateUserInformation } from "../services/update-user-information.servi
 import type { User } from "@/features/users/types/user.type";
 import { Label } from "@/components/ui/shadcn/label";
 import { QUERY_KEYS } from "@/features/common/constants/query-key.constant";
+import { toast } from "sonner";
+import { SUCCESS_MESSAGES } from "@/features/common/constants/messages.constant";
 
 interface InformationFormProps {
   user: User;
@@ -21,16 +23,8 @@ interface InformationFormProps {
 
 export default function InformationForm({ user }: InformationFormProps) {
   const [backendError, setBackendError] = useState<string | null>(null);
-  const [successMessage, setSuccessMessage] = useState<string | null>(null);
   const navigate = useNavigate();
   const queryClient = useQueryClient();
-
-  useEffect(() => {
-    if (successMessage) {
-      const timer = setTimeout(() => setSuccessMessage(null), 10000);
-      return () => clearTimeout(timer);
-    }
-  }, [successMessage]);
 
   const form = useForm<UserInformationFormData>({
     resolver: zodResolver(userInformationSchema),
@@ -58,11 +52,10 @@ export default function InformationForm({ user }: InformationFormProps) {
         queryClient.invalidateQueries({ queryKey: QUERY_KEYS.USERS }),
       ]);
 
-      setSuccessMessage("Vos informations ont été mises à jour avec succès.");
+      toast.success(SUCCESS_MESSAGES.update("Informations personnelles"));
       navigate({ to: "/profile" });
     },
     onError: (error: { message: string }) => {
-      setSuccessMessage(null);
       setBackendError(error.message);
     },
   });
@@ -83,13 +76,6 @@ export default function InformationForm({ user }: InformationFormProps) {
         <FormError
           title="Erreur lors de l'envoie du formulaire"
           message={backendError}
-        />
-      )}
-      {successMessage && (
-        <FormError
-          variant="success"
-          title="Opération réussie"
-          message={successMessage}
         />
       )}
       <div className="grid grid-cols-12 gap-2 items-center">

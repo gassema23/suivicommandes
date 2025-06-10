@@ -1,8 +1,10 @@
 import { NavigationTabs } from "@/components/ui/quebec/NavigationTabs";
 import InformationForm from "./InformationForm";
 import ProfileSecurityForm from "./ProfileSecurityForm";
+import SettingsForm from "./SettingsForm";
+import type { User } from "@/features/users/types/user.type";
 
-export default function ProfileMenu({ data }) {
+export default function ProfileMenu({ data }: { data: User }) {
   return (
     <NavigationTabs
       defaultTab="information"
@@ -15,7 +17,7 @@ export default function ProfileMenu({ data }) {
         {
           id: "security",
           label: "Sécurité",
-          content: () => <ProfileSecurityForm />,
+          content: () => <ProfileSecurityForm userId={data.id} />,
         },
         {
           id: "notifications",
@@ -25,7 +27,7 @@ export default function ProfileMenu({ data }) {
         {
           id: "settings",
           label: "Préférences",
-          content: () => <div>Contenu des notifications</div>,
+          content: () => <SettingsForm />,
         },
       ]}
     />

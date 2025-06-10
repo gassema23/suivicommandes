@@ -87,8 +87,6 @@ export class AuthService {
    * @returns Un objet contenant l'accessToken et le refreshToken.
    */
   async loginAndSetCookies(loginDto: LoginDto, res: Response) {
-    const { email, password, twoFactorCode } = loginDto;
-
     // Authentification et vérification 2FA via la méthode login existante
     const result = await this.login(loginDto);
 
@@ -142,11 +140,9 @@ export class AuthService {
     const { email, password, twoFactorCode } = loginDto;
 
     const testValue = await this.cacheManager.get('test_key');
-    console.log('Test Redis:', testValue); // doit afficher 42
 
     const cacheKey = `login_attempts:${email}`;
     let attempts = (await this.cacheManager.get<number>(cacheKey)) || 0;
-    console.log('Tentatives pour', email, ':', attempts);
 
     // Vérifie le seuil AVANT de valider l'utilisateur
     if (attempts >= 3) {
@@ -408,7 +404,7 @@ export class AuthService {
     userId: string,
     changePasswordDto: ChangePasswordDto,
   ): Promise<{ message: string }> {
-    const { currentPassword, newPassword } = changePasswordDto;
+    const { currentPassword, newPassword, confirmPassword } = changePasswordDto;
 
     const user = await this.userRepository.findOne({ where: { id: userId } });
     if (!user) {
@@ -421,8 +417,21 @@ export class AuthService {
       currentPassword,
       user.password,
     );
+
     if (!isCurrentPasswordValid) {
       throw new BadRequestException('Le mot de passe actuel est incorrect.');
+    }
+
+    // Vérifier si le nouveau mot de passe et la confirmation correspondent
+    if (newPassword !== confirmPassword) {
+      throw new BadRequestException('Les mots de passe ne correspondent pas.');
+    }
+
+    // le nouveau mot de passe ne doit pas être le même que l'ancien
+    if (newPassword === currentPassword) {
+      throw new BadRequestException(
+        "Le nouveau mot de passe ne peut pas être le même que l'ancien.",
+      );
     }
 
     const hashedPassword = await bcrypt.hash(newPassword, 12);
@@ -514,9 +523,19 @@ export class AuthService {
    * @param userId - L'ID de l'utilisateur à déconnecter.
    * @returns Un message indiquant que la déconnexion a réussi.
    */
-  async logout(userId: string): Promise<{ message: string }> {
+  async logout(userId: string, res: Response): Promise<{ message: string }> {
     await this.userRepository.update(userId, {
       rememberToken: '',
+    });
+    res.clearCookie('accessToken', {
+      httpOnly: true,
+      sameSite: 'strict',
+      secure: process.env.NODE_ENV === 'production',
+    });
+    res.clearCookie('refreshToken', {
+      httpOnly: true,
+      sameSite: 'strict',
+      secure: process.env.NODE_ENV === 'production',
     });
     return { message: 'Déconnexion réussie' };
   }
