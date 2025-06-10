@@ -12,16 +12,32 @@ import { Permission } from '../../roles/dto/create-role.dto';
 
 @Injectable()
 export class AuthorizationsGuard implements CanActivate {
+  /**
+   * Garde d'autorisation pour vérifier les permissions de l'utilisateur.
+   * Cette garde s'assure que l'utilisateur est authentifié et possède les permissions nécessaires
+   * pour accéder à une ressource spécifique.
+   * @param reflector - Utilisé pour récupérer les métadonnées des permissions définies sur les routes.
+   * @param authService - Service d'authentification pour récupérer les permissions de l'utilisateur.
+   */
   constructor(
     private reflector: Reflector,
     private authService: AuthService,
   ) {}
 
+  /**
+   * Vérifie si l'utilisateur a les permissions nécessaires pour accéder à la ressource.
+   * @param context - Contexte d'exécution de la requête.
+   * @returns true si l'utilisateur a les permissions, sinon lève une exception.
+   * @throws UnauthorizedException si l'utilisateur n'est pas authentifié.
+   * @throws ForbiddenException si l'utilisateur n'a pas les permissions requises.
+   */
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const request = context.switchToHttp().getRequest();
 
     if (!request.user) {
-      throw new UnauthorizedException('Utilisateur non authentifié');
+      throw new UnauthorizedException(
+        'Accès refusé : utilisateur non authentifié.',
+      );
     }
 
     const routePermissions: Permission[] = this.reflector.getAllAndOverride(
@@ -39,7 +55,7 @@ export class AuthorizationsGuard implements CanActivate {
         );
         if (!userPermission) {
           throw new ForbiddenException(
-            `L'utilisateur n'a pas la permission pour la ressource : ${routePermission.resource}`,
+            `Accès refusé : vous n'avez pas la permission d'accéder à la ressource "${routePermission.resource}".`,
           );
         } else {
           const hasAction = routePermission.actions.every((action) =>
@@ -47,14 +63,14 @@ export class AuthorizationsGuard implements CanActivate {
           );
           if (!hasAction) {
             throw new ForbiddenException(
-              `L'utilisateur n'a pas les actions requises pour la ressource : ${routePermission.resource}`,
+              `Accès refusé : vous n'avez pas les actions requises pour la ressource "${routePermission.resource}".`,
             );
           }
         }
       }
     } catch (error) {
       throw new ForbiddenException(
-        'Erreur lors de la récupération des permissions utilisateur',
+        "Erreur lors de la vérification des permissions de l'utilisateur.",
       );
     }
 

@@ -17,7 +17,6 @@ import { LoginDto } from '../dto/login.dto';
 import { RegisterDto } from '../dto/register.dto';
 import { UsersService } from '../../users/services/users.service';
 import { EmailService } from '../../email/email.service';
-import { TwoFactorAuthService } from './two-factor-auth.service';
 import { ForgotPasswordDto } from '../dto/forgot-password.dto';
 import { ResetPasswordDto } from '../dto/reset-password.dto';
 import { ChangePasswordDto } from '../dto/change-password.dto';
@@ -29,6 +28,7 @@ import { Response } from 'express';
 
 import { CACHE_MANAGER } from '@nestjs/cache-manager';
 import type { Cache } from 'cache-manager';
+import { TwoFactorAuthService } from './two-factor-auth.service';
 
 export interface JwtPayload {
   sub: string;
@@ -63,6 +63,12 @@ export class AuthService {
     @Inject(CACHE_MANAGER) private cacheManager: Cache,
   ) {}
 
+  /**
+   * Valide les identifiants de l'utilisateur.
+   * @param email - L'email de l'utilisateur.
+   * @param password - Le mot de passe de l'utilisateur.
+   * @returns L'utilisateur si les identifiants sont valides, sinon null.
+   */
   async validateUser(email: string, password: string): Promise<User | null> {
     const user = await this.userRepository.findOne({
       where: { email },
@@ -75,6 +81,11 @@ export class AuthService {
     return null;
   }
 
+  /**
+   * Génère les tokens JWT pour l'utilisateur.
+   * @param user - L'utilisateur pour lequel générer les tokens.
+   * @returns Un objet contenant l'accessToken et le refreshToken.
+   */
   async loginAndSetCookies(loginDto: LoginDto, res: Response) {
     const { email, password, twoFactorCode } = loginDto;
 
@@ -122,6 +133,11 @@ export class AuthService {
     return { user: result.user, requiresTwoFactor: false };
   }
 
+  /**
+   * Génère les tokens JWT pour l'utilisateur.
+   * @param user - L'utilisateur pour lequel générer les tokens.
+   * @returns Un objet contenant l'accessToken et le refreshToken.
+   */
   async login(loginDto: LoginDto): Promise<AuthResult> {
     const { email, password, twoFactorCode } = loginDto;
 
@@ -193,6 +209,11 @@ export class AuthService {
     };
   }
 
+  /**
+   * Génère les tokens JWT pour l'utilisateur.
+   * @param user - L'utilisateur pour lequel générer les tokens.
+   * @returns Un objet contenant l'accessToken et le refreshToken.
+   */
   async register(registerDto: RegisterDto): Promise<{ message: string }> {
     let hashedPassword: string;
     // Vérifier si l'utilisateur existe déjà
@@ -258,6 +279,10 @@ export class AuthService {
     };
   }
 
+  /**
+   * Envoie un email de vérification à l'utilisateur.
+   * @param user - L'utilisateur pour lequel envoyer l'email de vérification.
+   */
   async verifyEmail(
     token: string,
   ): Promise<{ message: string; user: VerifyEmailInterface }> {
@@ -297,6 +322,12 @@ export class AuthService {
     }
   }
 
+  /**
+   * Envoie un email de vérification à l'utilisateur après l'inscription.
+   * @param user - L'utilisateur pour lequel envoyer l'email de vérification.
+   * @param forgotPasswordDto - DTO contenant l'email de l'utilisateur qui souhaite réinitialiser son mot de passe.
+   * @returns - Un message indiquant que si l'email existe, un lien de réinitialisation a été envoyé.
+   */
   async forgotPassword(
     forgotPasswordDto: ForgotPasswordDto,
   ): Promise<{ message: string }> {
@@ -325,6 +356,11 @@ export class AuthService {
     };
   }
 
+  /**
+   * Réinitialise le mot de passe de l'utilisateur.
+   * @param resetPasswordDto - DTO contenant le token et le nouveau mot de passe.
+   * @returns Un message indiquant que le mot de passe a été réinitialisé avec succès.
+   */
   async resetPassword(
     resetPasswordDto: ResetPasswordDto,
   ): Promise<{ message: string }> {
@@ -362,6 +398,12 @@ export class AuthService {
     }
   }
 
+  /**
+   * Change le mot de passe de l'utilisateur.
+   * @param userId - L'ID de l'utilisateur dont le mot de passe doit être changé.
+   * @param changePasswordDto - DTO contenant le mot de passe actuel et le nouveau mot de passe.
+   * @returns Un message indiquant que le mot de passe a été changé avec succès.
+   */
   async changePassword(
     userId: string,
     changePasswordDto: ChangePasswordDto,
@@ -392,6 +434,11 @@ export class AuthService {
     return { message: 'Mot de passe modifié avec succès.' };
   }
 
+  /**
+   * Rafraîchit le token d'accès en utilisant le token de rafraîchissement.
+   * @param refreshToken - Le token de rafraîchissement.
+   * @returns Un objet contenant le nouveau accessToken et refreshToken.
+   */
   async refreshToken(
     refreshToken: string,
   ): Promise<{ accessToken: string; refreshToken: string }> {
@@ -419,6 +466,12 @@ export class AuthService {
     }
   }
 
+  /**
+   * Définit les cookies d'authentification dans la réponse.
+   * @param res - La réponse HTTP.
+   * @param accessToken - Le token d'accès à définir dans le cookie.
+   * @param refreshToken - Le token de rafraîchissement à définir dans le cookie.
+   */
   async setAuthCookies(
     res: Response,
     accessToken: string,
@@ -456,6 +509,11 @@ export class AuthService {
     }
   }
 
+  /**
+   * Déconnecte l'utilisateur en supprimant le token de rafraîchissement.
+   * @param userId - L'ID de l'utilisateur à déconnecter.
+   * @returns Un message indiquant que la déconnexion a réussi.
+   */
   async logout(userId: string): Promise<{ message: string }> {
     await this.userRepository.update(userId, {
       rememberToken: '',
@@ -463,6 +521,11 @@ export class AuthService {
     return { message: 'Déconnexion réussie' };
   }
 
+  /**
+   * Génère les tokens JWT pour l'utilisateur.
+   * @param user - L'utilisateur pour lequel générer les tokens.
+   * @returns Un objet contenant l'accessToken et le refreshToken.
+   */
   private async generateTokens(
     user: User,
   ): Promise<{ accessToken: string; refreshToken: string }> {
@@ -490,6 +553,10 @@ export class AuthService {
     return { accessToken, refreshToken };
   }
 
+  /**
+   * Envoie un email de vérification à l'utilisateur après l'inscription.
+   * @param user - L'utilisateur pour lequel envoyer l'email de vérification.
+   */
   private async sendVerificationEmail(user: User): Promise<void> {
     const verificationToken = this.jwtService.sign(
       { sub: user.id, type: 'email-verification' },
@@ -500,6 +567,11 @@ export class AuthService {
     await this.emailService.sendVerificationEmail(user, verificationToken);
   }
 
+  /**
+   * Récupère les permissions de l'utilisateur en fonction de son rôle.
+   * @param userId - L'ID de l'utilisateur dont on veut récupérer les permissions.
+   * @returns Un tableau de permissions associées au rôle de l'utilisateur.
+   */
   async getUserPermissions(userId: string) {
     const user = await this.userRepository.findOne({
       where: { id: userId },
@@ -512,6 +584,11 @@ export class AuthService {
     return user.role.permissions || [];
   }
 
+  /**
+   * Envoie un nouvel email de vérification à l'utilisateur.
+   * @param data - Contient le token de vérification et l'email de l'utilisateur.
+   * @returns Un message indiquant que l'email de vérification a été envoyé.
+   */
   async resendEmailVerification(data: {
     token: string;
     email: string;
@@ -533,6 +610,11 @@ export class AuthService {
     return { message: 'Un nouvel email de vérification a été envoyé' };
   }
 
+  /**
+   * Onboard un nouvel utilisateur en vérifiant son email et en mettant à jour ses informations.
+   * @param userId - L'ID de l'utilisateur à onboarder.
+   * @param onboardingDto - DTO contenant les informations d'onboarding de l'utilisateur.
+   */
   async onboard(
     userId: string,
     onboardingDto: OnboardingDto /*: Promise<{ message: string }>*/,

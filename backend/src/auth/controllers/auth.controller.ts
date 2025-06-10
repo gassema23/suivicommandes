@@ -23,7 +23,6 @@ import { Throttle } from '@nestjs/throttler';
 import { Response, Request } from 'express';
 
 import { AuthService } from '../services/auth.service';
-import { TwoFactorAuthService } from '../services/two-factor-auth.service';
 import { LoginDto } from '../dto/login.dto';
 import { RegisterDto } from '../dto/register.dto';
 import { ChangePasswordDto } from '../dto/change-password.dto';
@@ -34,6 +33,7 @@ import { User } from '../../users/entities/user.entity';
 import { EnableTwoFactorDto } from '../dto/enable-two-factor.dto';
 import { instanceToPlain } from 'class-transformer';
 import { OnboardingDto } from '../dto/onboarding.dto';
+import { TwoFactorAuthService } from '../services/two-factor-auth.service';
 
 @ApiTags('Authentication')
 @Controller('auth')

@@ -9,11 +9,11 @@ import { EmailModule } from '../email/email.module';
 import { JwtStrategy } from './strategies/jwt.strategy';
 import { UsersModule } from '../users/users.module';
 import { AuthService } from './services/auth.service';
-import { TwoFactorAuthService } from './services/two-factor-auth.service';
 import { LocalStrategy } from './strategies/local.strategy';
 import { AuthController } from './controllers/auth.controller';
 import { CacheModule } from '@nestjs/cache-manager';
 import * as redisStore from 'cache-manager-ioredis';
+import { TwoFactorAuthService } from './services/two-factor-auth.service';
 
 @Module({
   imports: [
@@ -33,7 +33,7 @@ import * as redisStore from 'cache-manager-ioredis';
       useFactory: async (configService: ConfigService) => ({
         secret: configService.getOrThrow<string>('JWT_SECRET'),
         signOptions: {
-          expiresIn: configService.getOrThrow<string>('JWT_EXPIRATION', '8h'),
+          expiresIn: configService.getOrThrow<string>('JWT_EXPIRATION'),
         },
       }),
       inject: [ConfigService],
