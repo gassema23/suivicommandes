@@ -30,6 +30,7 @@ import { FlowsModule } from './flows/flows.module';
 import { ProviderDisponibilitiesModule } from './provider-disponibilities/provider-disponibilities.module';
 import { RequestTypeServiceCategoriesModule } from './request-type-service-categories/request-type-service-categories.module';
 import { RequestTypeDelaysModule } from './request-type-delays/request-type-delays.module';
+import { DeliverableDelayRequestTypesModule } from './deliverable-delay-request-types/deliverable-delay-request-types.module';
 
 @Module({
   imports: [
@@ -132,6 +133,7 @@ import { RequestTypeDelaysModule } from './request-type-delays/request-type-dela
     ProviderDisponibilitiesModule,
     RequestTypeServiceCategoriesModule,
     RequestTypeDelaysModule,
+    DeliverableDelayRequestTypesModule,
   ],
 })
 export class AppModule {}

@@ -40,6 +40,7 @@ export const sidebarMenu = {
         PERMISSIONS.FLOWS.READ,
         PERMISSIONS.PROVIDER_DISPONIBILITIES.READ,
         PERMISSIONS.REQUEST_TYPE_SERVICE_CATEGORIES.READ,
+        PERMISSIONS.REQUEST_TYPE_DELAYS.READ,
       ],
       permissionLogic: "OR",
       items: [
@@ -62,6 +63,11 @@ export const sidebarMenu = {
           title: "Catégories de services par type de demande",
           url: "/pilotages/request-type-service-categories",
           permission: PERMISSIONS.REQUEST_TYPE_SERVICE_CATEGORIES.READ,
+        },
+        {
+          title: "Délai par type de demande",
+          url: "/pilotages/request-type-delays",
+          permission: PERMISSIONS.REQUEST_TYPE_DELAYS.READ,
         },
         {
           title: "Types de délai",

@@ -8,6 +8,8 @@ import { PaginatedResult } from '../../common/interfaces/paginated-result.interf
 import { CreateServiceCategoryDto } from '../dto/create-service-category.dto';
 import { User } from '../../users/entities/user.entity';
 import { UpdateServiceCategoryDto } from '../dto/update-service-category.dto';
+import { RequestType } from 'src/request-types/entities/request-type.entity';
+import { RequestTypeServiceCategory } from 'src/request-type-service-categories/entities/request-type-service-category.entity';
 
 @Injectable()
 export class ServiceCategoriesService {
@@ -137,6 +139,24 @@ export class ServiceCategoriesService {
     }
 
     return serviceCategory;
+  }
+
+  async getRequestTypeServiceCategory(id: string): Promise<RequestTypeServiceCategory[]> {
+    const serviceCategory = await this.serviceCategoryRepository.findOne({
+      where: { id },
+      relations: [
+        'requestTypeServiceCategories',
+        'requestTypeServiceCategories.requestType',
+      ],
+    });
+
+    if (!serviceCategory) {
+      throw new BadRequestException(
+        'Impossible de trouver : aucun type de demande trouvée pour cette catégorie de service.',
+      );
+    }
+
+    return serviceCategory.requestTypeServiceCategories;
   }
 
   /**

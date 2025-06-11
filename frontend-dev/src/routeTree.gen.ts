@@ -28,6 +28,7 @@ import { Route as AuthenticatedPilotagesSectorsIndexImport } from './routes/_aut
 import { Route as AuthenticatedPilotagesRequisitionTypesIndexImport } from './routes/_authenticated/pilotages/requisition-types/index'
 import { Route as AuthenticatedPilotagesRequestTypesIndexImport } from './routes/_authenticated/pilotages/request-types/index'
 import { Route as AuthenticatedPilotagesRequestTypeServiceCategoriesIndexImport } from './routes/_authenticated/pilotages/request-type-service-categories/index'
+import { Route as AuthenticatedPilotagesRequestTypeDelaysIndexImport } from './routes/_authenticated/pilotages/request-type-delays/index'
 import { Route as AuthenticatedPilotagesProvidersIndexImport } from './routes/_authenticated/pilotages/providers/index'
 import { Route as AuthenticatedPilotagesProviderServiceCategoriesIndexImport } from './routes/_authenticated/pilotages/provider-service-categories/index'
 import { Route as AuthenticatedPilotagesProviderDisponibilitiesIndexImport } from './routes/_authenticated/pilotages/provider-disponibilities/index'
@@ -47,6 +48,7 @@ import { Route as AuthenticatedPilotagesSectorsCreateImport } from './routes/_au
 import { Route as AuthenticatedPilotagesRequisitionTypesCreateImport } from './routes/_authenticated/pilotages/requisition-types/create'
 import { Route as AuthenticatedPilotagesRequestTypesCreateImport } from './routes/_authenticated/pilotages/request-types/create'
 import { Route as AuthenticatedPilotagesRequestTypeServiceCategoriesCreateImport } from './routes/_authenticated/pilotages/request-type-service-categories/create'
+import { Route as AuthenticatedPilotagesRequestTypeDelaysCreateImport } from './routes/_authenticated/pilotages/request-type-delays/create'
 import { Route as AuthenticatedPilotagesProvidersCreateImport } from './routes/_authenticated/pilotages/providers/create'
 import { Route as AuthenticatedPilotagesProviderServiceCategoriesCreateImport } from './routes/_authenticated/pilotages/provider-service-categories/create'
 import { Route as AuthenticatedPilotagesProviderDisponibilitiesCreateImport } from './routes/_authenticated/pilotages/provider-disponibilities/create'
@@ -65,6 +67,7 @@ import { Route as AuthenticatedPilotagesSectorsUpdateIdImport } from './routes/_
 import { Route as AuthenticatedPilotagesRequisitionTypesUpdateIdImport } from './routes/_authenticated/pilotages/requisition-types/update/$id'
 import { Route as AuthenticatedPilotagesRequestTypesUpdateIdImport } from './routes/_authenticated/pilotages/request-types/update/$id'
 import { Route as AuthenticatedPilotagesRequestTypeServiceCategoriesUpdateIdImport } from './routes/_authenticated/pilotages/request-type-service-categories/update/$id'
+import { Route as AuthenticatedPilotagesRequestTypeDelaysUpdateIdImport } from './routes/_authenticated/pilotages/request-type-delays/update/$id'
 import { Route as AuthenticatedPilotagesProvidersUpdateIdImport } from './routes/_authenticated/pilotages/providers/update/$id'
 import { Route as AuthenticatedPilotagesProviderServiceCategoriesUpdateIdImport } from './routes/_authenticated/pilotages/provider-service-categories/update/$id'
 import { Route as AuthenticatedPilotagesProviderDisponibilitiesUpdateIdImport } from './routes/_authenticated/pilotages/provider-disponibilities/update/$id'
@@ -184,6 +187,13 @@ const AuthenticatedPilotagesRequestTypeServiceCategoriesIndexRoute =
   AuthenticatedPilotagesRequestTypeServiceCategoriesIndexImport.update({
     id: '/pilotages/request-type-service-categories/',
     path: '/pilotages/request-type-service-categories/',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+
+const AuthenticatedPilotagesRequestTypeDelaysIndexRoute =
+  AuthenticatedPilotagesRequestTypeDelaysIndexImport.update({
+    id: '/pilotages/request-type-delays/',
+    path: '/pilotages/request-type-delays/',
     getParentRoute: () => AuthenticatedRoute,
   } as any)
 
@@ -320,6 +330,13 @@ const AuthenticatedPilotagesRequestTypeServiceCategoriesCreateRoute =
     getParentRoute: () => AuthenticatedRoute,
   } as any)
 
+const AuthenticatedPilotagesRequestTypeDelaysCreateRoute =
+  AuthenticatedPilotagesRequestTypeDelaysCreateImport.update({
+    id: '/pilotages/request-type-delays/create',
+    path: '/pilotages/request-type-delays/create',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+
 const AuthenticatedPilotagesProvidersCreateRoute =
   AuthenticatedPilotagesProvidersCreateImport.update({
     id: '/pilotages/providers/create',
@@ -443,6 +460,13 @@ const AuthenticatedPilotagesRequestTypeServiceCategoriesUpdateIdRoute =
   AuthenticatedPilotagesRequestTypeServiceCategoriesUpdateIdImport.update({
     id: '/pilotages/request-type-service-categories/update/$id',
     path: '/pilotages/request-type-service-categories/update/$id',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+
+const AuthenticatedPilotagesRequestTypeDelaysUpdateIdRoute =
+  AuthenticatedPilotagesRequestTypeDelaysUpdateIdImport.update({
+    id: '/pilotages/request-type-delays/update/$id',
+    path: '/pilotages/request-type-delays/update/$id',
     getParentRoute: () => AuthenticatedRoute,
   } as any)
 
@@ -646,6 +670,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedPilotagesProvidersCreateImport
       parentRoute: typeof AuthenticatedImport
     }
+    '/_authenticated/pilotages/request-type-delays/create': {
+      id: '/_authenticated/pilotages/request-type-delays/create'
+      path: '/pilotages/request-type-delays/create'
+      fullPath: '/pilotages/request-type-delays/create'
+      preLoaderRoute: typeof AuthenticatedPilotagesRequestTypeDelaysCreateImport
+      parentRoute: typeof AuthenticatedImport
+    }
     '/_authenticated/pilotages/request-type-service-categories/create': {
       id: '/_authenticated/pilotages/request-type-service-categories/create'
       path: '/pilotages/request-type-service-categories/create'
@@ -777,6 +808,13 @@ declare module '@tanstack/react-router' {
       path: '/pilotages/providers'
       fullPath: '/pilotages/providers'
       preLoaderRoute: typeof AuthenticatedPilotagesProvidersIndexImport
+      parentRoute: typeof AuthenticatedImport
+    }
+    '/_authenticated/pilotages/request-type-delays/': {
+      id: '/_authenticated/pilotages/request-type-delays/'
+      path: '/pilotages/request-type-delays'
+      fullPath: '/pilotages/request-type-delays'
+      preLoaderRoute: typeof AuthenticatedPilotagesRequestTypeDelaysIndexImport
       parentRoute: typeof AuthenticatedImport
     }
     '/_authenticated/pilotages/request-type-service-categories/': {
@@ -912,6 +950,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedPilotagesProvidersUpdateIdImport
       parentRoute: typeof AuthenticatedImport
     }
+    '/_authenticated/pilotages/request-type-delays/update/$id': {
+      id: '/_authenticated/pilotages/request-type-delays/update/$id'
+      path: '/pilotages/request-type-delays/update/$id'
+      fullPath: '/pilotages/request-type-delays/update/$id'
+      preLoaderRoute: typeof AuthenticatedPilotagesRequestTypeDelaysUpdateIdImport
+      parentRoute: typeof AuthenticatedImport
+    }
     '/_authenticated/pilotages/request-type-service-categories/update/$id': {
       id: '/_authenticated/pilotages/request-type-service-categories/update/$id'
       path: '/pilotages/request-type-service-categories/update/$id'
@@ -986,6 +1031,7 @@ interface AuthenticatedRouteChildren {
   AuthenticatedPilotagesProviderDisponibilitiesCreateRoute: typeof AuthenticatedPilotagesProviderDisponibilitiesCreateRoute
   AuthenticatedPilotagesProviderServiceCategoriesCreateRoute: typeof AuthenticatedPilotagesProviderServiceCategoriesCreateRoute
   AuthenticatedPilotagesProvidersCreateRoute: typeof AuthenticatedPilotagesProvidersCreateRoute
+  AuthenticatedPilotagesRequestTypeDelaysCreateRoute: typeof AuthenticatedPilotagesRequestTypeDelaysCreateRoute
   AuthenticatedPilotagesRequestTypeServiceCategoriesCreateRoute: typeof AuthenticatedPilotagesRequestTypeServiceCategoriesCreateRoute
   AuthenticatedPilotagesRequestTypesCreateRoute: typeof AuthenticatedPilotagesRequestTypesCreateRoute
   AuthenticatedPilotagesRequisitionTypesCreateRoute: typeof AuthenticatedPilotagesRequisitionTypesCreateRoute
@@ -1005,6 +1051,7 @@ interface AuthenticatedRouteChildren {
   AuthenticatedPilotagesProviderDisponibilitiesIndexRoute: typeof AuthenticatedPilotagesProviderDisponibilitiesIndexRoute
   AuthenticatedPilotagesProviderServiceCategoriesIndexRoute: typeof AuthenticatedPilotagesProviderServiceCategoriesIndexRoute
   AuthenticatedPilotagesProvidersIndexRoute: typeof AuthenticatedPilotagesProvidersIndexRoute
+  AuthenticatedPilotagesRequestTypeDelaysIndexRoute: typeof AuthenticatedPilotagesRequestTypeDelaysIndexRoute
   AuthenticatedPilotagesRequestTypeServiceCategoriesIndexRoute: typeof AuthenticatedPilotagesRequestTypeServiceCategoriesIndexRoute
   AuthenticatedPilotagesRequestTypesIndexRoute: typeof AuthenticatedPilotagesRequestTypesIndexRoute
   AuthenticatedPilotagesRequisitionTypesIndexRoute: typeof AuthenticatedPilotagesRequisitionTypesIndexRoute
@@ -1024,6 +1071,7 @@ interface AuthenticatedRouteChildren {
   AuthenticatedPilotagesProviderDisponibilitiesUpdateIdRoute: typeof AuthenticatedPilotagesProviderDisponibilitiesUpdateIdRoute
   AuthenticatedPilotagesProviderServiceCategoriesUpdateIdRoute: typeof AuthenticatedPilotagesProviderServiceCategoriesUpdateIdRoute
   AuthenticatedPilotagesProvidersUpdateIdRoute: typeof AuthenticatedPilotagesProvidersUpdateIdRoute
+  AuthenticatedPilotagesRequestTypeDelaysUpdateIdRoute: typeof AuthenticatedPilotagesRequestTypeDelaysUpdateIdRoute
   AuthenticatedPilotagesRequestTypeServiceCategoriesUpdateIdRoute: typeof AuthenticatedPilotagesRequestTypeServiceCategoriesUpdateIdRoute
   AuthenticatedPilotagesRequestTypesUpdateIdRoute: typeof AuthenticatedPilotagesRequestTypesUpdateIdRoute
   AuthenticatedPilotagesRequisitionTypesUpdateIdRoute: typeof AuthenticatedPilotagesRequisitionTypesUpdateIdRoute
@@ -1057,6 +1105,8 @@ const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
     AuthenticatedPilotagesProviderServiceCategoriesCreateRoute,
   AuthenticatedPilotagesProvidersCreateRoute:
     AuthenticatedPilotagesProvidersCreateRoute,
+  AuthenticatedPilotagesRequestTypeDelaysCreateRoute:
+    AuthenticatedPilotagesRequestTypeDelaysCreateRoute,
   AuthenticatedPilotagesRequestTypeServiceCategoriesCreateRoute:
     AuthenticatedPilotagesRequestTypeServiceCategoriesCreateRoute,
   AuthenticatedPilotagesRequestTypesCreateRoute:
@@ -1094,6 +1144,8 @@ const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
     AuthenticatedPilotagesProviderServiceCategoriesIndexRoute,
   AuthenticatedPilotagesProvidersIndexRoute:
     AuthenticatedPilotagesProvidersIndexRoute,
+  AuthenticatedPilotagesRequestTypeDelaysIndexRoute:
+    AuthenticatedPilotagesRequestTypeDelaysIndexRoute,
   AuthenticatedPilotagesRequestTypeServiceCategoriesIndexRoute:
     AuthenticatedPilotagesRequestTypeServiceCategoriesIndexRoute,
   AuthenticatedPilotagesRequestTypesIndexRoute:
@@ -1130,6 +1182,8 @@ const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
     AuthenticatedPilotagesProviderServiceCategoriesUpdateIdRoute,
   AuthenticatedPilotagesProvidersUpdateIdRoute:
     AuthenticatedPilotagesProvidersUpdateIdRoute,
+  AuthenticatedPilotagesRequestTypeDelaysUpdateIdRoute:
+    AuthenticatedPilotagesRequestTypeDelaysUpdateIdRoute,
   AuthenticatedPilotagesRequestTypeServiceCategoriesUpdateIdRoute:
     AuthenticatedPilotagesRequestTypeServiceCategoriesUpdateIdRoute,
   AuthenticatedPilotagesRequestTypesUpdateIdRoute:
@@ -1184,6 +1238,7 @@ export interface FileRoutesByFullPath {
   '/pilotages/provider-disponibilities/create': typeof AuthenticatedPilotagesProviderDisponibilitiesCreateRoute
   '/pilotages/provider-service-categories/create': typeof AuthenticatedPilotagesProviderServiceCategoriesCreateRoute
   '/pilotages/providers/create': typeof AuthenticatedPilotagesProvidersCreateRoute
+  '/pilotages/request-type-delays/create': typeof AuthenticatedPilotagesRequestTypeDelaysCreateRoute
   '/pilotages/request-type-service-categories/create': typeof AuthenticatedPilotagesRequestTypeServiceCategoriesCreateRoute
   '/pilotages/request-types/create': typeof AuthenticatedPilotagesRequestTypesCreateRoute
   '/pilotages/requisition-types/create': typeof AuthenticatedPilotagesRequisitionTypesCreateRoute
@@ -1203,6 +1258,7 @@ export interface FileRoutesByFullPath {
   '/pilotages/provider-disponibilities': typeof AuthenticatedPilotagesProviderDisponibilitiesIndexRoute
   '/pilotages/provider-service-categories': typeof AuthenticatedPilotagesProviderServiceCategoriesIndexRoute
   '/pilotages/providers': typeof AuthenticatedPilotagesProvidersIndexRoute
+  '/pilotages/request-type-delays': typeof AuthenticatedPilotagesRequestTypeDelaysIndexRoute
   '/pilotages/request-type-service-categories': typeof AuthenticatedPilotagesRequestTypeServiceCategoriesIndexRoute
   '/pilotages/request-types': typeof AuthenticatedPilotagesRequestTypesIndexRoute
   '/pilotages/requisition-types': typeof AuthenticatedPilotagesRequisitionTypesIndexRoute
@@ -1222,6 +1278,7 @@ export interface FileRoutesByFullPath {
   '/pilotages/provider-disponibilities/update/$id': typeof AuthenticatedPilotagesProviderDisponibilitiesUpdateIdRoute
   '/pilotages/provider-service-categories/update/$id': typeof AuthenticatedPilotagesProviderServiceCategoriesUpdateIdRoute
   '/pilotages/providers/update/$id': typeof AuthenticatedPilotagesProvidersUpdateIdRoute
+  '/pilotages/request-type-delays/update/$id': typeof AuthenticatedPilotagesRequestTypeDelaysUpdateIdRoute
   '/pilotages/request-type-service-categories/update/$id': typeof AuthenticatedPilotagesRequestTypeServiceCategoriesUpdateIdRoute
   '/pilotages/request-types/update/$id': typeof AuthenticatedPilotagesRequestTypesUpdateIdRoute
   '/pilotages/requisition-types/update/$id': typeof AuthenticatedPilotagesRequisitionTypesUpdateIdRoute
@@ -1250,6 +1307,7 @@ export interface FileRoutesByTo {
   '/pilotages/provider-disponibilities/create': typeof AuthenticatedPilotagesProviderDisponibilitiesCreateRoute
   '/pilotages/provider-service-categories/create': typeof AuthenticatedPilotagesProviderServiceCategoriesCreateRoute
   '/pilotages/providers/create': typeof AuthenticatedPilotagesProvidersCreateRoute
+  '/pilotages/request-type-delays/create': typeof AuthenticatedPilotagesRequestTypeDelaysCreateRoute
   '/pilotages/request-type-service-categories/create': typeof AuthenticatedPilotagesRequestTypeServiceCategoriesCreateRoute
   '/pilotages/request-types/create': typeof AuthenticatedPilotagesRequestTypesCreateRoute
   '/pilotages/requisition-types/create': typeof AuthenticatedPilotagesRequisitionTypesCreateRoute
@@ -1269,6 +1327,7 @@ export interface FileRoutesByTo {
   '/pilotages/provider-disponibilities': typeof AuthenticatedPilotagesProviderDisponibilitiesIndexRoute
   '/pilotages/provider-service-categories': typeof AuthenticatedPilotagesProviderServiceCategoriesIndexRoute
   '/pilotages/providers': typeof AuthenticatedPilotagesProvidersIndexRoute
+  '/pilotages/request-type-delays': typeof AuthenticatedPilotagesRequestTypeDelaysIndexRoute
   '/pilotages/request-type-service-categories': typeof AuthenticatedPilotagesRequestTypeServiceCategoriesIndexRoute
   '/pilotages/request-types': typeof AuthenticatedPilotagesRequestTypesIndexRoute
   '/pilotages/requisition-types': typeof AuthenticatedPilotagesRequisitionTypesIndexRoute
@@ -1288,6 +1347,7 @@ export interface FileRoutesByTo {
   '/pilotages/provider-disponibilities/update/$id': typeof AuthenticatedPilotagesProviderDisponibilitiesUpdateIdRoute
   '/pilotages/provider-service-categories/update/$id': typeof AuthenticatedPilotagesProviderServiceCategoriesUpdateIdRoute
   '/pilotages/providers/update/$id': typeof AuthenticatedPilotagesProvidersUpdateIdRoute
+  '/pilotages/request-type-delays/update/$id': typeof AuthenticatedPilotagesRequestTypeDelaysUpdateIdRoute
   '/pilotages/request-type-service-categories/update/$id': typeof AuthenticatedPilotagesRequestTypeServiceCategoriesUpdateIdRoute
   '/pilotages/request-types/update/$id': typeof AuthenticatedPilotagesRequestTypesUpdateIdRoute
   '/pilotages/requisition-types/update/$id': typeof AuthenticatedPilotagesRequisitionTypesUpdateIdRoute
@@ -1318,6 +1378,7 @@ export interface FileRoutesById {
   '/_authenticated/pilotages/provider-disponibilities/create': typeof AuthenticatedPilotagesProviderDisponibilitiesCreateRoute
   '/_authenticated/pilotages/provider-service-categories/create': typeof AuthenticatedPilotagesProviderServiceCategoriesCreateRoute
   '/_authenticated/pilotages/providers/create': typeof AuthenticatedPilotagesProvidersCreateRoute
+  '/_authenticated/pilotages/request-type-delays/create': typeof AuthenticatedPilotagesRequestTypeDelaysCreateRoute
   '/_authenticated/pilotages/request-type-service-categories/create': typeof AuthenticatedPilotagesRequestTypeServiceCategoriesCreateRoute
   '/_authenticated/pilotages/request-types/create': typeof AuthenticatedPilotagesRequestTypesCreateRoute
   '/_authenticated/pilotages/requisition-types/create': typeof AuthenticatedPilotagesRequisitionTypesCreateRoute
@@ -1337,6 +1398,7 @@ export interface FileRoutesById {
   '/_authenticated/pilotages/provider-disponibilities/': typeof AuthenticatedPilotagesProviderDisponibilitiesIndexRoute
   '/_authenticated/pilotages/provider-service-categories/': typeof AuthenticatedPilotagesProviderServiceCategoriesIndexRoute
   '/_authenticated/pilotages/providers/': typeof AuthenticatedPilotagesProvidersIndexRoute
+  '/_authenticated/pilotages/request-type-delays/': typeof AuthenticatedPilotagesRequestTypeDelaysIndexRoute
   '/_authenticated/pilotages/request-type-service-categories/': typeof AuthenticatedPilotagesRequestTypeServiceCategoriesIndexRoute
   '/_authenticated/pilotages/request-types/': typeof AuthenticatedPilotagesRequestTypesIndexRoute
   '/_authenticated/pilotages/requisition-types/': typeof AuthenticatedPilotagesRequisitionTypesIndexRoute
@@ -1356,6 +1418,7 @@ export interface FileRoutesById {
   '/_authenticated/pilotages/provider-disponibilities/update/$id': typeof AuthenticatedPilotagesProviderDisponibilitiesUpdateIdRoute
   '/_authenticated/pilotages/provider-service-categories/update/$id': typeof AuthenticatedPilotagesProviderServiceCategoriesUpdateIdRoute
   '/_authenticated/pilotages/providers/update/$id': typeof AuthenticatedPilotagesProvidersUpdateIdRoute
+  '/_authenticated/pilotages/request-type-delays/update/$id': typeof AuthenticatedPilotagesRequestTypeDelaysUpdateIdRoute
   '/_authenticated/pilotages/request-type-service-categories/update/$id': typeof AuthenticatedPilotagesRequestTypeServiceCategoriesUpdateIdRoute
   '/_authenticated/pilotages/request-types/update/$id': typeof AuthenticatedPilotagesRequestTypesUpdateIdRoute
   '/_authenticated/pilotages/requisition-types/update/$id': typeof AuthenticatedPilotagesRequisitionTypesUpdateIdRoute
@@ -1386,6 +1449,7 @@ export interface FileRouteTypes {
     | '/pilotages/provider-disponibilities/create'
     | '/pilotages/provider-service-categories/create'
     | '/pilotages/providers/create'
+    | '/pilotages/request-type-delays/create'
     | '/pilotages/request-type-service-categories/create'
     | '/pilotages/request-types/create'
     | '/pilotages/requisition-types/create'
@@ -1405,6 +1469,7 @@ export interface FileRouteTypes {
     | '/pilotages/provider-disponibilities'
     | '/pilotages/provider-service-categories'
     | '/pilotages/providers'
+    | '/pilotages/request-type-delays'
     | '/pilotages/request-type-service-categories'
     | '/pilotages/request-types'
     | '/pilotages/requisition-types'
@@ -1424,6 +1489,7 @@ export interface FileRouteTypes {
     | '/pilotages/provider-disponibilities/update/$id'
     | '/pilotages/provider-service-categories/update/$id'
     | '/pilotages/providers/update/$id'
+    | '/pilotages/request-type-delays/update/$id'
     | '/pilotages/request-type-service-categories/update/$id'
     | '/pilotages/request-types/update/$id'
     | '/pilotages/requisition-types/update/$id'
@@ -1451,6 +1517,7 @@ export interface FileRouteTypes {
     | '/pilotages/provider-disponibilities/create'
     | '/pilotages/provider-service-categories/create'
     | '/pilotages/providers/create'
+    | '/pilotages/request-type-delays/create'
     | '/pilotages/request-type-service-categories/create'
     | '/pilotages/request-types/create'
     | '/pilotages/requisition-types/create'
@@ -1470,6 +1537,7 @@ export interface FileRouteTypes {
     | '/pilotages/provider-disponibilities'
     | '/pilotages/provider-service-categories'
     | '/pilotages/providers'
+    | '/pilotages/request-type-delays'
     | '/pilotages/request-type-service-categories'
     | '/pilotages/request-types'
     | '/pilotages/requisition-types'
@@ -1489,6 +1557,7 @@ export interface FileRouteTypes {
     | '/pilotages/provider-disponibilities/update/$id'
     | '/pilotages/provider-service-categories/update/$id'
     | '/pilotages/providers/update/$id'
+    | '/pilotages/request-type-delays/update/$id'
     | '/pilotages/request-type-service-categories/update/$id'
     | '/pilotages/request-types/update/$id'
     | '/pilotages/requisition-types/update/$id'
@@ -1517,6 +1586,7 @@ export interface FileRouteTypes {
     | '/_authenticated/pilotages/provider-disponibilities/create'
     | '/_authenticated/pilotages/provider-service-categories/create'
     | '/_authenticated/pilotages/providers/create'
+    | '/_authenticated/pilotages/request-type-delays/create'
     | '/_authenticated/pilotages/request-type-service-categories/create'
     | '/_authenticated/pilotages/request-types/create'
     | '/_authenticated/pilotages/requisition-types/create'
@@ -1536,6 +1606,7 @@ export interface FileRouteTypes {
     | '/_authenticated/pilotages/provider-disponibilities/'
     | '/_authenticated/pilotages/provider-service-categories/'
     | '/_authenticated/pilotages/providers/'
+    | '/_authenticated/pilotages/request-type-delays/'
     | '/_authenticated/pilotages/request-type-service-categories/'
     | '/_authenticated/pilotages/request-types/'
     | '/_authenticated/pilotages/requisition-types/'
@@ -1555,6 +1626,7 @@ export interface FileRouteTypes {
     | '/_authenticated/pilotages/provider-disponibilities/update/$id'
     | '/_authenticated/pilotages/provider-service-categories/update/$id'
     | '/_authenticated/pilotages/providers/update/$id'
+    | '/_authenticated/pilotages/request-type-delays/update/$id'
     | '/_authenticated/pilotages/request-type-service-categories/update/$id'
     | '/_authenticated/pilotages/request-types/update/$id'
     | '/_authenticated/pilotages/requisition-types/update/$id'
@@ -1608,6 +1680,7 @@ export const routeTree = rootRoute
         "/_authenticated/pilotages/provider-disponibilities/create",
         "/_authenticated/pilotages/provider-service-categories/create",
         "/_authenticated/pilotages/providers/create",
+        "/_authenticated/pilotages/request-type-delays/create",
         "/_authenticated/pilotages/request-type-service-categories/create",
         "/_authenticated/pilotages/request-types/create",
         "/_authenticated/pilotages/requisition-types/create",
@@ -1627,6 +1700,7 @@ export const routeTree = rootRoute
         "/_authenticated/pilotages/provider-disponibilities/",
         "/_authenticated/pilotages/provider-service-categories/",
         "/_authenticated/pilotages/providers/",
+        "/_authenticated/pilotages/request-type-delays/",
         "/_authenticated/pilotages/request-type-service-categories/",
         "/_authenticated/pilotages/request-types/",
         "/_authenticated/pilotages/requisition-types/",
@@ -1646,6 +1720,7 @@ export const routeTree = rootRoute
         "/_authenticated/pilotages/provider-disponibilities/update/$id",
         "/_authenticated/pilotages/provider-service-categories/update/$id",
         "/_authenticated/pilotages/providers/update/$id",
+        "/_authenticated/pilotages/request-type-delays/update/$id",
         "/_authenticated/pilotages/request-type-service-categories/update/$id",
         "/_authenticated/pilotages/request-types/update/$id",
         "/_authenticated/pilotages/requisition-types/update/$id",
@@ -1727,6 +1802,10 @@ export const routeTree = rootRoute
       "filePath": "_authenticated/pilotages/providers/create.tsx",
       "parent": "/_authenticated"
     },
+    "/_authenticated/pilotages/request-type-delays/create": {
+      "filePath": "_authenticated/pilotages/request-type-delays/create.tsx",
+      "parent": "/_authenticated"
+    },
     "/_authenticated/pilotages/request-type-service-categories/create": {
       "filePath": "_authenticated/pilotages/request-type-service-categories/create.tsx",
       "parent": "/_authenticated"
@@ -1803,6 +1882,10 @@ export const routeTree = rootRoute
       "filePath": "_authenticated/pilotages/providers/index.tsx",
       "parent": "/_authenticated"
     },
+    "/_authenticated/pilotages/request-type-delays/": {
+      "filePath": "_authenticated/pilotages/request-type-delays/index.tsx",
+      "parent": "/_authenticated"
+    },
     "/_authenticated/pilotages/request-type-service-categories/": {
       "filePath": "_authenticated/pilotages/request-type-service-categories/index.tsx",
       "parent": "/_authenticated"
@@ -1877,6 +1960,10 @@ export const routeTree = rootRoute
     },
     "/_authenticated/pilotages/providers/update/$id": {
       "filePath": "_authenticated/pilotages/providers/update/$id.tsx",
+      "parent": "/_authenticated"
+    },
+    "/_authenticated/pilotages/request-type-delays/update/$id": {
+      "filePath": "_authenticated/pilotages/request-type-delays/update/$id.tsx",
       "parent": "/_authenticated"
     },
     "/_authenticated/pilotages/request-type-service-categories/update/$id": {

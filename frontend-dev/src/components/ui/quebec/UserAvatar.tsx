@@ -49,7 +49,7 @@ const statusVariant = cva(
 );
 
 const avatarSizeVariant = cva(
-  "avatar-editing transition-all duration-300  font-bold tracking-tighter",
+  "avatar-editing transition-all duration-300  font-bold tracking-tighter  elevation-1",
   {
     variants: {
       size: {

@@ -183,4 +183,15 @@ export class DelayTypesService {
 
     await this.delayTypeRepository.softDelete(id);
   }
+
+  /**
+   * Récupère tous les types de délais sans pagination.
+   * @returns Une liste de tous les types de délais, triée par date de création.
+   */
+  async findAllDelayTypesList(): Promise<DelayType[]> {
+    return this.delayTypeRepository.find({
+      select: ['id', 'delayTypeName'],
+      order: { delayTypeName: 'DESC' },
+    });
+  }
 }

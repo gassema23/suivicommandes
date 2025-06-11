@@ -3,9 +3,15 @@ import { DeleteModal } from "@/components/ui/quebec/DeleteModal";
 import FormError from "@/components/ui/shadcn/form-error";
 import { createPermissionGuard } from "@/features/common/authorizations/helpers/createPermissionGuard";
 import { PERMISSIONS } from "@/features/common/authorizations/types/auth.types";
-import { ServiceCategoryColumns } from "@/features/service-categories/components/ServiceCategoryColumns";
-import { getServiceCategories } from "@/features/service-categories/services/get-service-categories.service";
+import { SUCCESS_MESSAGES } from "@/features/common/constants/messages.constant";
+import { QUERY_KEYS } from "@/features/common/constants/query-key.constant";
 import { DataTable } from "@/features/common/table/DataTable";
+import { requestTypeDelayColumns } from "@/features/request-type-delays/components/RequestTypeDelayColumns";
+import { getRequestTypeDelays } from "@/features/request-type-delays/services/get-request-type-delays.service";
+import type {
+  RequestTypeDelay,
+  RequestTypeDelayResponse,
+} from "@/features/request-type-delays/types/request-type-delay.type";
 import {
   queryOptions,
   useQueryClient,
@@ -13,23 +19,20 @@ import {
 } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
-import type { ServiceCategoryResponse } from "@/features/service-categories/types/service-category.type";
-import { QUERY_KEYS } from "@/features/common/constants/query-key.constant";
 import { toast } from "sonner";
-import { SUCCESS_MESSAGES } from "@/features/common/constants/messages.constant";
 
-const serviceCategoriesQueryOptions = (pageNumber: number) =>
-  queryOptions<ServiceCategoryResponse>({
-    queryKey: QUERY_KEYS.SERVICE_CATEGORIES_WITH_PAGE(pageNumber),
-    queryFn: () => getServiceCategories(pageNumber),
+const requestTypeDelaysQueryOptions = (pageNumber: number) =>
+  queryOptions<RequestTypeDelayResponse>({
+    queryKey: QUERY_KEYS.REQUEST_TYPE_DELAY_WITH_PAGE(pageNumber),
+    queryFn: () => getRequestTypeDelays(pageNumber),
   });
 
 export const Route = createFileRoute(
-  "/_authenticated/pilotages/service-categories/"
+  "/_authenticated/pilotages/request-type-delays/"
 )({
-  beforeLoad: createPermissionGuard([PERMISSIONS.SERVICE_CATEGORIES.READ]),
+  beforeLoad: createPermissionGuard([PERMISSIONS.REQUEST_TYPE_DELAYS.READ]),
   head: () => ({
-    meta: [{ title: "Catégories de services" }],
+    meta: [{ title: "Délai par type de demande" }],
   }),
   validateSearch: (search) => ({
     page: Number(search.page ?? 1),
@@ -37,23 +40,23 @@ export const Route = createFileRoute(
   loader: (args) => {
     const { context, search } = args as any;
     return context.queryClient.ensureQueryData(
-      serviceCategoriesQueryOptions(Number(search?.page ?? "1"))
+      requestTypeDelaysQueryOptions(Number(search?.page ?? "1"))
     );
   },
   errorComponent: ({ error }) => (
     <FormError
-      title="Erreur lors du chargement des catégories de services"
+      title="Erreur lors du chargement délais par type de demande"
       message={error.message}
     />
   ),
   staticData: {
-    title: "Catégories de services",
-    action: "/pilotages/service-categories/create",
+    title: "Délai par type de demande",
+    action: "/pilotages/request-type-delays/create",
     breadcrumb: [
       { label: "Tableau de bord", href: "/" },
       {
-        label: "Catégories de services",
-        href: "/pilotages/service-categories",
+        label: "Délai par type de demande",
+        href: "/pilotages/request-type-delays",
         isCurrent: true,
       },
     ],
@@ -67,38 +70,39 @@ function RouteComponent() {
   const { page = 1 } = Route.useSearch();
   const pageNumber = Number(page);
 
-  const { data: serviceCategories } = useSuspenseQuery<ServiceCategoryResponse>(
-    serviceCategoriesQueryOptions(pageNumber)
-  );
+  const { data: requestTypeDelays } =
+    useSuspenseQuery<RequestTypeDelayResponse>(
+      requestTypeDelaysQueryOptions(pageNumber)
+    );
   const [deleteId, setDeleteId] = useState<string | null>(null);
   const queryClient = useQueryClient();
 
   const dataWithDelete = {
-    ...serviceCategories,
-    data: (serviceCategories.data ?? []).map((serviceCategory) => ({
-      ...serviceCategory,
-      onDelete: () => setDeleteId(serviceCategory.id),
+    ...requestTypeDelays,
+    data: (requestTypeDelays.data ?? []).map((requestTypeDelay) => ({
+      ...requestTypeDelay,
+      onDelete: () => setDeleteId(requestTypeDelay.id),
     })),
   };
   return (
     <>
       <DataTable
         data={dataWithDelete}
-        columns={ServiceCategoryColumns}
+        columns={requestTypeDelayColumns}
         currentPage={pageNumber}
-        totalPages={serviceCategories.meta.totalPages}
+        totalPages={requestTypeDelays.meta.totalPages}
         onPageChange={(page) => navigate({ search: { page } })}
       />
       <DeleteModal
         open={!!deleteId}
         onOpenChange={(open) => !open && setDeleteId(null)}
-        deleteUrl="service-categories"
+        deleteUrl="request-type-delays"
         deleteId={deleteId}
         onSuccess={() => {
           setDeleteId(null);
-          toast.success(SUCCESS_MESSAGES.delete("Catégorie de service"));
+          toast.success(SUCCESS_MESSAGES.delete("Délai par type de demande"));
           queryClient.invalidateQueries({
-            queryKey: QUERY_KEYS.SERVICE_CATEGORIES,
+            queryKey: QUERY_KEYS.REQUEST_TYPE_DELAYS,
           });
         }}
       />

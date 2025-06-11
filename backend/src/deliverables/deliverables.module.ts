@@ -6,10 +6,9 @@ import { Deliverable } from './entities/deliverable.entity';
 import { AuthModule } from '../auth/auth.module';
 
 @Module({
-
-    imports: [TypeOrmModule.forFeature([Deliverable]), AuthModule],
+  imports: [TypeOrmModule.forFeature([Deliverable]), AuthModule],
   controllers: [DeliverablesController],
   providers: [DeliverablesService],
-  exports: [DeliverablesService]
+  exports: [DeliverablesService],
 })
 export class DeliverablesModule {}

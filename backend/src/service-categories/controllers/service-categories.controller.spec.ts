@@ -58,6 +58,7 @@ describe('ServiceCategoriesController', () => {
       ...updateDto,
     }),
     remove: jest.fn().mockResolvedValue({ deleted: true }),
+    getRequestTypeServiceCategory: jest.fn(),
   };
 
   beforeEach(async () => {
@@ -178,5 +179,21 @@ describe('ServiceCategoriesController', () => {
     await expect(
       controller.remove(uuidv4(), { id: userId } as any),
     ).rejects.toThrow(NotFoundException);
+  });
+
+  it('should return request types for a service category', async () => {
+    const mockRequestTypes = [
+      { id: 'rt-1', name: 'Type 1' },
+      { id: 'rt-2', name: 'Type 2' },
+    ];
+    mockService.getRequestTypeServiceCategory.mockResolvedValueOnce(
+      mockRequestTypes,
+    );
+
+    const result = await controller.getRequestTypeServiceCategoryByServiceCategoryId(uuid);
+    expect(result).toEqual(mockRequestTypes);
+    expect(mockService.getRequestTypeServiceCategory).toHaveBeenCalledWith(
+      uuid,
+    );
   });
 });

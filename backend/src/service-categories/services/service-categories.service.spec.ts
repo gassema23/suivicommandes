@@ -182,4 +182,35 @@ describe('ServiceCategoriesService', () => {
       service.remove('uuid-category', 'user-category'),
     ).rejects.toThrow(BadRequestException);
   });
+
+  it('should return request types for a service category', async () => {
+    const mockRequestType = { id: 'rt-1', name: 'Type 1' };
+    const mockServiceCategoryWithRequestTypes = {
+      ...mockServiceCategory,
+      requestTypeServiceCategories: [
+        { requestType: mockRequestType },
+        { requestType: { id: 'rt-2', name: 'Type 2' } },
+      ],
+    };
+    (repo.findOne as jest.Mock).mockResolvedValueOnce(
+      mockServiceCategoryWithRequestTypes,
+    );
+
+    const result = await service.getRequestTypeServiceCategory('uuid-category');
+    expect(result).toEqual([mockRequestType, { id: 'rt-2', name: 'Type 2' }]);
+    expect(repo.findOne).toHaveBeenCalledWith({
+      where: { id: 'uuid-category' },
+      relations: [
+        'requestTypeServiceCategories',
+        'requestTypeServiceCategories.requestType',
+      ],
+    });
+  });
+
+  it('should throw if service category not found in getRequestTypeServiceCategory', async () => {
+    (repo.findOne as jest.Mock).mockResolvedValueOnce(undefined);
+    await expect(
+      service.getRequestTypeServiceCategory('not-exist'),
+    ).rejects.toThrow(BadRequestException);
+  });
 });

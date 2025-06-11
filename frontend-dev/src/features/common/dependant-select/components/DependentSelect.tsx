@@ -28,6 +28,7 @@ export function DependentSelect<T>({
   getOptionValue,
   getOptionLabel,
 }: DependentSelectProps<T>) {
+
   if (isLoading) return <Skeleton className="h-9 w-full" />;
   if (isError)
     return (

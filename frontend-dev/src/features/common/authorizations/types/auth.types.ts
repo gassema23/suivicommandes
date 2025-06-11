@@ -40,6 +40,7 @@ export const PERMISSIONS = {
   REQUEST_TYPE_SERVICE_CATEGORIES: makePermissions(
     "request_type_service_categories"
   ),
+  REQUEST_TYPE_DELAYS: makePermissions("request_type_delays"),
 } as const;
 
 export const ROLES = {

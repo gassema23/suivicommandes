@@ -21,6 +21,7 @@ export const QUERY_KEYS = {
     ["serviceCategoryByService", serviceId] as const,
   SERVICE_CATEGORIES_WITH_PAGE: (page: number) =>
     ["serviceCategories", page] as const,
+  
 
   // Fournisseurs
   PROVIDERS: ["providers"] as const,
@@ -105,6 +106,8 @@ export const QUERY_KEYS = {
     ["requestTypes", requestTypeId] as const,
   REQUEST_TYPES_WITH_PAGE: (page: number) => ["requestTypes", page] as const,
   REQUEST_TYPES_LISTS: ["requestTypesLists"] as const,
+  REQUEST_TYPES_BY_SERVICE_CATEGORY: (serviceCategoryId?: string | null) =>
+    ["requestTypesByServiceCategory", serviceCategoryId] as const,
 
   // Type de conformité
   CONFORMITY_TYPES: ["conformityTypes"] as const,
@@ -131,4 +134,11 @@ export const QUERY_KEYS = {
   REQUEST_TYPE_SERVICE_CATEGORY_WITH_ID: (
     requestTypeServiceCategoryId?: string | null
   ) => ["requestTypeServiceCategories", requestTypeServiceCategoryId] as const,
+
+  // Request type delays
+  REQUEST_TYPE_DELAY_WITH_PAGE: (page: number) =>
+    ["requestTypeDelays", page] as const,
+  REQUEST_TYPE_DELAYS: ["requestTypeDelays"] as const,
+  REQUEST_TYPE_DELAY_WITH_ID: (requestTypeDelayId?: string | null) =>
+    ["requestTypeDelays", requestTypeDelayId] as const,
 };

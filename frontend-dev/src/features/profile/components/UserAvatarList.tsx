@@ -44,32 +44,37 @@ export default function UserAvatarList({
 
   return (
     <div className="space-y-6 mt-4">
-      {Object.entries(profiles).map(([folder, images]) => (
+      {Object.entries(profiles)
+      .sort(([a], [b]) => (FOLDER_LABELS[a] || a).localeCompare(FOLDER_LABELS[b] || b, "fr"))
+      .map(([folder, images]) => (
         <div key={folder}>
           <h3 className="font-bold mb-2 capitalize">
             {FOLDER_LABELS[folder] || folder}
           </h3>
           <div className="flex flex-wrap gap-2">
-            {images.map((img) => {
-              const url = `/profiles/${folder}/${img}`;
-              return (
-                <button
-                  key={img}
-                  type="button"
-                  className={`border-2 rounded-full p-1 ${
-                    selected === url ? "border-accent" : "border-transparent"
-                  }`}
-                  onClick={() => onSelect(url)}
-                  aria-label={`Choisir ${img}`}
-                >
-                  <img
-                    src={url}
-                    alt={img}
-                    className="w-16 h-16 rounded-full object-cover"
-                  />
-                </button>
-              );
-            })}
+            {images
+              .slice()
+              .sort((a, b) => a.localeCompare(b, "fr"))
+              .map((img) => {
+                const url = `/profiles/${folder}/${img}`;
+                return (
+                  <button
+                    key={img}
+                    type="button"
+                    className={`border-2 rounded-full p-1 ${
+                      selected === url ? "border-accent" : "border-transparent"
+                    }`}
+                    onClick={() => onSelect(url)}
+                    aria-label={`Choisir ${img}`}
+                  >
+                    <img
+                      src={url}
+                      alt={img}
+                      className="w-16 h-16 rounded-full object-cover"
+                    />
+                  </button>
+                );
+              })}
           </div>
         </div>
       ))}

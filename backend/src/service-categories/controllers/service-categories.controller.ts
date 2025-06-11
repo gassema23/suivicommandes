@@ -91,6 +91,22 @@ export class ServiceCategoriesController {
     );
   }
 
+  @Get(':id/request-type-service-categories')
+  @Permissions([
+    { resource: Resource.SERVICE_CATEGORIES, actions: [Action.READ] },
+    { resource: Resource.REQUEST_TYPE_SERVICE_CATEGORIES, actions: [Action.READ] },
+  ])
+  @ApiOperation({
+    summary: 'Obtenir les type de demande d’un service par son ID',
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Type de demande récupérés avec succès',
+  })
+  async getRequestTypeServiceCategoryByServiceCategoryId(@Param('id', ParseUUIDPipe) id: string) {
+    return this.serviceCategoriesService.getRequestTypeServiceCategory(id);
+  }
+
   /**
    * Récupère une catégorie de service par son ID.
    * @param id - ID de la catégorie de service à récupérer.
@@ -143,14 +159,19 @@ export class ServiceCategoriesController {
    * @param currentUser - Utilisateur actuel effectuant la suppression.
    * @returns Confirmation de la suppression de la catégorie de service.
    */
-  @Delete()
-  @Permissions([{ resource: Resource.SERVICE_CATEGORIES, actions: [Action.DELETE] }])
+  @Delete(':id')
+  @Permissions([
+    { resource: Resource.SERVICE_CATEGORIES, actions: [Action.DELETE] },
+  ])
   @ApiOperation({ summary: 'Supprimer une catégorie service' })
   @ApiResponse({
     status: 200,
     description: 'la catégorie de service supprimé avec succès',
   })
-  async remove(@Body('id') id: string, @CurrentUser() currentUser: User) {
+  async remove(
+    @Param('id', ParseUUIDPipe) id: string,
+    @CurrentUser() currentUser: User,
+  ) {
     return this.serviceCategoriesService.remove(id, currentUser.id);
   }
 }

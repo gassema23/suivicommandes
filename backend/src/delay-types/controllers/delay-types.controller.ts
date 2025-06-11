@@ -76,6 +76,21 @@ export class DelayTypesController {
   }
 
   /**
+   * Récupère la liste des types de délais.
+   * @returns La liste des types de délais.
+   */
+  @Get('delay-types-list')
+  @Permissions([{ resource: Resource.DELAY_TYPES, actions: [Action.READ] }])
+  @ApiOperation({ summary: 'Afficher la liste des types de délais' })
+  @ApiResponse({
+    status: 200,
+    description: 'Liste des types de délais récupérée avec succès',
+  })
+  async getDelayTypesList() {
+    return this.delayTypesService.findAllDelayTypesList();
+  }
+
+  /**
    * Récupère un type de délai par son ID.
    * @param id - ID du type de délai à récupérer.
    * @returns Le type de délai correspondant à l'ID fourni.

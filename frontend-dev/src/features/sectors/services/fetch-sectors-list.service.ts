@@ -7,6 +7,15 @@ export const fetchSectorsList = async (): Promise<Sector[]> => {
     method: "GET",
     credentials: "include",
   });
-  if (!res.ok) throw new Error("Erreur lors du chargement des secteurs");
-  return res.json();
+
+
+  const result = await res.json();
+  if (!res.ok) {
+    throw new Error(
+      result.message ||
+        "Erreur lors de la récupération de la liste des secteurs"
+    );
+  }
+
+  return result;
 };
