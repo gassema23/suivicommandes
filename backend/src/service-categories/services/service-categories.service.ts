@@ -8,8 +8,7 @@ import { PaginatedResult } from '../../common/interfaces/paginated-result.interf
 import { CreateServiceCategoryDto } from '../dto/create-service-category.dto';
 import { User } from '../../users/entities/user.entity';
 import { UpdateServiceCategoryDto } from '../dto/update-service-category.dto';
-import { RequestType } from 'src/request-types/entities/request-type.entity';
-import { RequestTypeServiceCategory } from 'src/request-type-service-categories/entities/request-type-service-category.entity';
+import { RequestTypeServiceCategory } from '../..//request-type-service-categories/entities/request-type-service-category.entity';
 
 @Injectable()
 export class ServiceCategoriesService {

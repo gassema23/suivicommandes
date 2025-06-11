@@ -18,16 +18,16 @@ import {
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
-import { AuthorizationsGuard } from 'src/auth/guards/authorizations.guard';
+import { AuthorizationsGuard } from '../../auth/guards/authorizations.guard';
 import { DeliverableDelayRequestTypesService } from '../services/deliverable-delay-request-types.service';
-import { Permissions } from 'src/roles/decorators/permission.decorator';
-import { Resource } from 'src/roles/enums/resource.enum';
-import { Action } from 'src/roles/enums/action.enum';
-import { PaginationDto } from 'src/common/dto/pagination.dto';
+import { Permissions } from '../../roles/decorators/permission.decorator';
+import { Resource } from '../../roles/enums/resource.enum';
+import { Action } from '../../roles/enums/action.enum';
+import { PaginationDto } from '../../common/dto/pagination.dto';
 import { instanceToPlain } from 'class-transformer';
-import { CurrentUser } from 'src/auth/decorators/current-user.decorator';
+import { CurrentUser } from '../../auth/decorators/current-user.decorator';
 import { CreateDeliverableDelayRequestTypeDto } from '../dto/create-deliverable-delay-request-type.dto';
-import { User } from 'src/users/entities/user.entity';
+import { User } from '../../users/entities/user.entity';
 import { UpdateDeliverableDelayRequestTypeDto } from '../dto/update-deliverable-delay-request-type.dto';
 
 @Controller('deliverable-delay-request-types')

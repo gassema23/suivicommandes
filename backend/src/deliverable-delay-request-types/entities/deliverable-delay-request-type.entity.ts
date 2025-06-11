@@ -7,11 +7,13 @@ import {
   ManyToOne,
   JoinColumn,
   Index,
+  OneToMany,
 } from 'typeorm';
 import { User } from '../../users/entities/user.entity';
 import { IsOptional } from 'class-validator';
 import { RequestTypeServiceCategory } from '../../request-type-service-categories/entities/request-type-service-category.entity';
-import { Deliverable } from 'src/deliverables/entities/deliverable.entity';
+import { Deliverable } from '../../deliverables/entities/deliverable.entity';
+import { DeliverableDelayFlow } from 'src/deliverable-delay-flows/entities/deliverable-delay-flow.entity';
 
 @Entity('deliverable_delay_request_types')
 @Index(['deletedAt'])
@@ -28,12 +30,15 @@ export class DeliverableDelayRequestType {
   @JoinColumn({ name: 'request_type_service_category_id' })
   requestTypeServiceCategory: RequestTypeServiceCategory;
 
-  @ManyToOne(() => Deliverable, (deliverable) => deliverable.requestTypeDelays, {
-    nullable: false,
-  })
+  @ManyToOne(
+    () => Deliverable,
+    (deliverable) => deliverable.requestTypeDelays,
+    {
+      nullable: false,
+    },
+  )
   @JoinColumn({ name: 'deliverable_id' })
   deliverable: Deliverable;
-
 
   // Relation vers l'utilisateur ayant créé l'équipe
   @ManyToOne(() => User, { nullable: true })
@@ -62,4 +67,10 @@ export class DeliverableDelayRequestType {
   @DeleteDateColumn({ name: 'deleted_at' })
   @IsOptional()
   readonly deletedAt?: Date;
+
+  @OneToMany(
+    () => DeliverableDelayFlow,
+    (flow) => flow.requestTypeServiceCategory,
+  )
+  deliverableDelayFlows: DeliverableDelayFlow[];
 }

@@ -1,6 +1,5 @@
 import {
   Entity,
-  Column,
   PrimaryGeneratedColumn,
   CreateDateColumn,
   UpdateDateColumn,
@@ -8,30 +7,32 @@ import {
   ManyToOne,
   JoinColumn,
   Index,
-  OneToMany,
 } from 'typeorm';
 import { User } from '../../users/entities/user.entity';
-import { IsDate, IsOptional, IsString, MaxLength } from 'class-validator';
-import { RequestTypeDelay } from '../../request-type-delays/entities/request-type-delay.entity';
+import { IsOptional } from 'class-validator';
+import { Flow } from '../../flows/entities/flow.entity';
+import { DeliverableDelayRequestType } from '../../deliverable-delay-request-types/entities/deliverable-delay-request-type.entity';
 
-@Entity('deliverables')
-@Index(['deliverableName'])
+@Entity('deliverable_delay_flows')
 @Index(['deletedAt'])
-export class Deliverable {
+export class DeliverableDelayFlow {
   @PrimaryGeneratedColumn('uuid')
   readonly id: string;
 
-  @Column({ name: 'deliverable_name', length: 125, nullable: true })
-  @IsOptional()
-  @IsString()
-  @MaxLength(125)
-  deliverableName?: string;
+  @ManyToOne(
+    () => DeliverableDelayRequestType,
+    (deliverableDelayRequestType) =>
+      deliverableDelayRequestType.deliverableDelayFlows,
+    { nullable: false },
+  )
+  @JoinColumn({ name: 'deliverable_delay_request_type_id' })
+  requestTypeServiceCategory: DeliverableDelayRequestType;
 
-  @Column({ name: 'deliverable_description', length: 500, nullable: true })
-  @IsOptional()
-  @IsString()
-  @MaxLength(500)
-  deliverableDescription?: string;
+  @ManyToOne(() => Flow, (flow) => flow.deliverableDelayFlows, {
+    nullable: false,
+  })
+  @JoinColumn({ name: 'flow_id' })
+  deliverable: Flow;
 
   // Relation vers l'utilisateur ayant créé l'équipe
   @ManyToOne(() => User, { nullable: true })
@@ -60,10 +61,4 @@ export class Deliverable {
   @DeleteDateColumn({ name: 'deleted_at' })
   @IsOptional()
   readonly deletedAt?: Date;
-
-  @OneToMany(
-    () => RequestTypeDelay,
-    (requestTypeDelay) => requestTypeDelay.delayType,
-  )
-  requestTypeDelays: RequestTypeDelay[];
 }

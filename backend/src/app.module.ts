@@ -31,6 +31,7 @@ import { ProviderDisponibilitiesModule } from './provider-disponibilities/provid
 import { RequestTypeServiceCategoriesModule } from './request-type-service-categories/request-type-service-categories.module';
 import { RequestTypeDelaysModule } from './request-type-delays/request-type-delays.module';
 import { DeliverableDelayRequestTypesModule } from './deliverable-delay-request-types/deliverable-delay-request-types.module';
+import { DeliverableDelayFlowsModule } from './deliverable-delay-flows/deliverable-delay-flows.module';
 
 @Module({
   imports: [
@@ -134,6 +135,7 @@ import { DeliverableDelayRequestTypesModule } from './deliverable-delay-request-
     RequestTypeServiceCategoriesModule,
     RequestTypeDelaysModule,
     DeliverableDelayRequestTypesModule,
+    DeliverableDelayFlowsModule,
   ],
 })
 export class AppModule {}

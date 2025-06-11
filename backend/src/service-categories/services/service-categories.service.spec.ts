@@ -195,9 +195,11 @@ describe('ServiceCategoriesService', () => {
     (repo.findOne as jest.Mock).mockResolvedValueOnce(
       mockServiceCategoryWithRequestTypes,
     );
-
     const result = await service.getRequestTypeServiceCategory('uuid-category');
-    expect(result).toEqual([mockRequestType, { id: 'rt-2', name: 'Type 2' }]);
+    expect(result).toEqual([
+      { requestType: { id: 'rt-1', name: 'Type 1' } },
+      { requestType: { id: 'rt-2', name: 'Type 2' } },
+    ]);
     expect(repo.findOne).toHaveBeenCalledWith({
       where: { id: 'uuid-category' },
       relations: [

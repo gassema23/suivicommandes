@@ -8,9 +8,11 @@ import {
   ManyToOne,
   JoinColumn,
   Index,
+  OneToMany,
 } from 'typeorm';
 import { User } from '../../users/entities/user.entity';
 import { IsDate, IsOptional, IsString, MaxLength } from 'class-validator';
+import { DeliverableDelayFlow } from 'src/deliverable-delay-flows/entities/deliverable-delay-flow.entity';
 
 @Entity('flows')
 @Index(['flowName'])
@@ -58,4 +60,7 @@ export class Flow {
   @DeleteDateColumn({ name: 'deleted_at' })
   @IsOptional()
   readonly deletedAt?: Date;
+
+  @OneToMany(() => DeliverableDelayFlow, (flow) => flow.deliverable)
+  deliverableDelayFlows: DeliverableDelayFlow[];
 }
