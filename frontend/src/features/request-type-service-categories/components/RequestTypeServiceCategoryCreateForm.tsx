@@ -17,17 +17,20 @@ import { useDependentQuery } from "@/components/dependant-select/hooks/useDepend
 import { requestTypeServiceCategoryFields } from "../configs/request-type-service-category-fields";
 import { DependentSelect } from "@/components/dependant-select/components/DependentSelect";
 import { fetchRequestTypeList } from "@/shared/request-types/services/fetch-request-type-list.service";
-import { createRequestTypeServiceCategory } from "../services/create-request-type-service-category.service";
+import { useCreateRequestTypeServiceCategory } from "../services/create-request-type-service-category.service";
 import DateSlider from "@/components/ui/quebec/DateSlider";
 
 import { fetchSectorsList } from "@/shared/sectors/services/fetch-sectors-list.service";
 import { fetchServicesBySector } from "@/shared/services/services/fetch-services-by-sector.service";
 import { fetchServiceCategoriesByService } from "@/shared/service-categories/services/fetch-service-category-by-service.service";
+import { getFieldError } from "@/lib/utils";
 
 export default function RequestTypeServiceCategoryCreateForm() {
   const [backendError, setBackendError] = useState<string | null>(null);
   const navigate = useNavigate();
   const queryClient = useQueryClient();
+  const createRequestTypeServiceCategory =
+    useCreateRequestTypeServiceCategory();
 
   const form = useForm<RequestTypeServiceCategoryFormData>({
     resolver: zodResolver(requestTypeServiceCategorySchema),
@@ -54,7 +57,9 @@ export default function RequestTypeServiceCategoryCreateForm() {
       createRequestTypeServiceCategory(data),
     onSuccess: () => {
       setBackendError(null);
-      queryClient.invalidateQueries({ queryKey: QUERY_KEYS.REQUEST_TYPE_SERVICE_CATEGORIES });
+      queryClient.invalidateQueries({
+        queryKey: QUERY_KEYS.REQUEST_TYPE_SERVICE_CATEGORIES,
+      });
       toast.success(
         SUCCESS_MESSAGES.create("Catégories de services par type de demande")
       );
@@ -117,18 +122,16 @@ export default function RequestTypeServiceCategoryCreateForm() {
       className="xl:w-3xl w-full space-y-4"
       onSubmit={handleSubmit(onSubmit)}
     >
-      {backendError && (
-        <FormError
-          title="Erreur lors de l'envoie du formulaire"
-          message={backendError}
-        />
-      )}
+      {backendError && <FormError message={backendError} />}
 
       {requestTypeServiceCategoryFields.map((field) => (
         <InputContainer
           key={field.name}
           label={field.label}
-          error={errors[field.name]?.message}
+          error={getFieldError<RequestTypeServiceCategoryFormData>(
+            errors,
+            field.name as keyof RequestTypeServiceCategoryFormData
+          )}
           htmlFor={field.name}
         >
           {field.component === "select-sector" && (

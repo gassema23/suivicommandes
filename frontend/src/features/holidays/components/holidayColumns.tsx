@@ -7,7 +7,9 @@ import type { Holiday } from "../types/holiday.type";
 
 momentFr();
 
-export const holidayColumns: ColumnDef<Holiday>[] = [
+type HolidayWithDelete = Holiday & { onDelete: () => void };
+
+export const holidayColumns: ColumnDef<HolidayWithDelete>[] = [
   {
     accessorKey: "holidayName",
     header: ({ column }) => (

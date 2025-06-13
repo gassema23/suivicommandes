@@ -122,12 +122,7 @@ export default function ProviderServiceCategoryUpdateForm({
       className="xl:w-3xl w-full space-y-4"
       onSubmit={handleSubmit(onSubmit)}
     >
-      {backendError && (
-        <FormError
-          title="Erreur lors de la mise à jour"
-          message={backendError}
-        />
-      )}
+      {backendError && <FormError message={backendError} />}
 
       {providerServiceCategoryFields.map((field) => (
         <InputContainer

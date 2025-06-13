@@ -3,7 +3,7 @@ import type { ReactNode } from "react";
 
 interface FormActionsProps {
   isLoading?: boolean;
-  onCancel: () => void;
+  onCancel?: () => void;
   cancelLabel?: string;
   submitLabel?: string;
   disabled?: boolean;
@@ -20,14 +20,16 @@ export function FormActions({
 }: FormActionsProps) {
   return (
     <div className="flex gap-4 justify-end">
-      <Button
-        type="button"
-        variant="outline"
-        onClick={onCancel}
-        disabled={isLoading || disabled}
-      >
-        {cancelLabel}
-      </Button>
+      {onCancel && (
+        <Button
+          type="button"
+          variant="outline"
+          onClick={onCancel}
+          disabled={isLoading || disabled}
+        >
+          {cancelLabel}
+        </Button>
+      )}
       <Button
         type="submit"
         disabled={isLoading || disabled}

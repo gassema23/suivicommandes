@@ -121,14 +121,17 @@ export class FlowsController {
    * @param currentUser - Utilisateur actuel effectuant la suppression.
    * @returns Confirmation de la suppression.
    */
-  @Delete()
+  @Delete(':id')
   @Permissions([{ resource: Resource.FLOWS, actions: [Action.DELETE] }])
   @ApiOperation({ summary: 'Supprimer un flux de transmission' })
   @ApiResponse({
     status: 200,
     description: 'Flux de transmission supprimé avec succès',
   })
-  async remove(@Body('id') id: string, @CurrentUser() currentUser: User) {
+  async remove(
+    @Param('id', ParseUUIDPipe) id: string,
+    @CurrentUser() currentUser: User,
+  ) {
     return this.flowsService.remove(id, currentUser.id);
   }
 }

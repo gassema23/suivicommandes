@@ -8,7 +8,7 @@ import {
 } from "../schemas/delay-type.schema";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { updateDelayType } from "../services/update-delay-type.service";
+import { useUpdateDelayType } from "../services/update-delay-type.service";
 import { toast } from "sonner";
 import { QUERY_KEYS } from "@/constants/query-key.constant";
 import FormError from "@/components/ui/shadcn/form-error";
@@ -18,6 +18,7 @@ import { Input } from "@/components/ui/shadcn/input";
 import { Textarea } from "@/components/ui/shadcn/textarea";
 import { FormActions } from "@/components/forms/components/FormActions";
 import { SUCCESS_MESSAGES } from "@/constants/messages.constant";
+import { formatErrorMessage, getFieldError } from "@/lib/utils";
 
 interface DelayTypeFormProps {
   delayType: DelayType;
@@ -26,6 +27,7 @@ export default function DelayTypeUpdateForm({ delayType }: DelayTypeFormProps) {
   const [backendError, setBackendError] = useState<string | null>(null);
   const navigate = useNavigate();
   const queryClient = useQueryClient();
+  const updateDelayType = useUpdateDelayType();
 
   const form = useForm<DelayTypeFormData>({
     resolver: zodResolver(delayTypeSchema),
@@ -46,12 +48,12 @@ export default function DelayTypeUpdateForm({ delayType }: DelayTypeFormProps) {
       updateDelayType(delayType.id, data),
     onSuccess: () => {
       setBackendError(null);
-      toast.success(SUCCESS_MESSAGES.update('Type de délai'));
+      toast.success(SUCCESS_MESSAGES.update("Type de délai"));
       queryClient.invalidateQueries({ queryKey: QUERY_KEYS.DELAY_TYPES });
       navigate({ to: "/pilotages/delay-types", search: { page: 1 } });
     },
     onError: (error: { message: string }) => {
-      setBackendError(error.message);
+      setBackendError(formatErrorMessage(error));
     },
   });
 
@@ -63,19 +65,18 @@ export default function DelayTypeUpdateForm({ delayType }: DelayTypeFormProps) {
       className="xl:w-3xl w-full space-y-4"
       onSubmit={handleSubmit(onSubmit)}
     >
-      {backendError && (
-        <FormError
-          title="Erreur lors de l'envoie du formulaire"
-          message={backendError}
-        />
-      )}
+      {backendError && <FormError message={backendError} />}
 
       {delayTypeFields.map((field) => (
         <InputContainer
           key={field.name}
           label={field.label}
-          error={errors[field.name]?.message}
+          error={getFieldError<DelayTypeFormData>(
+            errors,
+            field.name as keyof DelayTypeFormData
+          )}
           htmlFor={field.name}
+          required={field?.required}
         >
           {field.component === "input" && (
             <Input

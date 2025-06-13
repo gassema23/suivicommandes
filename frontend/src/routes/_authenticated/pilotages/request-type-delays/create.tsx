@@ -15,7 +15,6 @@ export const Route = createFileRoute(
   component: RouteComponent,
   errorComponent: ({ error }) => (
     <FormError
-      title="Erreur lors du chargement des délais par type de demande"
       message={
         error.message ||
         "Une erreur inconnue est survenue. Veuillez réessayer plus tard."

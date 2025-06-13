@@ -13,12 +13,7 @@ export const Route = createFileRoute(
     meta: [{ title: "Ajouter un livrable" }],
   }),
   component: RouteComponent,
-  errorComponent: ({ error }) => (
-    <FormError
-      title="Erreur lors du chargement du livrable"
-      message={error.message}
-    />
-  ),
+  errorComponent: ({ error }) => <FormError message={error.message} />,
   staticData: {
     title: "Ajouter un livrable",
     breadcrumb: [

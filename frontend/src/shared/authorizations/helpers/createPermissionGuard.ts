@@ -1,22 +1,21 @@
 import { redirect } from "@tanstack/react-router";
-import type { User } from "../types/user.type";
 
 interface PermissionCheck {
   resource: string;
   action: string;
 }
 
-interface AuthContext {
+interface AuthContext<TUser = unknown> {
   auth: {
-    user: User;
+    user: TUser | null;
     hasRole: (role: string) => boolean;
     hasAllPermissions: (permissions: PermissionCheck[]) => boolean;
     hasAnyPermission: (permissions: PermissionCheck[]) => boolean;
   };
 }
 
-interface GuardArgs {
-  context: AuthContext;
+interface GuardArgs<TUser = unknown> {
+  context: AuthContext<TUser>;
 }
 
 // =============================================================================

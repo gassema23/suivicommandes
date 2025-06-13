@@ -9,7 +9,11 @@ import { DataTable } from "@/components/table/DataTable";
 import { requestTypeColumns } from "@/features/request-types/components/RequestTypeColumns";
 import { getRequestTypes } from "@/features/request-types/services/get-request-types.service";
 import type { RequestTypeResponse } from "@/features/request-types/types/request-type.type";
-import { queryOptions, useQueryClient, useSuspenseQuery } from "@tanstack/react-query";
+import {
+  queryOptions,
+  useQueryClient,
+  useSuspenseQuery,
+} from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 import { toast } from "sonner";
@@ -36,12 +40,7 @@ export const Route = createFileRoute(
       requestTypesQueryOptions(Number(search?.page ?? "1"))
     );
   },
-  errorComponent: ({ error }) => (
-    <FormError
-      title="Erreur lors du chargement des types de demande"
-      message={error.message}
-    />
-  ),
+  errorComponent: ({ error }) => <FormError message={error.message} />,
   staticData: {
     title: "Types de demande",
     action: "/pilotages/request-types/create",

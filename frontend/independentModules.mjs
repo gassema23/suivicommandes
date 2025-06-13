@@ -7,8 +7,7 @@ export const independentModulesConfig = createIndependentModules({
       "allowImportsFrom": [
         "src/app/globals.css",
         "{sharedImports}",
-        "src/features/**",
-        "src/routes/test-table/**"
+        "src/features/**"
       ]
     },
 
@@ -31,14 +30,13 @@ export const independentModulesConfig = createIndependentModules({
         "src/types/**",
         "src/constants/**",
         "src/shared/**",
-        "src/routes/test-table/**"
+        "src/helpers/**"
       ],
       "allowImportsFrom": ["{sharedImports}"],
       "errorMessage": "🔥 Shared folders are not allowed to import items from the `features` and `app` folders. 🔥"
     },
 
     // All files not specified in the rules are not allowed to import anything.
-    // Ignore files in `src/tasks/*` and `src/*`.
     {
       "name": "Unknown files",
       "pattern": [["src/**", "!src/*"]],
@@ -58,7 +56,7 @@ export const independentModulesConfig = createIndependentModules({
         "src/types/**",
         "src/constants/**",
         "src/shared/**",
-        "src/routes/test-table/**"
+        "src/helpers/**"
     ]
   }
 

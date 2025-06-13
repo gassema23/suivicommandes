@@ -10,6 +10,7 @@ export const serviceCategoryFields = [
     label: "Services",
     component: "select-service",
     placeholder: "Sélectionner un service",
+    required: true,
   },
   {
     name: "serviceCategoryName",
@@ -17,6 +18,7 @@ export const serviceCategoryFields = [
     component: "input",
     type: "text",
     placeholder: "Nom de la catégorie",
+    required: true,
   },
   {
     name: "isMultiLink",

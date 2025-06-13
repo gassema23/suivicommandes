@@ -2,19 +2,21 @@ import { Input } from "@/components/ui/shadcn/input";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Button } from "@/components/ui/quebec/Button";
 import { useNavigate } from "@tanstack/react-router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import FormError from "@/components/ui/shadcn/form-error";
 import {
   userInformationSchema,
   type UserInformationFormData,
 } from "../schemas/user-information.schema";
-import { updateUserInformation } from "../services/update-user-information.service";
-import { Label } from "@/components/ui/shadcn/label";
+import { useUpdateUserInformation } from "../services/update-user-information.service";
 import { QUERY_KEYS } from "@/constants/query-key.constant";
 import { toast } from "sonner";
 import { SUCCESS_MESSAGES } from "@/constants/messages.constant";
+import { formatErrorMessage, getFieldError } from "@/lib/utils";
+import InputContainer from "@/components/forms/components/InputContainer";
+import { profileInformationFields } from "../configs/profile-information-fields";
+import { FormActions } from "@/components/forms/components/FormActions";
 
 interface InformationFormProps {
   user: User;
@@ -31,6 +33,7 @@ export default function InformationForm({ user }: InformationFormProps) {
   const [backendError, setBackendError] = useState<string | null>(null);
   const navigate = useNavigate();
   const queryClient = useQueryClient();
+  const updateUserInformation = useUpdateUserInformation();
 
   const form = useForm<UserInformationFormData>({
     resolver: zodResolver(userInformationSchema),
@@ -44,10 +47,11 @@ export default function InformationForm({ user }: InformationFormProps) {
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    reset,
+    formState: { errors, isDirty },
   } = form;
 
-  const updateUserMutation = useMutation({
+  const updateMutation = useMutation({
     mutationFn: (data: UserInformationFormData) =>
       updateUserInformation(user.id, data),
     onSuccess: async () => {
@@ -62,12 +66,20 @@ export default function InformationForm({ user }: InformationFormProps) {
       navigate({ to: "/profile" });
     },
     onError: (error: { message: string }) => {
-      setBackendError(error.message);
+      setBackendError(formatErrorMessage(error));
     },
   });
 
+  useEffect(() => {
+    reset({
+      firstName: user.firstName,
+      lastName: user.lastName,
+      email: user.email,
+    });
+  }, [user, reset]);
+
   const onSubmit = (data: UserInformationFormData) => {
-    updateUserMutation.mutate(data);
+    updateMutation.mutate(data);
   };
   return (
     <form
@@ -78,72 +90,34 @@ export default function InformationForm({ user }: InformationFormProps) {
       <p className="subtitle">
         Mettez à jour vos informations personnelles ici.
       </p>
-      {backendError && (
-        <FormError
-          title="Erreur lors de l'envoie du formulaire"
-          message={backendError}
-        />
-      )}
-      <div className="grid grid-cols-12 gap-2 items-center">
-        <Label className="col-span-12 xl:col-span-4" htmlFor="firstName">
-          Prénom
-        </Label>
-        <div className="col-span-12 xl:col-span-8">
-          <Input
-            className="block w-full"
-            id="firstName"
-            {...register("firstName")}
-            required
-          />
-          {errors.firstName && (
-            <p className="text-destructive text-sm mt-1">
-              {errors.firstName.message}
-            </p>
+      {backendError && <FormError message={backendError} />}
+
+      {profileInformationFields.map((field) => (
+        <InputContainer
+          key={field.name}
+          label={field.label}
+          error={getFieldError<UserInformationFormData>(
+            errors,
+            field.name as keyof UserInformationFormData
           )}
-        </div>
-      </div>
-      <div className="grid grid-cols-12 gap-2 items-center">
-        <Label className="col-span-12 xl:col-span-4" htmlFor="lastName">
-          Nom
-        </Label>
-        <div className="col-span-12 xl:col-span-8">
-          <Input
-            className="block w-full"
-            id="lastName"
-            {...register("lastName")}
-            required
-          />
-          {errors.lastName && (
-            <p className="text-destructive text-sm mt-1">
-              {errors.lastName.message}
-            </p>
+          htmlFor={field.name}
+          required={field?.required}
+        >
+          {field.component === "input" && (
+            <Input
+              type={field.type}
+              className="block w-full"
+              id={field.name}
+              placeholder={field.placeholder}
+              {...register(field.name)}
+            />
           )}
-        </div>
-      </div>
-      <div className="grid grid-cols-12 gap-2 items-center">
-        <Label className="col-span-12 xl:col-span-4" htmlFor="email">
-          Email
-        </Label>
-        <div className="col-span-12 xl:col-span-8">
-          <Input
-            className="block w-full"
-            id="email"
-            type="email"
-            {...register("email")}
-            required
-          />
-          {errors.email && (
-            <p className="text-destructive text-sm mt-1">
-              {errors.email.message}
-            </p>
-          )}
-        </div>
-      </div>
+        </InputContainer>
+      ))}
+
       {/* Actions du formulaire */}
       <div className="flex gap-4 justify-end">
-        <Button type="submit" disabled={form.formState.isSubmitting}>
-          {form.formState.isSubmitting ? "Mise à jour..." : "Mettre à jour"}
-        </Button>
+        <FormActions isLoading={updateMutation.isPending} disabled={!isDirty} />
       </div>
     </form>
   );

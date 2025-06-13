@@ -13,12 +13,7 @@ export const Route = createFileRoute(
     meta: [{ title: "Ajouter un service" }],
   }),
   component: RouteComponent,
-  errorComponent: ({ error }) => (
-    <FormError
-      title="Erreur lors du chargement des services"
-      message={error.message}
-    />
-  ),
+  errorComponent: ({ error }) => <FormError message={error.message} />,
   staticData: {
     title: "Ajouter un service",
     breadcrumb: [
@@ -27,7 +22,6 @@ export const Route = createFileRoute(
       {
         label: "Ajouter un service",
         href: "/pilotages/services/create",
-        isCurrent: true,
       },
     ],
   },

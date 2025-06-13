@@ -30,11 +30,11 @@ const variantStyles: Record<
 };
 
 export default function FormError({
-  title,
+  title = "Une erreur est survenue",
   message,
   variant = "error",
 }: {
-  title: string;
+  title?: string;
   message: string;
   variant?: FormAlertVariant;
 }) {

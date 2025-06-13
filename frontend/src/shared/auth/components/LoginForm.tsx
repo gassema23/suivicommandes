@@ -16,7 +16,7 @@ import { QuebecLink } from "@/components/ui/quebec/QuebecLink"
 import { Label } from "@/components/ui/shadcn/label"
 import { QUERY_KEYS } from "@/constants/query-key.constant"
 import { loginSchema, type LoginFormData } from "../schema/login.schema"
-import { login as loginServiceMutation } from "../services/login.service"
+import { useLogin } from "../services/login.service"
 
 interface LoginFormProps {
   onSuccess: (token: string, email: string) => void
@@ -27,7 +27,8 @@ export default function LoginForm({ onSuccess, className = "" }: LoginFormProps)
   const [backendError, setBackendError] = useState<string | null>(null)
   const search = useSearch({ from: "/_guest/(login)/login" })
   const { login, refetchUser } = useAuth()
-  const queryClient = useQueryClient()
+  const queryClient = useQueryClient();
+  const loginServiceMutation = useLogin();
 
   const form = useForm<z.infer<typeof loginSchema>>({
     resolver: zodResolver(loginSchema),

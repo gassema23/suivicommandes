@@ -22,7 +22,9 @@ import { SUCCESS_MESSAGES } from "@/constants/messages.constant";
 interface RequestTypeFormProps {
   requestType: RequestType;
 }
-export default function RequestTypeUpdateForm({ requestType }: RequestTypeFormProps) {
+export default function RequestTypeUpdateForm({
+  requestType,
+}: RequestTypeFormProps) {
   const [backendError, setBackendError] = useState<string | null>(null);
   const navigate = useNavigate();
   const queryClient = useQueryClient();
@@ -46,7 +48,7 @@ export default function RequestTypeUpdateForm({ requestType }: RequestTypeFormPr
       updateRequestType(requestType.id, data),
     onSuccess: () => {
       setBackendError(null);
-      toast.success(SUCCESS_MESSAGES.update('Type de demande'));
+      toast.success(SUCCESS_MESSAGES.update("Type de demande"));
       queryClient.invalidateQueries({ queryKey: QUERY_KEYS.REQUEST_TYPES });
       navigate({ to: "/pilotages/request-types", search: { page: 1 } });
     },
@@ -63,12 +65,7 @@ export default function RequestTypeUpdateForm({ requestType }: RequestTypeFormPr
       className="xl:w-3xl w-full space-y-4"
       onSubmit={handleSubmit(onSubmit)}
     >
-      {backendError && (
-        <FormError
-          title="Erreur lors de l'envoie du formulaire"
-          message={backendError}
-        />
-      )}
+      {backendError && <FormError message={backendError} />}
 
       {requestTypeFields.map((field) => (
         <InputContainer

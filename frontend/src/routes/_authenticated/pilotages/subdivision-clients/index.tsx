@@ -40,12 +40,7 @@ export const Route = createFileRoute(
       subdivisionClientsQueryOptions(Number(search?.page ?? "1"))
     );
   },
-  errorComponent: ({ error }) => (
-    <FormError
-      title="Erreur lors du chargement des subdivisions clients"
-      message={error.message}
-    />
-  ),
+  errorComponent: ({ error }) => <FormError message={error.message} />,
   staticData: {
     title: "Subdivisions clients",
     action: "/pilotages/subdivision-clients/create",

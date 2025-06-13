@@ -7,7 +7,9 @@ import type { Client } from "@/shared/clients/types/client.type";
 
 momentFr();
 
-export const clientColumns: ColumnDef<Client>[] = [
+type ClientWithDelete = Client & { onDelete: () => void };
+
+export const clientColumns: ColumnDef<ClientWithDelete>[] = [
   {
     accessorKey: "clientName",
     header: ({ column }) => (

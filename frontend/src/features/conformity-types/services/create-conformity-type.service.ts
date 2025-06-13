@@ -1,23 +1,14 @@
 import { API_ROUTE } from "@/constants/api-route.constant";
 import type { ConformityTypeFormData } from "../schemas/conformity-type.schema";
 
-export const createConformityType = async (
-  data: ConformityTypeFormData
-): Promise<void> => {
-  const response = await fetch(`${API_ROUTE}/conformity-types`, {
-    credentials: "include",
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(data),
-  });
+import { useCsrfFetch } from "@/hooks/useCsrfFetch";
 
-  if (!response.ok) {
-    const errorData = await response.json();
-    throw new Error(
-      errorData.message || "Erreur lors de la création du type de conformité"
-    );
-  }
-  return response.json();
-};
+export function useCreateConformityType() {
+  const csrfFetch = useCsrfFetch();
+
+  return (data: ConformityTypeFormData) =>
+    csrfFetch(`${API_ROUTE}/conformity-types`, {
+      method: "POST",
+      body: data,
+    });
+}

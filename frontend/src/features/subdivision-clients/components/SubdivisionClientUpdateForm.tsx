@@ -75,57 +75,55 @@ export default function SubdivisionClientUpdateForm({
 
   return (
     <form
-          className="xl:w-3xl w-full space-y-4"
-          onSubmit={handleSubmit(onSubmit)}
+      className="xl:w-3xl w-full space-y-4"
+      onSubmit={handleSubmit(onSubmit)}
+    >
+      {backendError && <FormError message={backendError} />}
+
+      {subdivisionClientFields.map((field) => (
+        <InputContainer
+          key={field.name}
+          label={field.label}
+          error={errors[field.name]?.message}
+          htmlFor={field.name}
+          required={field.required}
         >
-          {backendError && (
-            <FormError
-              title="Erreur lors de l'envoie du formulaire"
-              message={backendError}
+          {field.component === "select-client" && (
+            <DependentSelect
+              value={watch("clientId")}
+              onChange={(value) => {
+                setValue("clientId", value);
+              }}
+              data={clients}
+              isLoading={isLoadingClients}
+              isError={isErrorClients}
+              placeholder={field.placeholder}
+              getOptionValue={(s) => s.id}
+              getOptionLabel={(s) => s.virtualClientName}
             />
           )}
-    
-          {subdivisionClientFields.map((field) => (
-            <InputContainer
-              key={field.name}
-              label={field.label}
-              error={errors[field.name]?.message}
-              htmlFor={field.name}
+          {field.component === "input" && (
+            <Input
+              type={field.type}
+              className="block w-full"
+              id={field.name}
+              placeholder={field.placeholder}
+              {...register(field.name)}
               required={field.required}
-            >
-              {field.component === "select-client" && (
-                <DependentSelect
-                  value={watch("clientId")}
-                  onChange={(value) => {
-                    setValue("clientId", value);
-                  }}
-                  data={clients}
-                  isLoading={isLoadingClients}
-                  isError={isErrorClients}
-                  placeholder={field.placeholder}
-                  getOptionValue={(s) => s.id}
-                  getOptionLabel={(s) => s.virtualClientName}
-                />
-              )}
-              {field.component === "input" && (
-                <Input
-                  type={field.type}
-                  className="block w-full"
-                  id={field.name}
-                  placeholder={field.placeholder}
-                  {...register(field.name)}
-                  required={field.required}
-                />
-              )}
-            </InputContainer>
-          ))}
-    
-          <FormActions
-            isLoading={updateMutation.isPending}
-            onCancel={() =>
-              navigate({ to: "/pilotages/subdivision-clients", search: { page: 1 } })
-            }
-          />
-        </form>
+            />
+          )}
+        </InputContainer>
+      ))}
+
+      <FormActions
+        isLoading={updateMutation.isPending}
+        onCancel={() =>
+          navigate({
+            to: "/pilotages/subdivision-clients",
+            search: { page: 1 },
+          })
+        }
+      />
+    </form>
   );
 }

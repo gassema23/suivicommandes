@@ -1,5 +1,5 @@
 import { API_ROUTE } from "@/constants/api-route.constant";
-import type { ConformityTypeResponse } from "../types/conformity-type.type";
+import type { ConformityTypeResponse } from "@/shared/conformity-types/types/conformity-type.type";
 
 export const getConformityTypes = async (
   page: number

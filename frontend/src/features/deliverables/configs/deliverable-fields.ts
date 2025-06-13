@@ -1,4 +1,7 @@
-export const deliverableFields = [
+import type { FieldConfig } from "@/types/field.type";
+import type { DeliverableFormData } from "../schemas/deliverable.schema";
+
+export const deliverableFields:FieldConfig<DeliverableFormData>[] = [
   {
     name: "deliverableName",
     label: "Livrable",

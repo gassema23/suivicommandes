@@ -34,6 +34,7 @@ import { EnableTwoFactorDto } from '../dto/enable-two-factor.dto';
 import { instanceToPlain } from 'class-transformer';
 import { OnboardingDto } from '../dto/onboarding.dto';
 import { TwoFactorAuthService } from '../services/two-factor-auth.service';
+import { randomBytes } from 'crypto';
 
 @ApiTags('Authentication')
 @Controller('auth')
@@ -292,11 +293,25 @@ export class AuthController {
   @UseGuards(AuthGuard('jwt'))
   @ApiBearerAuth()
   @ApiOperation({ summary: 'Mettre à jour le mot de passe de l’utilisateur' })
-  @ApiResponse({ status: 200, description: 'Mot de passe mis à jour avec succès' })
+  @ApiResponse({
+    status: 200,
+    description: 'Mot de passe mis à jour avec succès',
+  })
   async updatePassword(
     @Param('id') id: string,
     @Body() changePasswordDto: ChangePasswordDto,
   ) {
     return this.authService.changePassword(id, changePasswordDto);
+  }
+
+  @Get('csrf-token')
+  getCsrfToken(@Res() res: Response) {
+    const token = randomBytes(32).toString('hex');
+    res.cookie('csrfToken', token, {
+      httpOnly: false,
+      sameSite: 'strict',
+      secure: process.env.NODE_ENV === 'production',
+    });
+    res.json({ csrfToken: token });
   }
 }

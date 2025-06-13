@@ -95,12 +95,7 @@ export default function CreateRolePage() {
 
   return (
     <form onSubmit={form.handleSubmit(onSubmit)} className="w-full space-y-6">
-      {backendError && (
-        <FormError
-          title="Erreur lors de l'envoie du formulaire"
-          message={backendError}
-        />
-      )}
+      {backendError && <FormError message={backendError} />}
       {/* Champ nom du rôle */}
       <Card>
         <CardContent className="pt-6 w-md">

@@ -9,11 +9,13 @@ import {
 import { Button } from "@/components/ui/quebec/Button";
 import { useEffect, useState } from "react";
 import { API_ROUTE } from "@/constants/api-route.constant";
+import { useCsrf } from "@/providers/csrf.provider";
+import { formatErrorMessage } from "@/lib/utils";
 
 interface DeleteModalProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  deleteUrl: string;
+  deletePageName: string;
   onSuccess?: () => void;
   title?: string;
   description?: string;
@@ -23,7 +25,7 @@ interface DeleteModalProps {
 export function DeleteModal({
   open,
   onOpenChange,
-  deleteUrl,
+  deletePageName,
   deleteId,
   onSuccess,
   title = "Confirmer la suppression",
@@ -31,21 +33,26 @@ export function DeleteModal({
 }: DeleteModalProps) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const { ensureCsrfToken } = useCsrf();
 
   const handleDelete = async () => {
-    if (!deleteId) return;
+    if (!deleteId || !deletePageName) {
+      setError("Erreur interne : ressource à supprimer inconnue.");
+      return;
+    }
 
     setLoading(true);
     setError(null);
 
     try {
-      const res = await fetch(`${API_ROUTE}/${deleteUrl}`, {
+      const csrfToken = await ensureCsrfToken();
+      const res = await fetch(`${API_ROUTE}/${deletePageName}/${deleteId}`, {
         method: "DELETE",
         credentials: "include",
         headers: {
           "Content-Type": "application/json",
+          "x-csrf-token": csrfToken,
         },
-        body: JSON.stringify({ id: deleteId }),
       });
 
       if (!res.ok) {
@@ -56,9 +63,7 @@ export function DeleteModal({
       onOpenChange(false);
       onSuccess?.();
     } catch (err) {
-      const message =
-        err instanceof Error ? err.message : "Erreur inconnue";
-      setError(message);
+      setError(formatErrorMessage(err));
     } finally {
       setLoading(false);
     }

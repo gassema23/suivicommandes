@@ -1,33 +1,25 @@
 import { API_ROUTE } from "@/constants/api-route.constant";
 import type { ServiceCategoryFormData } from "../schemas/service-category.schema";
+import { useCsrfFetch } from "@/hooks/useCsrfFetch";
 
-export async function updateServiceCategory(
-  serviceCategoryId: string,
-  data: ServiceCategoryFormData
-) {
-  const payload = {
-    serviceId: data.serviceId,
-    serviceCategoryName: data.serviceCategoryName,
-  };
-  const res = await fetch(
-    `${API_ROUTE}/service-categories/${serviceCategoryId}`,
-    {
+export function useUpdateServiceCategory() {
+  const csrfFetch = useCsrfFetch();
+
+  return (id: string, data: ServiceCategoryFormData) => {
+    const payload = {
+      serviceId: data.serviceId,
+      serviceCategoryName: data.serviceCategoryName,
+      serviceCategoryDescription: data.serviceCategoryDescription,
+      isMultiLink: data.isMultiLink,
+      isMultiProvider: data.isMultiProvider,
+      isRequiredExpertise: data.isRequiredExpertise,
+    };
+
+    console.log("Updating service category with payload:", payload);
+
+    return csrfFetch(`${API_ROUTE}/service-categories/${id}`, {
       method: "PATCH",
-      credentials: "include",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(payload),
-    }
-  );
-
-  const result = await res.json();
-  if (!res.ok) {
-    throw new Error(
-      result.message ||
-        "Erreur lors de la mise à jour de la catégorie de service"
-    );
-  }
-
-  return result;
+      body: payload,
+    });
+  };
 }

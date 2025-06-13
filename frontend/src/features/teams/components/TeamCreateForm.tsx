@@ -69,12 +69,7 @@ export default function TeamCreateForm() {
       className="xl:w-3xl w-full space-y-4"
       onSubmit={handleSubmit(onSubmit)}
     >
-      {backendError && (
-        <FormError
-          title="Erreur lors de l'envoie du formulaire"
-          message={backendError}
-        />
-      )}
+      {backendError && <FormError message={backendError} />}
 
       {teamFields.map((field) => (
         <InputContainer

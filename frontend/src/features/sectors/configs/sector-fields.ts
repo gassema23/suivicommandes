@@ -1,10 +1,23 @@
-export const sectorFields = [
+import type { SectorFormData } from "../schemas/sector.schema";
+
+type SectorField = {
+  name: keyof SectorFormData;
+  label: string;
+  type?: string;
+  placeholder?: string;
+  component: "input" | "textarea" | "switch";
+  rows?: number;
+  required?: boolean;
+};
+
+export const sectorFields: SectorField[] = [
   {
     name: "sectorName",
     label: "Secteur",
     type: "text",
     placeholder: "Nom du secteur",
     component: "input",
+    required: true,
   },
   {
     name: "sectorClientTimeEnd",

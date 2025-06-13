@@ -4,17 +4,11 @@ import { z } from "zod";
 export const holidaySchema = z.object({
   holidayName: z.string().min(1, "Le jour férié est requis"),
   holidayDescription: z.string().optional(),
-  holidayDate: z
-    .union([
-      z
-        .string()
-        .refine(
-          (val) => !isNaN(Date.parse(val)),
-          "La date du jour férié n'est pas valide"
-        ),
-      z.date(),
-    ])
-    .transform((val) => (typeof val === "string" ? new Date(val) : val)),
+  holidayDate: z.coerce
+    .date()
+    .refine((date) => date instanceof Date && !isNaN(date.getTime()), {
+      message: "La date du jour férié est requise et doit être valide",
+    }),
 });
 
 export type HolidayFormData = z.infer<typeof holidaySchema>;

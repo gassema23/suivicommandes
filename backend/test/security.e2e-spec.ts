@@ -159,4 +159,28 @@ describe('🛡️ Security E2E Tests', () => {
         expect(res.statusCode).toBeGreaterThanOrEqual(400);
       });
   });
+
+  it('🛡️ /auth/login - reject POST without CSRF token', async () => {
+    await request(app.getHttpServer())
+      .post('/auth/login')
+      .send({ email: 'test@example.com', password: '!Password123' })
+      .expect(403); // ou 401 selon ta config
+  });
+  it('🛡️ /auth/login - accept POST with valid CSRF token', async () => {
+    // 1. Récupère le token CSRF via un GET (selon ta config)
+    const res = await request(app.getHttpServer()).get('/auth/csrf-token');
+    const csrfToken = res.body.csrfToken || res.headers['x-csrf-token'];
+    const cookies = res.headers['set-cookie'];
+
+    // 2. Utilise le token dans le header et le cookie dans la requête POST
+    await request(app.getHttpServer())
+      .post('/auth/login')
+      .set('Cookie', cookies)
+      .set('x-csrf-token', csrfToken)
+      .send({ email: 'test@example.com', password: '!Password123' })
+      .expect((r) => {
+        // Ici, tu attends un 200 ou une erreur d'auth, mais pas une erreur CSRF
+        expect([200, 400, 401]).toContain(r.statusCode);
+      });
+  });
 });

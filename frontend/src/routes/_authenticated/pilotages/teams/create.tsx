@@ -10,9 +10,7 @@ export const Route = createFileRoute("/_authenticated/pilotages/teams/create")({
   head: () => ({
     meta: [{ title: "Ajouter une équipe" }],
   }),
-  errorComponent: ({ error }) => (
-    <FormError title="Erreur lors du chargement" message={error.message} />
-  ),
+  errorComponent: ({ error }) => <FormError message={error.message} />,
   staticData: {
     title: "Ajouter une équipe",
     breadcrumb: [

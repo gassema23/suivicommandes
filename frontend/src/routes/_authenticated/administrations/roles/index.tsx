@@ -26,12 +26,7 @@ export const Route = createFileRoute("/_authenticated/administrations/roles/")({
   loader: ({ context }) =>
     context.queryClient?.ensureQueryData(rolesQueryOptions),
   component: RolePage,
-  errorComponent: ({ error }) => (
-    <FormError
-      title="Erreur lors du chargement des rôles"
-      message={error.message}
-    />
-  ),
+  errorComponent: ({ error }) => <FormError message={error.message} />,
   staticData: {
     title: "Rôles",
     action: "/administrations/roles/create",

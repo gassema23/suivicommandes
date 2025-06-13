@@ -181,7 +181,7 @@ export default function TwoFactorForm({
         onSubmit={form.handleSubmit(onSubmit)}
         className="flex flex-col gap-6 w-full"
       >
-        {backendError && <FormError title="Erreur" message={backendError} />}
+        {backendError && <FormError message={backendError} />}
 
         <div className="grid gap-4">
           <Label htmlFor="code">Code d'authentification</Label>

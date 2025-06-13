@@ -1,22 +1,13 @@
 import { API_ROUTE } from "@/constants/api-route.constant";
 import type { ClientFormData } from "../schemas/clients.schema";
+import { useCsrfFetch } from "@/hooks/useCsrfFetch";
 
-export async function updateClient(clientId: string, data: ClientFormData) {
-  const res = await fetch(`${API_ROUTE}/clients/${clientId}`, {
-    method: "PATCH",
-    credentials: "include",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(data),
-  });
+export function useUpdateClient() {
+  const csrfFetch = useCsrfFetch();
 
-  const result = await res.json();
-  if (!res.ok) {
-    throw new Error(
-      result.message || "Erreur lors de la mise à jour du jour férié"
-    );
-  }
-
-  return result;
+  return (id: string, data: ClientFormData) =>
+    csrfFetch(`${API_ROUTE}/clients/${id}`, {
+      method: "PATCH",
+      body: data,
+    });
 }

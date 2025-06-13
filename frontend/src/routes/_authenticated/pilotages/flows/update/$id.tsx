@@ -23,12 +23,7 @@ export const Route = createFileRoute(
   head: () => ({
     meta: [{ title: "Modifier le flux de transmission" }],
   }),
-  errorComponent: ({ error }) => (
-    <FormError
-      title="Erreur lors du chargement du flux de transmission"
-      message={error.message}
-    />
-  ),
+  errorComponent: ({ error }) => <FormError message={error.message} />,
   staticData: {
     title: "Modifier le flux de transmission",
     breadcrumb: [

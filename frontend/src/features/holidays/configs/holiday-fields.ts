@@ -1,4 +1,7 @@
-export const holidayFields = [
+import type { FieldConfig } from "@/types/field.type";
+import type { HolidayFormData } from "../schemas/holiday.schema";
+
+export const holidayFields: FieldConfig<HolidayFormData>[] = [
   {
     name: "holidayName",
     label: "Fournisseur",

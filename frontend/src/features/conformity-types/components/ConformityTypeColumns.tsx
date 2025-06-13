@@ -3,11 +3,13 @@ import moment from "moment";
 import { momentFr } from "@/lib/momentFr";
 import DataTableAction from "@/components/table/components/DataTableAction";
 import { DataTableColumnHeader } from "@/components/table/components/DataTableColumnHeader";
-import type { ConformityType } from "../types/conformity-type.type";
+import type { ConformityType } from "@/shared/conformity-types/types/conformity-type.type";
 
 momentFr();
 
-export const conformityTypeColumns: ColumnDef<ConformityType>[] = [
+type ConformityTypeWithDelete = ConformityType & { onDelete: () => void };
+
+export const conformityTypeColumns: ColumnDef<ConformityTypeWithDelete>[] = [
   {
     accessorKey: "conformityTypeName",
     header: ({ column }) => (

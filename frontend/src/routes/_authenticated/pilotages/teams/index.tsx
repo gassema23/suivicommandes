@@ -39,12 +39,7 @@ export const Route = createFileRoute("/_authenticated/pilotages/teams/")({
 
   component: TeamsPage,
 
-  errorComponent: ({ error }) => (
-    <FormError
-      title="Erreur lors du chargement des équipes"
-      message={error.message}
-    />
-  ),
+  errorComponent: ({ error }) => <FormError message={error.message} />,
   staticData: {
     title: "Équipes",
     action: "/pilotages/teams/create",

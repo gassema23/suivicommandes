@@ -92,7 +92,12 @@ export default function ProfileBanner({ data }: UserType) {
         </div>
         <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
           <DialogTrigger asChild>
-            <Button className="ml-auto" size="sm" variant="outline" onClick={() => setDialogOpen(true)}>
+            <Button
+              className="ml-auto"
+              size="sm"
+              variant="outline"
+              onClick={() => setDialogOpen(true)}
+            >
               Modifier la photo
             </Button>
           </DialogTrigger>
@@ -105,7 +110,6 @@ export default function ProfileBanner({ data }: UserType) {
                   de profil
                   {saveAvatarMutation.isError && (
                     <FormError
-                      title="Une erreur est survenue"
                       message={(saveAvatarMutation.error as Error).message}
                     />
                   )}

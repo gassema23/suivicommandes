@@ -164,7 +164,7 @@ export class RequestTypeDelaysController {
    * @param id - The ID of the request type delay to delete.
    * @param currentUser - The user deleting the request type delay.
    */
-  @Delete()
+  @Delete(':id')
   @Permissions([
     {
       resource: Resource.REQUEST_TYPE_DELAYS,
@@ -178,7 +178,10 @@ export class RequestTypeDelaysController {
     status: 200,
     description: 'le type de délai par type de demand supprimé avec succès',
   })
-  async remove(@Body('id') id: string, @CurrentUser() currentUser: User) {
+  async remove(
+    @Param('id', ParseUUIDPipe) id: string,
+    @CurrentUser() currentUser: User,
+  ) {
     return this.requestTypeDelayService.remove(id, currentUser.id);
   }
 }

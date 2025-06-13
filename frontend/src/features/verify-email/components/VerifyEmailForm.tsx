@@ -12,7 +12,10 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useNavigate } from "@tanstack/react-router";
 import { updateVerifyEmail } from "../services/update-verify-email.service";
 import type { User } from "@/shared/users/types/user.type";
-import { VerifyEmailSchema, type VerifyEmailFormData } from "../shemas/verify-email.schema";
+import {
+  VerifyEmailSchema,
+  type VerifyEmailFormData,
+} from "../shemas/verify-email.schema";
 type VerifyEmailFormProps = {
   user: User;
 };
@@ -64,12 +67,7 @@ export default function VerifyEmailForm({ user }: VerifyEmailFormProps) {
           Entrez votre adresse courriel ci-dessous pour vous connecter à votre
           compte
         </p>
-        {backendError && (
-          <FormError
-            title="Erreur de vérification de l'adresse courriel"
-            message={backendError}
-          />
-        )}
+        {backendError && <FormError message={backendError} />}
       </div>
       <div className="grid gap-6 w-full">
         <div className="grid gap-2">

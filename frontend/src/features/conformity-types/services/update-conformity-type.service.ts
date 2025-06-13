@@ -1,25 +1,14 @@
 import { API_ROUTE } from "@/constants/api-route.constant";
 import type { ConformityTypeFormData } from "../schemas/conformity-type.schema";
 
-export async function updateConformityType(
-  conformityTypeId: string,
-  data: ConformityTypeFormData
-) {
-  const res = await fetch(`${API_ROUTE}/conformity-types/${conformityTypeId}`, {
-    method: "PATCH",
-    credentials: "include",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(data),
-  });
+import { useCsrfFetch } from "@/hooks/useCsrfFetch";
 
-  const result = await res.json();
-  if (!res.ok) {
-    throw new Error(
-      result.message || "Erreur lors de la mise à jour du type de conformité"
-    );
-  }
+export function useUpdateConformityType() {
+  const csrfFetch = useCsrfFetch();
 
-  return result;
+  return (id: string, data: ConformityTypeFormData) =>
+    csrfFetch(`${API_ROUTE}/conformity-types/${id}`, {
+      method: "PATCH",
+      body: data,
+    });
 }

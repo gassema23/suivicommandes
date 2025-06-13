@@ -7,7 +7,9 @@ import type { DelayType } from "@/shared/delay-types/types/delay-type.type";
 
 momentFr();
 
-export const delayTypeColumns: ColumnDef<DelayType>[] = [
+type DelayTypeWithDelete = DelayType & { onDelete: () => void };
+
+export const delayTypeColumns: ColumnDef<DelayTypeWithDelete>[] = [
   {
     accessorKey: "delayTypeName",
     header: ({ column }) => (

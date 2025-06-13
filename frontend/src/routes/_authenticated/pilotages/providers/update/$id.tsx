@@ -23,12 +23,7 @@ export const Route = createFileRoute(
   head: () => ({
     meta: [{ title: "Modifier le fournisseur" }],
   }),
-  errorComponent: ({ error }) => (
-    <FormError
-      title="Erreur lors du chargement du fournisseur"
-      message={error.message}
-    />
-  ),
+  errorComponent: ({ error }) => <FormError message={error.message} />,
   staticData: {
     title: "Modifier le fournisseur",
     breadcrumb: [

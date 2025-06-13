@@ -1,6 +1,4 @@
-import LoadingPage from "@/components/ui/loader/LoadingPage";
 import { DeleteModal } from "@/components/ui/quebec/DeleteModal";
-import FormError from "@/components/ui/shadcn/form-error";
 import { createPermissionGuard } from "@/shared/authorizations/helpers/createPermissionGuard";
 import { PERMISSIONS } from "@/shared/authorizations/types/auth.types";
 import { SectorColumns } from "@/features/sectors/components/SectorColumns";
@@ -10,13 +8,15 @@ import {
   useQueryClient,
   useSuspenseQuery,
 } from "@tanstack/react-query";
-import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 import { getSectors } from "@/features/sectors/services/get-sectors.service";
-import type { SectorsResponse } from "@/features/sectors/types/sector.type";
+import type { SectorsResponse } from "@/shared/sectors/types/sector.type";
 import { QUERY_KEYS } from "@/constants/query-key.constant";
 import { toast } from "sonner";
 import { SUCCESS_MESSAGES } from "@/constants/messages.constant";
+import { createFileRoute } from "@tanstack/react-router";
+import FormError from "@/components/ui/shadcn/form-error";
+import LoadingPage from "@/components/ui/loader/LoadingPage";
 
 const sectorsQueryOptions = (pageNumber: number) =>
   queryOptions<SectorsResponse>({
@@ -25,7 +25,7 @@ const sectorsQueryOptions = (pageNumber: number) =>
   });
 
 export const Route = createFileRoute("/_authenticated/pilotages/sectors/")({
-  beforeLoad: createPermissionGuard([PERMISSIONS.SECTORS.READ]),
+  beforeLoad: createPermissionGuard([PERMISSIONS.SERVICE_CATEGORIES.READ]),
   head: () => ({
     meta: [{ title: "Secteurs" }],
   }),
@@ -38,18 +38,17 @@ export const Route = createFileRoute("/_authenticated/pilotages/sectors/")({
       sectorsQueryOptions(Number(search?.page ?? "1"))
     );
   },
-  errorComponent: ({ error }) => (
-    <FormError
-      title="Erreur lors du chargement des secteurs"
-      message={error.message}
-    />
-  ),
+  errorComponent: ({ error }) => <FormError message={error.message} />,
   staticData: {
     title: "Secteurs",
     action: "/pilotages/sectors/create",
     breadcrumb: [
       { label: "Tableau de bord", href: "/" },
-      { label: "Secteurs", href: "/pilotages/sectors", isCurrent: true },
+      {
+        label: "Secteurs",
+        href: "/pilotages/sectors",
+        isCurrent: true,
+      },
     ],
   },
   pendingComponent: () => <LoadingPage />,
@@ -87,7 +86,7 @@ function RouteComponent() {
       <DeleteModal
         open={!!deleteId}
         onOpenChange={(open) => !open && setDeleteId(null)}
-        deleteUrl="sectors"
+        deletePageName="sectors"
         deleteId={deleteId}
         onSuccess={() => {
           setDeleteId(null);

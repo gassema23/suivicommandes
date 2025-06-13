@@ -1,31 +1,22 @@
 import { API_ROUTE } from "@/constants/api-route.constant";
 import type { RequestTypeServiceCategoryFormData } from "../schemas/request-type-service-category.schema";
+import { useCsrfFetch } from "@/hooks/useCsrfFetch";
 
-export const createRequestTypeServiceCategory = async (
-  data: RequestTypeServiceCategoryFormData
-): Promise<void> => {
-  const payload = {
-    serviceCategoryId: data.serviceCategoryId,
-    requestTypeId: data.requestTypeId,
-    availabilityDelay: data.availabilityDelay,
-    minimumRequiredDelay: data.minimumRequiredDelay,
-    serviceActivationDelay: data.serviceActivationDelay,
+export function useCreateRequestTypeServiceCategory() {
+  const csrfFetch = useCsrfFetch();
+
+  return (data: RequestTypeServiceCategoryFormData) => {
+    const payload = {
+      serviceCategoryId: data.serviceCategoryId,
+      requestTypeId: data.requestTypeId,
+      availabilityDelay: data.availabilityDelay,
+      minimumRequiredDelay: data.minimumRequiredDelay,
+      serviceActivationDelay: data.serviceActivationDelay,
+    };
+
+    return csrfFetch(`${API_ROUTE}/request-type-service-categories`, {
+      method: "POST",
+      body: payload,
+    });
   };
-
-  const response = await fetch(`${API_ROUTE}/request-type-service-categories`, {
-    credentials: "include",
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(payload),
-  });
-
-  if (!response.ok) {
-    const errorData = await response.json();
-    throw new Error(
-      errorData.message || "Erreur lors de la création du fournisseur"
-    );
-  }
-  return response.json();
-};
+}

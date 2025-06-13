@@ -17,13 +17,14 @@ import {
   requestTypeServiceCategorySchema,
   type RequestTypeServiceCategoryFormData,
 } from "../schemas/request-type-service-category.schema";
-import { updateRequestTypeServiceCategory } from "../services/update-request-type-service-category.service";
+import { useUpdateRequestTypeServiceCategory } from "../services/update-request-type-service-category.service";
 
 import { fetchRequestTypeList } from "@/shared/request-types/services/fetch-request-type-list.service";
 import { fetchSectorsList } from "@/shared/sectors/services/fetch-sectors-list.service";
 import { fetchServicesBySector } from "@/shared/services/services/fetch-services-by-sector.service";
 import { fetchServiceCategoriesByService } from "@/shared/service-categories/services/fetch-service-category-by-service.service";
 import type { RequestTypeServiceCategory } from "@/shared/request-type-service-categories/types/request-type-service-category.type";
+import { formatErrorMessage, getFieldError } from "@/lib/utils";
 
 interface RequestTypeServiceCategoryFormProps {
   requestTypeServiceCategory: RequestTypeServiceCategory;
@@ -35,6 +36,8 @@ export default function RequestTypeServiceCategoryUpdateForm({
   const [backendError, setBackendError] = useState<string | null>(null);
   const navigate = useNavigate();
   const queryClient = useQueryClient();
+  const updateRequestTypeServiceCategory =
+    useUpdateRequestTypeServiceCategory();
 
   const form = useForm<RequestTypeServiceCategoryFormData>({
     resolver: zodResolver(requestTypeServiceCategorySchema),
@@ -75,7 +78,7 @@ export default function RequestTypeServiceCategoryUpdateForm({
       });
     },
     onError: (error: { message: string }) => {
-      setBackendError(error.message);
+      setBackendError(formatErrorMessage(error));
     },
   });
 
@@ -129,18 +132,16 @@ export default function RequestTypeServiceCategoryUpdateForm({
       className="xl:w-3xl w-full space-y-4"
       onSubmit={handleSubmit(onSubmit)}
     >
-      {backendError && (
-        <FormError
-          title="Erreur lors de l'envoie du formulaire"
-          message={backendError}
-        />
-      )}
+      {backendError && <FormError message={backendError} />}
 
       {requestTypeServiceCategoryFields.map((field) => (
         <InputContainer
           key={field.name}
           label={field.label}
-          error={errors[field.name]?.message}
+          error={getFieldError<RequestTypeServiceCategoryFormData>(
+            errors,
+            field.name as keyof RequestTypeServiceCategoryFormData
+          )}
           htmlFor={field.name}
         >
           {field.component === "select-sector" && (

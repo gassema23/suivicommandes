@@ -1,5 +1,5 @@
 import { useState } from "react";
-import type { ConformityType } from "../types/conformity-type.type";
+import type { ConformityType } from "@/shared/conformity-types/types/conformity-type.type";
 import { useNavigate } from "@tanstack/react-router";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import {
@@ -8,7 +8,7 @@ import {
 } from "../schemas/conformity-type.schema";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { updateConformityType } from "../services/update-conformity-type.service";
+import { useUpdateConformityType } from "../services/update-conformity-type.service";
 import { toast } from "sonner";
 import { QUERY_KEYS } from "@/constants/query-key.constant";
 import FormError from "@/components/ui/shadcn/form-error";
@@ -18,14 +18,18 @@ import { Input } from "@/components/ui/shadcn/input";
 import { Textarea } from "@/components/ui/shadcn/textarea";
 import { FormActions } from "@/components/forms/components/FormActions";
 import { SUCCESS_MESSAGES } from "@/constants/messages.constant";
+import { formatErrorMessage, getFieldError } from "@/lib/utils";
 
 interface ConformityTypeFormProps {
   conformityType: ConformityType;
 }
-export default function ConformityTypeUpdateForm({ conformityType }: ConformityTypeFormProps) {
+export default function ConformityTypeUpdateForm({
+  conformityType,
+}: ConformityTypeFormProps) {
   const [backendError, setBackendError] = useState<string | null>(null);
   const navigate = useNavigate();
   const queryClient = useQueryClient();
+  const updateConformityType = useUpdateConformityType();
 
   const form = useForm<ConformityTypeFormData>({
     resolver: zodResolver(conformityTypeSchema),
@@ -46,12 +50,12 @@ export default function ConformityTypeUpdateForm({ conformityType }: ConformityT
       updateConformityType(conformityType.id, data),
     onSuccess: () => {
       setBackendError(null);
-      toast.success(SUCCESS_MESSAGES.update('Type de conformité'));
+      toast.success(SUCCESS_MESSAGES.update("Type de conformité"));
       queryClient.invalidateQueries({ queryKey: QUERY_KEYS.CONFORMITY_TYPES });
       navigate({ to: "/pilotages/conformity-types", search: { page: 1 } });
     },
     onError: (error: { message: string }) => {
-      setBackendError(error.message);
+      setBackendError(formatErrorMessage(error));
     },
   });
 
@@ -63,19 +67,18 @@ export default function ConformityTypeUpdateForm({ conformityType }: ConformityT
       className="xl:w-3xl w-full space-y-4"
       onSubmit={handleSubmit(onSubmit)}
     >
-      {backendError && (
-        <FormError
-          title="Erreur lors de l'envoie du formulaire"
-          message={backendError}
-        />
-      )}
+      {backendError && <FormError message={backendError} />}
 
       {conformityTypeFields.map((field) => (
         <InputContainer
           key={field.name}
           label={field.label}
-          error={errors[field.name]?.message}
+          error={getFieldError<ConformityTypeFormData>(
+            errors,
+            field.name as keyof ConformityTypeFormData
+          )}
           htmlFor={field.name}
+          required={field?.required}
         >
           {field.component === "input" && (
             <Input

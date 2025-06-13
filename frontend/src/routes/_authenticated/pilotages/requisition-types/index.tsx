@@ -40,12 +40,7 @@ export const Route = createFileRoute(
       requisitionTypesQueryOptions(Number(search?.page ?? "1"))
     );
   },
-  errorComponent: ({ error }) => (
-    <FormError
-      title="Erreur lors du chargement des types de réquisition"
-      message={error.message}
-    />
-  ),
+  errorComponent: ({ error }) => <FormError message={error.message} />,
   staticData: {
     title: "Types de réquisition",
     action: "/pilotages/requisition-types/create",

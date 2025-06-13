@@ -24,12 +24,7 @@ export const Route = createFileRoute(
   head: () => ({
     meta: [{ title: "Modifier le jour férié" }],
   }),
-  errorComponent: ({ error }) => (
-    <FormError
-      title="Erreur lors du chargement du jour férié"
-      message={error.message}
-    />
-  ),
+  errorComponent: ({ error }) => <FormError message={error.message} />,
   staticData: {
     title: "Modifier le jour férié",
     breadcrumb: [

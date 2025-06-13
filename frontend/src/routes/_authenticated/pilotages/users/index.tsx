@@ -37,12 +37,7 @@ export const Route = createFileRoute("/_authenticated/pilotages/users/")({
   loader: ({ context }) =>
     context.queryClient.ensureQueryData(usersQueryOptions),
   component: RouteComponent,
-  errorComponent: ({ error }) => (
-    <FormError
-      title="Erreur lors du chargement des utilisateurs"
-      message={error.message}
-    />
-  ),
+  errorComponent: ({ error }) => <FormError message={error.message} />,
   staticData: {
     title: "Utilisateurs",
     action: "/pilotages/users/create",

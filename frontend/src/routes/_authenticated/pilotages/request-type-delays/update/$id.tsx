@@ -25,12 +25,7 @@ export const Route = createFileRoute(
   head: () => ({
     meta: [{ title: "Modifier le délai par type de demande" }],
   }),
-  errorComponent: ({ error }) => (
-    <FormError
-      title="Erreur lors du chargement du délai par type de demande"
-      message={error.message}
-    />
-  ),
+  errorComponent: ({ error }) => <FormError message={error.message} />,
   staticData: {
     title: "Modifier le délai par type de demande",
     breadcrumb: [
@@ -52,7 +47,6 @@ export const Route = createFileRoute(
 });
 
 function RouteComponent() {
-  
   const { id } = useParams({ strict: false });
   const { data } = useSuspenseQuery(requestTypeDelaysQueryOptions(id!));
   return <RequestTypeDelayUpdateForm requestTypeDelay={data} />;

@@ -23,12 +23,7 @@ export const Route = createFileRoute(
   head: () => ({
     meta: [{ title: "Modifier l'équipe" }],
   }),
-  errorComponent: ({ error }) => (
-    <FormError
-      title="Erreur lors du chargement de l'équipe"
-      message={error.message}
-    />
-  ),
+  errorComponent: ({ error }) => <FormError message={error.message} />,
   staticData: {
     title: "Modifier l'équipe",
     breadcrumb: [

@@ -133,12 +133,15 @@ export class ClientsController {
    * @param currentUser - Utilisateur actuel effectuant la requête.
    * @returns Confirmation de la suppression.
    */
-  @Delete()
+  @Delete(':id')
   @Permissions([{ resource: Resource.CLIENTS, actions: [Action.DELETE] }])
   @ApiOperation({ summary: 'Supprimer un client' })
   @ApiResponse({ status: 200, description: 'Succès' })
   @ApiResponse({ status: 404, description: 'Non trouvé' })
-  async remove(@Body('id') id: string, @CurrentUser() currentUser: User) {
+  async remove(
+    @Param('id', ParseUUIDPipe) id: string,
+    @CurrentUser() currentUser: User,
+  ) {
     return this.clientsService.remove(id, currentUser.id);
   }
 }

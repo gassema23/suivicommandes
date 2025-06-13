@@ -11,7 +11,10 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
 import { QUERY_KEYS } from "@/constants/query-key.constant";
 import { SUCCESS_MESSAGES } from "@/constants/messages.constant";
-import { requisitionTypeSchema, type RequisitionTypeFormData } from "../schemas/requisition-type.schema";
+import {
+  requisitionTypeSchema,
+  type RequisitionTypeFormData,
+} from "../schemas/requisition-type.schema";
 import { createRequisitionType } from "../services/create-requisition-type.service";
 import { requisitionTypeFields } from "../configs/requisition-type-fields";
 
@@ -56,12 +59,7 @@ export default function RequisitionTypeCreateForm() {
       className="xl:w-3xl w-full space-y-4"
       onSubmit={handleSubmit(onSubmit)}
     >
-      {backendError && (
-        <FormError
-          title="Erreur lors de l'envoie du formulaire"
-          message={backendError}
-        />
-      )}
+      {backendError && <FormError message={backendError} />}
 
       {requisitionTypeFields.map((field) => (
         <InputContainer

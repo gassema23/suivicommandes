@@ -42,12 +42,7 @@ export const Route = createFileRoute(
       providerServiceCategoriesQueryOptions(Number(search?.page ?? "1"))
     );
   },
-  errorComponent: ({ error }) => (
-    <FormError
-      title="Erreur lors du chargement des fournisseurs par services"
-      message={error.message}
-    />
-  ),
+  errorComponent: ({ error }) => <FormError message={error.message} />,
   staticData: {
     title: "Fournisseurs par services",
     action: "/pilotages/provider-service-categories/create",

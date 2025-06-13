@@ -64,7 +64,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const queryClient = useQueryClient();
 
   const [modalOpen, setModalOpen] = React.useState(false);
-  const [secondsLeft, setSecondsLeft] = React.useState(30);
+  const [secondsLeft, setSecondsLeft] = React.useState(300);
   const intervalRef = React.useRef<NodeJS.Timeout | null>(null);
 
   const {
@@ -146,13 +146,14 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     () => user?.role?.permissions || [],
     [user]
   );
+
   React.useEffect(() => {
     intervalRef.current = setInterval(() => {
       const expiresAt = Cookies.get("accessTokenExpiresAt");
       if (expiresAt) {
         const msLeft = parseInt(expiresAt, 10) - Date.now();
         const seconds = Math.floor(msLeft / 1000);
-        if (seconds <= 30 && seconds > 0) {
+        if (seconds <= 300 && seconds > 0) { // 5 minutes
           setModalOpen(true);
           setSecondsLeft(seconds);
         } else if (seconds <= 0) {
@@ -167,6 +168,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       if (intervalRef.current) clearInterval(intervalRef.current);
     };
   }, [logout]);
+
   // Rafraîchir le token
   const handleContinue = async () => {
     setModalOpen(false);

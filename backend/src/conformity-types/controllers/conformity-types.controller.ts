@@ -112,9 +112,9 @@ export class ConformityTypesController {
    * Updates an existing conformity type.
    * Validates the new name to ensure it does not conflict with existing types.
    * @param id - The ID of the conformity type to update.
-   * @param updateConformityTypeDto 
-   * @param currentUser 
-   * @returns 
+   * @param updateConformityTypeDto
+   * @param currentUser
+   * @returns
    */
   @Patch(':id')
   @Permissions([
@@ -141,7 +141,7 @@ export class ConformityTypesController {
    * @param currentUser - The user performing the deletion.
    * @returns A confirmation message indicating successful deletion.
    */
-  @Delete()
+  @Delete(':id')
   @Permissions([
     { resource: Resource.CONFORMITY_TYPES, actions: [Action.DELETE] },
   ])
@@ -150,7 +150,10 @@ export class ConformityTypesController {
     status: 200,
     description: 'Type de conformité supprimé avec succès',
   })
-  async remove(@Body('id') id: string, @CurrentUser() currentUser: User) {
+  async remove(
+    @Param('id', ParseUUIDPipe) id: string,
+    @CurrentUser() currentUser: User,
+  ) {
     return this.conformityTypesService.remove(id, currentUser.id);
   }
 }

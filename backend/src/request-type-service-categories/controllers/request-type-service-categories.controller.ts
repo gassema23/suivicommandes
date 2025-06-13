@@ -169,7 +169,7 @@ export class RequestTypeServiceCategoriesController {
    * @param id - The ID of the request type service category to delete.
    * @param currentUser - The user performing the deletion.
    */
-  @Delete()
+  @Delete(':id')
   @Permissions([
     {
       resource: Resource.REQUEST_TYPE_SERVICE_CATEGORIES,
@@ -183,7 +183,10 @@ export class RequestTypeServiceCategoriesController {
     status: 200,
     description: 'le type de demandes par service supprimé avec succès',
   })
-  async remove(@Body('id') id: string, @CurrentUser() currentUser: User) {
+  async remove(
+    @Param('id', ParseUUIDPipe) id: string,
+    @CurrentUser() currentUser: User,
+  ) {
     return this.requestTypeServiceCategoriesService.remove(id, currentUser.id);
   }
 }

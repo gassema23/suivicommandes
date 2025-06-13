@@ -6,35 +6,34 @@ import ProviderDisponibilityCreateForm from "@/features/provider-disponibilities
 import { createFileRoute } from "@tanstack/react-router";
 
 export const Route = createFileRoute(
-  '/_authenticated/pilotages/provider-disponibilities/create',
+  "/_authenticated/pilotages/provider-disponibilities/create"
 )({
-  beforeLoad: createPermissionGuard([PERMISSIONS.PROVIDER_DISPONIBILITIES.CREATE]),
-    head: () => ({
-      meta: [{ title: "Ajouter une disponibilité fournisseur" }],
-    }),
-    component: RouteComponent,
-    errorComponent: ({ error }) => (
-      <FormError
-        title="Erreur lors du chargement de la disponibilité fournisseur"
-        message={error.message}
-      />
-    ),
-    staticData: {
-      title: "Ajouter une disponibilité fournisseur",
-      breadcrumb: [
-        { label: "Tableau de bord", href: "/" },
-        { label: "Disponibilités fournisseur", href: "/pilotages/provider-disponibilities" },
-        {
-          label: "Ajouter une disponibilité fournisseur",
-          href: "/pilotages/provider-disponibilities/create",
-          isCurrent: true,
-        },
-      ],
-    },
-    pendingComponent: () => <LoadingPage />,
-  });
-  
-  function RouteComponent() {
-    return <ProviderDisponibilityCreateForm />;
-  }
-  
+  beforeLoad: createPermissionGuard([
+    PERMISSIONS.PROVIDER_DISPONIBILITIES.CREATE,
+  ]),
+  head: () => ({
+    meta: [{ title: "Ajouter une disponibilité fournisseur" }],
+  }),
+  component: RouteComponent,
+  errorComponent: ({ error }) => <FormError message={error.message} />,
+  staticData: {
+    title: "Ajouter une disponibilité fournisseur",
+    breadcrumb: [
+      { label: "Tableau de bord", href: "/" },
+      {
+        label: "Disponibilités fournisseur",
+        href: "/pilotages/provider-disponibilities",
+      },
+      {
+        label: "Ajouter une disponibilité fournisseur",
+        href: "/pilotages/provider-disponibilities/create",
+        isCurrent: true,
+      },
+    ],
+  },
+  pendingComponent: () => <LoadingPage />,
+});
+
+function RouteComponent() {
+  return <ProviderDisponibilityCreateForm />;
+}

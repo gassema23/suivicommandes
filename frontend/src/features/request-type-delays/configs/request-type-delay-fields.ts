@@ -24,7 +24,7 @@ export const requestTypeDelayFields = [
     placeholder: "Sélectionner un type de demande",
   },
   {
-    name: "delayType",
+    name: "delayTypeId",
     label: "Type de délai",
     component: "select-delay-type",
     placeholder: "Sélectionner un type de délai",

@@ -1,4 +1,7 @@
-export const conformityTypeFields = [
+import type { FieldConfig } from "@/types/field.type";
+import type { ConformityTypeFormData } from "../schemas/conformity-type.schema";
+
+export const conformityTypeFields:FieldConfig<ConformityTypeFormData>[] = [
   {
     name: "conformityTypeName",
     label: "Type de conformité",

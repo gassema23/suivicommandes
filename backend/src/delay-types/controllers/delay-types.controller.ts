@@ -136,14 +136,17 @@ export class DelayTypesController {
    * @param currentUser - Utilisateur actuel effectuant la requête.
    * @returns Confirmation de la suppression du type de délai.
    */
-  @Delete()
+  @Delete(':id')
   @Permissions([{ resource: Resource.DELAY_TYPES, actions: [Action.DELETE] }])
   @ApiOperation({ summary: 'Supprimer un type de délai' })
   @ApiResponse({
     status: 200,
     description: 'Type de délai supprimé avec succès',
   })
-  async remove(@Body('id') id: string, @CurrentUser() currentUser: User) {
+  async remove(
+    @Param('id', ParseUUIDPipe) id: string,
+    @CurrentUser() currentUser: User,
+  ) {
     return this.delayTypesService.remove(id, currentUser.id);
   }
 }

@@ -10,12 +10,7 @@ export const Route = createFileRoute(
     meta: [{ title: "Ajouter un type de réquisition" }],
   }),
   component: RouteComponent,
-  errorComponent: ({ error }) => (
-    <FormError
-      title="Erreur lors du chargement du type de réquisition"
-      message={error.message}
-    />
-  ),
+  errorComponent: ({ error }) => <FormError message={error.message} />,
   staticData: {
     title: "Ajouter un type de réquisition",
     breadcrumb: [

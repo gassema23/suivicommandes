@@ -17,23 +17,25 @@ const providerDisponibilityQueryOptions = (id: string) =>
 export const Route = createFileRoute(
   "/_authenticated/pilotages/provider-disponibilities/update/$id"
 )({
-  beforeLoad: createPermissionGuard([PERMISSIONS.PROVIDER_DISPONIBILITIES.UPDATE]),
+  beforeLoad: createPermissionGuard([
+    PERMISSIONS.PROVIDER_DISPONIBILITIES.UPDATE,
+  ]),
   loader: ({ context, params }) =>
-    context.queryClient.ensureQueryData(providerDisponibilityQueryOptions(params.id)),
+    context.queryClient.ensureQueryData(
+      providerDisponibilityQueryOptions(params.id)
+    ),
   head: () => ({
     meta: [{ title: "Modifier la disponibilité fournisseur" }],
   }),
-  errorComponent: ({ error }) => (
-    <FormError
-      title="Erreur lors du chargement de la disponibilité fournisseur"
-      message={error.message}
-    />
-  ),
+  errorComponent: ({ error }) => <FormError message={error.message} />,
   staticData: {
     title: "Modifier la disponibilité fournisseur",
     breadcrumb: [
       { label: "Tableau de bord", href: "/" },
-      { label: "Disponibilités fournisseur", href: "/pilotages/provider-disponibilities" },
+      {
+        label: "Disponibilités fournisseur",
+        href: "/pilotages/provider-disponibilities",
+      },
       {
         label: "Modifier la disponibilité fournisseur",
         href: "/pilotages/provider-disponibilities/update/$id",

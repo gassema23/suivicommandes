@@ -13,7 +13,7 @@ import {
 } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
-import type { ServiceCategoryResponse } from "@/features/service-categories/types/service-category.type";
+import type { ServiceCategoryResponse } from "@/shared/service-categories/types/service-category.type";
 import { QUERY_KEYS } from "@/constants/query-key.constant";
 import { toast } from "sonner";
 import { SUCCESS_MESSAGES } from "@/constants/messages.constant";
@@ -40,12 +40,7 @@ export const Route = createFileRoute(
       serviceCategoriesQueryOptions(Number(search?.page ?? "1"))
     );
   },
-  errorComponent: ({ error }) => (
-    <FormError
-      title="Erreur lors du chargement des catégories de services"
-      message={error.message}
-    />
-  ),
+  errorComponent: ({ error }) => <FormError message={error.message} />,
   staticData: {
     title: "Catégories de services",
     action: "/pilotages/service-categories/create",
@@ -92,7 +87,7 @@ function RouteComponent() {
       <DeleteModal
         open={!!deleteId}
         onOpenChange={(open) => !open && setDeleteId(null)}
-        deleteUrl="service-categories"
+        deletePageName="service-categories"
         deleteId={deleteId}
         onSuccess={() => {
           setDeleteId(null);

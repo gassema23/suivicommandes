@@ -8,7 +8,10 @@ import Table, {
   DEFAULT_PAGE_SIZE,
 } from "@/shared/test-table/Table";
 import { useFilters } from "@/shared/test-table/useFilters";
-import { sortByToState, stateToSortBy } from "@/shared/test-table/tableSortMapper";
+import {
+  sortByToState,
+  stateToSortBy,
+} from "@/shared/test-table/tableSortMapper";
 import { USER_COLUMNS } from "@/shared/test-table/userColumns";
 import FormError from "@/components/ui/shadcn/form-error";
 import LoadingPage from "@/components/ui/loader/LoadingPage";
@@ -17,12 +20,7 @@ export const Route = createFileRoute("/_authenticated/pilotages/test-table/")({
   head: () => ({
     meta: [{ title: "Test table" }],
   }),
-  errorComponent: ({ error }) => (
-    <FormError
-      title="Erreur lors du chargement de la table"
-      message={error.message}
-    />
-  ),
+  errorComponent: ({ error }) => <FormError message={error.message} />,
   staticData: {
     title: "Test table",
     breadcrumb: [{ label: "Test table", href: "/", isCurrent: true }],

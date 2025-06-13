@@ -20,15 +20,17 @@ import { DependentSelect } from "@/components/dependant-select/components/Depend
 import InputContainer from "@/components/forms/components/InputContainer";
 import { requestTypeDelayFields } from "../configs/request-type-delay-fields";
 import FormError from "@/components/ui/shadcn/form-error";
-import { createRequestTypeDelay } from "../services/create-request-type-delays.service";
+import { useCreateRequestTypeDelay } from "../services/create-request-type-delays.service";
 
 import { getRequestTypeServiceCategoryByServiceCategory } from "@/shared/request-type-service-categories/services/get-request-type-service-category-by-service-category.service";
 import { fetchDelayTypesList } from "@/shared/delay-types/services/fetch-delay-types-list.service";
+import { formatErrorMessage, getFieldError } from "@/lib/utils";
 
 export default function RequestTypeDelayCreateForm() {
   const [backendError, setBackendError] = useState<string | null>(null);
   const navigate = useNavigate();
   const queryClient = useQueryClient();
+  const createRequestTypeDelay = useCreateRequestTypeDelay();
 
   const form = useForm<RequestTypeDelayFormData>({
     resolver: zodResolver(requestTypeDelaySchema),
@@ -64,10 +66,7 @@ export default function RequestTypeDelayCreateForm() {
       });
     },
     onError: (error: { message: string }) => {
-      setBackendError(
-        error.message ||
-          "Une erreur est survenue lors de la création du délai. Veuillez réessayer."
-      );
+      setBackendError(formatErrorMessage(error));
     },
   });
   const onSubmit = (data: RequestTypeDelayFormData) => {
@@ -131,18 +130,16 @@ export default function RequestTypeDelayCreateForm() {
       className="xl:w-3xl w-full space-y-4"
       onSubmit={handleSubmit(onSubmit)}
     >
-      {backendError && (
-        <FormError
-          title="Erreur lors de l’envoi du formulaire"
-          message={backendError}
-        />
-      )}
+      {backendError && <FormError message={backendError} />}
 
       {requestTypeDelayFields.map((field) => (
         <InputContainer
           key={field.name}
           label={field.label}
-          error={errors[field.name as keyof RequestTypeDelayFormData]?.message}
+          error={getFieldError<RequestTypeDelayFormData>(
+            errors,
+            field.name as keyof RequestTypeDelayFormData
+          )}
           htmlFor={field.name}
         >
           {field.component === "select-sector" && (
@@ -215,9 +212,7 @@ export default function RequestTypeDelayCreateForm() {
               isLoading={isLoadingDelayTypes}
               isError={isErrorDelayTypes}
               placeholder={field.placeholder}
-              getOptionValue={(s: { id: string; delayTypeName: string }) =>
-                s.id
-              }
+              getOptionValue={(s) => s.id}
               getOptionLabel={(s: { id: string; delayTypeName: string }) =>
                 s.delayTypeName
               }

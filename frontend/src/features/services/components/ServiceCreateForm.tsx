@@ -7,7 +7,7 @@ import { Textarea } from "@/components/ui/shadcn/textarea";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { serviceSchema, type ServiceFormData } from "../schemas/service.schema";
-import { createService } from "../services/create-service.service";
+import { useCreateService } from "../services/create-service.service";
 import { fetchSectorsList } from "@/shared/sectors/services/fetch-sectors-list.service";
 import { DependentSelect } from "@/components/dependant-select/components/DependentSelect";
 import { QUERY_KEYS } from "@/constants/query-key.constant";
@@ -16,11 +16,14 @@ import { FormActions } from "@/components/forms/components/FormActions";
 import InputContainer from "@/components/forms/components/InputContainer";
 import { serviceFields } from "../configs/service-fields";
 import { SUCCESS_MESSAGES } from "@/constants/messages.constant";
+import { formatErrorMessage, getFieldError } from "@/lib/utils";
 
 export default function ServiceCreateForm() {
   const [backendError, setBackendError] = useState<string | null>(null);
   const navigate = useNavigate();
   const queryClient = useQueryClient();
+
+  const createService = useCreateService();
 
   const {
     data: sectors = [],
@@ -57,7 +60,7 @@ export default function ServiceCreateForm() {
       navigate({ to: "/pilotages/services", search: { page: 1 } });
     },
     onError: (error: { message: string }) => {
-      setBackendError(error.message);
+      setBackendError(formatErrorMessage(error));
     },
   });
   const onSubmit = (data: ServiceFormData) => {
@@ -69,19 +72,18 @@ export default function ServiceCreateForm() {
       className="xl:w-3xl w-full space-y-4"
       onSubmit={handleSubmit(onSubmit)}
     >
-      {backendError && (
-        <FormError
-          title="Erreur lors de l'envoie du formulaire"
-          message={backendError}
-        />
-      )}
+      {backendError && <FormError message={backendError} />}
 
       {serviceFields.map((field) => (
         <InputContainer
           key={field.name}
           label={field.label}
-          error={errors[field.name]?.message}
+          error={getFieldError<ServiceFormData>(
+            errors,
+            field.name as keyof ServiceFormData
+          )}
           htmlFor={field.name}
+          required={field?.required}
         >
           {field.component === "select" && (
             <DependentSelect

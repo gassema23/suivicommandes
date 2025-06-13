@@ -147,17 +147,20 @@ export class SectorsController {
     return this.sectorsService.update(id, updateSectorDto, currentUser.id);
   }
 
-/**
+  /**
    * Supprime un secteur.
    * @param id - ID du secteur à supprimer.
    * @param currentUser - Utilisateur actuel effectuant la suppression.
    * @returns Confirmation de la suppression du secteur.
    */
-  @Delete()
+  @Delete(':id')
   @Permissions([{ resource: Resource.SECTORS, actions: [Action.DELETE] }])
   @ApiOperation({ summary: 'Supprimer un secteur' })
   @ApiResponse({ status: 200, description: 'le secteur supprimé avec succès' })
-  async remove(@Body('id') id: string, @CurrentUser() currentUser: User) {
+  async remove(
+    @Param('id', ParseUUIDPipe) id: string,
+    @CurrentUser() currentUser: User,
+  ) {
     return this.sectorsService.remove(id, currentUser.id);
   }
 }

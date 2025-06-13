@@ -7,7 +7,7 @@ import { PERMISSIONS } from "@/shared/authorizations/types/auth.types";
 import { DataTable } from "@/components/table/DataTable";
 import { delayTypeColumns } from "@/features/delay-types/components/DelayTypeColumns";
 import { getDelayTypes } from "@/features/delay-types/services/get-delay-types.service";
-import type { DelayTypeResponse } from "@/features/delay-types/types/delay-type.type";
+import type { DelayTypeResponse } from "@/shared/delay-types/types/delay-type.type";
 import {
   queryOptions,
   useQueryClient,
@@ -38,12 +38,7 @@ export const Route = createFileRoute("/_authenticated/pilotages/delay-types/")({
       delayTypesQueryOptions(Number(search?.page ?? "1"))
     );
   },
-  errorComponent: ({ error }) => (
-    <FormError
-      title="Erreur lors du chargement des types de délai"
-      message={error.message}
-    />
-  ),
+  errorComponent: ({ error }) => <FormError message={error.message} />,
   staticData: {
     title: "Types de délai",
     action: "/pilotages/delay-types/create",
@@ -91,7 +86,7 @@ function RouteComponent() {
       <DeleteModal
         open={!!deleteId}
         onOpenChange={(open) => !open && setDeleteId(null)}
-        deleteUrl="delay-types"
+        deletePageName="delay-types"
         deleteId={deleteId}
         onSuccess={() => {
           setDeleteId(null);

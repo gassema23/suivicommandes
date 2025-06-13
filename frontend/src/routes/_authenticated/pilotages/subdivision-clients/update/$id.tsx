@@ -25,12 +25,7 @@ export const Route = createFileRoute(
   head: () => ({
     meta: [{ title: "Modifier la subdivision client" }],
   }),
-  errorComponent: ({ error }) => (
-    <FormError
-      title="Erreur lors du chargement de la subdivision client"
-      message={error.message}
-    />
-  ),
+  errorComponent: ({ error }) => <FormError message={error.message} />,
   staticData: {
     title: "Modifier la subdivision client",
     breadcrumb: [

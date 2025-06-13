@@ -11,12 +11,7 @@ export const Route = createFileRoute("/_authenticated/pilotages/flows/create")({
     meta: [{ title: "Ajouter un flux de transmission" }],
   }),
   component: RouteComponent,
-  errorComponent: ({ error }) => (
-    <FormError
-      title="Erreur lors du chargement du flux de transmission"
-      message={error.message}
-    />
-  ),
+  errorComponent: ({ error }) => <FormError message={error.message} />,
   staticData: {
     title: "Ajouter un flux de transmission",
     breadcrumb: [

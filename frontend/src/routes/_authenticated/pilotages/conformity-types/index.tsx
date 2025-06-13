@@ -7,7 +7,7 @@ import { PERMISSIONS } from "@/shared/authorizations/types/auth.types";
 import { DataTable } from "@/components/table/DataTable";
 import { conformityTypeColumns } from "@/features/conformity-types/components/ConformityTypeColumns";
 import { getConformityTypes } from "@/features/conformity-types/services/get-conformity-types.service";
-import type { ConformityTypeResponse } from "@/features/conformity-types/types/conformity-type.type";
+import type { ConformityTypeResponse } from "@/shared/conformity-types/types/conformity-type.type";
 import {
   queryOptions,
   useQueryClient,
@@ -25,7 +25,7 @@ const conformityTypesQueryOptions = (pageNumber: number) =>
   });
 
 export const Route = createFileRoute(
-  '/_authenticated/pilotages/conformity-types/',
+  "/_authenticated/pilotages/conformity-types/"
 )({
   beforeLoad: createPermissionGuard([PERMISSIONS.CONFORMITY_TYPES.READ]),
   head: () => ({
@@ -40,12 +40,7 @@ export const Route = createFileRoute(
       conformityTypesQueryOptions(Number(search?.page ?? "1"))
     );
   },
-  errorComponent: ({ error }) => (
-    <FormError
-      title="Erreur lors du chargement des types de conformité"
-      message={error.message}
-    />
-  ),
+  errorComponent: ({ error }) => <FormError message={error.message} />,
   staticData: {
     title: "Types de conformité",
     action: "/pilotages/conformity-types/create",
@@ -93,12 +88,14 @@ function RouteComponent() {
       <DeleteModal
         open={!!deleteId}
         onOpenChange={(open) => !open && setDeleteId(null)}
-        deleteUrl="conformity-types"
+        deletePageName="conformity-types"
         deleteId={deleteId}
         onSuccess={() => {
           setDeleteId(null);
           toast.success(SUCCESS_MESSAGES.delete("Type de conformité"));
-          queryClient.invalidateQueries({ queryKey: QUERY_KEYS.CONFORMITY_TYPES });
+          queryClient.invalidateQueries({
+            queryKey: QUERY_KEYS.CONFORMITY_TYPES,
+          });
         }}
       />
     </>

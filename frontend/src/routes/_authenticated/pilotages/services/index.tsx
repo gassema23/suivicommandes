@@ -38,12 +38,7 @@ export const Route = createFileRoute("/_authenticated/pilotages/services/")({
       servicesQueryOptions(Number(search?.page ?? "1"))
     );
   },
-  errorComponent: ({ error }) => (
-    <FormError
-      title="Erreur lors du chargement des services"
-      message={error.message}
-    />
-  ),
+  errorComponent: ({ error }) => <FormError message={error.message} />,
   staticData: {
     title: "Services",
     action: "/pilotages/services/create",
@@ -87,7 +82,7 @@ function RouteComponent() {
       <DeleteModal
         open={!!deleteId}
         onOpenChange={(open) => !open && setDeleteId(null)}
-        deleteUrl={`services/${deleteId}`}
+        deletePageName={`services`}
         deleteId={deleteId}
         onSuccess={() => {
           setDeleteId(null);

@@ -12,14 +12,19 @@ import { Textarea } from "@/components/ui/shadcn/textarea";
 import { FormActions } from "@/components/forms/components/FormActions";
 import { SUCCESS_MESSAGES } from "@/constants/messages.constant";
 import type { RequisitionType } from "../types/requisition-type.type";
-import { requisitionTypeSchema, type RequisitionTypeFormData } from "../schemas/requisition-type.schema";
+import {
+  requisitionTypeSchema,
+  type RequisitionTypeFormData,
+} from "../schemas/requisition-type.schema";
 import { requisitionTypeFields } from "../configs/requisition-type-fields";
 import { updateRequisitionType } from "../services/update-requisition-type.service";
 
 interface RequisitionTypeFormProps {
   requisitionType: RequisitionType;
 }
-export default function RequisitionTypeUpdateForm({ requisitionType }: RequisitionTypeFormProps) {
+export default function RequisitionTypeUpdateForm({
+  requisitionType,
+}: RequisitionTypeFormProps) {
   const [backendError, setBackendError] = useState<string | null>(null);
   const navigate = useNavigate();
   const queryClient = useQueryClient();
@@ -28,7 +33,8 @@ export default function RequisitionTypeUpdateForm({ requisitionType }: Requisiti
     resolver: zodResolver(requisitionTypeSchema),
     defaultValues: {
       requisitionTypeName: requisitionType.requisitionTypeName ?? "",
-      requisitionTypeDescription: requisitionType.requisitionTypeDescription ?? "",
+      requisitionTypeDescription:
+        requisitionType.requisitionTypeDescription ?? "",
     },
   });
 
@@ -43,7 +49,7 @@ export default function RequisitionTypeUpdateForm({ requisitionType }: Requisiti
       updateRequisitionType(requisitionType.id, data),
     onSuccess: () => {
       setBackendError(null);
-      toast.success(SUCCESS_MESSAGES.update('Type de réquisition'));
+      toast.success(SUCCESS_MESSAGES.update("Type de réquisition"));
       queryClient.invalidateQueries({ queryKey: QUERY_KEYS.REQUISITION_TYPES });
       navigate({ to: "/pilotages/requisition-types", search: { page: 1 } });
     },
@@ -60,12 +66,7 @@ export default function RequisitionTypeUpdateForm({ requisitionType }: Requisiti
       className="xl:w-3xl w-full space-y-4"
       onSubmit={handleSubmit(onSubmit)}
     >
-      {backendError && (
-        <FormError
-          title="Erreur lors de l'envoie du formulaire"
-          message={backendError}
-        />
-      )}
+      {backendError && <FormError message={backendError} />}
 
       {requisitionTypeFields.map((field) => (
         <InputContainer

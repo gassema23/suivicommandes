@@ -10,10 +10,10 @@ import { Skeleton } from "@/components/ui/shadcn/skeleton";
 interface DependentSelectProps<T> {
   value: string | undefined;
   onChange: (val: string) => void;
-  data: T[] | undefined;
+  data: T[] | undefined | null;
   isLoading: boolean;
   isError: boolean;
-  placeholder: string;
+  placeholder?: string | null;
   getOptionValue: (item: T) => string;
   getOptionLabel: (item: T) => string;
 }

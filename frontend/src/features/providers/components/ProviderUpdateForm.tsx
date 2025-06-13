@@ -63,12 +63,7 @@ export default function ProviderUpdateForm({ provider }: ProviderFormProps) {
       className="xl:w-3xl w-full space-y-4"
       onSubmit={handleSubmit(onSubmit)}
     >
-      {backendError && (
-        <FormError
-          title="Erreur lors de l'envoie du formulaire"
-          message={backendError}
-        />
-      )}
+      {backendError && <FormError message={backendError} />}
 
       {providerFields.map((field) => (
         <InputContainer

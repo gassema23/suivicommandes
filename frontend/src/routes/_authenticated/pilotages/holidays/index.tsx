@@ -38,12 +38,7 @@ export const Route = createFileRoute("/_authenticated/pilotages/holidays/")({
       holidaysQueryOptions(Number(search?.page ?? "1"))
     );
   },
-  errorComponent: ({ error }) => (
-    <FormError
-      title="Erreur lors du chargement des jours fériés"
-      message={error.message}
-    />
-  ),
+  errorComponent: ({ error }) => <FormError message={error.message} />,
   staticData: {
     title: "Jour férié",
     action: "/pilotages/holidays/create",
@@ -87,7 +82,7 @@ function RouteComponent() {
       <DeleteModal
         open={!!deleteId}
         onOpenChange={(open) => !open && setDeleteId(null)}
-        deleteUrl="holidays"
+        deletePageName="holidays"
         deleteId={deleteId}
         onSuccess={() => {
           setDeleteId(null);

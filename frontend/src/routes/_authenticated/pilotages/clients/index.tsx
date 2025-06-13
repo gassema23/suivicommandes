@@ -25,7 +25,7 @@ const clientsQueryOptions = (pageNumber: number) =>
   });
 
 export const Route = createFileRoute("/_authenticated/pilotages/clients/")({
-  beforeLoad:() => createPermissionGuard([PERMISSIONS.CLIENTS.READ]),
+  beforeLoad: () => createPermissionGuard([PERMISSIONS.CLIENTS.READ]),
   head: () => ({
     meta: [{ title: "Clients" }],
   }),
@@ -37,12 +37,7 @@ export const Route = createFileRoute("/_authenticated/pilotages/clients/")({
       clientsQueryOptions(Number(search?.page ?? "1"))
     );
   },
-  errorComponent: ({ error }) => (
-    <FormError
-      title="Erreur lors du chargement des clients"
-      message={error.message}
-    />
-  ),
+  errorComponent: ({ error }) => <FormError message={error.message} />,
   staticData: {
     title: "Clients",
     action: "/pilotages/clients/create",
@@ -86,7 +81,7 @@ function RouteComponent() {
       <DeleteModal
         open={!!deleteId}
         onOpenChange={(open) => !open && setDeleteId(null)}
-        deleteUrl="clients"
+        deletePageName="clients"
         deleteId={deleteId}
         onSuccess={() => {
           setDeleteId(null);

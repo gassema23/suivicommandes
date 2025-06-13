@@ -2,13 +2,10 @@ import { useState } from "react";
 import type { Flow } from "../types/flow.type";
 import { useNavigate } from "@tanstack/react-router";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import {
-  flowSchema,
-  type FlowFormData,
-} from "../schemas/flow.schema";
+import { flowSchema, type FlowFormData } from "../schemas/flow.schema";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { updateFlow } from "../services/update-flow.service";
+import { useUpdateFlow } from "../services/update-flow.service";
 import { toast } from "sonner";
 import { QUERY_KEYS } from "@/constants/query-key.constant";
 import FormError from "@/components/ui/shadcn/form-error";
@@ -18,6 +15,7 @@ import { Input } from "@/components/ui/shadcn/input";
 import { Textarea } from "@/components/ui/shadcn/textarea";
 import { FormActions } from "@/components/forms/components/FormActions";
 import { SUCCESS_MESSAGES } from "@/constants/messages.constant";
+import { formatErrorMessage, getFieldError } from "@/lib/utils";
 
 interface FlowFormProps {
   flow: Flow;
@@ -26,6 +24,7 @@ export default function FlowUpdateForm({ flow }: FlowFormProps) {
   const [backendError, setBackendError] = useState<string | null>(null);
   const navigate = useNavigate();
   const queryClient = useQueryClient();
+  const updateFlow = useUpdateFlow();
 
   const form = useForm<FlowFormData>({
     resolver: zodResolver(flowSchema),
@@ -42,16 +41,15 @@ export default function FlowUpdateForm({ flow }: FlowFormProps) {
   } = form;
 
   const updateMutation = useMutation({
-    mutationFn: (data: FlowFormData) =>
-      updateFlow(flow.id, data),
+    mutationFn: (data: FlowFormData) => updateFlow(flow.id, data),
     onSuccess: () => {
       setBackendError(null);
-      toast.success(SUCCESS_MESSAGES.update('Flux de tranmission'));
+      toast.success(SUCCESS_MESSAGES.update("Flux de tranmission"));
       queryClient.invalidateQueries({ queryKey: QUERY_KEYS.FLOWS });
       navigate({ to: "/pilotages/flows", search: { page: 1 } });
     },
     onError: (error: { message: string }) => {
-      setBackendError(error.message);
+      setBackendError(formatErrorMessage(error));
     },
   });
 
@@ -63,19 +61,18 @@ export default function FlowUpdateForm({ flow }: FlowFormProps) {
       className="xl:w-3xl w-full space-y-4"
       onSubmit={handleSubmit(onSubmit)}
     >
-      {backendError && (
-        <FormError
-          title="Erreur lors de l'envoie du formulaire"
-          message={backendError}
-        />
-      )}
+      {backendError && <FormError message={backendError} />}
 
       {flowFields.map((field) => (
         <InputContainer
           key={field.name}
           label={field.label}
-          error={errors[field.name]?.message}
+          error={getFieldError<FlowFormData>(
+            errors,
+            field.name as keyof FlowFormData
+          )}
           htmlFor={field.name}
+          required={field?.required}
         >
           {field.component === "input" && (
             <Input

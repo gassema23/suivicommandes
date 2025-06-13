@@ -1,29 +1,20 @@
 import { API_ROUTE } from "@/constants/api-route.constant";
 import type { RequestTypeDelayFormData } from "../schemas/request-type-delay.schema";
+import { useCsrfFetch } from "@/hooks/useCsrfFetch";
 
-export const createRequestTypeDelay = async (
-  data: RequestTypeDelayFormData
-): Promise<void> => {
-  const payload = {
-    requestTypeServiceCategoryId: data.requestTypeServiceCategoryId,
-    delayTypeId: data.delayTypeId,
-    delayValue: data.delayValue,
+export function useCreateRequestTypeDelay() {
+  const csrfFetch = useCsrfFetch();
+
+  return (data: RequestTypeDelayFormData) => {
+    const payload = {
+      requestTypeServiceCategoryId: data.requestTypeServiceCategoryId,
+      delayTypeId: data.delayTypeId,
+      delayValue: data.delayValue,
+    };
+
+    return csrfFetch(`${API_ROUTE}/request-type-delays`, {
+      method: "POST",
+      body: payload,
+    });
   };
-
-  const response = await fetch(`${API_ROUTE}/request-type-delays`, {
-    credentials: "include",
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(payload),
-  });
-
-  if (!response.ok) {
-    const errorData = await response.json();
-    throw new Error(
-      errorData.message || "Erreur lors de la création du fournisseur"
-    );
-  }
-  return response.json();
-};
+}

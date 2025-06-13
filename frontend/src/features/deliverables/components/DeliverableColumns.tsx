@@ -7,7 +7,8 @@ import type { Deliverable } from "../types/deliverable.type";
 
 momentFr();
 
-export const deliverableColumns: ColumnDef<Deliverable>[] = [
+type DeliverableWithDelete = Deliverable & { onDelete: () => void };
+export const deliverableColumns: ColumnDef<DeliverableWithDelete>[] = [
   {
     accessorKey: "deliverableName",
     header: ({ column }) => (

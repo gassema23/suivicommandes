@@ -25,7 +25,7 @@ export default function UserMenu() {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger>
-        <UserAvatar user={user} />
+        <UserAvatar user={{ ...user, initials: user.initials ?? "" }} />
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-56" side="bottom" align="end">
         <DropdownMenuLabel>

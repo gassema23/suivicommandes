@@ -75,11 +75,11 @@ export default function UserUpdateForm({ user }: UpdateUserFormProps) {
       className="xl:w-3xl w-full space-y-4"
       onSubmit={handleSubmit(onSubmit)}
     >
-      {backendError && (
-        <FormError title="Erreur lors de l'envoie du formulaire" message={backendError} />
-      )}
+      {backendError && <FormError message={backendError} />}
       <div className="grid grid-cols-12 gap-2 items-center">
-        <Label className="col-span-12 xl:col-span-4" htmlFor="firstName">Prénom</Label>
+        <Label className="col-span-12 xl:col-span-4" htmlFor="firstName">
+          Prénom
+        </Label>
         <div className="col-span-12 xl:col-span-8">
           <Input
             className="block w-full"
@@ -95,7 +95,9 @@ export default function UserUpdateForm({ user }: UpdateUserFormProps) {
         </div>
       </div>
       <div className="grid grid-cols-12 gap-2 items-center">
-        <Label className="col-span-12 xl:col-span-4" htmlFor="lastName">Nom</Label>
+        <Label className="col-span-12 xl:col-span-4" htmlFor="lastName">
+          Nom
+        </Label>
         <div className="col-span-12 xl:col-span-8">
           <Input
             className="block w-full"
@@ -111,7 +113,9 @@ export default function UserUpdateForm({ user }: UpdateUserFormProps) {
         </div>
       </div>
       <div className="grid grid-cols-12 gap-2 items-center">
-        <Label className="col-span-12 xl:col-span-4" htmlFor="email">Email</Label>
+        <Label className="col-span-12 xl:col-span-4" htmlFor="email">
+          Email
+        </Label>
         <div className="col-span-12 xl:col-span-8">
           <Input
             className="block w-full"
@@ -128,7 +132,9 @@ export default function UserUpdateForm({ user }: UpdateUserFormProps) {
         </div>
       </div>
       <div className="grid grid-cols-12 gap-2 items-center">
-        <Label className="col-span-12 xl:col-span-4" htmlFor="roleId">Rôle</Label>
+        <Label className="col-span-12 xl:col-span-4" htmlFor="roleId">
+          Rôle
+        </Label>
         <div className="col-span-12 xl:col-span-8">
           <Controller
             control={control}

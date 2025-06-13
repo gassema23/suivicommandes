@@ -13,7 +13,7 @@ import {
 import { fetchSectorsList } from "@/shared/sectors/services/fetch-sectors-list.service";
 import { Switch } from "@/components/ui/shadcn/switch";
 import type { ServiceCategory } from "@/shared/service-categories/types/service-category.type";
-import { updateServiceCategory } from "../services/update-service-category.service";
+import { useUpdateServiceCategory } from "../services/update-service-category.service";
 import { useDependentQuery } from "@/components/dependant-select/hooks/useDependentQuery";
 import { DependentSelect } from "@/components/dependant-select/components/DependentSelect";
 import { fetchServicesBySector } from "@/shared/services/services/fetch-services-by-sector.service";
@@ -23,6 +23,7 @@ import { FormActions } from "@/components/forms/components/FormActions";
 import InputContainer from "@/components/forms/components/InputContainer";
 import { serviceCategoryFields } from "../configs/service-category-fields";
 import { SUCCESS_MESSAGES } from "@/constants/messages.constant";
+import { formatErrorMessage, getFieldError } from "@/lib/utils";
 
 interface ServiceCategoryUpdateFormProps {
   serviceCategory: ServiceCategory;
@@ -35,6 +36,7 @@ export default function ServiceCategoryUpdateForm({
 
   const navigate = useNavigate();
   const queryClient = useQueryClient();
+  const updateServiceCategory = useUpdateServiceCategory();
 
   const form = useForm<ServiceCategoryFormData>({
     resolver: zodResolver(serviceCategorySchema),
@@ -73,7 +75,7 @@ export default function ServiceCategoryUpdateForm({
       navigate({ to: "/pilotages/service-categories", search: { page: 1 } });
     },
     onError: (error: { message: string }) => {
-      setBackendError(error.message);
+      setBackendError(formatErrorMessage(error));
     },
   });
   const onSubmit = (data: ServiceCategoryFormData) => {
@@ -100,19 +102,18 @@ export default function ServiceCategoryUpdateForm({
       className="xl:w-3xl w-full space-y-4"
       onSubmit={handleSubmit(onSubmit)}
     >
-      {backendError && (
-        <FormError
-          title="Erreur lors de l'envoie du formulaire"
-          message={backendError}
-        />
-      )}
+      {backendError && <FormError message={backendError} />}
 
       {serviceCategoryFields.map((field) => (
         <InputContainer
           key={field.name}
           label={field.label}
-          error={errors[field.name]?.message}
+          error={getFieldError<ServiceCategoryFormData>(
+            errors,
+            field.name as keyof ServiceCategoryFormData
+          )}
           htmlFor={field.name}
+          required={field?.required}
         >
           {field.component === "select-sector" && (
             <DependentSelect

@@ -8,9 +8,7 @@ import { QUERY_KEYS } from "@/constants/query-key.constant";
 import { DataTable } from "@/components/table/DataTable";
 import { requestTypeDelayColumns } from "@/features/request-type-delays/components/RequestTypeDelayColumns";
 import { getRequestTypeDelays } from "@/features/request-type-delays/services/get-request-type-delays.service";
-import type {
-  RequestTypeDelayResponse,
-} from "@/features/request-type-delays/types/request-type-delay.type";
+import type { RequestTypeDelayResponse } from "@/features/request-type-delays/types/request-type-delay.type";
 import {
   queryOptions,
   useQueryClient,
@@ -42,12 +40,7 @@ export const Route = createFileRoute(
       requestTypeDelaysQueryOptions(Number(search?.page ?? "1"))
     );
   },
-  errorComponent: ({ error }) => (
-    <FormError
-      title="Erreur lors du chargement délais par type de demande"
-      message={error.message}
-    />
-  ),
+  errorComponent: ({ error }) => <FormError message={error.message} />,
   staticData: {
     title: "Délai par type de demande",
     action: "/pilotages/request-type-delays/create",
@@ -95,7 +88,7 @@ function RouteComponent() {
       <DeleteModal
         open={!!deleteId}
         onOpenChange={(open) => !open && setDeleteId(null)}
-        deleteUrl="request-type-delays"
+        deletePageName="request-type-delays"
         deleteId={deleteId}
         onSuccess={() => {
           setDeleteId(null);

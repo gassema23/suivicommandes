@@ -1,7 +1,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useNavigate } from "@tanstack/react-router";
-import React, { useState } from "react";
+import { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import {
   requestTypeDelaySchema,
@@ -18,13 +18,14 @@ import InputContainer from "@/components/forms/components/InputContainer";
 import { requestTypeDelayFields } from "../configs/request-type-delay-fields";
 import FormError from "@/components/ui/shadcn/form-error";
 import type { RequestTypeDelay } from "../types/request-type-delay.type";
-import { updateRequestTypeDelay } from "../services/update-request-type-delay.service";
+import { useUpdateRequestTypeDelay } from "../services/update-request-type-delay.service";
 
 import { getRequestTypeServiceCategoryByServiceCategory } from "@/shared/request-type-service-categories/services/get-request-type-service-category-by-service-category.service";
 import { fetchDelayTypesList } from "@/shared/delay-types/services/fetch-delay-types-list.service";
 import { fetchSectorsList } from "@/shared/sectors/services/fetch-sectors-list.service";
 import { fetchServicesBySector } from "@/shared/services/services/fetch-services-by-sector.service";
 import { fetchServiceCategoriesByService } from "@/shared/service-categories/services/fetch-service-category-by-service.service";
+import { formatErrorMessage, getFieldError } from "@/lib/utils";
 
 interface RequestTypeDelayFormProps {
   requestTypeDelay: RequestTypeDelay;
@@ -36,6 +37,7 @@ export default function RequestTypeDelayUpdateForm({
   const [backendError, setBackendError] = useState<string | null>(null);
   const navigate = useNavigate();
   const queryClient = useQueryClient();
+  const updateRequestTypeDelay = useUpdateRequestTypeDelay();
 
   const form = useForm<RequestTypeDelayFormData>({
     resolver: zodResolver(requestTypeDelaySchema),
@@ -76,10 +78,7 @@ export default function RequestTypeDelayUpdateForm({
       });
     },
     onError: (error: { message: string }) => {
-      setBackendError(
-        error.message ||
-          "Une erreur est survenue lors de la mise à jour du délai. Veuillez réessayer."
-      );
+      setBackendError(formatErrorMessage(error));
     },
   });
   const onSubmit = (data: RequestTypeDelayFormData) => {
@@ -143,18 +142,16 @@ export default function RequestTypeDelayUpdateForm({
       className="xl:w-3xl w-full space-y-4"
       onSubmit={handleSubmit(onSubmit)}
     >
-      {backendError && (
-        <FormError
-          title="Erreur lors de la mise à jour du délai"
-          message={backendError}
-        />
-      )}
+      {backendError && <FormError message={backendError} />}
 
       {requestTypeDelayFields.map((field) => (
         <InputContainer
           key={field.name}
           label={field.label}
-          error={errors[field.name as keyof RequestTypeDelayFormData]?.message}
+          error={getFieldError<RequestTypeDelayFormData>(
+            errors,
+            field.name as keyof RequestTypeDelayFormData
+          )}
           htmlFor={field.name}
         >
           {field.component === "select-sector" && (

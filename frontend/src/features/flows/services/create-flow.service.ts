@@ -1,21 +1,13 @@
 import { API_ROUTE } from "@/constants/api-route.constant";
 import type { FlowFormData } from "../schemas/flow.schema";
+import { useCsrfFetch } from "@/hooks/useCsrfFetch";
 
-export const createFlow = async (data: FlowFormData): Promise<void> => {
-  const response = await fetch(`${API_ROUTE}/flows`, {
-    credentials: "include",
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(data),
-  });
+export function useCreateFlow() {
+  const csrfFetch = useCsrfFetch();
 
-  if (!response.ok) {
-    const errorData = await response.json();
-    throw new Error(
-      errorData.message || "Erreur lors de la création du flux de transmission"
-    );
-  }
-  return response.json();
-};
+  return (data: FlowFormData) =>
+    csrfFetch(`${API_ROUTE}/flows`, {
+      method: "POST",
+      body: data,
+    });
+}

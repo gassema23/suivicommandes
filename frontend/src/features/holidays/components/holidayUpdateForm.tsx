@@ -9,13 +9,14 @@ import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import DatePicker from "@/components/ui/shadcn/date-picker";
 import { Textarea } from "@/components/ui/shadcn/textarea";
-import { updateHoliday } from "../services/update-holiday.service";
+import { useUpdateHoliday } from "../services/update-holiday.service";
 import { QUERY_KEYS } from "@/constants/query-key.constant";
 import { FormActions } from "@/components/forms/components/FormActions";
 import InputContainer from "@/components/forms/components/InputContainer";
 import { holidayFields } from "../configs/holiday-fields";
 import { SUCCESS_MESSAGES } from "@/constants/messages.constant";
 import { toast } from "sonner";
+import { formatErrorMessage, getFieldError } from "@/lib/utils";
 
 interface HolidayFormProps {
   holiday: Holiday;
@@ -25,6 +26,7 @@ export default function HolidayUpdateForm({ holiday }: HolidayFormProps) {
   const [backendError, setBackendError] = useState<string | null>(null);
   const navigate = useNavigate();
   const queryClient = useQueryClient();
+  const updateHoliday = useUpdateHoliday();
 
   const form = useForm<HolidayFormData>({
     resolver: zodResolver(holidaySchema),
@@ -48,10 +50,10 @@ export default function HolidayUpdateForm({ holiday }: HolidayFormProps) {
       setBackendError(null);
       toast.success(SUCCESS_MESSAGES.update("Jour férié"));
       queryClient.invalidateQueries({ queryKey: QUERY_KEYS.HOLIDAYS });
-      navigate({ to: "/pilotages/holidays" });
+      navigate({ to: "/pilotages/holidays", search: { page: 1 } });
     },
     onError: (error: { message: string }) => {
-      setBackendError(error.message);
+      setBackendError(formatErrorMessage(error));
     },
   });
 
@@ -65,20 +67,18 @@ export default function HolidayUpdateForm({ holiday }: HolidayFormProps) {
       className="xl:w-3xl w-full space-y-4"
       onSubmit={handleSubmit(onSubmit)}
     >
-      {backendError && (
-        <FormError
-          title="Erreur lors de l'envoie du formulaire"
-          message={backendError}
-        />
-      )}
+      {backendError && <FormError message={backendError} />}
 
       {holidayFields.map((field) => (
         <InputContainer
           key={field.name}
           label={field.label}
-          error={errors[field.name]?.message}
+          error={getFieldError<HolidayFormData>(
+            errors,
+            field.name as keyof HolidayFormData
+          )}
           htmlFor={field.name}
-          required={field.required}
+          required={field?.required}
         >
           {field.component === "input" && (
             <Input

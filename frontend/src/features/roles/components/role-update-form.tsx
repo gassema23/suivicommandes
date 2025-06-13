@@ -131,12 +131,7 @@ export default function RoleUpdateForm({ role }: RoleUpdateFormProps) {
 
   return (
     <form onSubmit={form.handleSubmit(onSubmit)} className="w-full space-y-6">
-      {backendError && (
-        <FormError
-          title="Erreur lors de l'envoie du formulaire"
-          message={backendError}
-        />
-      )}
+      {backendError && <FormError message={backendError} />}
       {/* Champ nom du rôle */}
       <Card>
         <CardContent className="pt-6 w-md">
@@ -178,7 +173,9 @@ export default function RoleUpdateForm({ role }: RoleUpdateFormProps) {
               isResourcePartiallySelected(resource, sortedActions)
             }
             onActionToggle={toggleAction}
-            onResourceToggle={(resource) => toggleResource(resource, sortedActions)}
+            onResourceToggle={(resource) =>
+              toggleResource(resource, sortedActions)
+            }
             disabled={form.formState.isSubmitting}
           />
 

@@ -15,12 +15,7 @@ const profileQueryOptions = queryOptions({
 export const Route = createFileRoute("/_authenticated/profile/")({
   loader: ({ context }) =>
     context.queryClient.ensureQueryData(profileQueryOptions),
-  errorComponent: ({ error }) => (
-    <FormError
-      title="Erreur lors du chargement du profile"
-      message={error.message}
-    />
-  ),
+  errorComponent: ({ error }) => <FormError message={error.message} />,
   staticData: {
     title: "Profile",
     breadcrumb: [

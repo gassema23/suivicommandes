@@ -26,7 +26,9 @@ const providerDisponibilitiesQueryOptions = (pageNumber: number) =>
 export const Route = createFileRoute(
   "/_authenticated/pilotages/provider-disponibilities/"
 )({
-  beforeLoad: createPermissionGuard([PERMISSIONS.PROVIDER_DISPONIBILITIES.READ]),
+  beforeLoad: createPermissionGuard([
+    PERMISSIONS.PROVIDER_DISPONIBILITIES.READ,
+  ]),
   head: () => ({
     meta: [{ title: "Disponibilités fournisseur" }],
   }),
@@ -39,12 +41,7 @@ export const Route = createFileRoute(
       providerDisponibilitiesQueryOptions(Number(search?.page ?? "1"))
     );
   },
-  errorComponent: ({ error }) => (
-    <FormError
-      title="Erreur lors du chargement des disponibilités fournisseur"
-      message={error.message}
-    />
-  ),
+  errorComponent: ({ error }) => <FormError message={error.message} />,
   staticData: {
     title: "Disponibilités fournisseur",
     action: "/pilotages/provider-disponibilities/create",
@@ -66,9 +63,10 @@ function RouteComponent() {
   const { page = 1 } = Route.useSearch();
   const pageNumber = Number(page);
 
-  const { data: providerDisponibilities } = useSuspenseQuery<ProviderDisponibilityResponse>(
-    providerDisponibilitiesQueryOptions(pageNumber)
-  );
+  const { data: providerDisponibilities } =
+    useSuspenseQuery<ProviderDisponibilityResponse>(
+      providerDisponibilitiesQueryOptions(pageNumber)
+    );
   const [deleteId, setDeleteId] = useState<string | null>(null);
   const queryClient = useQueryClient();
 

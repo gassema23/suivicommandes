@@ -118,11 +118,14 @@ export class HolidaysController {
    * @param currentUser - Utilisateur actuel effectuant la suppression.
    * @returns Confirmation de la suppression du jour férié.
    */
-  @Delete()
+  @Delete(':id')
   @Permissions([{ resource: Resource.HOLIDAYS, actions: [Action.DELETE] }])
   @ApiOperation({ summary: 'Supprimer un jour férié' })
   @ApiResponse({ status: 200, description: 'Jour férié supprimé avec succès' })
-  async remove(@Body('id') id: string, @CurrentUser() currentUser: User) {
+  async remove(
+    @Param('id', ParseUUIDPipe) id: string,
+    @CurrentUser() currentUser: User,
+  ) {
     return this.holidaysService.remove(id, currentUser.id);
   }
 }

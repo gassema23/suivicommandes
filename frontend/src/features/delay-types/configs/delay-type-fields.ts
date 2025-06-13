@@ -1,4 +1,7 @@
-export const delayTypeFields = [
+import type { FieldConfig } from "@/types/field.type";
+import type { DelayTypeFormData } from "../schemas/delay-type.schema";
+
+export const delayTypeFields:FieldConfig<DelayTypeFormData>[] = [
   {
     name: "delayTypeName",
     label: "Type de délai",

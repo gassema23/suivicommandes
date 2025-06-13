@@ -1,22 +1,14 @@
 import { API_ROUTE } from "@/constants/api-route.constant";
 import type { SectorFormData } from "../schemas/sector.schema";
 
-export async function updateSector(sectorId: string, data: SectorFormData) {
-  const res = await fetch(`${API_ROUTE}/sectors/${sectorId}`, {
-    method: "PATCH",
-    credentials: "include",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(data),
-  });
+import { useCsrfFetch } from "@/hooks/useCsrfFetch";
 
-  const result = await res.json();
-  if (!res.ok) {
-    throw new Error(
-      result.message || "Erreur lors de la mise à jour du secteur"
-    );
-  }
+export function useUpdateSector() {
+  const csrfFetch = useCsrfFetch();
 
-  return result;
+  return (id: string, data: SectorFormData) =>
+    csrfFetch(`${API_ROUTE}/sectors/${id}`, {
+      method: "PATCH",
+      body: data,
+    });
 }

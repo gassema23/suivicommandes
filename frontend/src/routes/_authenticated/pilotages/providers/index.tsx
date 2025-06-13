@@ -38,12 +38,7 @@ export const Route = createFileRoute("/_authenticated/pilotages/providers/")({
       providersQueryOptions(Number(search?.page ?? "1"))
     );
   },
-  errorComponent: ({ error }) => (
-    <FormError
-      title="Erreur lors du chargement des fournisseurs"
-      message={error.message}
-    />
-  ),
+  errorComponent: ({ error }) => <FormError message={error.message} />,
   staticData: {
     title: "Fournisseurs",
     action: "/pilotages/providers/create",

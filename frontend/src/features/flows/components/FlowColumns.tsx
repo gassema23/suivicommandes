@@ -7,7 +7,9 @@ import type { Flow } from "../types/flow.type";
 
 momentFr();
 
-export const flowColumns: ColumnDef<Flow>[] = [
+type FlowWithDelete = Flow & { onDelete: () => void };
+
+export const flowColumns: ColumnDef<FlowWithDelete>[] = [
   {
     accessorKey: "flowName",
     header: ({ column }) => (

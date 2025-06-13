@@ -24,12 +24,7 @@ export const Route = createFileRoute(
   head: () => ({
     meta: [{ title: "Modifier le client" }],
   }),
-  errorComponent: ({ error }) => (
-    <FormError
-      title="Erreur lors du chargement du client"
-      message={error.message}
-    />
-  ),
+  errorComponent: ({ error }) => <FormError message={error.message} />,
   staticData: {
     title: "Modifier le client",
     breadcrumb: [

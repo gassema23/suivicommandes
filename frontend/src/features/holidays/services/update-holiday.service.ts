@@ -1,22 +1,13 @@
 import { API_ROUTE } from "@/constants/api-route.constant";
 import type { HolidayFormData } from "../schemas/holiday.schema";
+import { useCsrfFetch } from "@/hooks/useCsrfFetch";
 
-export async function updateHoliday(holidayId: string, data: HolidayFormData) {
-  const res = await fetch(`${API_ROUTE}/holidays/${holidayId}`, {
-    method: "PATCH",
-    credentials: "include",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(data),
-  });
+export function useUpdateHoliday() {
+  const csrfFetch = useCsrfFetch();
 
-  const result = await res.json();
-  if (!res.ok) {
-    throw new Error(
-      result.message || "Erreur lors de la mise à jour du jour férié"
-    );
-  }
-
-  return result;
+  return (id: string, data: HolidayFormData) =>
+    csrfFetch(`${API_ROUTE}/holidays/${id}`, {
+      method: "PATCH",
+      body: data,
+    });
 }

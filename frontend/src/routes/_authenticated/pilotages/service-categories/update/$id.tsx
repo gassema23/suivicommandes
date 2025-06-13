@@ -26,12 +26,7 @@ export const Route = createFileRoute(
   head: () => ({
     meta: [{ title: "Modifier la catégorie de service" }],
   }),
-  errorComponent: ({ error }) => (
-    <FormError
-      title="Erreur lors du chargement de la catégorie de service"
-      message={error.message}
-    />
-  ),
+  errorComponent: ({ error }) => <FormError message={error.message} />,
   staticData: {
     title: "Modifier la catégorie de service",
     breadcrumb: [

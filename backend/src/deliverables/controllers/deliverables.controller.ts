@@ -127,11 +127,14 @@ export class DeliverablesController {
    * @param currentUser Utilisateur actuel effectuant la requête
    * @returns Confirmation de la suppression du livrable
    */
-  @Delete()
+  @Delete(':id')
   @Permissions([{ resource: Resource.DELIVERABLES, actions: [Action.DELETE] }])
   @ApiOperation({ summary: 'Supprimer un livrable' })
   @ApiResponse({ status: 200, description: 'Livrable supprimé avec succès' })
-  async remove(@Body('id') id: string, @CurrentUser() currentUser: User) {
+  async remove(
+    @Param('id', ParseUUIDPipe) id: string,
+    @CurrentUser() currentUser: User,
+  ) {
     return this.deliverablesService.remove(id, currentUser.id);
   }
 }
