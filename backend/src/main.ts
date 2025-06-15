@@ -7,20 +7,24 @@ import * as compression from 'compression';
 import helmet from 'helmet';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import * as cookieParser from 'cookie-parser';
+import { CsrfMiddleware } from './common/middlewares/csrf.middleware';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   const configService = app.get(ConfigService);
   const logger = new Logger('Bootstrap');
+  const csrf = new CsrfMiddleware();
+
+  app.use(helmet());
 
   // Logger Winston
   app.useLogger(app.get(WINSTON_MODULE_NEST_PROVIDER));
 
   // Security
-  app.use(helmet());
   app.use(compression());
-  
+
   app.use(cookieParser());
+  app.use(csrf.use.bind(csrf));
 
   // CORS
   app.enableCors({
@@ -67,7 +71,10 @@ async function bootstrap() {
 
   const port = configService.getOrThrow<number>('APP_PORT');
 
-  await app.listen(configService.getOrThrow<number>('APP_PORT')|| 4010, '0.0.0.0');
+  await app.listen(
+    configService.getOrThrow<number>('APP_PORT') || 4010,
+    '0.0.0.0',
+  );
 
   logger.log(`🚀 Application démarrée sur le port ${port}`);
   logger.log(`🌍 Environment: ${configService.getOrThrow('NODE_ENV')}`);

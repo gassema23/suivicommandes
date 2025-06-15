@@ -14,6 +14,24 @@ import { RedisConfig } from './config/redis.config';
 import { getDatabaseConfig } from './config/database.config';
 import { RolesModule } from './roles/roles.module';
 import { HolidaysModule } from './holidays/holidays.module';
+import { SectorsModule } from './sectors/sectors.module';
+import { ServicesModule } from './services/services.module';
+import { ServiceCategoriesModule } from './service-categories/service-categories.module';
+import { ClientsModule } from './clients/clients.module';
+import { SubdivisionClientsModule } from './subdivision-clients/subdivision-clients.module';
+import { ProvidersModule } from './providers/providers.module';
+import { ProviderServiceCategoriesModule } from './provider-service-categories/provider-service-categories.module';
+import { DelayTypesModule } from './delay-types/delay-types.module';
+import { RequisitionTypesModule } from './requisition-types/requisition-types.module';
+import { RequestTypesModule } from './request-types/request-types.module';
+import { ConformityTypesModule } from './conformity-types/conformity-types.module';
+import { DeliverablesModule } from './deliverables/deliverables.module';
+import { FlowsModule } from './flows/flows.module';
+import { ProviderDisponibilitiesModule } from './provider-disponibilities/provider-disponibilities.module';
+import { RequestTypeServiceCategoriesModule } from './request-type-service-categories/request-type-service-categories.module';
+import { RequestTypeDelaysModule } from './request-type-delays/request-type-delays.module';
+import { DeliverableDelayRequestTypesModule } from './deliverable-delay-request-types/deliverable-delay-request-types.module';
+import { DeliverableDelayFlowsModule } from './deliverable-delay-flows/deliverable-delay-flows.module';
 
 @Module({
   imports: [
@@ -100,6 +118,24 @@ import { HolidaysModule } from './holidays/holidays.module';
     EmailModule,
     RolesModule,
     HolidaysModule,
+    SectorsModule,
+    ServicesModule,
+    ServiceCategoriesModule,
+    ClientsModule,
+    SubdivisionClientsModule,
+    ProvidersModule,
+    ProviderServiceCategoriesModule,
+    DelayTypesModule,
+    RequisitionTypesModule,
+    RequestTypesModule,
+    ConformityTypesModule,
+    DeliverablesModule,
+    FlowsModule,
+    ProviderDisponibilitiesModule,
+    RequestTypeServiceCategoriesModule,
+    RequestTypeDelaysModule,
+    DeliverableDelayRequestTypesModule,
+    DeliverableDelayFlowsModule,
   ],
 })
 export class AppModule {}

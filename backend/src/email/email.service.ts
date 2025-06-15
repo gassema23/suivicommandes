@@ -4,6 +4,7 @@ import { InjectQueue } from '@nestjs/bull';
 import { Queue } from 'bull';
 import * as nodemailer from 'nodemailer';
 import { User } from '../users/entities/user.entity';
+import { MailerService } from '@nestjs-modules/mailer';
 
 export interface EmailData {
   to: string;
@@ -17,13 +18,24 @@ export class EmailService {
   private readonly logger = new Logger(EmailService.name);
   private transporter: nodemailer.Transporter;
 
+  /**
+   * Service d'envoi d'emails.
+   * Utilise Nodemailer pour envoyer des emails via une file d'attente Bull.
+   * @param emailQueue La file d'attente Bull pour les emails.
+   * @param configService Le service de configuration pour récupérer les paramètres de l'email.
+   */
   constructor(
     @InjectQueue('email') private emailQueue: Queue,
     private configService: ConfigService,
+    private readonly mailerService: MailerService,
   ) {
     this.createTransporter();
   }
 
+  /**
+   * Crée le transporteur Nodemailer avec les paramètres de configuration.
+   * Utilise les variables d'environnement pour configurer l'hôte, le port, l'utilisateur et le mot de passe.
+   */
   private createTransporter() {
     const isSecure = this.configService.getOrThrow('MAIL_PORT') === 465;
     this.transporter = nodemailer.createTransport({
@@ -37,14 +49,22 @@ export class EmailService {
     });
   }
 
-
+  /**
+   * Envoie un email en ajoutant une tâche à la file d'attente.
+   * @param emailData Les données de l'email à envoyer.
+   */
   async sendEmail(emailData: EmailData): Promise<void> {
     await this.emailQueue.add('send-email', emailData);
   }
 
+  /**
+   * Envoie un email de vérification d'adresse.
+   * @param user L'utilisateur à qui envoyer l'email.
+   * @param token Le token de vérification.
+   */
   async sendVerificationEmail(user: User, token: string): Promise<void> {
     const verificationUrl = `${this.configService.getOrThrow<string>('FRONTEND_URL')}/verify-email/${token}`;
-    
+
     await this.sendEmail({
       to: user.email,
       subject: 'Vérifiez votre adresse email',
@@ -58,9 +78,14 @@ export class EmailService {
     });
   }
 
+  /**
+   * Envoie un email de réinitialisation de mot de passe.
+   * @param user L'utilisateur à qui envoyer l'email.
+   * @param token Le token de réinitialisation.
+   */
   async sendPasswordResetEmail(user: User, token: string): Promise<void> {
     const resetUrl = `${this.configService.getOrThrow<string>('FRONTEND_URL')}/reset-password/${token}`;
-    
+
     await this.sendEmail({
       to: user.email,
       subject: 'Réinitialisation de votre mot de passe',
@@ -74,6 +99,10 @@ export class EmailService {
     });
   }
 
+  /**
+   * Envoie un email de bienvenue à l'utilisateur.
+   * @param user L'utilisateur à qui envoyer l'email.
+   */
   async sendWelcomeEmail(user: User): Promise<void> {
     await this.sendEmail({
       to: user.email,
@@ -88,6 +117,10 @@ export class EmailService {
     });
   }
 
+  /**
+   * Envoie un email pour notifier l'activation de l'authentification à deux facteurs.
+   * @param user L'utilisateur à qui envoyer l'email.
+   */
   async sendTwoFactorEnabledEmail(user: User): Promise<void> {
     await this.sendEmail({
       to: user.email,
@@ -101,6 +134,10 @@ export class EmailService {
     });
   }
 
+  /**
+   * Envoie un email pour notifier le changement de mot de passe.
+   * @param user L'utilisateur à qui envoyer l'email.
+   */
   async sendPasswordChangedEmail(user: User): Promise<void> {
     await this.sendEmail({
       to: user.email,
@@ -115,27 +152,36 @@ export class EmailService {
     });
   }
 
-  // Méthode pour envoyer directement sans queue (pour les tests)
+  /**
+   * Envoie un email directement sans passer par la file d'attente.
+   * Utile pour les envois immédiats ou les tests.
+   * @param emailData Les données de l'email à envoyer.
+   */
   async sendEmailDirect(emailData: EmailData): Promise<void> {
     try {
-      const html = this.generateEmailHtml(emailData.template, emailData.context);
-      
-      const mailOptions = {
-        from: `${this.configService.getOrThrow('APP_NAME')} <${this.configService.getOrThrow('MAIL_FROM')}>`,
+      await this.mailerService.sendMail({
         to: emailData.to,
         subject: emailData.subject,
-        html,
-      };
-
-      const info = await this.transporter.sendMail(mailOptions);
-      this.logger.log(`Email envoyé avec succès: ${info.messageId}`);
+        template: emailData.template,
+        context: emailData.context,
+      });
+      this.logger.log(`Email envoyé avec succès à ${emailData.to}`);
     } catch (error) {
       this.logger.error(`Erreur lors de l'envoi de l'email: ${error.message}`);
-      throw new Error('Erreur lors de l\'envoi de l\'email');
+      throw new Error("Erreur lors de l'envoi de l'email");
     }
   }
 
-  private generateEmailHtml(template: string, context: Record<string, any>): string {
+  /**
+   * Génère le contenu HTML de l'email à partir d'un template et d'un contexte.
+   * @param template Le nom du template à utiliser.
+   * @param context Les données à injecter dans le template.
+   * @returns Le contenu HTML de l'email.
+   
+  private generateEmailHtml(
+    template: string,
+    context: Record<string, any>,
+  ): string {
     // Templates HTML simples - en production, vous pourriez utiliser Handlebars ou similar
     const templates = {
       'email-verification': `
@@ -173,7 +219,7 @@ export class EmailService {
         </body>
         </html>
       `,
-      
+
       'password-reset': `
         <!DOCTYPE html>
         <html>
@@ -214,7 +260,7 @@ export class EmailService {
         </html>
       `,
 
-      'welcome': `
+      welcome: `
         <!DOCTYPE html>
         <html>
         <head>
@@ -341,4 +387,5 @@ export class EmailService {
 
     return templates[template] || '<p>Template non trouvé</p>';
   }
+    */
 }

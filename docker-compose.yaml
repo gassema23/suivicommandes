@@ -47,20 +47,24 @@ services:
   backend:
     build:
       context: ./backend
+      dockerfile: Dockerfile.dev
     volumes:
-      - ./backend:/app
       - /app/node_modules
+      - ./backend:/app
     ports:
       - "4010:4010"
     env_file: ./backend/.env
     restart: unless-stopped
+    depends_on:
+      - postgresDb
 
   frontend:
     build:
-      context: ./frontend-dev
+      context: ./frontend
+      dockerfile: Dockerfile.dev
     volumes:
-      - ./frontend-dev:/src
       - /app/node_modules
+      - ./frontend:/app
     ports:
       - "5173:5173"
     environment:
