@@ -1,16 +1,13 @@
 import { API_ROUTE } from "@/constants/api-route.constant";
 import type { ProviderFormData } from "../schemas/provider.schema";
+import { apiFetch } from "@/hooks/useApiFetch";
 
 export async function updateProvider(
   providerId: string,
   data: ProviderFormData
 ) {
-  const res = await fetch(`${API_ROUTE}/providers/${providerId}`, {
+  const res = await apiFetch(`${API_ROUTE}/providers/${providerId}`, {
     method: "PATCH",
-    credentials: "include",
-    headers: {
-      "Content-Type": "application/json",
-    },
     body: JSON.stringify(data),
   });
 

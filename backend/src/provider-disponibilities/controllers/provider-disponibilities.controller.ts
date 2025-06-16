@@ -4,7 +4,6 @@ import {
   Delete,
   Get,
   Param,
-  ParseUUIDPipe,
   Patch,
   Post,
   Query,
@@ -28,6 +27,7 @@ import { CreateProviderDisponibilityDto } from '../dto/create-provider-disponibi
 import { User } from '../../users/entities/user.entity';
 import { CurrentUser } from '../../auth/decorators/current-user.decorator';
 import { UpdateProviderDisponibilityDto } from '../dto/update-provider-disponibility.dto';
+import { UuidParamPipe } from '@/common/pipes/uuid-param.pipe';
 
 @ApiTags('ProviderDisponibilities')
 @Controller('provider-disponibilities')
@@ -109,7 +109,7 @@ export class ProviderDisponibilitiesController {
     status: 200,
     description: 'Disponibilité fournisseur récupérée avec succès',
   })
-  async findOne(@Param('id', ParseUUIDPipe) id: string) {
+  async findOne(@Param('id', UuidParamPipe) id: string) {
     return this.providerDisponibilitiesService.findOne(id);
   }
 
@@ -134,7 +134,7 @@ export class ProviderDisponibilitiesController {
     description: 'Disponibilité fournisseur non trouvée',
   })
   async update(
-    @Param('id', ParseUUIDPipe) id: string,
+    @Param('id', UuidParamPipe) id: string,
     @Body() updateProviderDisponibilityDto: UpdateProviderDisponibilityDto,
     @CurrentUser() currentUser: User,
   ) {

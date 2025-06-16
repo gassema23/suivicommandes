@@ -1,10 +1,10 @@
 import { API_ROUTE } from "@/constants/api-route.constant";
 import type { ProviderServiceCategory } from "../types/provider-service-category.type";
+import { apiFetch } from "@/hooks/useApiFetch";
 
 export const fetchProviderServiceCategory= async (id: string): Promise<ProviderServiceCategory> => {
-  const res = await fetch(`${API_ROUTE}/provider-service-categories/${id}`, {
+  const res = await apiFetch(`${API_ROUTE}/provider-service-categories/${id}`, {
     method: "GET",
-    credentials: "include",
   });
 
   const result = await res.json();

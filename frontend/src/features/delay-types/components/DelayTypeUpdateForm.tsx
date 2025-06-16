@@ -8,7 +8,7 @@ import {
 } from "../schemas/delay-type.schema";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useUpdateDelayType } from "../services/update-delay-type.service";
+import { updateDelayType } from "../services/update-delay-type.service";
 import { toast } from "sonner";
 import { QUERY_KEYS } from "@/constants/query-key.constant";
 import FormError from "@/components/ui/shadcn/form-error";
@@ -27,7 +27,6 @@ export default function DelayTypeUpdateForm({ delayType }: DelayTypeFormProps) {
   const [backendError, setBackendError] = useState<string | null>(null);
   const navigate = useNavigate();
   const queryClient = useQueryClient();
-  const updateDelayType = useUpdateDelayType();
 
   const form = useForm<DelayTypeFormData>({
     resolver: zodResolver(delayTypeSchema),

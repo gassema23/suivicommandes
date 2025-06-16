@@ -8,7 +8,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { sectorSchema, type SectorFormData } from "../schemas/sector.schema";
 import { Controller, useForm } from "react-hook-form";
 import { Switch } from "@/components/ui/shadcn/switch";
-import { useUpdateSector } from "../services/update-sector.service";
+import { updateSector } from "../services/update-sector.service";
 import type { Sector } from "@/shared/sectors/types/sector.type";
 import { QUERY_KEYS } from "@/constants/query-key.constant";
 import { toast } from "sonner";
@@ -26,7 +26,6 @@ export default function SectorUpdateForm({ sector }: SectorFormProps) {
   const [backendError, setBackendError] = useState<string | null>(null);
   const navigate = useNavigate();
   const queryClient = useQueryClient();
-  const updateSector = useUpdateSector();
 
   const form = useForm<SectorFormData>({
     resolver: zodResolver(sectorSchema),

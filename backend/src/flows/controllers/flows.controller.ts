@@ -4,7 +4,6 @@ import {
   Delete,
   Get,
   Param,
-  ParseUUIDPipe,
   Patch,
   Post,
   Query,
@@ -28,6 +27,7 @@ import { CreateFlowDto } from '../dto/create-flow.dto';
 import { User } from '../../users/entities/user.entity';
 import { CurrentUser } from '../../auth/decorators/current-user.decorator';
 import { UpdateFlowDto } from '../dto/update-flow.dto';
+import { UuidParamPipe } from '@/common/pipes/uuid-param.pipe';
 
 @ApiTags('Flows')
 @Controller('flows')
@@ -91,7 +91,7 @@ export class FlowsController {
     status: 200,
     description: 'Flux de transmission récupéré avec succès',
   })
-  async findOne(@Param('id', ParseUUIDPipe) id: string) {
+  async findOne(@Param('id', UuidParamPipe) id: string) {
     return this.flowsService.findOne(id);
   }
 
@@ -108,7 +108,7 @@ export class FlowsController {
   @ApiResponse({ status: 200, description: 'Flux de transmission mise à jour' })
   @ApiResponse({ status: 404, description: 'Flux de transmission non trouvée' })
   async update(
-    @Param('id', ParseUUIDPipe) id: string,
+    @Param('id', UuidParamPipe) id: string,
     @Body() updateFlowDto: UpdateFlowDto,
     @CurrentUser() currentUser: User,
   ) {
@@ -129,7 +129,7 @@ export class FlowsController {
     description: 'Flux de transmission supprimé avec succès',
   })
   async remove(
-    @Param('id', ParseUUIDPipe) id: string,
+    @Param('id', UuidParamPipe) id: string,
     @CurrentUser() currentUser: User,
   ) {
     return this.flowsService.remove(id, currentUser.id);

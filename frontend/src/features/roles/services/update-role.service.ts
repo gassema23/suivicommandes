@@ -1,13 +1,10 @@
 import { API_ROUTE } from "@/constants/api-route.constant";
 import type { CreateRoleFormData } from "../schemas/role.schema";
+import { apiFetch } from "@/hooks/useApiFetch";
 
 export async function updateRole(roleId: string, data: CreateRoleFormData) {
-  const res = await fetch(`${API_ROUTE}/roles/${roleId}`, {
+  const res = await apiFetch(`${API_ROUTE}/roles/${roleId}`, {
     method: "PATCH",
-    credentials: "include",
-    headers: {
-      "Content-Type": "application/json",
-    },
     body: JSON.stringify(data),
   });
 

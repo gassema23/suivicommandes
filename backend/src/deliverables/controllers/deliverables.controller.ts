@@ -4,7 +4,6 @@ import {
   Delete,
   Get,
   Param,
-  ParseUUIDPipe,
   Patch,
   Post,
   Query,
@@ -28,6 +27,7 @@ import { CreateDeliverableDto } from '../dto/create-deliverable.dto';
 import { User } from '../../users/entities/user.entity';
 import { CurrentUser } from '../../auth/decorators/current-user.decorator';
 import { UpdateDeliverableDto } from '../dto/update-deliverable.dto';
+import { UuidParamPipe } from '@/common/pipes/uuid-param.pipe';
 
 @ApiTags('Deliverables')
 @Controller('deliverables')
@@ -93,7 +93,7 @@ export class DeliverablesController {
     status: 200,
     description: 'Livrable récupéré avec succès',
   })
-  async findOne(@Param('id', ParseUUIDPipe) id: string) {
+  async findOne(@Param('id', UuidParamPipe) id: string) {
     return this.deliverablesService.findOne(id);
   }
 
@@ -110,7 +110,7 @@ export class DeliverablesController {
   @ApiResponse({ status: 200, description: 'Livrable mise à jour' })
   @ApiResponse({ status: 404, description: 'Livrable non trouvée' })
   async update(
-    @Param('id', ParseUUIDPipe) id: string,
+    @Param('id', UuidParamPipe) id: string,
     @Body() updateDeliverableDto: UpdateDeliverableDto,
     @CurrentUser() currentUser: User,
   ) {
@@ -132,7 +132,7 @@ export class DeliverablesController {
   @ApiOperation({ summary: 'Supprimer un livrable' })
   @ApiResponse({ status: 200, description: 'Livrable supprimé avec succès' })
   async remove(
-    @Param('id', ParseUUIDPipe) id: string,
+    @Param('id', UuidParamPipe) id: string,
     @CurrentUser() currentUser: User,
   ) {
     return this.deliverablesService.remove(id, currentUser.id);

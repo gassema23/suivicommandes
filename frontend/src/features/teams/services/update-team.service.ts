@@ -1,13 +1,10 @@
 import { API_ROUTE } from "@/constants/api-route.constant";
 import type { TeamFormData } from "../schemas/team.schema";
+import { apiFetch } from "@/hooks/useApiFetch";
 
 export async function updateTeam(teamId: string, data: TeamFormData) {
-  const res = await fetch(`${API_ROUTE}/teams/${teamId}`, {
+  const res = await apiFetch(`${API_ROUTE}/teams/${teamId}`, {
     method: "PATCH",
-    credentials: "include",
-    headers: {
-      "Content-Type": "application/json",
-    },
     body: JSON.stringify(data),
   });
 

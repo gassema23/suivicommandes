@@ -1,10 +1,10 @@
 import { API_ROUTE } from "@/constants/api-route.constant";
+import { apiFetch } from "@/hooks/useApiFetch";
 import type { ServiceCategoryResponse } from "@/shared/service-categories/types/service-category.type";
 
 export const getServiceCategories = async (page:number): Promise<ServiceCategoryResponse> => {
-  const response = await fetch(`${API_ROUTE}/service-categories?page=${page}`, {
+  const response = await apiFetch(`${API_ROUTE}/service-categories?page=${page}`, {
     method: "GET",
-    credentials: "include",
   });
 
   if (!response.ok) {

@@ -8,7 +8,7 @@ import {
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { QUERY_KEYS } from "@/constants/query-key.constant";
-import { useUpdateSecurityInformation } from "../services/update-security-information.service";
+import { updateSecurityInformation } from "../services/update-security-information.service";
 import FormError from "@/components/ui/shadcn/form-error";
 import PasswordInput from "@/components/ui/shadcn/password-input";
 import { toast } from "sonner";
@@ -22,7 +22,6 @@ export default function ProfileSecurityForm({ userId }: { userId: string }) {
   const [backendError, setBackendError] = useState<string | null>(null);
   const navigate = useNavigate();
   const queryClient = useQueryClient();
-    const updateSecutiryInformation = useUpdateSecurityInformation();
 
   const form = useForm<PasswordFormData>({
     resolver: zodResolver(passwordSchema),
@@ -41,7 +40,8 @@ export default function ProfileSecurityForm({ userId }: { userId: string }) {
   } = form;
 
   const updateMutation = useMutation({
-    mutationFn: (data: PasswordFormData) => updateSecutiryInformation(userId, data),
+    mutationFn: (data: PasswordFormData) =>
+      updateSecurityInformation(userId, data),
     onSuccess: async () => {
       setBackendError(null);
       reset();

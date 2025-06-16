@@ -1,9 +1,9 @@
 import { API_ROUTE } from "@/constants/api-route.constant";
+import { apiFetch } from "@/hooks/useApiFetch";
 
 export async function getProfile() {
-  const res = await fetch(`${API_ROUTE}/auth/me`, {
+  const res = await apiFetch(`${API_ROUTE}/auth/me`, {
     method: "GET",
-    credentials: "include",
   });
   
   const result = await res.json();

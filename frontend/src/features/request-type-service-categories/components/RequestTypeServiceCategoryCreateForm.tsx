@@ -17,7 +17,7 @@ import { useDependentQuery } from "@/components/dependant-select/hooks/useDepend
 import { requestTypeServiceCategoryFields } from "../configs/request-type-service-category-fields";
 import { DependentSelect } from "@/components/dependant-select/components/DependentSelect";
 import { fetchRequestTypeList } from "@/shared/request-types/services/fetch-request-type-list.service";
-import { useCreateRequestTypeServiceCategory } from "../services/create-request-type-service-category.service";
+import { createRequestTypeServiceCategory } from "../services/create-request-type-service-category.service";
 import DateSlider from "@/components/ui/quebec/DateSlider";
 
 import { fetchSectorsList } from "@/shared/sectors/services/fetch-sectors-list.service";
@@ -29,8 +29,6 @@ export default function RequestTypeServiceCategoryCreateForm() {
   const [backendError, setBackendError] = useState<string | null>(null);
   const navigate = useNavigate();
   const queryClient = useQueryClient();
-  const createRequestTypeServiceCategory =
-    useCreateRequestTypeServiceCategory();
 
   const form = useForm<RequestTypeServiceCategoryFormData>({
     resolver: zodResolver(requestTypeServiceCategorySchema),

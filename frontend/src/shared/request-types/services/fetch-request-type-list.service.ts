@@ -1,9 +1,10 @@
 import { API_ROUTE } from "@/constants/api-route.constant";
+import { apiFetch } from "@/hooks/useApiFetch";
 import type { RequestType } from "@/shared/request-types/types/request-type.type";
 
 // Fetch resources depuis le backend
 export const fetchRequestTypeList = async (): Promise<RequestType[]> => {
-  const res = await fetch(`${API_ROUTE}/request-types/requestTypeList`, {
+  const res = await apiFetch(`${API_ROUTE}/request-types/requestTypeList`, {
     method: "GET",
     credentials: "include",
   });

@@ -4,7 +4,6 @@ import {
   Delete,
   Get,
   Param,
-  ParseUUIDPipe,
   Patch,
   Post,
   Query,
@@ -28,6 +27,7 @@ import { User } from '../../users/entities/user.entity';
 import { CurrentUser } from '../../auth/decorators/current-user.decorator';
 import { CreateServiceDto } from '../dto/create-service.dto';
 import { UpdateServiceDto } from '../dto/update-service.dto';
+import { UuidParamPipe } from '@/common/pipes/uuid-param.pipe';
 
 @Controller('services')
 @ApiTags('Services')
@@ -89,7 +89,7 @@ export class ServicesController {
   @ApiOperation({ summary: 'Mettre à jour un service' })
   @ApiResponse({ status: 200, description: 'Service mis à jour avec succès' })
   async update(
-    @Param('id', ParseUUIDPipe) id: string,
+    @Param('id', UuidParamPipe) id: string,
     @Body() updateServiceDto: UpdateServiceDto,
     @CurrentUser() currentUser: User,
   ) {
@@ -128,7 +128,7 @@ export class ServicesController {
     status: 200,
     description: 'Catégorie de service récupérés avec succès',
   })
-  async getServicesBySectorId(@Param('id', ParseUUIDPipe) id: string) {
+  async getServicesBySectorId(@Param('id', UuidParamPipe) id: string) {
     return this.servicesService.getServiceCategoriesByServiceId(id);
   }
 
@@ -141,7 +141,10 @@ export class ServicesController {
   @Permissions([{ resource: Resource.SERVICES, actions: [Action.READ] }])
   @ApiOperation({ summary: 'Obtenir un service par son ID' })
   @ApiResponse({ status: 200, description: 'Service trouvé' })
-  async findOne(@Param('id', ParseUUIDPipe) id: string) {
+  async findOne(
+    @Param('id', UuidParamPipe)
+    id: string,
+  ) {
     return this.servicesService.findOne(id);
   }
 
@@ -156,7 +159,7 @@ export class ServicesController {
   @ApiOperation({ summary: 'Supprimer un service' })
   @ApiResponse({ status: 200, description: 'le service supprimé avec succès' })
   async remove(
-    @Param('id', ParseUUIDPipe) id: string,
+    @Param('id', UuidParamPipe) id: string,
     @CurrentUser() currentUser: User,
   ) {
     return this.servicesService.remove(id, currentUser.id);

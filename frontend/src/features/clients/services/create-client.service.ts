@@ -1,13 +1,16 @@
 import { API_ROUTE } from "@/constants/api-route.constant";
+import { apiFetch } from "@/hooks/useApiFetch";
 import type { ClientFormData } from "../schemas/clients.schema";
-import { useCsrfFetch } from "@/hooks/useCsrfFetch";
 
-export function useCreateClient() {
-  const csrfFetch = useCsrfFetch();
+export async function createClient(data: ClientFormData) {
+  const res = await apiFetch(`${API_ROUTE}/clients`, {
+    method: "POST",
+    body: JSON.stringify(data),
+  });
 
-  return (data: ClientFormData) =>
-    csrfFetch(`${API_ROUTE}/clients`, {
-      method: "POST",
-      body: data,
-    });
+  const result = await res.json();
+  if (!res.ok) {
+    throw new Error(result.message || "Erreur lors de la création du client");
+  }
+  return result as ClientFormData;
 }

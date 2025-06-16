@@ -4,7 +4,6 @@ import {
   Delete,
   Get,
   Param,
-  ParseUUIDPipe,
   Patch,
   Post,
   Query,
@@ -29,6 +28,7 @@ import { CurrentUser } from '../../auth/decorators/current-user.decorator';
 import { CreateDeliverableDelayRequestTypeDto } from '../dto/create-deliverable-delay-request-type.dto';
 import { User } from '../../users/entities/user.entity';
 import { UpdateDeliverableDelayRequestTypeDto } from '../dto/update-deliverable-delay-request-type.dto';
+import { UuidParamPipe } from '@/common/pipes/uuid-param.pipe';
 
 @Controller('deliverable-delay-request-types')
 @ApiTags('Deliverable Delay Request Types')
@@ -129,7 +129,7 @@ export class DeliverableDelayRequestTypesController {
     status: 200,
     description: 'Type de demandes par livrable trouvé',
   })
-  async findOne(@Param('id', ParseUUIDPipe) id: string) {
+  async findOne(@Param('id', UuidParamPipe) id: string) {
     return this.deliverableDelayRequestTypeService.findOne(id);
   }
 
@@ -155,7 +155,7 @@ export class DeliverableDelayRequestTypesController {
     description: 'Type de demandes par livrable mis à jour avec succès',
   })
   async update(
-    @Param('id', ParseUUIDPipe) id: string,
+    @Param('id', UuidParamPipe) id: string,
     @Body()
     updateDeliverableDelayRequestTypeDto: UpdateDeliverableDelayRequestTypeDto,
     @CurrentUser() currentUser: User,
@@ -188,7 +188,7 @@ export class DeliverableDelayRequestTypesController {
     description: 'le type de demandes par livrable supprimé avec succès',
   })
   async remove(
-    @Param('id', ParseUUIDPipe) id: string,
+    @Param('id', UuidParamPipe) id: string,
     @CurrentUser() currentUser: User,
   ) {
     return this.deliverableDelayRequestTypeService.remove(id, currentUser.id);

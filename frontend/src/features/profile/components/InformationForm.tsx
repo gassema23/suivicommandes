@@ -9,7 +9,7 @@ import {
   userInformationSchema,
   type UserInformationFormData,
 } from "../schemas/user-information.schema";
-import { useUpdateUserInformation } from "../services/update-user-information.service";
+import { updateUserInformation } from "../services/update-user-information.service";
 import { QUERY_KEYS } from "@/constants/query-key.constant";
 import { toast } from "sonner";
 import { SUCCESS_MESSAGES } from "@/constants/messages.constant";
@@ -33,7 +33,6 @@ export default function InformationForm({ user }: InformationFormProps) {
   const [backendError, setBackendError] = useState<string | null>(null);
   const navigate = useNavigate();
   const queryClient = useQueryClient();
-  const updateUserInformation = useUpdateUserInformation();
 
   const form = useForm<UserInformationFormData>({
     resolver: zodResolver(userInformationSchema),

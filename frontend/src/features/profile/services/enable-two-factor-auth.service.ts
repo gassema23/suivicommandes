@@ -1,9 +1,9 @@
 import { API_ROUTE } from "@/constants/api-route.constant";
+import { apiFetch } from "@/hooks/useApiFetch";
 
 export async function enableTwoFactorAuth() {
-  const res = await fetch(`${API_ROUTE}/auth/2fa/generate`, {
+  const res = await apiFetch(`${API_ROUTE}/auth/2fa/generate`, {
     method: "GET",
-    credentials: "include",
   });
 
   const result = await res.json();

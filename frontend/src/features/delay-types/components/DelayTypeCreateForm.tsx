@@ -15,7 +15,7 @@ import {
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
 import { QUERY_KEYS } from "@/constants/query-key.constant";
-import { useCreateDelayType } from "../services/create-delay-type.service";
+import { createDelayType } from "../services/create-delay-type.service";
 import { SUCCESS_MESSAGES } from "@/constants/messages.constant";
 import { formatErrorMessage, getFieldError } from "@/lib/utils";
 
@@ -23,7 +23,6 @@ export default function DelayTypeCreateForm() {
   const [backendError, setBackendError] = useState<string | null>(null);
   const navigate = useNavigate();
   const queryClient = useQueryClient();
-  const createDelayType = useCreateDelayType();
 
   const form = useForm<DelayTypeFormData>({
     resolver: zodResolver(delayTypeSchema),

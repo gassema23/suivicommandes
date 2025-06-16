@@ -7,7 +7,7 @@ import { Textarea } from "@/components/ui/shadcn/textarea";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { serviceSchema, type ServiceFormData } from "../schemas/service.schema";
-import { useCreateService } from "../services/create-service.service";
+import { createService } from "../services/create-service.service";
 import { fetchSectorsList } from "@/shared/sectors/services/fetch-sectors-list.service";
 import { DependentSelect } from "@/components/dependant-select/components/DependentSelect";
 import { QUERY_KEYS } from "@/constants/query-key.constant";
@@ -22,8 +22,6 @@ export default function ServiceCreateForm() {
   const [backendError, setBackendError] = useState<string | null>(null);
   const navigate = useNavigate();
   const queryClient = useQueryClient();
-
-  const createService = useCreateService();
 
   const {
     data: sectors = [],
@@ -104,7 +102,6 @@ export default function ServiceCreateForm() {
               id={field.name}
               placeholder={field.placeholder}
               {...register(field.name)}
-              required
             />
           )}
           {field.component === "textarea" && (

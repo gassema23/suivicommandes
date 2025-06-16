@@ -4,7 +4,6 @@ import {
   Delete,
   Get,
   Param,
-  ParseUUIDPipe,
   Patch,
   Post,
   Query,
@@ -29,6 +28,7 @@ import { User } from '../../users/entities/user.entity';
 import { CreateRequestTypeServiceCategoryDto } from '../dto/create-request-type-service-category.dto';
 import { instanceToPlain } from 'class-transformer';
 import { UpdateRequestTypeServiceCategoryDto } from '../dto/update-request-type-service-category.dto';
+import { UuidParamPipe } from '@/common/pipes/uuid-param.pipe';
 
 @Controller('request-type-service-categories')
 @ApiTags('Service Provider Categories')
@@ -126,7 +126,7 @@ export class RequestTypeServiceCategoriesController {
     status: 200,
     description: 'Type de demandes par service trouvé',
   })
-  async findOne(@Param('id', ParseUUIDPipe) id: string) {
+  async findOne(@Param('id', UuidParamPipe) id: string) {
     return this.requestTypeServiceCategoriesService.findOne(id);
   }
 
@@ -152,7 +152,7 @@ export class RequestTypeServiceCategoriesController {
     description: 'Type de demandes par service mis à jour avec succès',
   })
   async update(
-    @Param('id', ParseUUIDPipe) id: string,
+    @Param('id', UuidParamPipe) id: string,
     @Body()
     updateRequestTypeServiceCategoryDto: UpdateRequestTypeServiceCategoryDto,
     @CurrentUser() currentUser: User,
@@ -184,7 +184,7 @@ export class RequestTypeServiceCategoriesController {
     description: 'le type de demandes par service supprimé avec succès',
   })
   async remove(
-    @Param('id', ParseUUIDPipe) id: string,
+    @Param('id', UuidParamPipe) id: string,
     @CurrentUser() currentUser: User,
   ) {
     return this.requestTypeServiceCategoriesService.remove(id, currentUser.id);

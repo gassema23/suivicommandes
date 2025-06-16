@@ -17,6 +17,7 @@ import type { ServiceResponse } from "@/features/services/types/service.type";
 import { QUERY_KEYS } from "@/constants/query-key.constant";
 import { toast } from "sonner";
 import { SUCCESS_MESSAGES } from "@/constants/messages.constant";
+import LoadingTable from "@/components/ui/loader/LoadingTable";
 
 const servicesQueryOptions = (pageNumber: number) =>
   queryOptions<ServiceResponse>({
@@ -32,12 +33,6 @@ export const Route = createFileRoute("/_authenticated/pilotages/services/")({
   validateSearch: (search) => ({
     page: Number(search.page ?? 1),
   }),
-  loader: (args) => {
-    const { context, search } = args as any;
-    return context.queryClient.ensureQueryData(
-      servicesQueryOptions(Number(search?.page ?? "1"))
-    );
-  },
   errorComponent: ({ error }) => <FormError message={error.message} />,
   staticData: {
     title: "Services",
@@ -47,7 +42,7 @@ export const Route = createFileRoute("/_authenticated/pilotages/services/")({
       { label: "Services", href: "/pilotages/services", isCurrent: true },
     ],
   },
-  pendingComponent: () => <LoadingPage />,
+  pendingComponent: () => <LoadingTable rows={10} columns={4} />,
   component: RouteComponent,
 });
 

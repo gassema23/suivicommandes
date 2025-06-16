@@ -4,7 +4,6 @@ import {
   Delete,
   Get,
   Param,
-  ParseUUIDPipe,
   Patch,
   Post,
   Query,
@@ -28,6 +27,7 @@ import { CurrentUser } from '../../auth/decorators/current-user.decorator';
 import { User } from '../../users/entities/user.entity';
 import { CreateProviderServiceCategoryDto } from '../dto/create-provider-service-category.dto';
 import { instanceToPlain } from 'class-transformer';
+import { UuidParamPipe } from '@/common/pipes/uuid-param.pipe';
 
 @Controller('provider-service-categories')
 @ApiTags('Catégories de services fournisseurs')
@@ -122,7 +122,7 @@ export class ProviderServiceCategoriesController {
     status: 200,
     description: 'Catégories de services fournisseurs trouvée',
   })
-  async findOne(@Param('id', ParseUUIDPipe) id: string) {
+  async findOne(@Param('id', UuidParamPipe) id: string) {
     return this.providerServiceCategoriesService.findOne(id);
   }
 
@@ -148,7 +148,7 @@ export class ProviderServiceCategoriesController {
     description: 'Catégorie de service mise à jour avec succès',
   })
   async update(
-    @Param('id', ParseUUIDPipe) id: string,
+    @Param('id', UuidParamPipe) id: string,
     @Body() updateProviderServiceCategoryDto: CreateProviderServiceCategoryDto,
     @CurrentUser() currentUser: User,
   ) {
@@ -179,7 +179,10 @@ export class ProviderServiceCategoriesController {
     status: 200,
     description: 'la catégories de services fournisseurs supprimé avec succès',
   })
-  async remove(@Body('id') id: string, @CurrentUser() currentUser: User) {
+  async remove(
+    @Param('id', UuidParamPipe) id: string,
+    @CurrentUser() currentUser: User,
+  ) {
     return this.providerServiceCategoriesService.remove(id, currentUser.id);
   }
 }

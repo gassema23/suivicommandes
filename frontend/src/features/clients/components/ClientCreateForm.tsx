@@ -6,7 +6,6 @@ import { useForm } from "react-hook-form";
 import FormError from "@/components/ui/shadcn/form-error";
 import { Input } from "@/components/ui/shadcn/input";
 import { clientSchema, type ClientFormData } from "../schemas/clients.schema";
-import { useCreateClient } from "../services/create-client.service";
 import { QUERY_KEYS } from "@/constants/query-key.constant";
 import { toast } from "sonner";
 import { FormActions } from "@/components/forms/components/FormActions";
@@ -14,12 +13,12 @@ import InputContainer from "@/components/forms/components/InputContainer";
 import { clientFields } from "../configs/client-fields";
 import { SUCCESS_MESSAGES } from "@/constants/messages.constant";
 import { formatErrorMessage, getFieldError } from "@/lib/utils";
+import { createClient } from "../services/create-client.service";
 
 export default function ClientCreateForm() {
   const [backendError, setBackendError] = useState<string | null>(null);
   const navigate = useNavigate();
   const queryClient = useQueryClient();
-  const createClient = useCreateClient();
 
   const form = useForm<ClientFormData>({
     resolver: zodResolver(clientSchema),

@@ -21,7 +21,7 @@ const options: DataSourceOptions & SeederOptions = {
     ProviderServiceCategoryFactory,
     ClientFactory,
     SubdivisionClientFactory,
-    HolidayFactory
+    HolidayFactory,
   ],
   seeds: [MainSeeder],
 };

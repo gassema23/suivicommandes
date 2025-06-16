@@ -15,7 +15,7 @@ import {
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
 import { QUERY_KEYS } from "@/constants/query-key.constant";
-import { useCreateDeliverable } from "../services/create-deliverable.service";
+import { createDeliverable } from "../services/create-deliverable.service";
 import { SUCCESS_MESSAGES } from "@/constants/messages.constant";
 import { formatErrorMessage, getFieldError } from "@/lib/utils";
 
@@ -23,7 +23,6 @@ export default function DeliverableCreateForm() {
   const [backendError, setBackendError] = useState<string | null>(null);
   const navigate = useNavigate();
   const queryClient = useQueryClient();
-  const createDeliverable = useCreateDeliverable();
 
   const form = useForm<DeliverableFormData>({
     resolver: zodResolver(deliverableSchema),

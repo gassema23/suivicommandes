@@ -8,7 +8,6 @@ import {
   Delete,
   Query,
   UseGuards,
-  ParseUUIDPipe,
 } from '@nestjs/common';
 import {
   ApiTags,
@@ -26,6 +25,7 @@ import { CurrentUser } from '../../auth/decorators/current-user.decorator';
 import { User } from '../entities/user.entity';
 import { PaginationDto } from '../../common/dto/pagination.dto';
 import { instanceToPlain } from 'class-transformer';
+import { UuidParamPipe } from '@/common/pipes/uuid-param.pipe';
 
 @ApiTags('Users')
 @Controller('users')
@@ -136,7 +136,7 @@ export class UsersController {
   @ApiOperation({ summary: 'Obtenir un utilisateur par ID' })
   @ApiResponse({ status: 200, description: 'Utilisateur trouvé' })
   @ApiResponse({ status: 404, description: 'Utilisateur non trouvé' })
-  async findOne(@Param('id', ParseUUIDPipe) id: string) {
+  async findOne(@Param('id', UuidParamPipe) id: string) {
     return this.usersService.findOne(id);
   }
 
@@ -152,7 +152,7 @@ export class UsersController {
   @ApiResponse({ status: 200, description: 'Utilisateur mis à jour' })
   @ApiResponse({ status: 404, description: 'Utilisateur non trouvé' })
   async update(
-    @Param('id', ParseUUIDPipe) id: string,
+    @Param('id', UuidParamPipe) id: string,
     @Body() updateUserDto: UpdateUserDto,
     @CurrentUser() currentUser: User,
   ) {
@@ -170,7 +170,7 @@ export class UsersController {
   @ApiResponse({ status: 200, description: 'Utilisateur supprimé' })
   @ApiResponse({ status: 404, description: 'Utilisateur non trouvé' })
   async remove(
-    @Param('id', ParseUUIDPipe) id: string,
+    @Param('id', UuidParamPipe) id: string,
     @CurrentUser() currentUser: User,
   ) {
     await this.usersService.remove(id, currentUser.id);

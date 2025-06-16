@@ -1,16 +1,13 @@
 import { API_ROUTE } from "@/constants/api-route.constant";
 import type { VerifyEmailFormData } from "../shemas/verify-email.schema";
+import { apiFetch } from "@/hooks/useApiFetch";
 
 export async function updateVerifyEmail(
   userId: string,
   data: VerifyEmailFormData
 ) {
-  const res = await fetch(`${API_ROUTE}/auth/onboard/${userId}`, {
+  const res = await apiFetch(`${API_ROUTE}/auth/onboard/${userId}`, {
     method: "PATCH",
-    credentials: "include",
-    headers: {
-      "Content-Type": "application/json",
-    },
     body: JSON.stringify(data),
   });
 

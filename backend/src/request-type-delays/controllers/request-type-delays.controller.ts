@@ -4,7 +4,6 @@ import {
   Delete,
   Get,
   Param,
-  ParseUUIDPipe,
   Patch,
   Post,
   Query,
@@ -29,6 +28,7 @@ import { CreateRequestTypeDelayDto } from '../dto/create-request-type-delay.dto'
 import { User } from '../../users/entities/user.entity';
 import { CurrentUser } from '../../auth/decorators/current-user.decorator';
 import { UpdateRequestTypeDelayDto } from '../dto/update-request-type-delay.dto';
+import { UuidParamPipe } from '@/common/pipes/uuid-param.pipe';
 
 @Controller('request-type-delays')
 @ApiTags('Délai des types de demandes')
@@ -122,7 +122,7 @@ export class RequestTypeDelaysController {
     status: 200,
     description: 'Type de délai par type de demande trouvé',
   })
-  async findOne(@Param('id', ParseUUIDPipe) id: string) {
+  async findOne(@Param('id', UuidParamPipe) id: string) {
     return this.requestTypeDelayService.findOne(id);
   }
 
@@ -147,7 +147,7 @@ export class RequestTypeDelaysController {
     description: 'Type de délai par type de demande mis à jour avec succès',
   })
   async update(
-    @Param('id', ParseUUIDPipe) id: string,
+    @Param('id', UuidParamPipe) id: string,
     @Body()
     updateRequestTypeDelayDto: UpdateRequestTypeDelayDto,
     @CurrentUser() currentUser: User,
@@ -179,7 +179,7 @@ export class RequestTypeDelaysController {
     description: 'le type de délai par type de demand supprimé avec succès',
   })
   async remove(
-    @Param('id', ParseUUIDPipe) id: string,
+    @Param('id', UuidParamPipe) id: string,
     @CurrentUser() currentUser: User,
   ) {
     return this.requestTypeDelayService.remove(id, currentUser.id);

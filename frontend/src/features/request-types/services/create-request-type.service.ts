@@ -1,15 +1,12 @@
 import { API_ROUTE } from "@/constants/api-route.constant";
 import type { RequestTypeFormData } from "../schemas/request-type.schema";
+import { apiFetch } from "@/hooks/useApiFetch";
 
 export const createRequestType = async (
   data: RequestTypeFormData
 ): Promise<void> => {
-  const response = await fetch(`${API_ROUTE}/request-types`, {
-    credentials: "include",
+  const response = await apiFetch(`${API_ROUTE}/request-types`, {
     method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
     body: JSON.stringify(data),
   });
 

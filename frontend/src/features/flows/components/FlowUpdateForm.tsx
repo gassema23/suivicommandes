@@ -5,7 +5,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { flowSchema, type FlowFormData } from "../schemas/flow.schema";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useUpdateFlow } from "../services/update-flow.service";
+import { updateFlow } from "../services/update-flow.service";
 import { toast } from "sonner";
 import { QUERY_KEYS } from "@/constants/query-key.constant";
 import FormError from "@/components/ui/shadcn/form-error";
@@ -24,7 +24,6 @@ export default function FlowUpdateForm({ flow }: FlowFormProps) {
   const [backendError, setBackendError] = useState<string | null>(null);
   const navigate = useNavigate();
   const queryClient = useQueryClient();
-  const updateFlow = useUpdateFlow();
 
   const form = useForm<FlowFormData>({
     resolver: zodResolver(flowSchema),

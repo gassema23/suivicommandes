@@ -4,7 +4,7 @@ import { useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { holidaySchema, type HolidayFormData } from "../schemas/holiday.schema";
-import { useCreateHoliday } from "../services/create-holiday.service";
+import { createHoliday } from "../services/create-holiday.service";
 import FormError from "@/components/ui/shadcn/form-error";
 import { Input } from "@/components/ui/shadcn/input";
 import { Textarea } from "@/components/ui/shadcn/textarea";
@@ -21,7 +21,6 @@ export default function HolidayCreateForm() {
   const [backendError, setBackendError] = useState<string | null>(null);
   const navigate = useNavigate();
   const queryClient = useQueryClient();
-  const createHoliday = useCreateHoliday();
 
   const form = useForm<HolidayFormData>({
     resolver: zodResolver(holidaySchema),

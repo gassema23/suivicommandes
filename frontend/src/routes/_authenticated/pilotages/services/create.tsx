@@ -1,9 +1,9 @@
-import LoadingPage from "@/components/ui/loader/LoadingPage";
 import FormError from "@/components/ui/shadcn/form-error";
 import { createPermissionGuard } from "@/shared/authorizations/helpers/createPermissionGuard";
 import { PERMISSIONS } from "@/shared/authorizations/types/auth.types";
 import ServiceCreateForm from "@/features/services/components/ServiceCreateForm";
 import { createFileRoute } from "@tanstack/react-router";
+import LoadingForm from "@/components/ui/loader/LoadingForm";
 
 export const Route = createFileRoute(
   "/_authenticated/pilotages/services/create"
@@ -25,7 +25,7 @@ export const Route = createFileRoute(
       },
     ],
   },
-  pendingComponent: () => <LoadingPage />,
+  pendingComponent: () => <LoadingForm rows={3} />,
 });
 
 function RouteComponent() {

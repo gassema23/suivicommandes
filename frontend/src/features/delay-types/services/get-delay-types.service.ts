@@ -1,12 +1,12 @@
 import { API_ROUTE } from "@/constants/api-route.constant";
+import { apiFetch } from "@/hooks/useApiFetch";
 import type { DelayTypeResponse } from "@/shared/delay-types/types/delay-type.type";
 
 export const getDelayTypes = async (
   page: number
 ): Promise<DelayTypeResponse> => {
-  const response = await fetch(`${API_ROUTE}/delay-types?page=${page}`, {
+  const response = await apiFetch(`${API_ROUTE}/delay-types?page=${page}`, {
     method: "GET",
-    credentials: "include",
   });
 
   if (!response.ok) {

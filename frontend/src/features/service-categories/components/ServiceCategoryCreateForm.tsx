@@ -11,7 +11,7 @@ import {
   type ServiceCategoryFormData,
 } from "../schemas/service-category.schema";
 import { fetchSectorsList } from "@/shared/sectors/services/fetch-sectors-list.service";
-import { useCreateServiceCategory } from "../services/create-service-category.service";
+import { createServiceCategory } from "../services/create-service-category.service";
 import { Switch } from "@/components/ui/shadcn/switch";
 import { DependentSelect } from "@/components/dependant-select/components/DependentSelect";
 import { useDependentQuery } from "@/components/dependant-select/hooks/useDependentQuery";
@@ -28,7 +28,6 @@ export default function ServiceCategoryCreateForm() {
   const [backendError, setBackendError] = useState<string | null>(null);
   const navigate = useNavigate();
   const queryClient = useQueryClient();
-  const createServiceCategory = useCreateServiceCategory();
 
   const form = useForm<ServiceCategoryFormData>({
     resolver: zodResolver(serviceCategorySchema),

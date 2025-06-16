@@ -13,7 +13,7 @@ import {
 import { fetchSectorsList } from "@/shared/sectors/services/fetch-sectors-list.service";
 import { Switch } from "@/components/ui/shadcn/switch";
 import type { ServiceCategory } from "@/shared/service-categories/types/service-category.type";
-import { useUpdateServiceCategory } from "../services/update-service-category.service";
+import { updateServiceCategory } from "../services/update-service-category.service";
 import { useDependentQuery } from "@/components/dependant-select/hooks/useDependentQuery";
 import { DependentSelect } from "@/components/dependant-select/components/DependentSelect";
 import { fetchServicesBySector } from "@/shared/services/services/fetch-services-by-sector.service";
@@ -36,7 +36,6 @@ export default function ServiceCategoryUpdateForm({
 
   const navigate = useNavigate();
   const queryClient = useQueryClient();
-  const updateServiceCategory = useUpdateServiceCategory();
 
   const form = useForm<ServiceCategoryFormData>({
     resolver: zodResolver(serviceCategorySchema),

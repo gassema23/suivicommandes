@@ -8,7 +8,7 @@ import {
   useQueryClient,
   useSuspenseQuery,
 } from "@tanstack/react-query";
-import { useState } from "react";
+import { Suspense, useState } from "react";
 import { getSectors } from "@/features/sectors/services/get-sectors.service";
 import type { SectorsResponse } from "@/shared/sectors/types/sector.type";
 import { QUERY_KEYS } from "@/constants/query-key.constant";
@@ -17,6 +17,7 @@ import { SUCCESS_MESSAGES } from "@/constants/messages.constant";
 import { createFileRoute } from "@tanstack/react-router";
 import FormError from "@/components/ui/shadcn/form-error";
 import LoadingPage from "@/components/ui/loader/LoadingPage";
+import LoadingTable from "@/components/ui/loader/LoadingTable";
 
 const sectorsQueryOptions = (pageNumber: number) =>
   queryOptions<SectorsResponse>({
@@ -32,12 +33,6 @@ export const Route = createFileRoute("/_authenticated/pilotages/sectors/")({
   validateSearch: (search) => ({
     page: Number(search.page ?? 1),
   }),
-  loader: (args) => {
-    const { context, search } = args as any;
-    return context.queryClient.ensureQueryData(
-      sectorsQueryOptions(Number(search?.page ?? "1"))
-    );
-  },
   errorComponent: ({ error }) => <FormError message={error.message} />,
   staticData: {
     title: "Secteurs",
@@ -51,7 +46,7 @@ export const Route = createFileRoute("/_authenticated/pilotages/sectors/")({
       },
     ],
   },
-  pendingComponent: () => <LoadingPage />,
+  pendingComponent: () => <LoadingTable rows={10} columns={4} />,
   component: RouteComponent,
 });
 

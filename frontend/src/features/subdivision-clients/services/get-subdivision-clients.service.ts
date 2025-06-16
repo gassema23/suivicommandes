@@ -1,11 +1,11 @@
 import { API_ROUTE } from "@/constants/api-route.constant";
 import type { SubdivisionClientResponse } from "../types/subdivision-client.type";
+import { apiFetch } from "@/hooks/useApiFetch";
 
 export const getSubdivisionClients =
   async (page:number): Promise<SubdivisionClientResponse> => {
-    const response = await fetch(`${API_ROUTE}/subdivision-clients?page=${page}`, {
+    const response = await apiFetch(`${API_ROUTE}/subdivision-clients?page=${page}`, {
       method: "GET",
-      credentials: "include",
     });
 
     if (!response.ok) {

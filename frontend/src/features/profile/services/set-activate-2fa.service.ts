@@ -1,4 +1,5 @@
 import { API_ROUTE } from "@/constants/api-route.constant";
+import { apiFetch } from "@/hooks/useApiFetch";
 
 export async function setActivate2FA({
   secret,
@@ -7,12 +8,8 @@ export async function setActivate2FA({
   secret: string;
   code: string;
 }) {
-  const res = await fetch(`${API_ROUTE}/auth/2fa/enable`, {
+  const res = await apiFetch(`${API_ROUTE}/auth/2fa/enable`, {
     method: "POST",
-    credentials: "include",
-    headers: {
-      "Content-Type": "application/json",
-    },
     body: JSON.stringify({ secret, code }),
   });
   

@@ -1,13 +1,10 @@
 import { API_ROUTE } from "@/constants/api-route.constant";
 import type { UserFormData } from "../schemas/user.schema";
+import { apiFetch } from "@/hooks/useApiFetch";
 
 export async function createUser(data: UserFormData) {
-  const res = await fetch(`${API_ROUTE}/auth/register`, {
+  const res = await apiFetch(`${API_ROUTE}/auth/register`, {
     method: "POST",
-    credentials: "include",
-    headers: {
-      "Content-Type": "application/json",
-    },
     body: JSON.stringify(data),
   });
 

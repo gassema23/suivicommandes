@@ -1,23 +1,20 @@
 import { API_ROUTE } from "@/constants/api-route.constant";
 import type { ProviderDisponibilityFormData } from "../schemas/provider-disponibility.schema";
+import { apiFetch } from "@/hooks/useApiFetch";
 
-export const createProviderDisponibility = async (
+export async function createProviderDisponibility(
   data: ProviderDisponibilityFormData
-): Promise<void> => {
-  const response = await fetch(`${API_ROUTE}/provider-disponibilities`, {
-    credentials: "include",
+) {
+  const res = await apiFetch(`${API_ROUTE}/provider-disponibilities`, {
     method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
     body: JSON.stringify(data),
   });
 
-  if (!response.ok) {
-    const errorData = await response.json();
+  const result = await res.json();
+  if (!res.ok) {
     throw new Error(
-      errorData.message || "Erreur lors de la création de la disponibilité fournisseur"
+      result.message || "Erreur lors de la mise à jour du jour férié"
     );
   }
-  return response.json();
-};
+  return result as ProviderDisponibilityFormData;
+}

@@ -1,16 +1,13 @@
 import { API_ROUTE } from "@/constants/api-route.constant";
 import type { RequestTypeFormData } from "../schemas/request-type.schema";
+import { apiFetch } from "@/hooks/useApiFetch";
 
 export async function updateRequestType(
   requestTypeId: string,
   data: RequestTypeFormData
 ) {
-  const res = await fetch(`${API_ROUTE}/request-types/${requestTypeId}`, {
+  const res = await apiFetch(`${API_ROUTE}/request-types/${requestTypeId}`, {
     method: "PATCH",
-    credentials: "include",
-    headers: {
-      "Content-Type": "application/json",
-    },
     body: JSON.stringify(data),
   });
 

@@ -17,7 +17,7 @@ import {
   requestTypeServiceCategorySchema,
   type RequestTypeServiceCategoryFormData,
 } from "../schemas/request-type-service-category.schema";
-import { useUpdateRequestTypeServiceCategory } from "../services/update-request-type-service-category.service";
+import { updateRequestTypeServiceCategory } from "../services/update-request-type-service-category.service";
 
 import { fetchRequestTypeList } from "@/shared/request-types/services/fetch-request-type-list.service";
 import { fetchSectorsList } from "@/shared/sectors/services/fetch-sectors-list.service";
@@ -36,8 +36,6 @@ export default function RequestTypeServiceCategoryUpdateForm({
   const [backendError, setBackendError] = useState<string | null>(null);
   const navigate = useNavigate();
   const queryClient = useQueryClient();
-  const updateRequestTypeServiceCategory =
-    useUpdateRequestTypeServiceCategory();
 
   const form = useForm<RequestTypeServiceCategoryFormData>({
     resolver: zodResolver(requestTypeServiceCategorySchema),

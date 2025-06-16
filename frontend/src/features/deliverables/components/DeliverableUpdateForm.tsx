@@ -8,7 +8,7 @@ import {
 } from "../schemas/deliverable.schema";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useUpdateDeliverable } from "../services/update-deliverable.service";
+import { updateDeliverable } from "../services/update-deliverable.service";
 import { toast } from "sonner";
 import { QUERY_KEYS } from "@/constants/query-key.constant";
 import FormError from "@/components/ui/shadcn/form-error";
@@ -29,7 +29,6 @@ export default function DeliverableUpdateForm({
   const [backendError, setBackendError] = useState<string | null>(null);
   const navigate = useNavigate();
   const queryClient = useQueryClient();
-  const updateDeliverable = useUpdateDeliverable();
 
   const form = useForm<DeliverableFormData>({
     resolver: zodResolver(deliverableSchema),

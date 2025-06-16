@@ -1,10 +1,10 @@
 import { API_ROUTE } from "@/constants/api-route.constant";
 import type { RequestTypeDelay } from "../types/request-type-delay.type";
+import { apiFetch } from "@/hooks/useApiFetch";
 
 export const fetchRequestTypeDelay= async (id: string): Promise<RequestTypeDelay> => {
-  const res = await fetch(`${API_ROUTE}/request-type-delays/${id}`, {
+  const res = await apiFetch(`${API_ROUTE}/request-type-delays/${id}`, {
     method: "GET",
-    credentials: "include",
   });
 
   const result = await res.json();

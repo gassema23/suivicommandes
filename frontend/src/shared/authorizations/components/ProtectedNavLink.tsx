@@ -1,5 +1,5 @@
 import { useAuth } from "@/providers/auth.provider";
-import { useNavigate, useRouter } from "@tanstack/react-router";
+import { Link, useNavigate, useRouter } from "@tanstack/react-router";
 import { useMemo } from "react";
 
 interface NavLinkProps {
@@ -17,14 +17,13 @@ export const ProtectedNavLink: React.FC<NavLinkProps> = ({
   children,
   requiredPermission,
   requiredRole,
-  className = '',
-  activeClassName = '',
-  exactMatch = false
+  className = "",
+  activeClassName = "",
+  exactMatch = false,
 }) => {
   const { hasPermission, hasRole } = useAuth();
   const navigate = useNavigate();
   const router = useRouter();
-  
   // Vérifier si le lien est actif
   const isActive = useMemo(() => {
     const currentPath = router.state.location.pathname;
@@ -36,7 +35,10 @@ export const ProtectedNavLink: React.FC<NavLinkProps> = ({
 
   // Vérifier les permissions
   const hasAccess = useMemo(() => {
-    if (requiredPermission && !hasPermission(requiredPermission.resource, requiredPermission.action)) {
+    if (
+      requiredPermission &&
+      !hasPermission(requiredPermission.resource, requiredPermission.action)
+    ) {
       return false;
     }
     if (requiredRole && !hasRole(requiredRole)) {
@@ -51,21 +53,17 @@ export const ProtectedNavLink: React.FC<NavLinkProps> = ({
       navigate({ to });
     }
   };
-
   // Ne pas rendre le lien si pas d'accès
   if (!hasAccess) {
     return null;
   }
 
-  const finalClassName = `${className} ${isActive ? activeClassName : ''}`.trim();
+  const finalClassName =
+    `${className} ${isActive ? activeClassName : ""}`.trim();
 
   return (
-    <a 
-      href={to}
-      onClick={handleClick}
-      className={finalClassName}
-    >
+    <Link to={to} onClick={handleClick} className={finalClassName}>
       {children}
-    </a>
+    </Link>
   );
 };

@@ -9,7 +9,7 @@ import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import DatePicker from "@/components/ui/shadcn/date-picker";
 import { Textarea } from "@/components/ui/shadcn/textarea";
-import { useUpdateHoliday } from "../services/update-holiday.service";
+import { updateHoliday } from "../services/update-holiday.service";
 import { QUERY_KEYS } from "@/constants/query-key.constant";
 import { FormActions } from "@/components/forms/components/FormActions";
 import InputContainer from "@/components/forms/components/InputContainer";
@@ -26,7 +26,6 @@ export default function HolidayUpdateForm({ holiday }: HolidayFormProps) {
   const [backendError, setBackendError] = useState<string | null>(null);
   const navigate = useNavigate();
   const queryClient = useQueryClient();
-  const updateHoliday = useUpdateHoliday();
 
   const form = useForm<HolidayFormData>({
     resolver: zodResolver(holidaySchema),
@@ -58,7 +57,6 @@ export default function HolidayUpdateForm({ holiday }: HolidayFormProps) {
   });
 
   const onSubmit = (data: HolidayFormData) => {
-    console.log("Submitting data:", data);
     updateMutation.mutate(data);
   };
 

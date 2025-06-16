@@ -1,10 +1,10 @@
 import { API_ROUTE } from "@/constants/api-route.constant";
 import type { Holiday } from "../types/holiday.type";
+import { apiFetch } from "@/hooks/useApiFetch";
 
 export const fetchHoliday= async (id: string): Promise<Holiday> => {
-  const res = await fetch(`${API_ROUTE}/holidays/${id}`, {
+  const res = await apiFetch(`${API_ROUTE}/holidays/${id}`, {
     method: "GET",
-    credentials: "include",
   });
 
   const result = await res.json();

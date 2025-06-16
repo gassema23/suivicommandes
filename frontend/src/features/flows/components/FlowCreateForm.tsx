@@ -12,7 +12,7 @@ import { flowSchema, type FlowFormData } from "../schemas/flow.schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
 import { QUERY_KEYS } from "@/constants/query-key.constant";
-import { useCreateFlow } from "../services/create-flow.service";
+import { createFlow } from "../services/create-flow.service";
 import { SUCCESS_MESSAGES } from "@/constants/messages.constant";
 import { formatErrorMessage, getFieldError } from "@/lib/utils";
 
@@ -20,7 +20,6 @@ export default function FlowCreateForm() {
   const [backendError, setBackendError] = useState<string | null>(null);
   const navigate = useNavigate();
   const queryClient = useQueryClient();
-  const createFlow = useCreateFlow();
 
   const form = useForm<FlowFormData>({
     resolver: zodResolver(flowSchema),

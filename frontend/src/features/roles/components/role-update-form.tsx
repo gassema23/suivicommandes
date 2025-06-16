@@ -25,12 +25,13 @@ import { updateRole } from "../services/update-role.service";
 import FormError from "@/components/ui/shadcn/form-error";
 import { QUERY_KEYS } from "@/constants/query-key.constant";
 import { API_ROUTE } from "@/constants/api-route.constant";
+import { apiFetch } from "@/hooks/useApiFetch";
 
 // Fetch resources depuis le backend
 const fetchResources = async (): Promise<
   { value: string; label: string }[]
 > => {
-  const res = await fetch(`${API_ROUTE}/roles/resources/`, {
+  const res = await apiFetch(`${API_ROUTE}/roles/resources/`, {
     method: "GET",
     credentials: "include",
   });

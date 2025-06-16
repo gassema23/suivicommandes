@@ -1,4 +1,5 @@
 import LoadingPage from "@/components/ui/loader/LoadingPage";
+import { apiFetch } from "@/hooks/useApiFetch";
 import { useQuery } from "@tanstack/react-query";
 
 type ProfilesMap = Record<string, string[]>;
@@ -33,7 +34,7 @@ export default function UserAvatarList({
   } = useQuery<ProfilesMap>({
     queryKey: ["avatars"],
     queryFn: async () => {
-      const res = await fetch("/profiles/index.json");
+      const res = await apiFetch("/profiles/index.json");
       if (!res.ok) throw new Error("Erreur lors du chargement des avatars");
       return res.json();
     },

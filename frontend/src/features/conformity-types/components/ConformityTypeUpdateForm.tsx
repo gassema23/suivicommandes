@@ -8,7 +8,7 @@ import {
 } from "../schemas/conformity-type.schema";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useUpdateConformityType } from "../services/update-conformity-type.service";
+import { updateConformityType } from "../services/update-conformity-type.service";
 import { toast } from "sonner";
 import { QUERY_KEYS } from "@/constants/query-key.constant";
 import FormError from "@/components/ui/shadcn/form-error";
@@ -29,7 +29,6 @@ export default function ConformityTypeUpdateForm({
   const [backendError, setBackendError] = useState<string | null>(null);
   const navigate = useNavigate();
   const queryClient = useQueryClient();
-  const updateConformityType = useUpdateConformityType();
 
   const form = useForm<ConformityTypeFormData>({
     resolver: zodResolver(conformityTypeSchema),

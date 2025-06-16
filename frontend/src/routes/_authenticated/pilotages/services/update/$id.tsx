@@ -1,4 +1,3 @@
-import LoadingPage from "@/components/ui/loader/LoadingPage";
 import FormError from "@/components/ui/shadcn/form-error";
 import { QUERY_KEYS } from "@/constants/query-key.constant";
 import { createPermissionGuard } from "@/shared/authorizations/helpers/createPermissionGuard";
@@ -7,6 +6,7 @@ import ServiceUpdateForm from "@/features/services/components/ServiceUpdateForm"
 import { fetchService } from "@/features/services/services/fetch-service.service";
 import { queryOptions, useSuspenseQuery } from "@tanstack/react-query";
 import { createFileRoute, useParams } from "@tanstack/react-router";
+import LoadingForm from "@/components/ui/loader/LoadingForm";
 
 const servicesQueryOptions = (id: string) =>
   queryOptions({
@@ -14,12 +14,11 @@ const servicesQueryOptions = (id: string) =>
     queryFn: () => fetchService(id),
   });
 
+
 export const Route = createFileRoute(
   "/_authenticated/pilotages/services/update/$id"
 )({
   beforeLoad: createPermissionGuard([PERMISSIONS.SERVICES.UPDATE]),
-  loader: ({ context, params }) =>
-    context.queryClient.ensureQueryData(servicesQueryOptions(params.id)),
   head: () => ({
     meta: [{ title: "Modifier le service" }],
   }),
@@ -36,8 +35,7 @@ export const Route = createFileRoute(
       },
     ],
   },
-
-  pendingComponent: () => <LoadingPage />,
+  pendingComponent: () => <LoadingForm rows={3} />,
   component: RouteComponent,
 });
 

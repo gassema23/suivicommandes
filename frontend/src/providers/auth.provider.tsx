@@ -1,11 +1,10 @@
 import { LoadingProgress } from "@/components/ui/loader/LoadingProgress";
-import { SessionExpiryModal } from "@/shared/auth/components/SessionExpiryModal";
 import { API_ROUTE } from "@/constants/api-route.constant";
 import { QUERY_KEYS } from "@/constants/query-key.constant";
-import logoutUser from "@/lib/logout-user";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import * as React from "react";
 import Cookies from "js-cookie";
+import { useAuthService } from "@/shared/auth/libs/useAuthService";
 
 interface AuthUser {
   id: string;
@@ -62,44 +61,54 @@ const AuthContext = React.createContext<AuthContext | null>(null);
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const queryClient = useQueryClient();
+  const { refreshToken, logout: authLogout } = useAuthService();
 
-  const [modalOpen, setModalOpen] = React.useState(false);
-  const [secondsLeft, setSecondsLeft] = React.useState(300);
-  const intervalRef = React.useRef<NodeJS.Timeout | null>(null);
-
+  // Récupération user avec gestion refresh si 401
   const {
     data: user,
     isLoading,
     refetch,
   } = useQuery({
-    staleTime: 5 * 60 * 1000,
     queryKey: QUERY_KEYS.ME,
     queryFn: async () => {
       const res = await fetch(`${API_ROUTE}/auth/me`, {
         credentials: "include",
       });
-      if (res.status === 401) return null;
+
+      if (res.status === 401) {
+        try {
+          await refreshToken();
+        } catch {
+          return null;
+        }
+
+        const retryRes = await fetch(`${API_ROUTE}/auth/me`, {
+          credentials: "include",
+        });
+        if (!retryRes.ok) return null;
+        const retryData = await retryRes.json();
+        return retryData.user;
+      }
+
       if (!res.ok) return null;
+
       const data = await res.json();
       return data.user;
     },
+    staleTime: 5 * 60 * 1000, // 5 min
   });
 
   const logout = React.useCallback(async () => {
-    await logoutUser();
-
+    await authLogout();
     Cookies.remove("accessTokenExpiresAt");
     await queryClient.invalidateQueries();
     queryClient.clear();
-    window.location.href = "/login";
-  }, [queryClient]);
+  }, [authLogout, queryClient]);
 
-  // Cette fonction ne fait que refetch l'utilisateur (à utiliser après login)
   const refetchUser = React.useCallback(async () => {
     await refetch();
   }, [refetch]);
 
-  // Cette fonction ne fait que rediriger (le vrai login est fait dans le composant de login)
   const login = React.useCallback((redirectTo?: string) => {
     window.location.href = redirectTo || "/";
   }, []);
@@ -147,39 +156,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     [user]
   );
 
-  React.useEffect(() => {
-    intervalRef.current = setInterval(() => {
-      const expiresAt = Cookies.get("accessTokenExpiresAt");
-      if (expiresAt) {
-        const msLeft = parseInt(expiresAt, 10) - Date.now();
-        const seconds = Math.floor(msLeft / 1000);
-        if (seconds <= 300 && seconds > 0) { // 5 minutes
-          setModalOpen(true);
-          setSecondsLeft(seconds);
-        } else if (seconds <= 0) {
-          setModalOpen(false);
-          logout();
-        } else {
-          setModalOpen(false);
-        }
-      }
-    }, 1000);
-    return () => {
-      if (intervalRef.current) clearInterval(intervalRef.current);
-    };
-  }, [logout]);
-
-  // Rafraîchir le token
-  const handleContinue = async () => {
-    setModalOpen(false);
-    // Appelle ton endpoint de refresh
-    await fetch(`${API_ROUTE}/auth/refresh`, {
-      method: "POST",
-      credentials: "include",
-    });
-    refetchUser();
-  };
-
   const isAuthenticated = !!user;
 
   if (isLoading) {
@@ -205,12 +181,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       }}
     >
       {children}
-      <SessionExpiryModal
-        open={modalOpen}
-        timer={secondsLeft}
-        onLogout={logout}
-        onContinue={handleContinue}
-      />
     </AuthContext.Provider>
   );
 }

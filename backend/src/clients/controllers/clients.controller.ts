@@ -4,7 +4,6 @@ import {
   Delete,
   Get,
   Param,
-  ParseUUIDPipe,
   Patch,
   Post,
   Query,
@@ -29,6 +28,7 @@ import { User } from '../../users/entities/user.entity';
 import { CreateClientDto } from '../dto/create-client.dto';
 import { UpdateClientDto } from '../dto/update-client.dto';
 import { instanceToPlain } from 'class-transformer';
+import { UuidParamPipe } from '../../common/pipes/uuid-param.pipe';
 
 @Controller('clients')
 @ApiTags('Clients')
@@ -102,7 +102,7 @@ export class ClientsController {
   @ApiOperation({ summary: 'Afficher un client' })
   @ApiResponse({ status: 200, description: 'Succès' })
   @ApiResponse({ status: 404, description: 'Non trouvé' })
-  async findOne(@Param('id', ParseUUIDPipe) id: string) {
+  async findOne(@Param('id', UuidParamPipe) id: string) {
     const client = await this.clientsService.findOne(id);
     return instanceToPlain(client);
   }
@@ -120,7 +120,7 @@ export class ClientsController {
   @ApiResponse({ status: 200, description: 'Succès' })
   @ApiResponse({ status: 404, description: 'Non trouvé' })
   async update(
-    @Param('id', ParseUUIDPipe) id: string,
+    @Param('id', UuidParamPipe) id: string,
     @Body() updateClientDto: UpdateClientDto,
     @CurrentUser() currentUser: User,
   ) {
@@ -139,7 +139,7 @@ export class ClientsController {
   @ApiResponse({ status: 200, description: 'Succès' })
   @ApiResponse({ status: 404, description: 'Non trouvé' })
   async remove(
-    @Param('id', ParseUUIDPipe) id: string,
+    @Param('id', UuidParamPipe) id: string,
     @CurrentUser() currentUser: User,
   ) {
     return this.clientsService.remove(id, currentUser.id);

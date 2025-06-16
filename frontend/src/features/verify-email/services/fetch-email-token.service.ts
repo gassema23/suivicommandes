@@ -1,8 +1,9 @@
 import { API_ROUTE } from "@/constants/api-route.constant";
+import { apiFetch } from "@/hooks/useApiFetch";
 
 // Fetch resources depuis le backend
 export const fetchEmailToken = async (token: string): Promise<string> => {
-  const res = await fetch(`${API_ROUTE}/auth/verify-email?token=${token}`, {
+  const res = await apiFetch(`${API_ROUTE}/auth/verify-email?token=${token}`, {
     method: "GET",
   });
 

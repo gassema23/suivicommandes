@@ -1,22 +1,22 @@
 import { API_ROUTE } from "@/constants/api-route.constant";
 import type { RequestTypeServiceCategoryFormData } from "../schemas/request-type-service-category.schema";
-import { useCsrfFetch } from "@/hooks/useCsrfFetch";
 
-export function useCreateRequestTypeServiceCategory() {
-  const csrfFetch = useCsrfFetch();
+import { apiFetch } from "@/hooks/useApiFetch";
 
-  return (data: RequestTypeServiceCategoryFormData) => {
-    const payload = {
-      serviceCategoryId: data.serviceCategoryId,
-      requestTypeId: data.requestTypeId,
-      availabilityDelay: data.availabilityDelay,
-      minimumRequiredDelay: data.minimumRequiredDelay,
-      serviceActivationDelay: data.serviceActivationDelay,
-    };
+export async function createRequestTypeServiceCategory(
+  data: RequestTypeServiceCategoryFormData
+) {
+  const res = await apiFetch(`${API_ROUTE}/request-type-service-categories`, {
+    method: "POST",
+    body: JSON.stringify(data),
+  });
 
-    return csrfFetch(`${API_ROUTE}/request-type-service-categories`, {
-      method: "POST",
-      body: payload,
-    });
-  };
+  const result = await res.json();
+  if (!res.ok) {
+    throw new Error(
+      result.message ||
+        "Erreur lors de la création de la catégorie de service pour le type de demande"
+    );
+  }
+  return result as RequestTypeServiceCategoryFormData;
 }

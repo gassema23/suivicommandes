@@ -1,13 +1,18 @@
 import { API_ROUTE } from "@/constants/api-route.constant";
 import type { DelayTypeFormData } from "../schemas/delay-type.schema";
-import { useCsrfFetch } from "@/hooks/useCsrfFetch";
+import { apiFetch } from "@/hooks/useApiFetch";
 
-export function useUpdateDelayType() {
-  const csrfFetch = useCsrfFetch();
+export async function updateDelayType(id: string, data: DelayTypeFormData) {
+  const res = await apiFetch(`${API_ROUTE}/delay-types/${id}`, {
+    method: "PATCH",
+    body: JSON.stringify(data),
+  });
 
-  return (id: string, data: DelayTypeFormData) =>
-    csrfFetch(`${API_ROUTE}/delay-types/${id}`, {
-      method: "PATCH",
-      body: data,
-    });
+  const result = await res.json();
+  if (!res.ok) {
+    throw new Error(
+      result.message || "Erreur lors de la mise à jour du type de délai"
+    );
+  }
+  return result as DelayTypeFormData;
 }

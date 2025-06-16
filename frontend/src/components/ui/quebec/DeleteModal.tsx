@@ -11,6 +11,7 @@ import { useEffect, useState } from "react";
 import { API_ROUTE } from "@/constants/api-route.constant";
 import { useCsrf } from "@/providers/csrf.provider";
 import { formatErrorMessage } from "@/lib/utils";
+import { apiFetch } from "@/hooks/useApiFetch";
 
 interface DeleteModalProps {
   open: boolean;
@@ -46,7 +47,7 @@ export function DeleteModal({
 
     try {
       const csrfToken = await ensureCsrfToken();
-      const res = await fetch(`${API_ROUTE}/${deletePageName}/${deleteId}`, {
+      const res = await apiFetch(`${API_ROUTE}/${deletePageName}/${deleteId}`, {
         method: "DELETE",
         credentials: "include",
         headers: {

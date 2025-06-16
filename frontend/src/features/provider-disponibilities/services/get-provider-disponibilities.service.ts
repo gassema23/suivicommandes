@@ -1,17 +1,24 @@
 import { API_ROUTE } from "@/constants/api-route.constant";
 import type { ProviderDisponibilityResponse } from "../types/provider-disponibility.type";
+import { apiFetch } from "@/hooks/useApiFetch";
 
 export const getProviderDisponibilities = async (
   page: number
 ): Promise<ProviderDisponibilityResponse> => {
-  const response = await fetch(`${API_ROUTE}/provider-disponibilities?page=${page}`, {
-    method: "GET",
-    credentials: "include",
-  });
+  const res = await apiFetch(
+    `${API_ROUTE}/provider-disponibilities?page=${page}`,
+    {
+      method: "GET",
+    }
+  );
 
-  if (!response.ok) {
-    throw new Error("Erreur lors de la récupération des disponibilités fournisseur");
+  const result = await res.json();
+  if (!res.ok) {
+    throw new Error(
+      result.message ||
+        "Erreur lors de la récupération des disponibilités fournisseur"
+    );
   }
 
-  return response.json();
+  return result;
 };

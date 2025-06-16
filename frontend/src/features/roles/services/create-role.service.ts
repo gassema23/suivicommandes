@@ -1,4 +1,5 @@
 import { API_ROUTE } from "@/constants/api-route.constant";
+import { apiFetch } from "@/hooks/useApiFetch";
 
 export interface CreateRoleRequest {
   roleName: string;
@@ -24,12 +25,8 @@ export interface CreateRoleResponse {
 }
 
 export const createRole = async (data: CreateRoleRequest): Promise<CreateRoleResponse> => {
-    const response = await fetch(`${API_ROUTE}/roles`, {
+    const response = await apiFetch(`${API_ROUTE}/roles`, {
     method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    credentials: "include",
     body: JSON.stringify(data),
   });
 

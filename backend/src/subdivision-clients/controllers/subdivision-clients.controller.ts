@@ -4,7 +4,6 @@ import {
   Delete,
   Get,
   Param,
-  ParseUUIDPipe,
   Patch,
   Post,
   Query,
@@ -29,6 +28,7 @@ import { User } from '../../users/entities/user.entity';
 import { CurrentUser } from '../../auth/decorators/current-user.decorator';
 import { CreateSubdivisionClientDto } from '../dto/create-subdivision-client.dto';
 import { UpdateSubdivisionClientDto } from '../dto/update-subdivision-client.dto';
+import { UuidParamPipe } from '@/common/pipes/uuid-param.pipe';
 
 @Controller('subdivision-clients')
 @ApiTags('Subdivision clients')
@@ -113,7 +113,7 @@ export class SubdivisionClientsController {
     status: 200,
     description: 'Subdivision client récupéré avec succès',
   })
-  async findOne(@Param('id', ParseUUIDPipe) id: string) {
+  async findOne(@Param('id', UuidParamPipe) id: string) {
     const subdivisionClient = await this.subdivisionClientsService.findOne(id);
     return instanceToPlain(subdivisionClient);
   }
@@ -126,14 +126,16 @@ export class SubdivisionClientsController {
    * @returns La subdivision client mise à jour.
    */
   @Patch(':id')
-  @Permissions([{ resource: Resource.SUBDIVISION_CLIENTS, actions: [Action.UPDATE] }])
+  @Permissions([
+    { resource: Resource.SUBDIVISION_CLIENTS, actions: [Action.UPDATE] },
+  ])
   @ApiOperation({ summary: 'Mettre à jour la subdivision client' })
   @ApiResponse({
     status: 200,
     description: 'Subdivision client mis à jour avec succès',
   })
   async update(
-    @Param('id', ParseUUIDPipe) id: string,
+    @Param('id', UuidParamPipe) id: string,
     @Body() updateSubdivisionClientDto: UpdateSubdivisionClientDto,
     @CurrentUser() currentUser: User,
   ) {
@@ -151,10 +153,15 @@ export class SubdivisionClientsController {
    * @returns Confirmation de la suppression.
    */
   @Delete()
-  @Permissions([{ resource: Resource.SUBDIVISION_CLIENTS, actions: [Action.DELETE] }])
+  @Permissions([
+    { resource: Resource.SUBDIVISION_CLIENTS, actions: [Action.DELETE] },
+  ])
   @ApiOperation({ summary: 'Supprimer un jour férié' })
   @ApiResponse({ status: 200, description: 'Jour férié supprimé avec succès' })
-  async remove(@Body('id') id: string, @CurrentUser() currentUser: User) {
+  async remove(
+    @Param('id', UuidParamPipe) id: string,
+    @CurrentUser() currentUser: User,
+  ) {
     return this.subdivisionClientsService.remove(id, currentUser.id);
   }
 }

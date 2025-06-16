@@ -1,15 +1,12 @@
 import { API_ROUTE } from "@/constants/api-route.constant";
 import type { ProviderFormData } from "../schemas/provider.schema";
+import { apiFetch } from "@/hooks/useApiFetch";
 
 export const createProvider = async (
   provider: ProviderFormData
 ): Promise<void> => {
-  const response = await fetch(`${API_ROUTE}/providers`, {
-    credentials: "include",
+  const response = await apiFetch(`${API_ROUTE}/providers`, {
     method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
     body: JSON.stringify(provider),
   });
 

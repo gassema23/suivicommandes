@@ -4,7 +4,6 @@ import {
   Delete,
   Get,
   Param,
-  ParseUUIDPipe,
   Patch,
   Post,
   Query,
@@ -28,6 +27,7 @@ import { CreateRequestTypeDto } from '../dto/create-request-type.dto';
 import { CurrentUser } from '../../auth/decorators/current-user.decorator';
 import { User } from '../../users/entities/user.entity';
 import { UpdateRequestTypeDto } from '../dto/update-request-type.dto';
+import { UuidParamPipe } from '@/common/pipes/uuid-param.pipe';
 
 @ApiTags('Request types')
 @Controller('request-types')
@@ -110,7 +110,7 @@ export class RequestTypesController {
     status: 200,
     description: 'Type de demande récupéré avec succès',
   })
-  async findOne(@Param('id', ParseUUIDPipe) id: string) {
+  async findOne(@Param('id', UuidParamPipe) id: string) {
     return this.requestTypesService.findOne(id);
   }
 
@@ -128,7 +128,7 @@ export class RequestTypesController {
   @ApiResponse({ status: 200, description: 'Type de demande mise à jour' })
   @ApiResponse({ status: 404, description: 'Type de demande non trouvée' })
   async update(
-    @Param('id', ParseUUIDPipe) id: string,
+    @Param('id', UuidParamPipe) id: string,
     @Body() updateRequestTypeDto: UpdateRequestTypeDto,
     @CurrentUser() currentUser: User,
   ) {
@@ -152,7 +152,10 @@ export class RequestTypesController {
     status: 200,
     description: 'Type de demande supprimé avec succès',
   })
-  async remove(@Body('id') id: string, @CurrentUser() currentUser: User) {
+  async remove(
+    @Param('id', UuidParamPipe) id: string,
+    @CurrentUser() currentUser: User,
+  ) {
     return this.requestTypesService.remove(id, currentUser.id);
   }
 }

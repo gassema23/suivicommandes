@@ -4,7 +4,6 @@ import {
   Delete,
   Get,
   Param,
-  ParseUUIDPipe,
   Patch,
   Post,
   Query,
@@ -28,6 +27,7 @@ import { CreateSectorDto } from '../dto/create-sector.dto';
 import { User } from '../../users/entities/user.entity';
 import { CurrentUser } from '../../auth/decorators/current-user.decorator';
 import { UpdateSectorDto } from '../dto/update-sector.dto';
+import { UuidParamPipe } from '@/common/pipes/uuid-param.pipe';
 
 @Controller('sectors')
 @ApiTags('Sectors')
@@ -90,7 +90,7 @@ export class SectorsController {
     status: 200,
     description: 'Services du secteur récupérés avec succès',
   })
-  async getServicesBySectorId(@Param('id', ParseUUIDPipe) id: string) {
+  async getServicesBySectorId(@Param('id', UuidParamPipe) id: string) {
     return this.sectorsService.getServicesBySectorId(id);
   }
 
@@ -123,7 +123,7 @@ export class SectorsController {
     status: 200,
     description: 'Jour férié récupéré avec succès',
   })
-  async findOne(@Param('id', ParseUUIDPipe) id: string) {
+  async findOne(@Param('id', UuidParamPipe) id: string) {
     return this.sectorsService.findOne(id);
   }
 
@@ -140,7 +140,7 @@ export class SectorsController {
   @ApiResponse({ status: 200, description: 'Secteur mise à jour' })
   @ApiResponse({ status: 404, description: 'Secteur non trouvée' })
   async update(
-    @Param('id', ParseUUIDPipe) id: string,
+    @Param('id', UuidParamPipe) id: string,
     @Body() updateSectorDto: UpdateSectorDto,
     @CurrentUser() currentUser: User,
   ) {
@@ -158,7 +158,7 @@ export class SectorsController {
   @ApiOperation({ summary: 'Supprimer un secteur' })
   @ApiResponse({ status: 200, description: 'le secteur supprimé avec succès' })
   async remove(
-    @Param('id', ParseUUIDPipe) id: string,
+    @Param('id', UuidParamPipe) id: string,
     @CurrentUser() currentUser: User,
   ) {
     return this.sectorsService.remove(id, currentUser.id);

@@ -1,21 +1,15 @@
 import { API_ROUTE } from "@/constants/api-route.constant";
 import type { ProviderDisponibilityFormData } from "../schemas/provider-disponibility.schema";
+import { apiFetch } from "@/hooks/useApiFetch";
 
 export async function updateProviderDisponibility(
-  providerDisponibilityId: string,
+  id: string,
   data: ProviderDisponibilityFormData
 ) {
-  const res = await fetch(
-    `${API_ROUTE}/provider-disponibilities/${providerDisponibilityId}`,
-    {
-      method: "PATCH",
-      credentials: "include",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(data),
-    }
-  );
+  const res = await apiFetch(`${API_ROUTE}/provider-disponibilities/${id}`, {
+    method: "PATCH",
+    body: JSON.stringify(data),
+  });
 
   const result = await res.json();
   if (!res.ok) {
@@ -24,6 +18,5 @@ export async function updateProviderDisponibility(
         "Erreur lors de la mise à jour de la disponibilité fournisseur"
     );
   }
-
-  return result;
+  return result as ProviderDisponibilityFormData;
 }

@@ -1,10 +1,10 @@
 import { API_ROUTE } from "@/constants/api-route.constant";
 import type { Flow } from "../types/flow.type";
+import { apiFetch } from "@/hooks/useApiFetch";
 
 export const fetchFlow = async (id: string): Promise<Flow> => {
-  const res = await fetch(`${API_ROUTE}/flows/${id}`, {
+  const res = await apiFetch(`${API_ROUTE}/flows/${id}`, {
     method: "GET",
-    credentials: "include",
   });
 
   const result = await res.json();

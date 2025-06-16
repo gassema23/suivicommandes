@@ -18,7 +18,7 @@ import InputContainer from "@/components/forms/components/InputContainer";
 import { requestTypeDelayFields } from "../configs/request-type-delay-fields";
 import FormError from "@/components/ui/shadcn/form-error";
 import type { RequestTypeDelay } from "../types/request-type-delay.type";
-import { useUpdateRequestTypeDelay } from "../services/update-request-type-delay.service";
+import { updateRequestTypeDelay } from "../services/update-request-type-delay.service";
 
 import { getRequestTypeServiceCategoryByServiceCategory } from "@/shared/request-type-service-categories/services/get-request-type-service-category-by-service-category.service";
 import { fetchDelayTypesList } from "@/shared/delay-types/services/fetch-delay-types-list.service";
@@ -37,7 +37,6 @@ export default function RequestTypeDelayUpdateForm({
   const [backendError, setBackendError] = useState<string | null>(null);
   const navigate = useNavigate();
   const queryClient = useQueryClient();
-  const updateRequestTypeDelay = useUpdateRequestTypeDelay();
 
   const form = useForm<RequestTypeDelayFormData>({
     resolver: zodResolver(requestTypeDelaySchema),

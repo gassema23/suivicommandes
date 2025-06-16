@@ -4,7 +4,6 @@ import {
   Delete,
   Get,
   Param,
-  ParseUUIDPipe,
   Patch,
   Post,
   Query,
@@ -27,6 +26,7 @@ import { PaginationDto } from '../../common/dto/pagination.dto';
 import { CurrentUser } from '../../auth/decorators/current-user.decorator';
 import { User } from '../../users/entities/user.entity';
 import { CreateServiceCategoryDto } from '../dto/create-service-category.dto';
+import { UuidParamPipe } from '@/common/pipes/uuid-param.pipe';
 
 @Controller('service-categories')
 @ApiTags('Services Categories')
@@ -94,7 +94,10 @@ export class ServiceCategoriesController {
   @Get(':id/request-type-service-categories')
   @Permissions([
     { resource: Resource.SERVICE_CATEGORIES, actions: [Action.READ] },
-    { resource: Resource.REQUEST_TYPE_SERVICE_CATEGORIES, actions: [Action.READ] },
+    {
+      resource: Resource.REQUEST_TYPE_SERVICE_CATEGORIES,
+      actions: [Action.READ],
+    },
   ])
   @ApiOperation({
     summary: 'Obtenir les type de demande d’un service par son ID',
@@ -103,7 +106,9 @@ export class ServiceCategoriesController {
     status: 200,
     description: 'Type de demande récupérés avec succès',
   })
-  async getRequestTypeServiceCategoryByServiceCategoryId(@Param('id', ParseUUIDPipe) id: string) {
+  async getRequestTypeServiceCategoryByServiceCategoryId(
+    @Param('id', UuidParamPipe) id: string,
+  ) {
     return this.serviceCategoriesService.getRequestTypeServiceCategory(id);
   }
 
@@ -121,7 +126,7 @@ export class ServiceCategoriesController {
     status: 200,
     description: 'Catégorie de service trouvée',
   })
-  async findOne(@Param('id', ParseUUIDPipe) id: string) {
+  async findOne(@Param('id', UuidParamPipe) id: string) {
     return this.serviceCategoriesService.findOne(id);
   }
 
@@ -142,7 +147,7 @@ export class ServiceCategoriesController {
     description: 'Catégorie de service mise à jour avec succès',
   })
   async update(
-    @Param('id', ParseUUIDPipe) id: string,
+    @Param('id', UuidParamPipe) id: string,
     @Body() updateServiceCategoryDto: CreateServiceCategoryDto,
     @CurrentUser() currentUser: User,
   ) {
@@ -169,7 +174,7 @@ export class ServiceCategoriesController {
     description: 'la catégorie de service supprimé avec succès',
   })
   async remove(
-    @Param('id', ParseUUIDPipe) id: string,
+    @Param('id', UuidParamPipe) id: string,
     @CurrentUser() currentUser: User,
   ) {
     return this.serviceCategoriesService.remove(id, currentUser.id);

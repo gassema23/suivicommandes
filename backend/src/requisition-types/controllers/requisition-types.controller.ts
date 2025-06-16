@@ -4,7 +4,6 @@ import {
   Delete,
   Get,
   Param,
-  ParseUUIDPipe,
   Patch,
   Post,
   Query,
@@ -28,6 +27,7 @@ import { CreateRequisitionTypeDto } from '../dto/create-requisition-type.dto';
 import { CurrentUser } from '../../auth/decorators/current-user.decorator';
 import { User } from '../../users/entities/user.entity';
 import { UpdateRequisitionTypeDto } from '../dto/update-requisition-type.dto';
+import { UuidParamPipe } from '@/common/pipes/uuid-param.pipe';
 
 @ApiTags('Requisition types')
 @Controller('requisition-types')
@@ -101,7 +101,7 @@ export class RequisitionTypesController {
     status: 200,
     description: 'Type de réquisition récupéré avec succès',
   })
-  async findOne(@Param('id', ParseUUIDPipe) id: string) {
+  async findOne(@Param('id', UuidParamPipe) id: string) {
     return this.requisitionTypesService.findOne(id);
   }
 
@@ -113,12 +113,14 @@ export class RequisitionTypesController {
    * @returns Le type de réquisition mis à jour
    */
   @Patch(':id')
-  @Permissions([{ resource: Resource.REQUISITION_TYPES, actions: [Action.UPDATE] }])
+  @Permissions([
+    { resource: Resource.REQUISITION_TYPES, actions: [Action.UPDATE] },
+  ])
   @ApiOperation({ summary: 'Mettre à jour le type de réquisition' })
   @ApiResponse({ status: 200, description: 'Type de réquisition mise à jour' })
   @ApiResponse({ status: 404, description: 'Type de réquisition non trouvée' })
   async update(
-    @Param('id', ParseUUIDPipe) id: string,
+    @Param('id', UuidParamPipe) id: string,
     @Body() updateRequisitionTypeDto: UpdateRequisitionTypeDto,
     @CurrentUser() currentUser: User,
   ) {
@@ -129,20 +131,25 @@ export class RequisitionTypesController {
     );
   }
 
-/**
+  /**
    * Supprime un type de réquisition
    * @param id ID du type de réquisition à supprimer
    * @param currentUser Utilisateur actuel effectuant la suppression
    * @returns Confirmation de la suppression
    */
   @Delete()
-  @Permissions([{ resource: Resource.REQUISITION_TYPES, actions: [Action.DELETE] }])
+  @Permissions([
+    { resource: Resource.REQUISITION_TYPES, actions: [Action.DELETE] },
+  ])
   @ApiOperation({ summary: 'Supprimer un type de réquisition' })
   @ApiResponse({
     status: 200,
     description: 'Type de réquisition supprimé avec succès',
   })
-  async remove(@Body('id') id: string, @CurrentUser() currentUser: User) {
+  async remove(
+    @Param('id', UuidParamPipe) id: string,
+    @CurrentUser() currentUser: User,
+  ) {
     return this.requisitionTypesService.remove(id, currentUser.id);
   }
 }

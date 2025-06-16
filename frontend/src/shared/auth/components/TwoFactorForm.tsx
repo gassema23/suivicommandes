@@ -15,6 +15,7 @@ import FormError from "@/components/ui/shadcn/form-error";
 import { useAuth } from "@/providers/auth.provider";
 import { QUERY_KEYS } from "@/constants/query-key.constant";
 import { API_ROUTE } from "../../../constants/api-route.constant";
+import { apiFetch } from "@/hooks/useApiFetch";
 
 interface TwoFactorFormProps {
   sessionToken: string;
@@ -89,7 +90,7 @@ export default function TwoFactorForm({
 
   const verifyTwoFactorMutation = useMutation({
     mutationFn: async (data: { sessionToken: string; totpCode: string }) => {
-      const response = await fetch(`${API_ROUTE}/auth/verify-2fa`, {
+      const response = await apiFetch(`${API_ROUTE}/auth/verify-2fa`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -120,7 +121,7 @@ export default function TwoFactorForm({
 
   const resendCodeMutation = useMutation({
     mutationFn: async () => {
-      const response = await fetch(`${API_ROUTE}/auth/2fa/generate`, {
+      const response = await apiFetch(`${API_ROUTE}/auth/2fa/generate`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

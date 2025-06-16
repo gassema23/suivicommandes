@@ -4,7 +4,6 @@ import {
   Delete,
   Get,
   Param,
-  ParseUUIDPipe,
   Patch,
   Post,
   Query,
@@ -28,6 +27,7 @@ import { User } from '../../users/entities/user.entity';
 import { CreateHolidayDto } from '../dto/create-holiday.dto';
 import { PaginationDto } from '../../common/dto/pagination.dto';
 import { UpdateHolidayDto } from '../dto/update-holiday.dto';
+import { UuidParamPipe } from '@/common/pipes/uuid-param.pipe';
 
 @ApiTags('Holidays')
 @Controller('holidays')
@@ -88,7 +88,7 @@ export class HolidaysController {
     status: 200,
     description: 'Jour férié récupéré avec succès',
   })
-  async findOne(@Param('id', ParseUUIDPipe) id: string) {
+  async findOne(@Param('id', UuidParamPipe) id: string) {
     return this.holidaysService.findOne(id);
   }
 
@@ -105,7 +105,7 @@ export class HolidaysController {
   @ApiResponse({ status: 200, description: 'Jour férié mise à jour' })
   @ApiResponse({ status: 404, description: 'Jour férié non trouvée' })
   async update(
-    @Param('id', ParseUUIDPipe) id: string,
+    @Param('id', UuidParamPipe) id: string,
     @Body() updateHolidayDto: UpdateHolidayDto,
     @CurrentUser() currentUser: User,
   ) {
@@ -123,7 +123,7 @@ export class HolidaysController {
   @ApiOperation({ summary: 'Supprimer un jour férié' })
   @ApiResponse({ status: 200, description: 'Jour férié supprimé avec succès' })
   async remove(
-    @Param('id', ParseUUIDPipe) id: string,
+    @Param('id', UuidParamPipe) id: string,
     @CurrentUser() currentUser: User,
   ) {
     return this.holidaysService.remove(id, currentUser.id);

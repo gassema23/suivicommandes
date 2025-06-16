@@ -1,20 +1,16 @@
 import { API_ROUTE } from "@/constants/api-route.constant";
 import type { RequestTypeDelayFormData } from "../schemas/request-type-delay.schema";
-import { useCsrfFetch } from "@/hooks/useCsrfFetch";
+import { apiFetch } from "@/hooks/useApiFetch";
 
-export function useCreateRequestTypeDelay() {
-  const csrfFetch = useCsrfFetch();
+export async function createRequestTypeDelay(data: RequestTypeDelayFormData) {
+  const res = await apiFetch(`${API_ROUTE}/request-type-delays`, {
+    method: "POST",
+    body: JSON.stringify(data),
+  });
 
-  return (data: RequestTypeDelayFormData) => {
-    const payload = {
-      requestTypeServiceCategoryId: data.requestTypeServiceCategoryId,
-      delayTypeId: data.delayTypeId,
-      delayValue: data.delayValue,
-    };
-
-    return csrfFetch(`${API_ROUTE}/request-type-delays`, {
-      method: "POST",
-      body: payload,
-    });
-  };
+  const result = await res.json();
+  if (!res.ok) {
+    throw new Error(result.message || "Erreur lors de la création du délai de type de demande");
+  }
+  return result as RequestTypeDelayFormData;
 }

@@ -15,7 +15,7 @@ import {
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
 import { QUERY_KEYS } from "@/constants/query-key.constant";
-import { useCreateConformityType } from "../services/create-conformity-type.service";
+import { createConformityType } from "../services/create-conformity-type.service";
 import { SUCCESS_MESSAGES } from "@/constants/messages.constant";
 import { formatErrorMessage, getFieldError } from "@/lib/utils";
 
@@ -23,7 +23,6 @@ export default function ConformityTypeCreateForm() {
   const [backendError, setBackendError] = useState<string | null>(null);
   const navigate = useNavigate();
   const queryClient = useQueryClient();
-  const createConformityType = useCreateConformityType();
 
   const form = useForm<ConformityTypeFormData>({
     resolver: zodResolver(conformityTypeSchema),

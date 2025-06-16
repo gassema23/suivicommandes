@@ -1,7 +1,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useNavigate } from "@tanstack/react-router";
-import React, { useState } from "react";
+import { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import {
   requestTypeDelaySchema,
@@ -20,7 +20,7 @@ import { DependentSelect } from "@/components/dependant-select/components/Depend
 import InputContainer from "@/components/forms/components/InputContainer";
 import { requestTypeDelayFields } from "../configs/request-type-delay-fields";
 import FormError from "@/components/ui/shadcn/form-error";
-import { useCreateRequestTypeDelay } from "../services/create-request-type-delays.service";
+import { createRequestTypeDelay } from "../services/create-request-type-delays.service";
 
 import { getRequestTypeServiceCategoryByServiceCategory } from "@/shared/request-type-service-categories/services/get-request-type-service-category-by-service-category.service";
 import { fetchDelayTypesList } from "@/shared/delay-types/services/fetch-delay-types-list.service";
@@ -30,7 +30,6 @@ export default function RequestTypeDelayCreateForm() {
   const [backendError, setBackendError] = useState<string | null>(null);
   const navigate = useNavigate();
   const queryClient = useQueryClient();
-  const createRequestTypeDelay = useCreateRequestTypeDelay();
 
   const form = useForm<RequestTypeDelayFormData>({
     resolver: zodResolver(requestTypeDelaySchema),

@@ -1,9 +1,10 @@
 import { API_ROUTE } from "@/constants/api-route.constant";
+import { apiFetch } from "@/hooks/useApiFetch";
 import type { Sector } from "@/shared/sectors/types/sector.type";
 
 // Fetch resources depuis le backend
 export const fetchSectorsList = async (): Promise<Sector[]> => {
-  const res = await fetch(`${API_ROUTE}/sectors/sectorsList`, {
+  const res = await apiFetch(`${API_ROUTE}/sectors/sectorsList`, {
     method: "GET",
     credentials: "include",
   });

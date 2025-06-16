@@ -4,7 +4,6 @@ import {
   Delete,
   Get,
   Param,
-  ParseUUIDPipe,
   Patch,
   Post,
   Query,
@@ -28,6 +27,7 @@ import { CreateConformityTypeDto } from '../dto/create-conformity-type.dto';
 import { User } from '../../users/entities/user.entity';
 import { CurrentUser } from '../../auth/decorators/current-user.decorator';
 import { UpdateConformityTypeDto } from '../dto/update-conformity-type.dto';
+import { UuidParamPipe } from '../../common/pipes/uuid-param.pipe';
 
 @ApiTags('Conformity types')
 @Controller('conformity-types')
@@ -104,7 +104,7 @@ export class ConformityTypesController {
     status: 200,
     description: 'Type de conformité récupéré avec succès',
   })
-  async findOne(@Param('id', ParseUUIDPipe) id: string) {
+  async findOne(@Param('id', UuidParamPipe) id: string) {
     return this.conformityTypesService.findOne(id);
   }
 
@@ -124,7 +124,7 @@ export class ConformityTypesController {
   @ApiResponse({ status: 200, description: 'Type de conformité mise à jour' })
   @ApiResponse({ status: 404, description: 'Type de conformité non trouvée' })
   async update(
-    @Param('id', ParseUUIDPipe) id: string,
+    @Param('id', UuidParamPipe) id: string,
     @Body() updateConformityTypeDto: UpdateConformityTypeDto,
     @CurrentUser() currentUser: User,
   ) {
@@ -151,7 +151,7 @@ export class ConformityTypesController {
     description: 'Type de conformité supprimé avec succès',
   })
   async remove(
-    @Param('id', ParseUUIDPipe) id: string,
+    @Param('id', UuidParamPipe) id: string,
     @CurrentUser() currentUser: User,
   ) {
     return this.conformityTypesService.remove(id, currentUser.id);

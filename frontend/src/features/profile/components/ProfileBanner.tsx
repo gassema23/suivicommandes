@@ -25,6 +25,7 @@ import FormError from "@/components/ui/shadcn/form-error";
 import { API_ROUTE } from "@/constants/api-route.constant";
 import { QUERY_KEYS } from "@/constants/query-key.constant";
 import UserAvatar from "@/components/ui/quebec/UserAvatar";
+import { apiFetch } from "@/hooks/useApiFetch";
 
 interface UserType {
   data: User;
@@ -48,7 +49,7 @@ export default function ProfileBanner({ data }: UserType) {
   const saveAvatarMutation = useMutation({
     mutationFn: async (avatarUrl: string) => {
       setSaving(true);
-      const res = await fetch(`${API_ROUTE}/users/${data.id}`, {
+      const res = await apiFetch(`${API_ROUTE}/users/${data.id}`, {
         method: "PATCH",
         credentials: "include",
         headers: { "Content-Type": "application/json" },

@@ -7,7 +7,7 @@ import FormError from "@/components/ui/shadcn/form-error";
 import { Input } from "@/components/ui/shadcn/input";
 import { clientSchema, type ClientFormData } from "../schemas/clients.schema";
 import type { Client } from "@/shared/clients/types/client.type";
-import { useUpdateClient } from "../services/update-client.service";
+import { updateClient } from "../services/update-client.service";
 import { QUERY_KEYS } from "@/constants/query-key.constant";
 import { FormActions } from "@/components/forms/components/FormActions";
 import InputContainer from "@/components/forms/components/InputContainer";
@@ -22,7 +22,6 @@ export default function ClientUpdateForm({ client }: ClientUpdateFormProps) {
   const [backendError, setBackendError] = useState<string | null>(null);
   const navigate = useNavigate();
   const queryClient = useQueryClient();
-  const updateClient = useUpdateClient();
 
   const form = useForm<ClientFormData>({
     resolver: zodResolver(clientSchema),

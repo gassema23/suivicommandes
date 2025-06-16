@@ -1,5 +1,6 @@
 import { API_ROUTE } from "@/constants/api-route.constant";
 import type { ProviderServiceCategoryFormData } from "../schemas/provider-service-category.schema";
+import { apiFetch } from "@/hooks/useApiFetch";
 
 export async function updateProviderServiceCategory(
   providerServiceCategoryId: string,
@@ -9,14 +10,10 @@ export async function updateProviderServiceCategory(
     providerId: data.providerId,
     serviceCategoryId: data.serviceCategoryId,
   };
-  const res = await fetch(
+  const res = await apiFetch(
     `${API_ROUTE}/provider-service-categories/${providerServiceCategoryId}`,
     {
       method: "PATCH",
-      credentials: "include",
-      headers: {
-        "Content-Type": "application/json",
-      },
       body: JSON.stringify(payload),
     }
   );

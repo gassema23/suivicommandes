@@ -15,7 +15,6 @@ import { Route as AuthenticatedRouteImport } from './routes/_authenticated'
 import { Route as AuthenticatedIndexRouteImport } from './routes/_authenticated/index'
 import { Route as AuthenticatedProfileIndexRouteImport } from './routes/_authenticated/profile/index'
 import { Route as GuestVerifyEmailTokenRouteImport } from './routes/_guest/verify-email/$token'
-import { Route as GuestloginTwoFactorRouteImport } from './routes/_guest/(login)/two-factor'
 import { Route as GuestloginLoginRouteImport } from './routes/_guest/(login)/login'
 import { Route as AuthenticatedPilotagesUsersIndexRouteImport } from './routes/_authenticated/pilotages/users/index'
 import { Route as AuthenticatedPilotagesTestTableIndexRouteImport } from './routes/_authenticated/pilotages/test-table/index'
@@ -106,11 +105,6 @@ const AuthenticatedProfileIndexRoute =
 const GuestVerifyEmailTokenRoute = GuestVerifyEmailTokenRouteImport.update({
   id: '/verify-email/$token',
   path: '/verify-email/$token',
-  getParentRoute: () => GuestRoute,
-} as any)
-const GuestloginTwoFactorRoute = GuestloginTwoFactorRouteImport.update({
-  id: '/(login)/two-factor',
-  path: '/two-factor',
   getParentRoute: () => GuestRoute,
 } as any)
 const GuestloginLoginRoute = GuestloginLoginRouteImport.update({
@@ -490,7 +484,6 @@ export interface FileRoutesByFullPath {
   '/unauthorized': typeof UnauthorizedRoute
   '/': typeof AuthenticatedIndexRoute
   '/login': typeof GuestloginLoginRoute
-  '/two-factor': typeof GuestloginTwoFactorRoute
   '/verify-email/$token': typeof GuestVerifyEmailTokenRoute
   '/profile': typeof AuthenticatedProfileIndexRoute
   '/administrations/roles/create': typeof AuthenticatedAdministrationsRolesCreateRoute
@@ -560,7 +553,6 @@ export interface FileRoutesByTo {
   '/unauthorized': typeof UnauthorizedRoute
   '/': typeof AuthenticatedIndexRoute
   '/login': typeof GuestloginLoginRoute
-  '/two-factor': typeof GuestloginTwoFactorRoute
   '/verify-email/$token': typeof GuestVerifyEmailTokenRoute
   '/profile': typeof AuthenticatedProfileIndexRoute
   '/administrations/roles/create': typeof AuthenticatedAdministrationsRolesCreateRoute
@@ -632,7 +624,6 @@ export interface FileRoutesById {
   '/unauthorized': typeof UnauthorizedRoute
   '/_authenticated/': typeof AuthenticatedIndexRoute
   '/_guest/(login)/login': typeof GuestloginLoginRoute
-  '/_guest/(login)/two-factor': typeof GuestloginTwoFactorRoute
   '/_guest/verify-email/$token': typeof GuestVerifyEmailTokenRoute
   '/_authenticated/profile/': typeof AuthenticatedProfileIndexRoute
   '/_authenticated/administrations/roles/create': typeof AuthenticatedAdministrationsRolesCreateRoute
@@ -704,7 +695,6 @@ export interface FileRouteTypes {
     | '/unauthorized'
     | '/'
     | '/login'
-    | '/two-factor'
     | '/verify-email/$token'
     | '/profile'
     | '/administrations/roles/create'
@@ -774,7 +764,6 @@ export interface FileRouteTypes {
     | '/unauthorized'
     | '/'
     | '/login'
-    | '/two-factor'
     | '/verify-email/$token'
     | '/profile'
     | '/administrations/roles/create'
@@ -845,7 +834,6 @@ export interface FileRouteTypes {
     | '/unauthorized'
     | '/_authenticated/'
     | '/_guest/(login)/login'
-    | '/_guest/(login)/two-factor'
     | '/_guest/verify-email/$token'
     | '/_authenticated/profile/'
     | '/_authenticated/administrations/roles/create'
@@ -959,13 +947,6 @@ declare module '@tanstack/react-router' {
       path: '/verify-email/$token'
       fullPath: '/verify-email/$token'
       preLoaderRoute: typeof GuestVerifyEmailTokenRouteImport
-      parentRoute: typeof GuestRoute
-    }
-    '/_guest/(login)/two-factor': {
-      id: '/_guest/(login)/two-factor'
-      path: '/two-factor'
-      fullPath: '/two-factor'
-      preLoaderRoute: typeof GuestloginTwoFactorRouteImport
       parentRoute: typeof GuestRoute
     }
     '/_guest/(login)/login': {
@@ -1601,13 +1582,11 @@ const AuthenticatedRouteWithChildren = AuthenticatedRoute._addFileChildren(
 
 interface GuestRouteChildren {
   GuestloginLoginRoute: typeof GuestloginLoginRoute
-  GuestloginTwoFactorRoute: typeof GuestloginTwoFactorRoute
   GuestVerifyEmailTokenRoute: typeof GuestVerifyEmailTokenRoute
 }
 
 const GuestRouteChildren: GuestRouteChildren = {
   GuestloginLoginRoute: GuestloginLoginRoute,
-  GuestloginTwoFactorRoute: GuestloginTwoFactorRoute,
   GuestVerifyEmailTokenRoute: GuestVerifyEmailTokenRoute,
 }
 

@@ -15,7 +15,6 @@ export class MainSeeder implements Seeder {
     dataSource: DataSource,
     factoryManager: SeederFactoryManager,
   ): Promise<any> {
-    
     const sectorCount = 10;
     const serviceCount = 50;
     const serviceCategoryCount = 100;
@@ -30,17 +29,42 @@ export class MainSeeder implements Seeder {
     // Seed sectors
     const sectors = await sectorSeed(dataSource, factoryManager, sectorCount);
     // Seed services
-    const services = await serviceSeed(dataSource, factoryManager, serviceCount, sectors);
+    const services = await serviceSeed(
+      dataSource,
+      factoryManager,
+      serviceCount,
+      sectors,
+    );
     // Seed service categories
-    const serviceCategories =  await serviceCategorySeed(dataSource, factoryManager, serviceCategoryCount, services);
+    const serviceCategories = await serviceCategorySeed(
+      dataSource,
+      factoryManager,
+      serviceCategoryCount,
+      services,
+    );
 
-    const providers = await providerSeed(dataSource, factoryManager, providerCount);
+    const providers = await providerSeed(
+      dataSource,
+      factoryManager,
+      providerCount,
+    );
 
-    const providerServiceCategories = await providerServiceCategorySeed(dataSource, factoryManager, providerServiceCategoryCount, providers, serviceCategories);
+    await providerServiceCategorySeed(
+      dataSource,
+      factoryManager,
+      providerServiceCategoryCount,
+      providers,
+      serviceCategories,
+    );
 
     const clients = await clientSeed(dataSource, factoryManager, clientCount);
-    const subdivisionClients = await subdivisionClientSeed(dataSource, factoryManager, subdivisionClientCount, clients);
-    
+    await subdivisionClientSeed(
+      dataSource,
+      factoryManager,
+      subdivisionClientCount,
+      clients,
+    );
+
     return await holidaySeed(dataSource, factoryManager, holidayCount);
   }
 }

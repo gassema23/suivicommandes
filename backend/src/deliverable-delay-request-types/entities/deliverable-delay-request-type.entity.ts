@@ -13,7 +13,7 @@ import { User } from '../../users/entities/user.entity';
 import { IsOptional } from 'class-validator';
 import { RequestTypeServiceCategory } from '../../request-type-service-categories/entities/request-type-service-category.entity';
 import { Deliverable } from '../../deliverables/entities/deliverable.entity';
-import { DeliverableDelayFlow } from 'src/deliverable-delay-flows/entities/deliverable-delay-flow.entity';
+import { DeliverableDelayFlow } from '../../deliverable-delay-flows/entities/deliverable-delay-flow.entity';
 
 @Entity('deliverable_delay_request_types')
 @Index(['deletedAt'])

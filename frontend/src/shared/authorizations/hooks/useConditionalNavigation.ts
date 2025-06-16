@@ -13,13 +13,11 @@ export const useConditionalNavigation = () => {
   ) => {
     // Vérification des permissions
     if (requiredPermission && !hasPermission(requiredPermission.resource, requiredPermission.action)) {
-      console.warn(`Navigation bloquée vers ${to}: permission manquante`);
       return false;
     }
 
     // Vérification du rôle
     if (requiredRole && !hasRole(requiredRole)) {
-      console.warn(`Navigation bloquée vers ${to}: rôle insuffisant`);
       return false;
     }
 

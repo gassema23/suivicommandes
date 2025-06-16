@@ -1,9 +1,10 @@
 import type { Client } from "@/shared/clients/types/client.type";
 import { API_ROUTE } from "@/constants/api-route.constant";
+import { apiFetch } from "@/hooks/useApiFetch";
 
 // Fetch resources depuis le backend
 export const fetchClients = async (): Promise<Client[]> => {
-  const res = await fetch(`${API_ROUTE}/clients/clientsList`, {
+  const res = await apiFetch(`${API_ROUTE}/clients/clientsList`, {
     method: "GET",
     credentials: "include",
   });

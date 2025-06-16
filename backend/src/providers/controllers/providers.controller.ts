@@ -4,7 +4,6 @@ import {
   Delete,
   Get,
   Param,
-  ParseUUIDPipe,
   Patch,
   Post,
   Query,
@@ -29,6 +28,7 @@ import { User } from '../../users/entities/user.entity';
 import { CurrentUser } from '../../auth/decorators/current-user.decorator';
 import { UpdateProviderDto } from '../dto/update-provider.dto';
 import { instanceToPlain } from 'class-transformer';
+import { UuidParamPipe } from '@/common/pipes/uuid-param.pipe';
 
 @ApiTags('Providers')
 @Controller('providers')
@@ -108,7 +108,7 @@ export class ProvidersController {
     status: 200,
     description: 'Fournisseur récupéré avec succès',
   })
-  async findOne(@Param('id', ParseUUIDPipe) id: string) {
+  async findOne(@Param('id', UuidParamPipe) id: string) {
     return this.providersService.findOne(id);
   }
 
@@ -125,7 +125,7 @@ export class ProvidersController {
   @ApiResponse({ status: 200, description: 'Fournisseur mise à jour' })
   @ApiResponse({ status: 404, description: 'Fournisseur non trouvée' })
   async update(
-    @Param('id', ParseUUIDPipe) id: string,
+    @Param('id', UuidParamPipe) id: string,
     @Body() updateProviderDto: UpdateProviderDto,
     @CurrentUser() currentUser: User,
   ) {
@@ -142,7 +142,10 @@ export class ProvidersController {
   @Permissions([{ resource: Resource.PROVIDERS, actions: [Action.DELETE] }])
   @ApiOperation({ summary: 'Supprimer un fournisseur' })
   @ApiResponse({ status: 200, description: 'Fournisseur supprimé avec succès' })
-  async remove(@Body('id') id: string, @CurrentUser() currentUser: User) {
+  async remove(
+    @Param('id', UuidParamPipe) id: string,
+    @CurrentUser() currentUser: User,
+  ) {
     return this.providersService.remove(id, currentUser.id);
   }
 }

@@ -8,7 +8,6 @@ import {
   Delete,
   Query,
   UseGuards,
-  ParseUUIDPipe,
 } from '@nestjs/common';
 import {
   ApiTags,
@@ -30,6 +29,7 @@ import { Resource } from '../../roles/enums/resource.enum';
 import { Action } from '../../roles/enums/action.enum';
 import { AuthorizationsGuard } from '../../auth/guards/authorizations.guard';
 import { instanceToPlain } from 'class-transformer';
+import { UuidParamPipe } from '@/common/pipes/uuid-param.pipe';
 
 @ApiTags('Teams')
 @Controller('teams')
@@ -109,7 +109,7 @@ export class TeamsController {
   @ApiOperation({ summary: 'Obtenir une équipe par ID' })
   @ApiResponse({ status: 200, description: 'Équipe trouvée' })
   @ApiResponse({ status: 404, description: 'Équipe non trouvée' })
-  async findOne(@Param('id', ParseUUIDPipe) id: string) {
+  async findOne(@Param('id', UuidParamPipe) id: string) {
     return this.teamsService.findOne(id);
   }
 
@@ -126,7 +126,7 @@ export class TeamsController {
   @ApiResponse({ status: 200, description: 'Équipe mise à jour' })
   @ApiResponse({ status: 404, description: 'Équipe non trouvée' })
   async update(
-    @Param('id', ParseUUIDPipe) id: string,
+    @Param('id', UuidParamPipe) id: string,
     @Body() updateTeamDto: UpdateTeamDto,
     @CurrentUser() currentUser: User,
   ) {
@@ -158,8 +158,8 @@ export class TeamsController {
   @ApiOperation({ summary: "Ajouter un utilisateur à l'équipe" })
   @ApiResponse({ status: 200, description: "Utilisateur ajouté à l'équipe" })
   async addMember(
-    @Param('teamId', ParseUUIDPipe) teamId: string,
-    @Param('userId', ParseUUIDPipe) userId: string,
+    @Param('teamId', UuidParamPipe) teamId: string,
+    @Param('userId', UuidParamPipe) userId: string,
   ) {
     await this.teamsService.addUserToTeam(teamId, userId);
     return { message: "Utilisateur ajouté à l'équipe avec succès" };
@@ -175,8 +175,8 @@ export class TeamsController {
   @ApiOperation({ summary: "Retirer un utilisateur de l'équipe" })
   @ApiResponse({ status: 200, description: "Utilisateur retiré de l'équipe" })
   async removeMember(
-    @Param('teamId', ParseUUIDPipe) teamId: string,
-    @Param('userId', ParseUUIDPipe) userId: string,
+    @Param('teamId', UuidParamPipe) teamId: string,
+    @Param('userId', UuidParamPipe) userId: string,
   ) {
     await this.teamsService.removeUserFromTeam(teamId, userId);
     return { message: "Utilisateur retiré de l'équipe avec succès" };
@@ -190,7 +190,7 @@ export class TeamsController {
   @Get(':id/members')
   @ApiOperation({ summary: "Obtenir les membres d'une équipe" })
   @ApiResponse({ status: 200, description: "Membres de l'équipe" })
-  async getMembers(@Param('id', ParseUUIDPipe) id: string) {
+  async getMembers(@Param('id', UuidParamPipe) id: string) {
     return this.teamsService.getTeamMembers(id);
   }
 }

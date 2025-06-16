@@ -12,7 +12,6 @@ export const teamColumns: ColumnDef<Team>[] = [
     accessorKey: "owner",
     header: "Propriétaire",
     cell: ({ row }) => {
-      console.log("row", row.original);
       return row.original.owner.fullName || "Inconnu";
     },
     enableSorting: true,
