@@ -3,6 +3,7 @@ import type { ConformityTypeFormData } from "../schemas/conformity-type.schema";
 import { apiFetch } from "@/hooks/useApiFetch";
 
 export async function createConformityType(data: ConformityTypeFormData) {
+
   const res = await apiFetch(`${API_ROUTE}/conformity-types`, {
     method: "POST",
     body: JSON.stringify(data),

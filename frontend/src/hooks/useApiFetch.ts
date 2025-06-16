@@ -20,10 +20,12 @@ export async function apiFetch(
   if (!csrfToken) {
     throw new Error("CSRF token is missing");
   }
+  
   if (needsCsrf(method)) {
     headers = {
       ...headers,
-      "X-CSRF-Token": csrfToken ?? "",
+      "Content-Type": "application/json",
+      "X-CSRF-Token": csrfToken,
     };
   }
 

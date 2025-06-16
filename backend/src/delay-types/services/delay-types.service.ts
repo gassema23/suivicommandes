@@ -7,6 +7,8 @@ import { PaginatedResult } from '../../common/interfaces/paginated-result.interf
 import { CreateDelayTypeDto } from '../dto/create-delay-type.dto';
 import { User } from '../../users/entities/user.entity';
 import { UpdateDelayTypeDto } from '../dto/update-delay-type.dto';
+import { ERROR_MESSAGES } from '@/common/constants/error-messages.constant';
+import { assertUniqueFields } from '@/common/utils/assert-unique-fields';
 
 @Injectable()
 export class DelayTypesService {
@@ -78,17 +80,13 @@ export class DelayTypesService {
    * @throws BadRequestException si le nom du type de délai est déjà utilisé.
    */
   async create(createDelayTypeDto: CreateDelayTypeDto, createdBy: string) {
-    const existingDelayType = await this.delayTypeRepository.findOne({
-      where: {
-        delayTypeName: createDelayTypeDto.delayTypeName,
-      },
-    });
-
-    if (existingDelayType) {
-      throw new BadRequestException(
-        'Ce nom de type de délai est déjà utilisé.',
-      );
-    }
+    // Vérifie si le nom du type de délai existe déjà
+    await assertUniqueFields<CreateDelayTypeDto>(
+      this.delayTypeRepository,
+      { delayTypeName: createDelayTypeDto.delayTypeName },
+      undefined,
+      `${ERROR_MESSAGES.CREATE} ${ERROR_MESSAGES.UNIQUE_CONSTRAINT}`,
+    );
 
     const delayType = this.delayTypeRepository.create({
       ...createDelayTypeDto,
@@ -111,9 +109,7 @@ export class DelayTypesService {
     });
 
     if (!delayType) {
-      throw new BadRequestException(
-        'Aucun type de délai trouvé avec cet identifiant.',
-      );
+      throw new BadRequestException(ERROR_MESSAGES.NOT_FOUND);
     }
 
     return delayType;
@@ -133,21 +129,13 @@ export class DelayTypesService {
     updatedBy: string,
   ): Promise<DelayType> {
     const delayType = await this.findOne(id);
-    if (
-      updateDelayTypeDto.delayTypeName &&
-      updateDelayTypeDto.delayTypeName !== delayType.delayTypeName
-    ) {
-      const existingDelayType = await this.delayTypeRepository.findOne({
-        where: {
-          delayTypeName: updateDelayTypeDto.delayTypeName,
-        },
-      });
-      if (existingDelayType) {
-        throw new BadRequestException(
-          'Impossible de modifier : ce nom de type de délai existe déjà.',
-        );
-      }
-    }
+    await assertUniqueFields<CreateDelayTypeDto>(
+      this.delayTypeRepository,
+      { delayTypeName: updateDelayTypeDto.delayTypeName },
+      id,
+      `${ERROR_MESSAGES.UPDATE} ${ERROR_MESSAGES.UNIQUE_CONSTRAINT}`,
+    );
+
     Object.assign(delayType, updateDelayTypeDto, {
       updatedBy: { id: updatedBy } as User,
     });
@@ -168,13 +156,13 @@ export class DelayTypesService {
     });
     if (!delayType) {
       throw new BadRequestException(
-        'Impossible de supprimer : type de délai introuvable.',
+        `${ERROR_MESSAGES.DELETE} type de délai introuvable.`,
       );
     }
 
     if (delayType.requestTypeDelays && delayType.requestTypeDelays.length > 0) {
       throw new BadRequestException(
-        'Suppression impossible : ce type de délai est utilisé par au moins un type de demande.',
+        `${ERROR_MESSAGES.DELETE} ce type de délai est utilisé par au moins un type de demande.`,
       );
     }
 

@@ -1,4 +1,3 @@
-import LoadingPage from "@/components/ui/loader/LoadingPage";
 import { DeleteModal } from "@/components/ui/quebec/DeleteModal";
 import FormError from "@/components/ui/shadcn/form-error";
 import { createPermissionGuard } from "@/shared/authorizations/helpers/createPermissionGuard";
@@ -13,7 +12,7 @@ import {
 } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
-import type { ServiceResponse } from "@/features/services/types/service.type";
+import type { ServiceResponse } from "@/shared/services/types/service.type";
 import { QUERY_KEYS } from "@/constants/query-key.constant";
 import { toast } from "sonner";
 import { SUCCESS_MESSAGES } from "@/constants/messages.constant";

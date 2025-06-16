@@ -9,6 +9,8 @@ import { PaginatedResult } from '../../common/interfaces/paginated-result.interf
 import { CreateDeliverableDelayRequestTypeDto } from '../dto/create-deliverable-delay-request-type.dto';
 import { User } from '../../users/entities/user.entity';
 import { UpdateDeliverableDelayRequestTypeDto } from '../dto/update-deliverable-delay-request-type.dto';
+import { assertUniqueFields } from '@/common/utils/assert-unique-fields';
+import { ERROR_MESSAGES } from '@/common/constants/error-messages.constant';
 
 @Injectable()
 export class DeliverableDelayRequestTypesService {
@@ -103,19 +105,15 @@ export class DeliverableDelayRequestTypesService {
    * @throws BadRequestException if an association with the same request type and deliverable already exists.
    */
   async create(dto: CreateDeliverableDelayRequestTypeDto, createdBy: string) {
-    const existing = await this.deliverableDelayRequestTypeRepository.findOne({
-      where: {
+    await assertUniqueFields(
+      this.deliverableDelayRequestTypeRepository,
+      {
+        deliverable: dto.deliverableId,
         requestTypeServiceCategory: { id: dto.requestTypeServiceCategoryId },
-        deliverable: { id: dto.deliverableId },
       },
-      relations: ['requestTypeServiceCategory', 'deliverable'],
-    });
-
-    if (existing) {
-      throw new BadRequestException(
-        'Impossible de créer : une association entre ce type de demande et ce livrable existe déjà.',
-      );
-    }
+      undefined, // id à exclure pour l'update
+      `${ERROR_MESSAGES.CREATE} ${ERROR_MESSAGES.UNIQUE_CONSTRAINT}`,
+    );
 
     const requestTypeServiceCategory =
       await this.requestTypeServiceCategoryRepository.findOne({
@@ -123,7 +121,7 @@ export class DeliverableDelayRequestTypesService {
       });
     if (!requestTypeServiceCategory) {
       throw new BadRequestException(
-        'Impossible de créer : le type de demande/service est introuvable avec cet identifiant.',
+        `${ERROR_MESSAGES.CREATE} ${ERROR_MESSAGES.NOT_FOUND}`,
       );
     }
 
@@ -132,7 +130,7 @@ export class DeliverableDelayRequestTypesService {
     });
     if (!deliverable) {
       throw new BadRequestException(
-        'Impossible de créer : le livrable est introuvable avec cet identifiant.',
+        `${ERROR_MESSAGES.CREATE} ${ERROR_MESSAGES.NOT_FOUND}`,
       );
     }
 
@@ -174,9 +172,7 @@ export class DeliverableDelayRequestTypesService {
     const entity = await qb.getOne();
 
     if (!entity) {
-      throw new BadRequestException(
-        'Aucune association délai/type de demande trouvée pour cet identifiant.',
-      );
+      throw new BadRequestException(`${ERROR_MESSAGES.NOT_FOUND}`);
     }
 
     return entity;

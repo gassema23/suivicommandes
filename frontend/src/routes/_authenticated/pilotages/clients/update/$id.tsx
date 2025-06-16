@@ -1,4 +1,3 @@
-import LoadingPage from "@/components/ui/loader/LoadingPage";
 import FormError from "@/components/ui/shadcn/form-error";
 import { createPermissionGuard } from "@/shared/authorizations/helpers/createPermissionGuard";
 import { PERMISSIONS } from "@/shared/authorizations/types/auth.types";
@@ -7,6 +6,7 @@ import { fetchClient } from "@/features/clients/services/fetch-client.service";
 import { queryOptions, useSuspenseQuery } from "@tanstack/react-query";
 import { createFileRoute, useParams } from "@tanstack/react-router";
 import { QUERY_KEYS } from "@/constants/query-key.constant";
+import LoadingForm from "@/components/ui/loader/LoadingForm";
 
 const clientsQueryOptions = (id: string) =>
   queryOptions({
@@ -18,9 +18,6 @@ export const Route = createFileRoute(
   "/_authenticated/pilotages/clients/update/$id"
 )({
   beforeLoad: createPermissionGuard([PERMISSIONS.CLIENTS.UPDATE]),
-
-  loader: ({ context, params }) =>
-    context.queryClient.ensureQueryData(clientsQueryOptions(params.id)),
   head: () => ({
     meta: [{ title: "Modifier le client" }],
   }),
@@ -37,8 +34,7 @@ export const Route = createFileRoute(
       },
     ],
   },
-
-  pendingComponent: () => <LoadingPage />,
+  pendingComponent: () => <LoadingForm rows={2} />,
   component: RouteComponent,
 });
 

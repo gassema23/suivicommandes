@@ -1,4 +1,3 @@
-import LoadingPage from "@/components/ui/loader/LoadingPage";
 import { DeleteModal } from "@/components/ui/quebec/DeleteModal";
 import FormError from "@/components/ui/shadcn/form-error";
 import { createPermissionGuard } from "@/shared/authorizations/helpers/createPermissionGuard";
@@ -17,6 +16,7 @@ import type { ClientResponse } from "@/shared/clients/types/client.type";
 import { QUERY_KEYS } from "@/constants/query-key.constant";
 import { toast } from "sonner";
 import { SUCCESS_MESSAGES } from "@/constants/messages.constant";
+import LoadingTable from "@/components/ui/loader/LoadingTable";
 
 const clientsQueryOptions = (pageNumber: number) =>
   queryOptions<ClientResponse>({
@@ -32,11 +32,6 @@ export const Route = createFileRoute("/_authenticated/pilotages/clients/")({
   validateSearch: (search: Record<string, unknown>) => {
     return { page: Number(search.page ?? 1) };
   },
-  loader: ({ context, search }) => {
-    return context.queryClient.ensureQueryData(
-      clientsQueryOptions(Number(search?.page ?? "1"))
-    );
-  },
   errorComponent: ({ error }) => <FormError message={error.message} />,
   staticData: {
     title: "Clients",
@@ -46,7 +41,7 @@ export const Route = createFileRoute("/_authenticated/pilotages/clients/")({
       { label: "Clients", href: "/pilotages/clients", isCurrent: true },
     ],
   },
-  pendingComponent: () => <LoadingPage />,
+  pendingComponent: () => <LoadingTable rows={10} columns={4} />,
   component: RouteComponent,
 });
 

@@ -94,6 +94,7 @@ async function refreshTokenRequest() {
 
 export function useAuthService() {
   const queryClient = useQueryClient();
+  
   const userQuery = useQuery<AuthUser | null>({
     queryKey: ["auth", "user"],
     queryFn: fetchUser,

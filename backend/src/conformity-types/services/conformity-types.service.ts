@@ -7,6 +7,8 @@ import { FindOptionsWhere, ILike, Repository } from 'typeorm';
 import { PaginationDto } from '../../common/dto/pagination.dto';
 import { PaginatedResult } from '../../common/interfaces/paginated-result.interface';
 import { BadRequestException, Injectable } from '@nestjs/common';
+import { assertUniqueFields } from '@/common/utils/assert-unique-fields';
+import { ERROR_MESSAGES } from '@/common/constants/error-messages.constant';
 
 @Injectable()
 export class ConformityTypesService {
@@ -81,17 +83,12 @@ export class ConformityTypesService {
     createConformityTypeDto: CreateConformityTypeDto,
     createdBy: string,
   ) {
-    const existingConformityType = await this.conformityTypeRepository.findOne({
-      where: {
-        conformityTypeName: createConformityTypeDto.conformityTypeName,
-      },
-    });
-
-    if (existingConformityType) {
-      throw new BadRequestException(
-        'Impossible de créer : un type de conformité avec ce nom existe déjà.',
-      );
-    }
+    await assertUniqueFields(
+      this.conformityTypeRepository,
+      { conformityTypeName: createConformityTypeDto.conformityTypeName },
+      undefined, // id à exclure pour l'update
+      `${ERROR_MESSAGES.CREATE} ${ERROR_MESSAGES.UNIQUE_CONSTRAINT}`,
+    );
 
     const conformityType = this.conformityTypeRepository.create({
       ...createConformityTypeDto,
@@ -114,9 +111,7 @@ export class ConformityTypesService {
     });
 
     if (!conformityType) {
-      throw new BadRequestException(
-        'Aucun type de conformité trouvé avec cet identifiant.',
-      );
+      throw new BadRequestException(ERROR_MESSAGES.NOT_FOUND);
     }
 
     return conformityType;
@@ -137,23 +132,14 @@ export class ConformityTypesService {
     updatedBy: string,
   ): Promise<ConformityType> {
     const conformityType = await this.findOne(id);
-    if (
-      updateConformityTypeDto.conformityTypeName &&
-      updateConformityTypeDto.conformityTypeName !==
-        conformityType.conformityTypeName
-    ) {
-      const existingConformityType =
-        await this.conformityTypeRepository.findOne({
-          where: {
-            conformityTypeName: updateConformityTypeDto.conformityTypeName,
-          },
-        });
-      if (existingConformityType) {
-        throw new BadRequestException(
-          'Impossible de modifier : ce nom de type de conformité est déjà utilisé.',
-        );
-      }
-    }
+
+    await assertUniqueFields(
+      this.conformityTypeRepository,
+      { conformityTypeName: updateConformityTypeDto.conformityTypeName },
+      id, // id à exclure pour l'update
+      `${ERROR_MESSAGES.UPDATE} ${ERROR_MESSAGES.UNIQUE_CONSTRAINT}`,
+    );
+
     Object.assign(conformityType, updateConformityTypeDto, {
       updatedBy: { id: updatedBy } as User,
     });
@@ -172,7 +158,7 @@ export class ConformityTypesService {
 
     if (!conformityType) {
       throw new BadRequestException(
-        'Impossible de supprimer : type de conformité introuvable.',
+        `${ERROR_MESSAGES.DELETE} type de conformité introuvable.`,
       );
     }
 

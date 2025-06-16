@@ -28,6 +28,8 @@ import { VerifyEmailInterface } from '../interfaces/verify-email.interface';
 import { OnboardingDto } from '../dto/onboarding.dto';
 import { parseDurationToMs } from '../../common/utils/parse-duration';
 import { TwoFactorAuthService } from './two-factor-auth.service';
+import { ERROR_MESSAGES } from '@/common/constants/error-messages.constant';
+import { assertUniqueFields } from '@/common/utils/assert-unique-fields';
 
 export interface JwtPayload {
   sub: string;
@@ -135,25 +137,19 @@ export class AuthService {
 
     if (attempts >= 3) {
       await this.cacheManager.set(cacheKey, attempts, 900_000);
-      throw new UnauthorizedException(
-        'Trop de tentatives, réessayez dans 15 minutes.',
-      );
+      throw new UnauthorizedException(ERROR_MESSAGES.TOO_MANY_ATTEMPTS(15));
     }
 
     const user = await this.validateUser(email, password);
     if (!user) {
       attempts++;
       await this.cacheManager.set(cacheKey, attempts, 900_000);
-      throw new UnauthorizedException(
-        'Identifiants ou mot de passe incorrects.',
-      );
+      throw new UnauthorizedException(ERROR_MESSAGES.INVALID_CREDENTIALS);
     }
     await this.cacheManager.del(cacheKey);
 
     if (!user.emailVerifiedAt) {
-      throw new UnauthorizedException(
-        'Veuillez vérifier votre adresse email avant de vous connecter.',
-      );
+      throw new UnauthorizedException(ERROR_MESSAGES.IS_EMAIL_VERIFIED);
     }
 
     if (user.twoFactorEnabled) {
@@ -170,9 +166,7 @@ export class AuthService {
         twoFactorCode,
       );
       if (!isValidCode) {
-        throw new UnauthorizedException(
-          'Le code de vérification 2FA est invalide.',
-        );
+        throw new UnauthorizedException(ERROR_MESSAGES.TWO_FA_ERROR);
       }
     }
 
@@ -194,20 +188,18 @@ export class AuthService {
    * @throws BadRequestException si le token de vérification est invalide ou expiré.
    */
   async register(registerDto: RegisterDto): Promise<{ message: string }> {
-    const existingUser = await this.userRepository.findOne({
-      where: { email: registerDto.email },
-    });
-    if (existingUser) {
-      throw new ConflictException(
-        'Un utilisateur avec cette adresse email existe déjà.',
-      );
-    }
+    await assertUniqueFields(
+      this.userRepository,
+      { email: registerDto.email },
+      undefined,
+      `${ERROR_MESSAGES.CREATE} ${ERROR_MESSAGES.UNIQUE_CONSTRAINT}`,
+    );
 
     if (
       registerDto.password &&
       registerDto.password !== registerDto.confirmPassword
     ) {
-      throw new BadRequestException('Les mots de passe ne correspondent pas.');
+      throw new BadRequestException(`${ERROR_MESSAGES.INVALID_INPUT}`);
     }
 
     const password =

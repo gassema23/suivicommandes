@@ -15,9 +15,9 @@ import {
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
 import { QUERY_KEYS } from "@/constants/query-key.constant";
-import { createConformityType } from "../services/create-conformity-type.service";
 import { SUCCESS_MESSAGES } from "@/constants/messages.constant";
 import { formatErrorMessage, getFieldError } from "@/lib/utils";
+import { createConformityType } from "../services/create-conformity-type.service";
 
 export default function ConformityTypeCreateForm() {
   const [backendError, setBackendError] = useState<string | null>(null);
@@ -44,13 +44,13 @@ export default function ConformityTypeCreateForm() {
       setBackendError(null);
       toast.success(SUCCESS_MESSAGES.create("Type de conformité"));
       queryClient.invalidateQueries({ queryKey: QUERY_KEYS.CONFORMITY_TYPES });
-
       navigate({ to: "/pilotages/conformity-types", search: { page: 1 } });
     },
     onError: (error: { message: string }) => {
       setBackendError(formatErrorMessage(error));
     },
   });
+
   const onSubmit = (data: ConformityTypeFormData) => {
     createMutation.mutate(data);
   };
@@ -61,7 +61,6 @@ export default function ConformityTypeCreateForm() {
       onSubmit={handleSubmit(onSubmit)}
     >
       {backendError && <FormError message={backendError} />}
-
       {conformityTypeFields.map((field) => (
         <InputContainer
           key={field.name}
@@ -93,7 +92,6 @@ export default function ConformityTypeCreateForm() {
           )}
         </InputContainer>
       ))}
-
       <FormActions
         isLoading={createMutation.isPending}
         onCancel={() =>

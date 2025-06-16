@@ -7,6 +7,8 @@ import { PaginatedResult } from '../../common/interfaces/paginated-result.interf
 import { CreateClientDto } from '../dto/create-client.dto';
 import { User } from '../../users/entities/user.entity';
 import { UpdateClientDto } from '../dto/update-client.dto';
+import { assertUniqueFields } from '@/common/utils/assert-unique-fields';
+import { ERROR_MESSAGES } from '@/common/constants/error-messages.constant';
 
 @Injectable()
 export class ClientsService {
@@ -89,18 +91,15 @@ export class ClientsService {
    * @throws BadRequestException si un client avec le même nom ou numéro existe déjà.
    */
   async create(createClientDto: CreateClientDto, createdBy: string) {
-    const existingClient = await this.clientRepository.findOne({
-      where: {
+    await assertUniqueFields(
+      this.clientRepository,
+      {
         clientName: createClientDto.clientName,
         clientNumber: createClientDto.clientNumber,
       },
-    });
-
-    if (existingClient) {
-      throw new BadRequestException(
-        'Un client avec ce nom ET ce numéro existe déjà. Veuillez choisir un nom ou un numéro différent.',
-      );
-    }
+      undefined, // id à exclure pour l'update
+      `${ERROR_MESSAGES.CREATE} ${ERROR_MESSAGES.UNIQUE_CONSTRAINT}`,
+    );
 
     const client = this.clientRepository.create({
       ...createClientDto,
@@ -123,7 +122,7 @@ export class ClientsService {
     });
 
     if (!client) {
-      throw new BadRequestException(`Aucun client trouvé.`);
+      throw new BadRequestException(ERROR_MESSAGES.NOT_FOUND);
     }
     return client;
   }
@@ -142,22 +141,16 @@ export class ClientsService {
     updatedBy: string,
   ): Promise<Client> {
     const client = await this.findOne(id);
-    if (
-      updateClientDto.clientName &&
-      updateClientDto.clientName !== client.clientName
-    ) {
-      const existingClient = await this.clientRepository.findOne({
-        where: {
-          clientName: updateClientDto.clientName,
-          clientNumber: updateClientDto.clientNumber,
-        },
-      });
-      if (existingClient) {
-        throw new BadRequestException(
-          'Un client avec ce nom ET ce numéro existe déjà. Impossible de mettre à jour.',
-        );
-      }
-    }
+    await assertUniqueFields(
+      this.clientRepository,
+      {
+        clientName: updateClientDto.clientName,
+        clientNumber: updateClientDto.clientNumber,
+      },
+      id, // id à exclure pour l'update
+      `${ERROR_MESSAGES.UPDATE} ${ERROR_MESSAGES.UNIQUE_CONSTRAINT}`,
+    );
+
     Object.assign(client, updateClientDto, {
       updatedBy: { id: updatedBy } as User,
     });
@@ -179,13 +172,13 @@ export class ClientsService {
 
     if (!client) {
       throw new BadRequestException(
-        `Impossible de supprimer : aucun client trouvé.`,
+        `${ERROR_MESSAGES.DELETE} client introuvable.`,
       );
     }
 
     if (client.subdivisionClients && client.subdivisionClients.length > 0) {
       throw new BadRequestException(
-        'Suppression impossible : ce client est associé à une ou plusieurs subdivisions.',
+        `${ERROR_MESSAGES.DELETE} ce client est associé à une ou plusieurs subdivisions.`,
       );
     }
 

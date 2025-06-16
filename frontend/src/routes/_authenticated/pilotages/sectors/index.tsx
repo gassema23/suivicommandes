@@ -8,7 +8,7 @@ import {
   useQueryClient,
   useSuspenseQuery,
 } from "@tanstack/react-query";
-import { Suspense, useState } from "react";
+import { useState } from "react";
 import { getSectors } from "@/features/sectors/services/get-sectors.service";
 import type { SectorsResponse } from "@/shared/sectors/types/sector.type";
 import { QUERY_KEYS } from "@/constants/query-key.constant";
@@ -16,7 +16,6 @@ import { toast } from "sonner";
 import { SUCCESS_MESSAGES } from "@/constants/messages.constant";
 import { createFileRoute } from "@tanstack/react-router";
 import FormError from "@/components/ui/shadcn/form-error";
-import LoadingPage from "@/components/ui/loader/LoadingPage";
 import LoadingTable from "@/components/ui/loader/LoadingTable";
 
 const sectorsQueryOptions = (pageNumber: number) =>

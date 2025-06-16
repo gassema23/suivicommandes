@@ -18,9 +18,6 @@ export const Route = createFileRoute(
   "/_authenticated/pilotages/sectors/update/$id"
 )({
   beforeLoad: createPermissionGuard([PERMISSIONS.SECTORS.UPDATE]),
-
-  loader: ({ context, params }) =>
-    context.queryClient.ensureQueryData(sectorsQueryOptions(params.id)),
   head: () => ({
     meta: [{ title: "Modifier le secteur" }],
   }),

@@ -20,10 +20,9 @@ export class ConformityType {
   readonly id: string;
 
   @Column({ name: 'conformity_type_name', length: 125, nullable: true })
-  @IsOptional()
   @IsString()
   @MaxLength(125)
-  conformityTypeName?: string;
+  conformityTypeName: string;
 
   @Column({ name: 'conformity_type_description', length: 500, nullable: true })
   @IsOptional()
