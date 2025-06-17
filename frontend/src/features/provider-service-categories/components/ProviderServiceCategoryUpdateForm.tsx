@@ -24,6 +24,7 @@ import { toast } from "sonner";
 import { providerServiceCategoryFields } from "../configs/provider-service-category-fields";
 import { updateProviderServiceCategory } from "../services/update-provider-service-category.service";
 import { SUCCESS_MESSAGES } from "@/constants/messages.constant";
+import { formatErrorMessage } from "@/lib/utils";
 
 interface ProviderServiceCategoryUpdateFormProps {
   providerServiceCategory: ProviderServiceCategory;
@@ -68,7 +69,7 @@ export default function ProviderServiceCategoryUpdateForm({
       });
     },
     onError: (error: { message: string }) => {
-      setBackendError(error.message);
+      setBackendError(formatErrorMessage(error));
     },
   });
 
@@ -130,6 +131,7 @@ export default function ProviderServiceCategoryUpdateForm({
           label={field.label}
           error={errors[field.name]?.message}
           htmlFor={field.name}
+          required={field.required}
         >
           {field.component === "select-sector" && (
             <DependentSelect

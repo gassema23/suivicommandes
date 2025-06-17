@@ -47,7 +47,9 @@ describe('RequisitionTypesController', () => {
       ],
     }).compile();
 
-    controller = module.get<RequisitionTypesController>(RequisitionTypesController);
+    controller = module.get<RequisitionTypesController>(
+      RequisitionTypesController,
+    );
     service = module.get<RequisitionTypesService>(RequisitionTypesService);
 
     jest.clearAllMocks();

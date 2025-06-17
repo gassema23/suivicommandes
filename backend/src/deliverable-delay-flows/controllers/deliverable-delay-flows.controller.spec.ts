@@ -9,7 +9,9 @@ describe('DeliverableDelayFlowsController', () => {
       controllers: [DeliverableDelayFlowsController],
     }).compile();
 
-    controller = module.get<DeliverableDelayFlowsController>(DeliverableDelayFlowsController);
+    controller = module.get<DeliverableDelayFlowsController>(
+      DeliverableDelayFlowsController,
+    );
   });
 
   it('should be defined', () => {

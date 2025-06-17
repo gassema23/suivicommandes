@@ -19,6 +19,7 @@ import { fetchSectorsList } from "@/shared/sectors/services/fetch-sectors-list.s
 import { fetchProvidersList } from "@/shared/providers/services/fetch-providers-list.service";
 import { fetchServicesBySector } from "@/shared/services/services/fetch-services-by-sector.service";
 import { fetchServiceCategoriesByService } from "@/shared/service-categories/services/fetch-service-category-by-service.service";
+import { formatErrorMessage } from "@/lib/utils";
 
 export default function ProviderServiceCategoryCreateForm() {
   const [backendError, setBackendError] = useState<string | null>(null);
@@ -56,7 +57,7 @@ export default function ProviderServiceCategoryCreateForm() {
       });
     },
     onError: (error: { message: string }) => {
-      setBackendError(error.message);
+      setBackendError(formatErrorMessage(error));
     },
   });
 
@@ -118,6 +119,7 @@ export default function ProviderServiceCategoryCreateForm() {
           label={field.label}
           error={errors[field.name]?.message}
           htmlFor={field.name}
+          required={field.required}
         >
           {field.component === "select-sector" && (
             <DependentSelect

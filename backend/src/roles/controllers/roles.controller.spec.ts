@@ -1,7 +1,11 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { APP_GUARD } from '@nestjs/core';
 import { v4 as uuidv4 } from 'uuid';
-import { BadRequestException, NotFoundException, ConflictException } from '@nestjs/common';
+import {
+  BadRequestException,
+  NotFoundException,
+  ConflictException,
+} from '@nestjs/common';
 import { RolesController } from './roles.controller';
 import { RolesService } from '../services/roles.service';
 import { CreateRoleDto } from '../dto/create-role.dto';
@@ -97,27 +101,35 @@ describe('RolesController', () => {
     mockService.create.mockRejectedValueOnce(
       new ConflictException('Role already exists'),
     );
-    await expect(controller.createRole(createDto)).rejects.toThrow(ConflictException);
+    await expect(controller.createRole(createDto)).rejects.toThrow(
+      ConflictException,
+    );
   });
 
   it('should throw NotFoundException if role not found on update', async () => {
     mockService.update.mockRejectedValueOnce(
       new NotFoundException('Not found'),
     );
-    await expect(controller.updateRole(uuidv4(), updateDto)).rejects.toThrow(NotFoundException);
+    await expect(controller.updateRole(uuidv4(), updateDto)).rejects.toThrow(
+      NotFoundException,
+    );
   });
 
   it('should throw ConflictException if role name already exists on update', async () => {
     mockService.update.mockRejectedValueOnce(
       new ConflictException('Role name exists'),
     );
-    await expect(controller.updateRole(uuidv4(), updateDto)).rejects.toThrow(ConflictException);
+    await expect(controller.updateRole(uuidv4(), updateDto)).rejects.toThrow(
+      ConflictException,
+    );
   });
 
   it('should throw NotFoundException if role not found on findOne', async () => {
     mockService.findById.mockRejectedValueOnce(
       new NotFoundException('Not found'),
     );
-    await expect(controller.findOne(uuidv4())).rejects.toThrow(NotFoundException);
+    await expect(controller.findOne(uuidv4())).rejects.toThrow(
+      NotFoundException,
+    );
   });
 });

@@ -62,7 +62,6 @@ const AuthContext = React.createContext<AuthContext | null>(null);
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const queryClient = useQueryClient();
   const { refreshToken, logout: authLogout } = useAuthService();
-
   // Récupération user avec gestion refresh si 401
   const {
     data: user,

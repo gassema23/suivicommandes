@@ -139,12 +139,15 @@ export class TeamsController {
    * @param currentUser - Utilisateur actuel effectuant la suppression.
    * @returns Un message de confirmation de suppression.
    */
-  @Delete()
+  @Delete(':id')
   @Permissions([{ resource: Resource.TEAMS, actions: [Action.DELETE] }])
   @ApiOperation({ summary: 'Supprimer une équipe' })
   @ApiResponse({ status: 200, description: 'Équipe supprimée' })
   @ApiResponse({ status: 404, description: 'Équipe non trouvée' })
-  async remove(@Body('id') id: string, @CurrentUser() currentUser: User) {
+  async remove(
+    @Param('id', UuidParamPipe) id: string,
+    @CurrentUser() currentUser: User,
+  ) {
     await this.teamsService.remove(id, currentUser.id);
     return { message: 'Équipe supprimée avec succès' };
   }

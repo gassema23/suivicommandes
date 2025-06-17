@@ -1,16 +1,7 @@
+import type { FieldConfig } from "@/types/field.type";
 import type { SectorFormData } from "../schemas/sector.schema";
 
-type SectorField = {
-  name: keyof SectorFormData;
-  label: string;
-  type?: string;
-  placeholder?: string;
-  component: "input" | "textarea" | "switch";
-  rows?: number;
-  required?: boolean;
-};
-
-export const sectorFields: SectorField[] = [
+export const sectorFields: FieldConfig<SectorFormData>[] = [
   {
     name: "sectorName",
     label: "Secteur",

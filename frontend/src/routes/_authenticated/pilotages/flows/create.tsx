@@ -1,9 +1,9 @@
-import LoadingPage from "@/components/ui/loader/LoadingPage";
 import FormError from "@/components/ui/shadcn/form-error";
 import { createPermissionGuard } from "@/shared/authorizations/helpers/createPermissionGuard";
 import { PERMISSIONS } from "@/shared/authorizations/types/auth.types";
 import FlowCreateForm from "@/features/flows/components/FlowCreateForm";
 import { createFileRoute } from "@tanstack/react-router";
+import LoadingForm from "@/components/ui/loader/LoadingForm";
 
 export const Route = createFileRoute("/_authenticated/pilotages/flows/create")({
   beforeLoad: createPermissionGuard([PERMISSIONS.FLOWS.CREATE]),
@@ -24,7 +24,7 @@ export const Route = createFileRoute("/_authenticated/pilotages/flows/create")({
       },
     ],
   },
-  pendingComponent: () => <LoadingPage />,
+  pendingComponent: () => <LoadingForm rows={2} />,
 });
 
 function RouteComponent() {

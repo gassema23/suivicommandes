@@ -190,7 +190,8 @@ describe('ServiceCategoriesController', () => {
       mockRequestTypes,
     );
 
-    const result = await controller.getRequestTypeServiceCategoryByServiceCategoryId(uuid);
+    const result =
+      await controller.getRequestTypeServiceCategoryByServiceCategoryId(uuid);
     expect(result).toEqual(mockRequestTypes);
     expect(mockService.getRequestTypeServiceCategory).toHaveBeenCalledWith(
       uuid,

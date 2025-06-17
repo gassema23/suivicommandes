@@ -60,7 +60,9 @@ describe('ServicesService', () => {
 
   it('should create a service', async () => {
     (repo.findOne as jest.Mock).mockResolvedValueOnce(undefined);
-    (sectorRepo.findOne as jest.Mock).mockResolvedValueOnce({ id: 'uuid-sector' });
+    (sectorRepo.findOne as jest.Mock).mockResolvedValueOnce({
+      id: 'uuid-sector',
+    });
     const dto = {
       serviceName: 'Test service',
       sectorId: 'uuid-sector',
@@ -118,7 +120,9 @@ describe('ServicesService', () => {
     (repo.findOne as jest.Mock)
       .mockResolvedValueOnce(mockService) // findOne for findOne(id)
       .mockResolvedValueOnce(undefined); // findOne for duplicate check
-    (sectorRepo.findOne as jest.Mock).mockResolvedValueOnce({ id: 'uuid-sector' });
+    (sectorRepo.findOne as jest.Mock).mockResolvedValueOnce({
+      id: 'uuid-sector',
+    });
     const updated = await service.update(
       'uuid-service',
       {

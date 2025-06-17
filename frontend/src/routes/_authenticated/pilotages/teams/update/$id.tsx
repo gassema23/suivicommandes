@@ -1,4 +1,3 @@
-import LoadingPage from "@/components/ui/loader/LoadingPage";
 import FormError from "@/components/ui/shadcn/form-error";
 import { QUERY_KEYS } from "@/constants/query-key.constant";
 import { createPermissionGuard } from "@/shared/authorizations/helpers/createPermissionGuard";
@@ -7,6 +6,7 @@ import TeamUpdateForm from "@/features/teams/components/TeamUpdateForm";
 import { fetchTeam } from "@/features/teams/services/fetch-team.service";
 import { queryOptions, useSuspenseQuery } from "@tanstack/react-query";
 import { createFileRoute, useParams } from "@tanstack/react-router";
+import LoadingForm from "@/components/ui/loader/LoadingForm";
 
 const teamsQueryOptions = (id: string) =>
   queryOptions({
@@ -18,8 +18,6 @@ export const Route = createFileRoute(
   "/_authenticated/pilotages/teams/update/$id"
 )({
   beforeLoad: createPermissionGuard([PERMISSIONS.TEAMS.UPDATE]),
-  loader: ({ context, params }) =>
-    context.queryClient.ensureQueryData(teamsQueryOptions(params.id)),
   head: () => ({
     meta: [{ title: "Modifier l'équipe" }],
   }),
@@ -36,8 +34,7 @@ export const Route = createFileRoute(
       },
     ],
   },
-
-  pendingComponent: () => <LoadingPage />,
+  pendingComponent: () => <LoadingForm rows={3} />,
   component: RouteComponent,
 });
 

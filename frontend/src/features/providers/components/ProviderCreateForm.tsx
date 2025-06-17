@@ -16,6 +16,7 @@ import { FormActions } from "@/components/forms/components/FormActions";
 import InputContainer from "@/components/forms/components/InputContainer";
 import { providerFields } from "../configs/provider-fields";
 import { SUCCESS_MESSAGES } from "@/constants/messages.constant";
+import { formatErrorMessage } from "@/lib/utils";
 
 export default function ProviderCreateForm() {
   const [backendError, setBackendError] = useState<string | null>(null);
@@ -45,7 +46,7 @@ export default function ProviderCreateForm() {
       navigate({ to: "/pilotages/providers", search: { page: 1 } });
     },
     onError: (error: { message: string }) => {
-      setBackendError(error.message);
+      setBackendError(formatErrorMessage(error));
     },
   });
   const onSubmit = (data: ProviderFormData) => {
@@ -65,6 +66,7 @@ export default function ProviderCreateForm() {
           label={field.label}
           error={errors[field.name]?.message}
           htmlFor={field.name}
+          required={field.required}
         >
           <Input
             type={field.type}

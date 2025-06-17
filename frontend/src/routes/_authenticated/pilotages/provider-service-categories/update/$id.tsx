@@ -1,4 +1,3 @@
-import LoadingPage from "@/components/ui/loader/LoadingPage";
 import FormError from "@/components/ui/shadcn/form-error";
 import { QUERY_KEYS } from "@/constants/query-key.constant";
 import { createPermissionGuard } from "@/shared/authorizations/helpers/createPermissionGuard";
@@ -7,6 +6,7 @@ import ProviderServiceCategoryUpdateForm from "@/features/provider-service-categ
 import { fetchProviderServiceCategory } from "@/features/provider-service-categories/services/fetch-provider-service-category.service";
 import { queryOptions, useSuspenseQuery } from "@tanstack/react-query";
 import { createFileRoute, useParams } from "@tanstack/react-router";
+import LoadingForm from "@/components/ui/loader/LoadingForm";
 
 const providerServiceCategoriesQueryOptions = (id: string) =>
   queryOptions({
@@ -20,14 +20,9 @@ export const Route = createFileRoute(
   beforeLoad: createPermissionGuard([
     PERMISSIONS.PROVIDER_SERVICE_CATEGORIES.UPDATE,
   ]),
-  loader: ({ context, params }) =>
-    context.queryClient.ensureQueryData(
-      providerServiceCategoriesQueryOptions(params.id)
-    ),
   head: () => ({
     meta: [{ title: "Modifier l'association fournisseur & service" }],
   }),
-  errorComponent: ({ error }) => <FormError message={error.message} />,
   staticData: {
     title: "Modifier l'association fournisseur & service",
     breadcrumb: [
@@ -43,8 +38,8 @@ export const Route = createFileRoute(
       },
     ],
   },
-
-  pendingComponent: () => <LoadingPage />,
+  errorComponent: ({ error }) => <FormError message={error.message} />,
+  pendingComponent: () => <LoadingForm rows={4} />,
   component: RouteComponent,
 });
 

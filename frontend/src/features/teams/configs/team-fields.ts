@@ -1,8 +1,11 @@
-export const teamFields = [
+import type { FieldConfig } from "@/types/field.type";
+import type { TeamFormData } from "../schemas/team.schema";
+
+export const teamFields: FieldConfig<TeamFormData>[] = [
   {
     name: "ownerId",
     label: "Propriétaire",
-    component: "select",
+    component: "select-team-owner",
     placeholder: "Sélectionner un propriétaire",
   },
   {

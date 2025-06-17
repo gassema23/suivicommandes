@@ -8,7 +8,7 @@ export async function subdivisionClientSeed(
   dataSource: DataSource,
   factoryManager: SeederFactoryManager,
   count: number,
-  clients: Client[]
+  clients: Client[],
 ): Promise<SubdivisionClient[]> {
   const subdivisionClientBar = new cliProgress.SingleBar(
     { format: '{bar} | {name} | {value}/{total}' },

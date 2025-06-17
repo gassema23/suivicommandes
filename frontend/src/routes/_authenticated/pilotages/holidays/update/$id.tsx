@@ -1,4 +1,3 @@
-import LoadingPage from "@/components/ui/loader/LoadingPage";
 import FormError from "@/components/ui/shadcn/form-error";
 import { QUERY_KEYS } from "@/constants/query-key.constant";
 import { createPermissionGuard } from "@/shared/authorizations/helpers/createPermissionGuard";
@@ -7,6 +6,7 @@ import HolidayUpdateForm from "@/features/holidays/components/holidayUpdateForm"
 import { fetchHoliday } from "@/features/holidays/services/fetch-holiday.service";
 import { queryOptions, useSuspenseQuery } from "@tanstack/react-query";
 import { createFileRoute, useParams } from "@tanstack/react-router";
+import LoadingForm from "@/components/ui/loader/LoadingForm";
 
 const holidaysQueryOptions = (id: string) =>
   queryOptions({
@@ -18,9 +18,6 @@ export const Route = createFileRoute(
   "/_authenticated/pilotages/holidays/update/$id"
 )({
   beforeLoad: createPermissionGuard([PERMISSIONS.HOLIDAYS.UPDATE]),
-
-  loader: ({ context, params }) =>
-    context.queryClient.ensureQueryData(holidaysQueryOptions(params.id)),
   head: () => ({
     meta: [{ title: "Modifier le jour férié" }],
   }),
@@ -37,8 +34,7 @@ export const Route = createFileRoute(
       },
     ],
   },
-
-  pendingComponent: () => <LoadingPage />,
+  pendingComponent: () => <LoadingForm rows={3} />,
   component: RouteComponent,
 });
 

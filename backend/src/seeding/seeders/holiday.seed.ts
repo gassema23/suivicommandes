@@ -13,7 +13,7 @@ export async function holidaySeed(
     cliProgress.Presets.shades_classic,
   );
   holidayBar.start(count, 0, { name: 'Holiday' });
-1
+  1;
   const holidayFactory = factoryManager.get(Holiday);
   const holidays: Holiday[] = [];
   for (let i = 0; i < count; i++) {

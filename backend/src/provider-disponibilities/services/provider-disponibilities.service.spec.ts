@@ -8,7 +8,8 @@ import { ProviderDisponibilitiesService } from './provider-disponibilities.servi
 const mockProviderDisponibility = {
   id: 'uuid-provider-disponibility',
   providerDisponibilityName: 'Test provider disponibility',
-  providerDisponibilityDescription: 'Description of test provider disponibility',
+  providerDisponibilityDescription:
+    'Description of test provider disponibility',
 };
 
 describe('ProviderDisponibilitiesService', () => {
@@ -22,19 +23,29 @@ describe('ProviderDisponibilitiesService', () => {
         {
           provide: getRepositoryToken(ProviderDisponibility),
           useValue: {
-            findAndCount: jest.fn().mockResolvedValue([[mockProviderDisponibility], 1]),
+            findAndCount: jest
+              .fn()
+              .mockResolvedValue([[mockProviderDisponibility], 1]),
             find: jest.fn().mockResolvedValue([mockProviderDisponibility]),
             findOne: jest.fn(),
             create: jest.fn().mockImplementation((dto) => dto),
-            save: jest.fn().mockImplementation((providerDisponibility) => providerDisponibility),
+            save: jest
+              .fn()
+              .mockImplementation(
+                (providerDisponibility) => providerDisponibility,
+              ),
             softDelete: jest.fn(),
           },
         },
       ],
     }).compile();
 
-    service = module.get<ProviderDisponibilitiesService>(ProviderDisponibilitiesService);
-    repo = module.get<Repository<ProviderDisponibility>>(getRepositoryToken(ProviderDisponibility));
+    service = module.get<ProviderDisponibilitiesService>(
+      ProviderDisponibilitiesService,
+    );
+    repo = module.get<Repository<ProviderDisponibility>>(
+      getRepositoryToken(ProviderDisponibility),
+    );
   });
 
   it('should be defined', () => {
@@ -51,21 +62,27 @@ describe('ProviderDisponibilitiesService', () => {
     (repo.findOne as jest.Mock).mockResolvedValueOnce(undefined);
     const dto = {
       providerDisponibilityName: 'Test provider disponibility',
-      providerDisponibilityDescription: 'Description of test provider disponibility',
+      providerDisponibilityDescription:
+        'Description of test provider disponibility',
     };
     const created = await service.create(dto, 'user-provider');
-    expect(created.providerDisponibilityName).toBe('Test provider disponibility');
+    expect(created.providerDisponibilityName).toBe(
+      'Test provider disponibility',
+    );
     expect(repo.create).toHaveBeenCalled();
     expect(repo.save).toHaveBeenCalled();
   });
 
   it('should throw if provider disponibility already exists on create', async () => {
-    (repo.findOne as jest.Mock).mockResolvedValueOnce(mockProviderDisponibility);
+    (repo.findOne as jest.Mock).mockResolvedValueOnce(
+      mockProviderDisponibility,
+    );
     await expect(
       service.create(
         {
           providerDisponibilityName: 'Test provider disponibility',
-          providerDisponibilityDescription: 'Description of test provider disponibility',
+          providerDisponibilityDescription:
+            'Description of test provider disponibility',
         },
         'user-provider',
       ),
@@ -73,8 +90,12 @@ describe('ProviderDisponibilitiesService', () => {
   });
 
   it('should find one provider disponibility', async () => {
-    (repo.findOne as jest.Mock).mockResolvedValueOnce(mockProviderDisponibility);
-    const providerDisponibility = await service.findOne('uuid-provider-disponibility');
+    (repo.findOne as jest.Mock).mockResolvedValueOnce(
+      mockProviderDisponibility,
+    );
+    const providerDisponibility = await service.findOne(
+      'uuid-provider-disponibility',
+    );
     expect(providerDisponibility).toEqual(mockProviderDisponibility);
   });
 
@@ -118,7 +139,9 @@ describe('ProviderDisponibilitiesService', () => {
   });
 
   it('should remove a provider disponibility', async () => {
-    (repo.findOne as jest.Mock).mockResolvedValueOnce(mockProviderDisponibility);
+    (repo.findOne as jest.Mock).mockResolvedValueOnce(
+      mockProviderDisponibility,
+    );
     await expect(
       service.remove('uuid-provider-disponibility', 'user-provider'),
     ).resolves.toBeUndefined();

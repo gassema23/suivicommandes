@@ -1,9 +1,11 @@
+import type { FieldConfig } from "@/types/field.type";
+import type { ServiceFormData } from "../schemas/service.schema";
 
-export const serviceFields = [
+export const serviceFields: FieldConfig<ServiceFormData>[] = [
   {
     name: "sectorId",
     label: "Secteur",
-    component: "select",
+    component: "select-sector",
     placeholder: "Sélectionner un secteur",
     required: true,
   },

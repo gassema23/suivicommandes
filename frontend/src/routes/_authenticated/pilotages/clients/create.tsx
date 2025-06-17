@@ -26,7 +26,7 @@ export const Route = createFileRoute(
       },
     ],
   },
-  pendingComponent: () => <LoadingForm />,
+  pendingComponent: () => <LoadingForm rows={2}/>,
 });
 
 function RouteComponent() {

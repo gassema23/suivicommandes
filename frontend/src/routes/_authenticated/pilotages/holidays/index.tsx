@@ -1,4 +1,3 @@
-import LoadingPage from "@/components/ui/loader/LoadingPage";
 import { DeleteModal } from "@/components/ui/quebec/DeleteModal";
 import FormError from "@/components/ui/shadcn/form-error";
 import { createPermissionGuard } from "@/shared/authorizations/helpers/createPermissionGuard";
@@ -17,6 +16,7 @@ import type { HolidayResponse } from "@/features/holidays/types/holiday.type";
 import { QUERY_KEYS } from "@/constants/query-key.constant";
 import { SUCCESS_MESSAGES } from "@/constants/messages.constant";
 import { toast } from "sonner";
+import LoadingTable from "@/components/ui/loader/LoadingTable";
 
 const holidaysQueryOptions = (pageNumber: number) =>
   queryOptions<HolidayResponse>({
@@ -32,12 +32,6 @@ export const Route = createFileRoute("/_authenticated/pilotages/holidays/")({
   validateSearch: (search) => ({
     page: Number(search.page ?? 1),
   }),
-  loader: (args) => {
-    const { context, search } = args as any;
-    return context.queryClient.ensureQueryData(
-      holidaysQueryOptions(Number(search?.page ?? "1"))
-    );
-  },
   errorComponent: ({ error }) => <FormError message={error.message} />,
   staticData: {
     title: "Jour férié",
@@ -47,7 +41,7 @@ export const Route = createFileRoute("/_authenticated/pilotages/holidays/")({
       { label: "Jour férié", href: "/pilotages/holidays", isCurrent: true },
     ],
   },
-  pendingComponent: () => <LoadingPage />,
+  pendingComponent: () => <LoadingTable rows={10} columns={4} />,
   component: RouteComponent,
 });
 

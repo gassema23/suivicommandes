@@ -140,7 +140,9 @@ export class ServiceCategoriesService {
     return serviceCategory;
   }
 
-  async getRequestTypeServiceCategory(id: string): Promise<RequestTypeServiceCategory[]> {
+  async getRequestTypeServiceCategory(
+    id: string,
+  ): Promise<RequestTypeServiceCategory[]> {
     const serviceCategory = await this.serviceCategoryRepository.findOne({
       where: { id },
       relations: [

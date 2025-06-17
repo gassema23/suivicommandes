@@ -1,4 +1,7 @@
-export const requestTypeFields = [
+import type { FieldConfig } from "@/types/field.type";
+import type { RequestTypeFormData } from "../schemas/request-type.schema";
+
+export const requestTypeFields: FieldConfig<RequestTypeFormData>[] = [
   {
     name: "requestTypeName",
     label: "Type de demande",

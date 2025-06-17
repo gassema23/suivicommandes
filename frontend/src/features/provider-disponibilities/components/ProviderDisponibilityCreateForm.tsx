@@ -17,6 +17,7 @@ import { toast } from "sonner";
 import { QUERY_KEYS } from "@/constants/query-key.constant";
 import { createProviderDisponibility } from "../services/create-provider-disponibility.service";
 import { SUCCESS_MESSAGES } from "@/constants/messages.constant";
+import { formatErrorMessage } from "@/lib/utils";
 
 export default function ProviderDisponibilityCreateForm() {
   const [backendError, setBackendError] = useState<string | null>(null);
@@ -53,7 +54,7 @@ export default function ProviderDisponibilityCreateForm() {
       });
     },
     onError: (error: { message: string }) => {
-      setBackendError(error.message);
+      setBackendError(formatErrorMessage(error));
     },
   });
   const onSubmit = (data: ProviderDisponibilityFormData) => {
@@ -73,6 +74,7 @@ export default function ProviderDisponibilityCreateForm() {
           label={field.label}
           error={errors[field.name]?.message}
           htmlFor={field.name}
+          required={field.required}
         >
           {field.component === "input" && (
             <Input

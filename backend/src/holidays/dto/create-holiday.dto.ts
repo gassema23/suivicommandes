@@ -1,9 +1,4 @@
-import {
-  IsString,
-  MaxLength,
-  IsOptional,
-  IsDate,
-} from 'class-validator';
+import { IsString, MaxLength, IsOptional, IsDate } from 'class-validator';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { Transform } from 'class-transformer';
 
@@ -15,8 +10,12 @@ export class CreateHolidayDto {
 
   @ApiPropertyOptional({ example: 'Noël', description: 'Nom du jour férié' })
   @IsOptional()
-  @IsString({ message: 'Le nom du jour férié doit être une chaîne de caractères.' })
-  @MaxLength(125, { message: 'Le nom du jour férié ne doit pas dépasser 125 caractères.' })
+  @IsString({
+    message: 'Le nom du jour férié doit être une chaîne de caractères.',
+  })
+  @MaxLength(125, {
+    message: 'Le nom du jour férié ne doit pas dépasser 125 caractères.',
+  })
   holidayName?: string;
 
   @ApiPropertyOptional({
@@ -24,7 +23,12 @@ export class CreateHolidayDto {
     description: 'Description du jour férié',
   })
   @IsOptional()
-  @IsString({ message: 'La description du jour férié doit être une chaîne de caractères.' })
-  @MaxLength(500, { message: 'La description du jour férié ne doit pas dépasser 500 caractères.' })
+  @IsString({
+    message: 'La description du jour férié doit être une chaîne de caractères.',
+  })
+  @MaxLength(500, {
+    message:
+      'La description du jour férié ne doit pas dépasser 500 caractères.',
+  })
   holidayDescription?: string;
 }

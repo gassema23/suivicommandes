@@ -1,4 +1,7 @@
-export const requestTypeDelayFields = [
+import type { FieldConfig } from "@/types/field.type";
+import type { RequestTypeDelayFormData } from "../schemas/request-type-delay.schema";
+
+export const requestTypeDelayFields: FieldConfig<RequestTypeDelayFormData>[] = [
   {
     name: "sectorId",
     label: "Secteur",

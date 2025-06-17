@@ -66,14 +66,16 @@ import { DeliverableDelayFlowsModule } from './deliverable-delay-flows/deliverab
           format: winston.format.combine(
             winston.format.timestamp(),
             winston.format.colorize({ all: true }),
-            winston.format.printf(({ timestamp, level, message, context, trace }) => {
-              return `${timestamp} [${context || 'Application'}] ${level}: ${message}${
-                trace ? `\n${trace}` : ''
-              }`;
-            }),
+            winston.format.printf(
+              ({ timestamp, level, message, context, trace }) => {
+                return `${timestamp} [${context || 'Application'}] ${level}: ${message}${
+                  trace ? `\n${trace}` : ''
+                }`;
+              },
+            ),
           ),
         }),
-        
+
         // Fichier de logs pour les erreurs
         new winston.transports.File({
           filename: 'logs/error.log',
@@ -86,7 +88,7 @@ import { DeliverableDelayFlowsModule } from './deliverable-delay-flows/deliverab
           maxsize: 5242880, // 5MB
           maxFiles: 5,
         }),
-        
+
         // Fichier de logs combiné
         new winston.transports.File({
           filename: 'logs/combined.log',

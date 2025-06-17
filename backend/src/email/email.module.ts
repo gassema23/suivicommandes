@@ -37,7 +37,6 @@ import { strict } from 'assert';
             defaultLayout: 'main',
           },
         },
-
       }),
     }),
     BullModule.registerQueue({

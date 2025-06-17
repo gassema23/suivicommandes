@@ -18,6 +18,7 @@ import { Input } from "@/components/ui/shadcn/input";
 import { Textarea } from "@/components/ui/shadcn/textarea";
 import { FormActions } from "@/components/forms/components/FormActions";
 import { SUCCESS_MESSAGES } from "@/constants/messages.constant";
+import { formatErrorMessage } from "@/lib/utils";
 
 interface ProviderDisponibilityFormProps {
   providerDisponibility: ProviderDisponibility;
@@ -51,14 +52,16 @@ export default function ProviderDisponibilityUpdateForm({
     onSuccess: () => {
       setBackendError(null);
       toast.success(SUCCESS_MESSAGES.update("Disponibilité fournisseur"));
-      queryClient.invalidateQueries({ queryKey: QUERY_KEYS.DELIVERABLES });
+      queryClient.invalidateQueries({
+        queryKey: QUERY_KEYS.PROVIDER_DISPONIBILITIES,
+      });
       navigate({
         to: "/pilotages/provider-disponibilities",
         search: { page: 1 },
       });
     },
     onError: (error: { message: string }) => {
-      setBackendError(error.message);
+      setBackendError(formatErrorMessage(error));
     },
   });
 
@@ -78,6 +81,7 @@ export default function ProviderDisponibilityUpdateForm({
           label={field.label}
           error={errors[field.name]?.message}
           htmlFor={field.name}
+          required={field.required}
         >
           {field.component === "input" && (
             <Input

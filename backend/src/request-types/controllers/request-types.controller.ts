@@ -145,7 +145,7 @@ export class RequestTypesController {
    * @param currentUser - The user deleting the request type.
    * @returns A success message indicating the request type was deleted.
    */
-  @Delete()
+  @Delete(':id')
   @Permissions([{ resource: Resource.REQUEST_TYPES, actions: [Action.DELETE] }])
   @ApiOperation({ summary: 'Supprimer un type de demande' })
   @ApiResponse({

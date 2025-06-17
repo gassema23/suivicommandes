@@ -9,6 +9,6 @@ import { DelayType } from './entities/delay-type.entity';
   imports: [TypeOrmModule.forFeature([DelayType]), AuthModule],
   controllers: [DelayTypesController],
   providers: [DelayTypesService],
-  exports: [DelayTypesService]
+  exports: [DelayTypesService],
 })
 export class DelayTypesModule {}

@@ -9,7 +9,9 @@ describe('DeliverableDelayFlowsService', () => {
       providers: [DeliverableDelayFlowsService],
     }).compile();
 
-    service = module.get<DeliverableDelayFlowsService>(DeliverableDelayFlowsService);
+    service = module.get<DeliverableDelayFlowsService>(
+      DeliverableDelayFlowsService,
+    );
   });
 
   it('should be defined', () => {

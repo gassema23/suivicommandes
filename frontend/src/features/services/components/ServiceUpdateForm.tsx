@@ -88,7 +88,7 @@ export default function ServiceUpdateForm({ service }: ServiceUpdateFormProps) {
           htmlFor={field.name}
           required={field?.required}
         >
-          {field.component === "select" && (
+          {field.component === "select-sector" && (
             <DependentSelect
               value={watch("sectorId")}
               onChange={(value) => setValue("sectorId", value)}

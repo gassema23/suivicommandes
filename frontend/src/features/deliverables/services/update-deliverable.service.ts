@@ -4,7 +4,7 @@ import { apiFetch } from "@/hooks/useApiFetch";
 
 export async function updateDeliverable(id: string, data: DeliverableFormData) {
   const res = await apiFetch(`${API_ROUTE}/deliverables/${id}`, {
-    method: "POST",
+    method: "PATCH",
     body: JSON.stringify(data),
   });
 

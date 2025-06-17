@@ -1,4 +1,3 @@
-import LoadingPage from "@/components/ui/loader/LoadingPage";
 import FormError from "@/components/ui/shadcn/form-error";
 import { QUERY_KEYS } from "@/constants/query-key.constant";
 import { createPermissionGuard } from "@/shared/authorizations/helpers/createPermissionGuard";
@@ -7,6 +6,7 @@ import FlowUpdateForm from "@/features/flows/components/FlowUpdateForm";
 import { fetchFlow } from "@/features/flows/services/fetch-flow.service";
 import { queryOptions, useSuspenseQuery } from "@tanstack/react-query";
 import { createFileRoute, useParams } from "@tanstack/react-router";
+import LoadingForm from "@/components/ui/loader/LoadingForm";
 
 const flowQueryOptions = (id: string) =>
   queryOptions({
@@ -18,8 +18,6 @@ export const Route = createFileRoute(
   "/_authenticated/pilotages/flows/update/$id"
 )({
   beforeLoad: createPermissionGuard([PERMISSIONS.FLOWS.UPDATE]),
-  loader: ({ context, params }) =>
-    context.queryClient.ensureQueryData(flowQueryOptions(params.id)),
   head: () => ({
     meta: [{ title: "Modifier le flux de transmission" }],
   }),
@@ -36,8 +34,7 @@ export const Route = createFileRoute(
       },
     ],
   },
-
-  pendingComponent: () => <LoadingPage />,
+  pendingComponent: () => <LoadingForm rows={2} />,
   component: RouteComponent,
 });
 

@@ -12,7 +12,6 @@ export async function providerServiceCategorySeed(
   providers: Provider[],
   serviceCategories: ServiceCategory[],
 ): Promise<ProviderServiceCategory[]> {
-
   const bar = new cliProgress.SingleBar(
     { format: '{bar} | {name} | {value}/{total}' },
     cliProgress.Presets.shades_classic,
@@ -24,12 +23,15 @@ export async function providerServiceCategorySeed(
   for (let i = 0; i < count; i++) {
     const providerServiceCategory = await pscFactory.make({
       provider: providers[Math.floor(Math.random() * providers.length)],
-      serviceCategory: serviceCategories[Math.floor(Math.random() * serviceCategories.length)],
+      serviceCategory:
+        serviceCategories[Math.floor(Math.random() * serviceCategories.length)],
     });
     providerServiceCategories.push(providerServiceCategory);
     bar.update(i + 1);
   }
-  await dataSource.getRepository(ProviderServiceCategory).save(providerServiceCategories);
+  await dataSource
+    .getRepository(ProviderServiceCategory)
+    .save(providerServiceCategories);
   bar.stop();
   return providerServiceCategories;
 }

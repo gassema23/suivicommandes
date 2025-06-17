@@ -16,6 +16,7 @@ import InputContainer from "@/components/forms/components/InputContainer";
 import { teamFields } from "../configs/team-fields";
 import { DependentSelect } from "@/components/dependant-select/components/DependentSelect";
 import { FormActions } from "@/components/forms/components/FormActions";
+import { formatErrorMessage } from "@/lib/utils";
 
 export default function TeamCreateForm() {
   const [backendError, setBackendError] = useState<string | null>(null);
@@ -57,7 +58,7 @@ export default function TeamCreateForm() {
       navigate({ to: "/pilotages/teams", search: { page: 1 } });
     },
     onError: (error: { message: string }) => {
-      setBackendError(error.message);
+      setBackendError(formatErrorMessage(error));
     },
   });
   const onSubmit = (data: TeamFormData) => {
@@ -78,7 +79,7 @@ export default function TeamCreateForm() {
           error={errors[field.name]?.message}
           htmlFor={field.name}
         >
-          {field.component === "select" && (
+          {field.component === "select-team-owner" && (
             <DependentSelect
               value={watch("ownerId")}
               onChange={(value) => setValue("ownerId", value)}

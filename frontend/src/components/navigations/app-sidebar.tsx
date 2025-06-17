@@ -1,27 +1,18 @@
 import {
   Sidebar,
   SidebarContent,
-  SidebarGroup,
   SidebarGroupContent,
-  SidebarGroupLabel,
   SidebarHeader,
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
   SidebarRail,
 } from "@/components/ui/shadcn/sidebar";
-import {
-  Collapsible,
-  CollapsibleContent,
-  CollapsibleTrigger,
-} from "@/components/ui/shadcn/collapsible";
-import { ChevronDown } from "lucide-react";
 import { sidebarMenu } from "./config/sidebar-menu";
 import AppLogo from "@/components/ui/quebec/AppLogo";
 import { usePermissions } from "../../shared/authorizations/hooks/usePermissions";
 import { ProtectedNavLink } from "../../shared/authorizations/components/ProtectedNavLink";
 import type { ComponentProps } from "react";
-import { useRouter } from "@tanstack/react-router";
 import { GroupCollapsible } from "./components/GroupCollapsible";
 
 type Permission = {

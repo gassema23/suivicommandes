@@ -1,4 +1,3 @@
-import LoadingPage from "@/components/ui/loader/LoadingPage";
 import FormError from "@/components/ui/shadcn/form-error";
 import { QUERY_KEYS } from "@/constants/query-key.constant";
 import { createPermissionGuard } from "@/shared/authorizations/helpers/createPermissionGuard";
@@ -7,6 +6,7 @@ import DelayTypeUpdateForm from "@/features/delay-types/components/DelayTypeUpda
 import { fetchDelayType } from "@/features/delay-types/services/fetch-delay-type.service";
 import { queryOptions, useSuspenseQuery } from "@tanstack/react-query";
 import { createFileRoute, useParams } from "@tanstack/react-router";
+import LoadingForm from "@/components/ui/loader/LoadingForm";
 
 const delayTypeQueryOptions = (id: string) =>
   queryOptions({
@@ -18,8 +18,6 @@ export const Route = createFileRoute(
   "/_authenticated/pilotages/delay-types/update/$id"
 )({
   beforeLoad: createPermissionGuard([PERMISSIONS.DELAY_TYPES.UPDATE]),
-  loader: ({ context, params }) =>
-    context.queryClient.ensureQueryData(delayTypeQueryOptions(params.id)),
   head: () => ({
     meta: [{ title: "Modifier le type de délai" }],
   }),
@@ -37,7 +35,7 @@ export const Route = createFileRoute(
     ],
   },
 
-  pendingComponent: () => <LoadingPage />,
+  pendingComponent: () => <LoadingForm rows={2} />,
   component: RouteComponent,
 });
 

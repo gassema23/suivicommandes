@@ -1,4 +1,7 @@
-export const requisitionTypeFields = [
+import type { FieldConfig } from "@/types/field.type";
+import type { RequisitionTypeFormData } from "../schemas/requisition-type.schema";
+
+export const requisitionTypeFields: FieldConfig<RequisitionTypeFormData>[] = [
   {
     name: "requisitionTypeName",
     label: "Type de réquisition",

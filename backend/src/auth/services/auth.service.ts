@@ -444,7 +444,7 @@ export class AuthService {
       maxAge: maxAgeRefreshToken,
     });
 
-    const decoded = this.jwtService.decode(accessToken) as { exp?: number };
+    const decoded = this.jwtService.decode(accessToken);
     if (decoded?.exp) {
       res.cookie('accessTokenExpiresAt', decoded.exp * 1000, {
         httpOnly: false,

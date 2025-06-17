@@ -122,8 +122,8 @@ describe('FlowsService', () => {
 
   it('should throw if flow not found on remove', async () => {
     (repo.findOne as jest.Mock).mockResolvedValueOnce(undefined);
-    await expect(
-      service.remove('not-exist', 'user-flow'),
-    ).rejects.toThrow(BadRequestException);
+    await expect(service.remove('not-exist', 'user-flow')).rejects.toThrow(
+      BadRequestException,
+    );
   });
 });

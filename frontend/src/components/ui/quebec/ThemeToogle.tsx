@@ -10,7 +10,16 @@ interface ThemeToggleProps {
 
 export function ThemeToggle({ className }: ThemeToggleProps) {
   const { theme, setTheme } = useTheme();
-  const isDark = theme === "dark";
+
+  const systemTheme =
+    typeof window !== "undefined" &&
+    window.matchMedia("(prefers-color-scheme: dark)").matches
+      ? "dark"
+      : "light";
+
+  const activeTheme = theme === "system" ? systemTheme : theme;
+
+  const isDark = activeTheme === "dark";
 
   return (
     <div
@@ -26,9 +35,7 @@ export function ThemeToggle({ className }: ThemeToggleProps) {
         <div
           className={cn(
             "flex justify-center items-center w-6 h-6 rounded-full transition-transform duration-300 bg-muted-foreground",
-            isDark
-              ? "transform translate-x-0"
-              : "transform translate-x-8"
+            isDark ? "transform translate-x-0" : "transform translate-x-8"
           )}
         >
           {isDark ? (

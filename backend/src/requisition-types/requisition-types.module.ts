@@ -9,6 +9,6 @@ import { RequisitionType } from './entities/requisition-type.entity';
   imports: [TypeOrmModule.forFeature([RequisitionType]), AuthModule],
   controllers: [RequisitionTypesController],
   providers: [RequisitionTypesService],
-  exports: [RequisitionTypesService]
+  exports: [RequisitionTypesService],
 })
 export class RequisitionTypesModule {}

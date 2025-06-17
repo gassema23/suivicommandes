@@ -17,6 +17,7 @@ import {
 } from "../schemas/requisition-type.schema";
 import { createRequisitionType } from "../services/create-requisition-type.service";
 import { requisitionTypeFields } from "../configs/requisition-type-fields";
+import { formatErrorMessage } from "@/lib/utils";
 
 export default function RequisitionTypeCreateForm() {
   const [backendError, setBackendError] = useState<string | null>(null);
@@ -47,7 +48,7 @@ export default function RequisitionTypeCreateForm() {
       navigate({ to: "/pilotages/requisition-types", search: { page: 1 } });
     },
     onError: (error: { message: string }) => {
-      setBackendError(error.message);
+      setBackendError(formatErrorMessage(error));
     },
   });
   const onSubmit = (data: RequisitionTypeFormData) => {

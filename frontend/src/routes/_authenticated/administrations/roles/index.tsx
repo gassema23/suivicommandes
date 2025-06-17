@@ -1,4 +1,3 @@
-import LoadingPage from "@/components/ui/loader/LoadingPage";
 import FormError from "@/components/ui/shadcn/form-error";
 import { queryOptions, useSuspenseQuery } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
@@ -9,6 +8,7 @@ import { RoleList } from "@/features/roles/components/RoleList";
 import type { RoleResponse } from "@/shared/roles/types/role.type";
 import { QUERY_KEYS } from "@/constants/query-key.constant";
 import { APP_NAME } from "@/constants/app-name.constant";
+import LoadingTable from "@/components/ui/loader/LoadingTable";
 
 const rolesQueryOptions = queryOptions<RoleResponse>({
   queryKey: QUERY_KEYS.ROLES,
@@ -23,8 +23,6 @@ export const Route = createFileRoute("/_authenticated/administrations/roles/")({
       { title: `Rôles | ${APP_NAME}` },
     ],
   }),
-  loader: ({ context }) =>
-    context.queryClient?.ensureQueryData(rolesQueryOptions),
   component: RolePage,
   errorComponent: ({ error }) => <FormError message={error.message} />,
   staticData: {
@@ -35,7 +33,7 @@ export const Route = createFileRoute("/_authenticated/administrations/roles/")({
       { label: "Rôles", href: "/administrations/roles", isCurrent: true },
     ],
   },
-  pendingComponent: () => <LoadingPage />,
+  pendingComponent: () => <LoadingTable rows={10} columns={4} />,
 });
 
 function RolePage() {

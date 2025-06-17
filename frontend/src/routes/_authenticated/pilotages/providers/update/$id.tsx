@@ -1,4 +1,3 @@
-import LoadingPage from "@/components/ui/loader/LoadingPage";
 import FormError from "@/components/ui/shadcn/form-error";
 import { QUERY_KEYS } from "@/constants/query-key.constant";
 import { createPermissionGuard } from "@/shared/authorizations/helpers/createPermissionGuard";
@@ -7,6 +6,7 @@ import ProviderUpdateForm from "@/features/providers/components/ProviderUpdateFo
 import { fetchProvider } from "@/features/providers/services/fetch-provider.service";
 import { queryOptions, useSuspenseQuery } from "@tanstack/react-query";
 import { createFileRoute, useParams } from "@tanstack/react-router";
+import LoadingForm from "@/components/ui/loader/LoadingForm";
 
 const providersQueryOptions = (id: string) =>
   queryOptions({
@@ -18,8 +18,6 @@ export const Route = createFileRoute(
   "/_authenticated/pilotages/providers/update/$id"
 )({
   beforeLoad: createPermissionGuard([PERMISSIONS.PROVIDERS.UPDATE]),
-  loader: ({ context, params }) =>
-    context.queryClient.ensureQueryData(providersQueryOptions(params.id)),
   head: () => ({
     meta: [{ title: "Modifier le fournisseur" }],
   }),
@@ -37,7 +35,7 @@ export const Route = createFileRoute(
     ],
   },
 
-  pendingComponent: () => <LoadingPage />,
+  pendingComponent: () => <LoadingForm rows={2} />,
   component: RouteComponent,
 });
 

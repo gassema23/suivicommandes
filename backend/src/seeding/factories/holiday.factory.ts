@@ -8,7 +8,6 @@ function capitalizeWords(str: string) {
 }
 
 export const HolidayFactory = setSeederFactory(Holiday, (faker) => {
-    
   const holiday = new Holiday();
   holiday.holidayName = capitalizeWords(faker.word.words(2));
 

@@ -94,7 +94,7 @@ async function refreshTokenRequest() {
 
 export function useAuthService() {
   const queryClient = useQueryClient();
-  
+
   const userQuery = useQuery<AuthUser | null>({
     queryKey: ["auth", "user"],
     queryFn: fetchUser,
@@ -103,14 +103,14 @@ export function useAuthService() {
   });
 
   const logoutMutation = useMutation({
-    mutationFn: logoutRequest,
-    onSuccess: () => {
-      Cookies.remove("accessTokenExpiresAt");
-      queryClient.removeQueries();
-      window.location.href = "/login";
-    },
-    onError: (error) => {
-      console.error("Erreur lors de la déconnexion", error);
+    mutationFn: async () => {
+      try {
+        await logoutRequest();
+      } catch (error) {
+        console.error("Logout failed:", error);
+      } finally {
+        window.location.href = "/login";
+      }
     },
   });
 

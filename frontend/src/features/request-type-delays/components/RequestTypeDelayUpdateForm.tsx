@@ -236,7 +236,17 @@ export default function RequestTypeDelayUpdateForm({
               control={form.control}
               name={field.name}
               render={({ field: { value, onChange, name } }) => (
-                <DateSlider value={value} onChange={onChange} name={name} />
+                <DateSlider
+                  value={
+                    typeof value === "string"
+                      ? value === ""
+                        ? undefined
+                        : Number(value)
+                      : value
+                  }
+                  onChange={onChange}
+                  name={name}
+                />
               )}
             />
           )}

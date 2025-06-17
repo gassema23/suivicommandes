@@ -47,8 +47,12 @@ describe('ProviderDisponibilitiesController', () => {
       ],
     }).compile();
 
-    controller = module.get<ProviderDisponibilitiesController>(ProviderDisponibilitiesController);
-    service = module.get<ProviderDisponibilitiesService>(ProviderDisponibilitiesService);
+    controller = module.get<ProviderDisponibilitiesController>(
+      ProviderDisponibilitiesController,
+    );
+    service = module.get<ProviderDisponibilitiesService>(
+      ProviderDisponibilitiesService,
+    );
 
     jest.clearAllMocks();
   });

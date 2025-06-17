@@ -112,10 +112,9 @@ describe('DelayTypesController', () => {
       new BadRequestException('Invalid data'),
     );
     await expect(
-      controller.create(
-        { delayTypeName: '', delayTypeDescription: '' },
-        { id: userId } as any,
-      ),
+      controller.create({ delayTypeName: '', delayTypeDescription: '' }, {
+        id: userId,
+      } as any),
     ).rejects.toThrow(BadRequestException);
   });
 

@@ -3,7 +3,7 @@ import { setSeederFactory } from 'typeorm-extension';
 
 export const SectorFactory = setSeederFactory(Sector, (faker) => {
   const sector = new Sector();
-  
+
   sector.sectorName = faker.company.name();
   sector.sectorClientTimeEnd = faker.date
     .soon()

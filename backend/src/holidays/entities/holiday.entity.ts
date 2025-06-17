@@ -13,13 +13,13 @@ import { User } from '../../users/entities/user.entity';
 import { IsDate, IsOptional, IsString, MaxLength } from 'class-validator';
 
 @Entity('holidays')
-@Index(['holidayName','holidayDate'])
+@Index(['holidayName', 'holidayDate'])
 @Index(['deletedAt'])
 export class Holiday {
   @PrimaryGeneratedColumn('uuid')
   readonly id: string;
 
-  @Column({ name: 'holiday_date', type: 'date' }) 
+  @Column({ name: 'holiday_date', type: 'date' })
   @IsDate()
   holidayDate: Date;
 
@@ -62,5 +62,4 @@ export class Holiday {
   @DeleteDateColumn({ name: 'deleted_at' })
   @IsOptional()
   readonly deletedAt?: Date;
-
 }

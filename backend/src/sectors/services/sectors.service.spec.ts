@@ -142,8 +142,8 @@ describe('SectorsService', () => {
       ...mockSector,
       services: [{ id: 'service1' }],
     });
-    await expect(
-      service.remove('uuid-sector', 'user-sector'),
-    ).rejects.toThrow(BadRequestException);
+    await expect(service.remove('uuid-sector', 'user-sector')).rejects.toThrow(
+      BadRequestException,
+    );
   });
 });

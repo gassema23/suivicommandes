@@ -1,4 +1,3 @@
-import LoadingPage from "@/components/ui/loader/LoadingPage";
 import { DeleteModal } from "@/components/ui/quebec/DeleteModal";
 import FormError from "@/components/ui/shadcn/form-error";
 import { createPermissionGuard } from "@/shared/authorizations/helpers/createPermissionGuard";
@@ -17,6 +16,7 @@ import type { ProviderServiceCategoryResponse } from "@/features/provider-servic
 import { QUERY_KEYS } from "@/constants/query-key.constant";
 import { toast } from "sonner";
 import { SUCCESS_MESSAGES } from "@/constants/messages.constant";
+import LoadingTable from "@/components/ui/loader/LoadingTable";
 
 const providerServiceCategoriesQueryOptions = (pageNumber: number) =>
   queryOptions<ProviderServiceCategoryResponse>({
@@ -36,12 +36,6 @@ export const Route = createFileRoute(
   validateSearch: (search) => ({
     page: Number(search.page ?? 1),
   }),
-  loader: (args) => {
-    const { context, search } = args as any;
-    return context.queryClient.ensureQueryData(
-      providerServiceCategoriesQueryOptions(Number(search?.page ?? "1"))
-    );
-  },
   errorComponent: ({ error }) => <FormError message={error.message} />,
   staticData: {
     title: "Fournisseurs par services",
@@ -55,7 +49,7 @@ export const Route = createFileRoute(
       },
     ],
   },
-  pendingComponent: () => <LoadingPage />,
+  pendingComponent: () => <LoadingTable rows={10} columns={4} />,
   component: RouteComponent,
 });
 
@@ -94,7 +88,7 @@ function RouteComponent() {
       <DeleteModal
         open={!!deleteId}
         onOpenChange={(open) => !open && setDeleteId(null)}
-        deleteUrl="provider-service-categories"
+        deletePageName="provider-service-categories"
         deleteId={deleteId}
         onSuccess={() => {
           setDeleteId(null);

@@ -1,4 +1,3 @@
-import LoadingPage from "@/components/ui/loader/LoadingPage";
 import { DeleteModal } from "@/components/ui/quebec/DeleteModal";
 import FormError from "@/components/ui/shadcn/form-error";
 import { QUERY_KEYS } from "@/constants/query-key.constant";
@@ -17,6 +16,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 import { toast } from "sonner";
 import { SUCCESS_MESSAGES } from "@/constants/messages.constant";
+import LoadingTable from "@/components/ui/loader/LoadingTable";
 
 const subdivisionClientsQueryOptions = (pageNumber: number) =>
   queryOptions<SubdivisionClientResponse>({
@@ -34,12 +34,6 @@ export const Route = createFileRoute(
   validateSearch: (search) => ({
     page: Number(search.page ?? 1),
   }),
-  loader: (args) => {
-    const { context, search } = args as any;
-    return context.queryClient.ensureQueryData(
-      subdivisionClientsQueryOptions(Number(search?.page ?? "1"))
-    );
-  },
   errorComponent: ({ error }) => <FormError message={error.message} />,
   staticData: {
     title: "Subdivisions clients",
@@ -53,7 +47,7 @@ export const Route = createFileRoute(
       },
     ],
   },
-  pendingComponent: () => <LoadingPage />,
+  pendingComponent: () => <LoadingTable rows={10} columns={4} />,
   component: RouteComponent,
 });
 
@@ -69,7 +63,6 @@ function RouteComponent() {
 
   const [deleteId, setDeleteId] = useState<string | null>(null);
   const queryClient = useQueryClient();
-  // Ajoute la fonction onDelete à chaque ligne
   const dataWithDelete = {
     ...subdivisionClients,
     data: (subdivisionClients.data ?? []).map((subdivisionClient) => ({
@@ -90,7 +83,7 @@ function RouteComponent() {
       <DeleteModal
         open={!!deleteId}
         onOpenChange={(open) => !open && setDeleteId(null)}
-        deleteUrl="subdivision-clients"
+        deletePageName="subdivision-clients"
         deleteId={deleteId}
         onSuccess={() => {
           setDeleteId(null);

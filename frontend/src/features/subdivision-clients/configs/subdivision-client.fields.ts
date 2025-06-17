@@ -1,4 +1,7 @@
-export const subdivisionClientFields = [
+import type { FieldConfig } from "@/types/field.type";
+import type { SubdivisionClientFormData } from "../schemas/subdivision-client.schema";
+
+export const subdivisionClientFields: FieldConfig<SubdivisionClientFormData>[] = [
   {
     name: "clientId",
     label: "Client",

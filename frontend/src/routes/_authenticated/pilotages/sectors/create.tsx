@@ -4,7 +4,7 @@ import { createPermissionGuard } from "@/shared/authorizations/helpers/createPer
 import { PERMISSIONS } from "@/shared/authorizations/types/auth.types";
 import SectorCreateForm from "@/features/sectors/components/SectorCreateForm";
 import type { SectorsResponse } from "@/shared/sectors/types/sector.type";
-import LoadingPage from "@/components/ui/loader/LoadingPage";
+import LoadingForm from "@/components/ui/loader/LoadingForm";
 
 export const Route = createFileRoute(
   "/_authenticated/pilotages/sectors/create"
@@ -27,7 +27,7 @@ export const Route = createFileRoute(
       },
     ],
   },
-  pendingComponent: () => <LoadingPage />,
+  pendingComponent: () => <LoadingForm rows={6} />,
 });
 
 function RouteComponent() {

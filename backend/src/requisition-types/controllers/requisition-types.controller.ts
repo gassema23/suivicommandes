@@ -137,7 +137,7 @@ export class RequisitionTypesController {
    * @param currentUser Utilisateur actuel effectuant la suppression
    * @returns Confirmation de la suppression
    */
-  @Delete()
+  @Delete(':id')
   @Permissions([
     { resource: Resource.REQUISITION_TYPES, actions: [Action.DELETE] },
   ])

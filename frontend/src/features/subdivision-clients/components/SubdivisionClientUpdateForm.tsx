@@ -17,6 +17,7 @@ import { FormActions } from "@/components/forms/components/FormActions";
 import { DependentSelect } from "@/components/dependant-select/components/DependentSelect";
 import InputContainer from "@/components/forms/components/InputContainer";
 import { subdivisionClientFields } from "../configs/subdivision-client.fields";
+import { formatErrorMessage } from "@/lib/utils";
 
 interface SubdivisionClientUpdateFormProps {
   subdivisionClient: SubdivisionClient;
@@ -66,7 +67,7 @@ export default function SubdivisionClientUpdateForm({
       navigate({ to: "/pilotages/subdivision-clients", search: { page: 1 } });
     },
     onError: (error: { message: string }) => {
-      setBackendError(error.message);
+      setBackendError(formatErrorMessage(error));
     },
   });
   const onSubmit = (data: SubdivisionClientFormData) => {

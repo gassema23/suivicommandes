@@ -1,4 +1,4 @@
-import LoadingPage from "@/components/ui/loader/LoadingPage";
+import LoadingForm from "@/components/ui/loader/LoadingForm";
 import FormError from "@/components/ui/shadcn/form-error";
 import RequisitionTypeCreateForm from "@/features/requisition-types/components/RequisitionTypeCreateForm";
 import { createFileRoute } from "@tanstack/react-router";
@@ -23,7 +23,7 @@ export const Route = createFileRoute(
       },
     ],
   },
-  pendingComponent: () => <LoadingPage />,
+  pendingComponent: () => <LoadingForm rows={2} />,
 });
 
 function RouteComponent() {

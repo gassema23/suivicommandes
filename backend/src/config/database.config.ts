@@ -11,7 +11,9 @@ dotenv.config();
 export const getDatabaseConfig = (): DataSourceOptions => ({
   type: 'postgres',
   host: process.env.POSTGRES_HOST,
-  port: process.env.POSTGRES_PORT ? parseInt(process.env.POSTGRES_PORT, 10) : 5432,
+  port: process.env.POSTGRES_PORT
+    ? parseInt(process.env.POSTGRES_PORT, 10)
+    : 5432,
   username: process.env.POSTGRES_USER,
   password: process.env.POSTGRES_PASSWORD,
   database: process.env.POSTGRES_DB,
@@ -31,7 +33,6 @@ export const getDatabaseConfig = (): DataSourceOptions => ({
     connectionTimeoutMillis: 10000,
   },
 });
-
 
 const AppDataSource = new DataSource(getDatabaseConfig());
 

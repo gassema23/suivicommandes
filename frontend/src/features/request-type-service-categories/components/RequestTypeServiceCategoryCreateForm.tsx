@@ -23,7 +23,7 @@ import DateSlider from "@/components/ui/quebec/DateSlider";
 import { fetchSectorsList } from "@/shared/sectors/services/fetch-sectors-list.service";
 import { fetchServicesBySector } from "@/shared/services/services/fetch-services-by-sector.service";
 import { fetchServiceCategoriesByService } from "@/shared/service-categories/services/fetch-service-category-by-service.service";
-import { getFieldError } from "@/lib/utils";
+import { formatErrorMessage, getFieldError } from "@/lib/utils";
 
 export default function RequestTypeServiceCategoryCreateForm() {
   const [backendError, setBackendError] = useState<string | null>(null);
@@ -67,7 +67,7 @@ export default function RequestTypeServiceCategoryCreateForm() {
       });
     },
     onError: (error: { message: string }) => {
-      setBackendError(error.message);
+      setBackendError(formatErrorMessage(error));
     },
   });
   const onSubmit = (data: RequestTypeServiceCategoryFormData) => {
@@ -193,7 +193,17 @@ export default function RequestTypeServiceCategoryCreateForm() {
               control={form.control}
               name={field.name}
               render={({ field: { value, onChange, name } }) => (
-                <DateSlider value={value} onChange={onChange} name={name} />
+                <DateSlider
+                  value={
+                    typeof value === "string"
+                      ? value === ""
+                        ? undefined
+                        : Number(value)
+                      : value
+                  }
+                  onChange={onChange}
+                  name={name}
+                />
               )}
             />
           )}

@@ -17,6 +17,7 @@ import { toast } from "sonner";
 import { QUERY_KEYS } from "@/constants/query-key.constant";
 import { createRequestType } from "../services/create-request-type.service";
 import { SUCCESS_MESSAGES } from "@/constants/messages.constant";
+import { formatErrorMessage } from "@/lib/utils";
 
 export default function RequestTypeCreateForm() {
   const [backendError, setBackendError] = useState<string | null>(null);
@@ -47,7 +48,7 @@ export default function RequestTypeCreateForm() {
       navigate({ to: "/pilotages/request-types", search: { page: 1 } });
     },
     onError: (error: { message: string }) => {
-      setBackendError(error.message);
+      setBackendError(formatErrorMessage(error));
     },
   });
   const onSubmit = (data: RequestTypeFormData) => {

@@ -3,7 +3,23 @@ export type FieldConfig<T extends object> = {
   label: string;
   type?: string;
   placeholder?: string;
-  component: "input" | "textarea" | "switch" | "date-picker" | "password";
+  component:
+    | "input"
+    | "textarea"
+    | "switch"
+    | "date-picker"
+    | "password"
+    | "slider"
+    | "select-sector"
+    | "select-service"
+    | "select-service-category"
+    | "select-provider"
+    | "select-request-type-service-category"
+    | "select-delay-type"
+    | "select-request-type"
+    | "select-client"
+    | "select-team-owner";
   rows?: number;
   required?: boolean;
+  min?: number;
 };

@@ -10,7 +10,7 @@ import {
   Index,
 } from 'typeorm';
 import { User } from '../../users/entities/user.entity';
-import { IsOptional, IsString,MaxLength } from 'class-validator';
+import { IsOptional, IsString, MaxLength } from 'class-validator';
 import { Client } from '../../clients/entities/client.entity';
 import { Expose } from 'class-transformer';
 
@@ -20,7 +20,6 @@ import { Expose } from 'class-transformer';
 export class SubdivisionClient {
   @PrimaryGeneratedColumn('uuid')
   readonly id: string;
-
 
   @ManyToOne(() => Client, (client) => client.subdivisionClients, {
     nullable: false,

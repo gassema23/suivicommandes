@@ -17,6 +17,7 @@ import { DependentSelect } from "@/components/dependant-select/components/Depend
 import { toast } from "sonner";
 import { SUCCESS_MESSAGES } from "@/constants/messages.constant";
 import { FormActions } from "@/components/forms/components/FormActions";
+import { formatErrorMessage } from "@/lib/utils";
 
 interface TeamUpdateFormProps {
   team: Team;
@@ -61,7 +62,7 @@ export default function TeamUpdateForm({ team }: TeamUpdateFormProps) {
       navigate({ to: "/pilotages/teams", search: { page: 1 } });
     },
     onError: (error: { message: string }) => {
-      setBackendError(error.message);
+      setBackendError(formatErrorMessage(error));
     },
   });
 
@@ -83,7 +84,7 @@ export default function TeamUpdateForm({ team }: TeamUpdateFormProps) {
           error={errors[field.name]?.message}
           htmlFor={field.name}
         >
-          {field.component === "select" && (
+          {field.component === "select-team-owner" && (
             <DependentSelect
               value={watch("ownerId")}
               onChange={(value) => setValue("ownerId", value)}

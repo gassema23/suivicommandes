@@ -1,4 +1,3 @@
-import LoadingPage from "@/components/ui/loader/LoadingPage";
 import { DeleteModal } from "@/components/ui/quebec/DeleteModal";
 import FormError from "@/components/ui/shadcn/form-error";
 import { createPermissionGuard } from "@/shared/authorizations/helpers/createPermissionGuard";
@@ -13,10 +12,11 @@ import {
 } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
-import type { ProviderResponse } from "@/features/providers/types/provider.type";
+import type { ProviderResponse } from "@/shared/providers/types/provider.type";
 import { QUERY_KEYS } from "@/constants/query-key.constant";
 import { toast } from "sonner";
 import { SUCCESS_MESSAGES } from "@/constants/messages.constant";
+import LoadingTable from "@/components/ui/loader/LoadingTable";
 
 const providersQueryOptions = (pageNumber: number) =>
   queryOptions<ProviderResponse>({
@@ -32,12 +32,6 @@ export const Route = createFileRoute("/_authenticated/pilotages/providers/")({
   validateSearch: (search) => ({
     page: Number(search.page ?? 1),
   }),
-  loader: (args) => {
-    const { context, search } = args as any;
-    return context.queryClient.ensureQueryData(
-      providersQueryOptions(Number(search?.page ?? "1"))
-    );
-  },
   errorComponent: ({ error }) => <FormError message={error.message} />,
   staticData: {
     title: "Fournisseurs",
@@ -47,7 +41,7 @@ export const Route = createFileRoute("/_authenticated/pilotages/providers/")({
       { label: "Fournisseurs", href: "/pilotages/providers", isCurrent: true },
     ],
   },
-  pendingComponent: () => <LoadingPage />,
+  pendingComponent: () => <LoadingTable rows={10} columns={4} />,
   component: RouteComponent,
 });
 
@@ -82,7 +76,7 @@ function RouteComponent() {
       <DeleteModal
         open={!!deleteId}
         onOpenChange={(open) => !open && setDeleteId(null)}
-        deleteUrl="providers"
+        deletePageName="providers"
         deleteId={deleteId}
         onSuccess={() => {
           setDeleteId(null);

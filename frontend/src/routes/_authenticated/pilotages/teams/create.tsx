@@ -1,9 +1,9 @@
-import LoadingPage from "@/components/ui/loader/LoadingPage";
 import FormError from "@/components/ui/shadcn/form-error";
 import { createPermissionGuard } from "@/shared/authorizations/helpers/createPermissionGuard";
 import { PERMISSIONS } from "@/shared/authorizations/types/auth.types";
 import TeamCreateForm from "@/features/teams/components/TeamCreateForm";
 import { createFileRoute } from "@tanstack/react-router";
+import LoadingForm from "@/components/ui/loader/LoadingForm";
 
 export const Route = createFileRoute("/_authenticated/pilotages/teams/create")({
   beforeLoad: createPermissionGuard([PERMISSIONS.TEAMS.CREATE]),
@@ -23,8 +23,7 @@ export const Route = createFileRoute("/_authenticated/pilotages/teams/create")({
       },
     ],
   },
-
-  pendingComponent: () => <LoadingPage />,
+  pendingComponent: () => <LoadingForm rows={3} />,
   component: RouteComponent,
 });
 

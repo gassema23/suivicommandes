@@ -1,4 +1,7 @@
-export const providerFields = [
+import type { FieldConfig } from "@/types/field.type";
+import type { ProviderFormData } from "../schemas/provider.schema";
+
+export const providerFields: FieldConfig<ProviderFormData>[] = [
   {
     name: "providerName",
     label: "Fournisseur",
@@ -13,6 +16,6 @@ export const providerFields = [
     component: "input",
     type: "text",
     placeholder: "Identifiant du fournisseur",
-    required: false,
+    required: true,
   },
 ];

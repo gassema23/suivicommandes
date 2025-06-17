@@ -1,4 +1,3 @@
-import LoadingPage from "@/components/ui/loader/LoadingPage";
 import FormError from "@/components/ui/shadcn/form-error";
 import { QUERY_KEYS } from "@/constants/query-key.constant";
 import { createPermissionGuard } from "@/shared/authorizations/helpers/createPermissionGuard";
@@ -7,6 +6,7 @@ import ProviderDisponibilityUpdateForm from "@/features/provider-disponibilities
 import { fetchProviderDisponibility } from "@/features/provider-disponibilities/services/fetch-provider-disponibility.service";
 import { queryOptions, useSuspenseQuery } from "@tanstack/react-query";
 import { createFileRoute, useParams } from "@tanstack/react-router";
+import LoadingForm from "@/components/ui/loader/LoadingForm";
 
 const providerDisponibilityQueryOptions = (id: string) =>
   queryOptions({
@@ -20,10 +20,6 @@ export const Route = createFileRoute(
   beforeLoad: createPermissionGuard([
     PERMISSIONS.PROVIDER_DISPONIBILITIES.UPDATE,
   ]),
-  loader: ({ context, params }) =>
-    context.queryClient.ensureQueryData(
-      providerDisponibilityQueryOptions(params.id)
-    ),
   head: () => ({
     meta: [{ title: "Modifier la disponibilité fournisseur" }],
   }),
@@ -43,8 +39,7 @@ export const Route = createFileRoute(
       },
     ],
   },
-
-  pendingComponent: () => <LoadingPage />,
+  pendingComponent: () => <LoadingForm rows={2} />,
   component: RouteComponent,
 });
 

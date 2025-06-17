@@ -2,19 +2,9 @@ import {
   Injectable,
   NotFoundException,
   ConflictException,
-  BadRequestException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import {
-  Repository,
-  FindOptionsWhere,
-  ILike,
-  IsNull,
-  Not,
-  In,
-  And,
-  Raw,
-} from 'typeorm';
+import { Repository, FindOptionsWhere, IsNull, Not, In } from 'typeorm';
 import * as bcrypt from 'bcryptjs';
 
 import { User } from '../entities/user.entity';
@@ -93,6 +83,7 @@ export class UsersService {
     const qb = this.userRepository
       .createQueryBuilder('user')
       .leftJoinAndSelect('user.team', 'team')
+      .leftJoinAndSelect('user.role', 'role')
       .leftJoinAndSelect('user.createdBy', 'createdBy')
       .skip(skip)
       .take(limit);

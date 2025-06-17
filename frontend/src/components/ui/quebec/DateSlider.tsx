@@ -1,7 +1,7 @@
 import { Slider } from "@/components/ui/shadcn/slider";
 
 interface DateSliderProps {
-  value: number | number[];
+  value: number | number[] | null | undefined;
   onChange: (value: number) => void;
   name: string;
   max?: number;
@@ -14,6 +14,8 @@ export default function DateSlider({
   max = 90,
 }: DateSliderProps) {
   const sliderValue = Array.isArray(value) ? value : [value ?? 1];
+
+  const min = 0;
   return (
     <>
       <div className="grid items-start grid-cols-12 w-full gap-x-4">
@@ -24,20 +26,22 @@ export default function DateSlider({
               value={sliderValue}
               onValueChange={(arr) => onChange(arr[0])}
               max={max}
-              min={1}
+              min={min}
               step={1}
               className="w-full"
             />
-            <div className="flex justify-between text-xs text-muted-foreground mt-1">
-              <span>1 jour</span>
-              <span>90 jours</span>
+            <div className="flex justify-between text-xs text-muted-foreground mt-1.5">
+              <span>{min} jour</span>
+              <span>{max} jours</span>
             </div>
           </div>
         </div>
         <div className="col-span-2">
-          <div className="text-sm text-muted-foreground text-end">
-            <span className="font-bold text-primary">{sliderValue[0]}</span>{" "}
-            jour{sliderValue[0] > 1 ? "s" : ""}
+          <div className="text-sm text-muted-foreground text-end flex items-center justify-end">
+            <span className="font-bold text-primary mr-2">
+              {sliderValue[0]}
+            </span>
+            <span>jour{sliderValue[0] > 1 ? "s" : ""}</span>
           </div>
         </div>
       </div>

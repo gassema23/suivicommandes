@@ -10,7 +10,6 @@ export async function serviceCategorySeed(
   count: number,
   services: Service[],
 ): Promise<ServiceCategory[]> {
-
   const serviceCategoryBar = new cliProgress.SingleBar(
     { format: '{bar} | {name} | {value}/{total}' },
     cliProgress.Presets.shades_classic,

@@ -22,7 +22,10 @@ describe('RequestTypeServiceCategoriesController', () => {
     minimumRequiredDelay: 2,
     serviceActivationDelay: 3,
     requestType: { id: 'uuid-request-type', requestTypeName: 'Type A' },
-    serviceCategory: { id: 'uuid-service-category', serviceCategoryName: 'Catégorie A' },
+    serviceCategory: {
+      id: 'uuid-service-category',
+      serviceCategoryName: 'Catégorie A',
+    },
   };
 
   const createDto = {
@@ -59,7 +62,9 @@ describe('RequestTypeServiceCategoriesController', () => {
     controller = module.get<RequestTypeServiceCategoriesController>(
       RequestTypeServiceCategoriesController,
     );
-    service = module.get<RequestTypeServiceCategoriesService>(RequestTypeServiceCategoriesService);
+    service = module.get<RequestTypeServiceCategoriesService>(
+      RequestTypeServiceCategoriesService,
+    );
 
     jest.clearAllMocks();
   });
@@ -85,7 +90,9 @@ describe('RequestTypeServiceCategoriesController', () => {
   });
 
   it('should return a request type service category by id', async () => {
-    expect(await controller.findOne(uuid)).toEqual(mockRequestTypeServiceCategory);
+    expect(await controller.findOne(uuid)).toEqual(
+      mockRequestTypeServiceCategory,
+    );
     expect(service.findOne).toHaveBeenCalledWith(uuid);
   });
 

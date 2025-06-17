@@ -8,7 +8,7 @@ export async function serviceSeed(
   dataSource: DataSource,
   factoryManager: SeederFactoryManager,
   count: number,
-  sectors: Sector[]
+  sectors: Sector[],
 ): Promise<Service[]> {
   const serviceBar = new cliProgress.SingleBar(
     { format: '{bar} | {name} | {value}/{total}' },

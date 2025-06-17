@@ -151,7 +151,7 @@ export class ProviderDisponibilitiesController {
    * @param currentUser - Utilisateur actuel effectuant l'action.
    * @returns Confirmation de la suppression.
    */
-  @Delete()
+  @Delete(':id')
   @Permissions([
     { resource: Resource.PROVIDER_DISPONIBILITIES, actions: [Action.DELETE] },
   ])
@@ -160,7 +160,10 @@ export class ProviderDisponibilitiesController {
     status: 200,
     description: 'Disponibilité fournisseur supprimée avec succès',
   })
-  async remove(@Body('id') id: string, @CurrentUser() currentUser: User) {
+  async remove(
+    @Param('id', UuidParamPipe) id: string,
+    @CurrentUser() currentUser: User,
+  ) {
     return this.providerDisponibilitiesService.remove(id, currentUser.id);
   }
 }

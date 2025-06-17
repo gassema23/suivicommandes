@@ -49,7 +49,10 @@ describe('DelayTypesService', () => {
 
   it('should create a delay type', async () => {
     (repo.findOne as jest.Mock).mockResolvedValueOnce(undefined);
-    const dto = { delayTypeName: 'Test delay type', delayTypeDescription: 'Description of test delay type' };
+    const dto = {
+      delayTypeName: 'Test delay type',
+      delayTypeDescription: 'Description of test delay type',
+    };
     const created = await service.create(dto, 'user-delay-type');
     expect(created.delayTypeName).toBe('Test delay type');
     expect(repo.create).toHaveBeenCalled();
@@ -59,7 +62,13 @@ describe('DelayTypesService', () => {
   it('should throw if delay type already exists on create', async () => {
     (repo.findOne as jest.Mock).mockResolvedValueOnce(mockDelayType);
     await expect(
-      service.create({ delayTypeName: 'Test delay type', delayTypeDescription: 'Description of test delay type' }, 'user-delay-type'),
+      service.create(
+        {
+          delayTypeName: 'Test delay type',
+          delayTypeDescription: 'Description of test delay type',
+        },
+        'user-delay-type',
+      ),
     ).rejects.toThrow(BadRequestException);
   });
 
@@ -71,7 +80,9 @@ describe('DelayTypesService', () => {
 
   it('should throw if delay type not found', async () => {
     (repo.findOne as jest.Mock).mockResolvedValueOnce(undefined);
-    await expect(service.findOne('not-exist')).rejects.toThrow(BadRequestException);
+    await expect(service.findOne('not-exist')).rejects.toThrow(
+      BadRequestException,
+    );
   });
 
   it('should update a delay type', async () => {
@@ -102,13 +113,17 @@ describe('DelayTypesService', () => {
 
   it('should remove a delay type', async () => {
     (repo.findOne as jest.Mock).mockResolvedValueOnce(mockDelayType);
-    await expect(service.remove('uuid-delay-type', 'user-delay-type')).resolves.toBeUndefined();
+    await expect(
+      service.remove('uuid-delay-type', 'user-delay-type'),
+    ).resolves.toBeUndefined();
     expect(repo.save).toHaveBeenCalled();
     expect(repo.softDelete).toHaveBeenCalledWith('uuid-delay-type');
   });
 
   it('should throw if delay type not found on remove', async () => {
     (repo.findOne as jest.Mock).mockResolvedValueOnce(undefined);
-    await expect(service.remove('not-exist', 'user-delay-type')).rejects.toThrow(BadRequestException);
+    await expect(
+      service.remove('not-exist', 'user-delay-type'),
+    ).rejects.toThrow(BadRequestException);
   });
 });

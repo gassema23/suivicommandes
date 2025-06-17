@@ -1,5 +1,5 @@
 import { DataTable } from "@/components/table/DataTable";
-import LoadingPage from "@/components/ui/loader/LoadingPage";
+import LoadingTable from "@/components/ui/loader/LoadingTable";
 import { DeleteModal } from "@/components/ui/quebec/DeleteModal";
 import FormError from "@/components/ui/shadcn/form-error";
 import { SUCCESS_MESSAGES } from "@/constants/messages.constant";
@@ -31,12 +31,6 @@ export const Route = createFileRoute("/_authenticated/pilotages/flows/")({
   validateSearch: (search) => ({
     page: Number(search.page ?? 1),
   }),
-  loader: (args) => {
-    const { context, search } = args as any;
-    return context.queryClient.ensureQueryData(
-      flowsQueryOptions(Number(search?.page ?? "1"))
-    );
-  },
   errorComponent: ({ error }) => <FormError message={error.message} />,
   staticData: {
     title: "Flux de transmission",
@@ -50,7 +44,7 @@ export const Route = createFileRoute("/_authenticated/pilotages/flows/")({
       },
     ],
   },
-  pendingComponent: () => <LoadingPage />,
+  pendingComponent: () => <LoadingTable rows={10} columns={4} />,
   component: RouteComponent,
 });
 

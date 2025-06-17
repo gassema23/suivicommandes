@@ -18,6 +18,7 @@ import {
 } from "../schemas/requisition-type.schema";
 import { requisitionTypeFields } from "../configs/requisition-type-fields";
 import { updateRequisitionType } from "../services/update-requisition-type.service";
+import { formatErrorMessage } from "@/lib/utils";
 
 interface RequisitionTypeFormProps {
   requisitionType: RequisitionType;
@@ -54,7 +55,7 @@ export default function RequisitionTypeUpdateForm({
       navigate({ to: "/pilotages/requisition-types", search: { page: 1 } });
     },
     onError: (error: { message: string }) => {
-      setBackendError(error.message);
+      setBackendError(formatErrorMessage(error));
     },
   });
 

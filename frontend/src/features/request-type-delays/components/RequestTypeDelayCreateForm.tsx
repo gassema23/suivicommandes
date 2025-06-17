@@ -77,7 +77,7 @@ export default function RequestTypeDelayCreateForm() {
   const serviceCategoryId = watch("serviceCategoryId");
 
   const {
-    data: sectors = [],
+    data: sectors,
     isLoading: isLoadingSectors,
     isError: isErrorSectors,
   } = useQuery({
@@ -86,7 +86,7 @@ export default function RequestTypeDelayCreateForm() {
   });
 
   const {
-    data: delayTypes = [],
+    data: delayTypes,
     isLoading: isLoadingDelayTypes,
     isError: isErrorDelayTypes,
   } = useQuery({
@@ -95,7 +95,7 @@ export default function RequestTypeDelayCreateForm() {
   });
 
   const {
-    data: services = [],
+    data: services,
     isLoading: isLoadingServices,
     isError: isErrorServices,
   } = useDependentQuery(
@@ -105,7 +105,7 @@ export default function RequestTypeDelayCreateForm() {
   );
 
   const {
-    data: serviceCategories = [],
+    data: serviceCategories,
     isLoading: isLoadingServiceCategories,
     isError: isErrorServiceCategories,
   } = useDependentQuery(
@@ -115,7 +115,7 @@ export default function RequestTypeDelayCreateForm() {
   );
 
   const {
-    data: requestTypeByServiceCategory = [],
+    data: requestTypeByServiceCategory,
     isLoading: isLoadingRequestTypeByServiceCategory,
     isError: isErrorRequestTypeByServiceCategory,
   } = useDependentQuery(
@@ -222,7 +222,17 @@ export default function RequestTypeDelayCreateForm() {
               control={form.control}
               name={field.name}
               render={({ field: { value, onChange, name } }) => (
-                <DateSlider value={value} onChange={onChange} name={name} />
+                <DateSlider
+                  value={
+                    typeof value === "string"
+                      ? value === ""
+                        ? undefined
+                        : Number(value)
+                      : value
+                  }
+                  onChange={onChange}
+                  name={name}
+                />
               )}
             />
           )}
@@ -233,7 +243,7 @@ export default function RequestTypeDelayCreateForm() {
         isLoading={createMutation.isPending}
         onCancel={() =>
           navigate({
-            to: "/pilotages/request-type-service-categories",
+            to: "/pilotages/request-type-delays",
             search: { page: 1 },
           })
         }

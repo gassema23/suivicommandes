@@ -26,8 +26,8 @@ export class PaginationDto {
   @IsOptional()
   @IsString()
   order?: 'asc' | 'desc';
-  
-  @ApiPropertyOptional({ description: "Recherche globale" })
+
+  @ApiPropertyOptional({ description: 'Recherche globale' })
   @IsOptional()
   @IsString()
   search?: string;

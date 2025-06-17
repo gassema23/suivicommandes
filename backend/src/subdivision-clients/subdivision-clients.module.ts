@@ -7,10 +7,7 @@ import { Client } from '../clients/entities/client.entity';
 import { AuthModule } from '../auth/auth.module';
 
 @Module({
-  imports: [
-      TypeOrmModule.forFeature([SubdivisionClient, Client]), 
-      AuthModule,
-    ],
+  imports: [TypeOrmModule.forFeature([SubdivisionClient, Client]), AuthModule],
   controllers: [SubdivisionClientsController],
   providers: [SubdivisionClientsService],
   exports: [SubdivisionClientsService],

@@ -42,7 +42,7 @@ export class TwoFactorAuthService {
     const qrCodeUrl = await qrcode.toDataURL(secret.otpauth_url);
 
     return {
-      secret: secret.base32!,
+      secret: secret.base32,
       qrCodeUrl,
     };
   }

@@ -138,7 +138,7 @@ export class ProvidersController {
    * @param currentUser - Utilisateur actuel effectuant la requête.
    * @returns Confirmation de la suppression du fournisseur.
    */
-  @Delete()
+  @Delete(':id')
   @Permissions([{ resource: Resource.PROVIDERS, actions: [Action.DELETE] }])
   @ApiOperation({ summary: 'Supprimer un fournisseur' })
   @ApiResponse({ status: 200, description: 'Fournisseur supprimé avec succès' })

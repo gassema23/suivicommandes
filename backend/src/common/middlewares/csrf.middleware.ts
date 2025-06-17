@@ -3,9 +3,7 @@ import { Request, Response, NextFunction } from 'express';
 
 @Injectable()
 export class CsrfMiddleware implements NestMiddleware {
-
   use(req: Request, res: Response, next: NextFunction) {
-    
     if (['POST', 'PUT', 'PATCH', 'DELETE'].includes(req.method)) {
       const csrfCookie = req.cookies['csrfToken'];
       const csrfHeader = req.headers['x-csrf-token'];

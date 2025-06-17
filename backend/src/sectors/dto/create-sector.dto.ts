@@ -5,8 +5,12 @@ import { Transform } from 'class-transformer';
 export class CreateSectorDto {
   @ApiProperty({ example: 'RGT', description: 'Nom du secteur' })
   @IsOptional()
-  @IsString({ message: 'Le nom du secteur doit être une chaîne de caractères.' })
-  @MaxLength(125, { message: 'Le nom du secteur ne doit pas dépasser 125 caractères.' })
+  @IsString({
+    message: 'Le nom du secteur doit être une chaîne de caractères.',
+  })
+  @MaxLength(125, {
+    message: 'Le nom du secteur ne doit pas dépasser 125 caractères.',
+  })
   sectorName?: string;
 
   @ApiPropertyOptional({
@@ -14,8 +18,10 @@ export class CreateSectorDto {
     description: 'Heure de fin pour le client',
   })
   @IsOptional()
-  @IsString({ message: "L'heure de fin client doit être une chaîne de caractères." })
-  @Transform(({ value }) => value === "" ? null : value)
+  @IsString({
+    message: "L'heure de fin client doit être une chaîne de caractères.",
+  })
+  @Transform(({ value }) => (value === '' ? null : value))
   sectorClientTimeEnd?: string;
 
   @ApiPropertyOptional({
@@ -23,8 +29,10 @@ export class CreateSectorDto {
     description: 'Heure de fin pour le fournisseur',
   })
   @IsOptional()
-  @IsString({ message: "L'heure de fin fournisseur doit être une chaîne de caractères." })
-  @Transform(({ value }) => value === "" ? null : value)
+  @IsString({
+    message: "L'heure de fin fournisseur doit être une chaîne de caractères.",
+  })
+  @Transform(({ value }) => (value === '' ? null : value))
   sectorProviderTimeEnd?: string;
 
   @ApiProperty({
@@ -46,7 +54,11 @@ export class CreateSectorDto {
     description: 'Description du secteur',
   })
   @IsOptional()
-  @IsString({ message: 'La description du secteur doit être une chaîne de caractères.' })
-  @MaxLength(500, { message: 'La description du secteur ne doit pas dépasser 500 caractères.' })
+  @IsString({
+    message: 'La description du secteur doit être une chaîne de caractères.',
+  })
+  @MaxLength(500, {
+    message: 'La description du secteur ne doit pas dépasser 500 caractères.',
+  })
   sectorDescription?: string;
 }

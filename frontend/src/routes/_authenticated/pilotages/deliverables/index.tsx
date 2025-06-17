@@ -1,4 +1,3 @@
-import LoadingPage from "@/components/ui/loader/LoadingPage";
 import { DeleteModal } from "@/components/ui/quebec/DeleteModal";
 import FormError from "@/components/ui/shadcn/form-error";
 import { QUERY_KEYS } from "@/constants/query-key.constant";
@@ -17,6 +16,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 import { toast } from "sonner";
 import { SUCCESS_MESSAGES } from "@/constants/messages.constant";
+import LoadingTable from "@/components/ui/loader/LoadingTable";
 
 const deliverablesQueryOptions = (pageNumber: number) =>
   queryOptions<DeliverableResponse>({
@@ -33,12 +33,6 @@ export const Route = createFileRoute("/_authenticated/pilotages/deliverables/")(
     validateSearch: (search) => ({
       page: Number(search.page ?? 1),
     }),
-    loader: (args) => {
-      const { context, search } = args as any;
-      return context.queryClient.ensureQueryData(
-        deliverablesQueryOptions(Number(search?.page ?? "1"))
-      );
-    },
     errorComponent: ({ error }) => <FormError message={error.message} />,
     staticData: {
       title: "Livrables",
@@ -52,7 +46,7 @@ export const Route = createFileRoute("/_authenticated/pilotages/deliverables/")(
         },
       ],
     },
-    pendingComponent: () => <LoadingPage />,
+    pendingComponent: () => <LoadingTable rows={10} columns={4} />,
     component: RouteComponent,
   }
 );

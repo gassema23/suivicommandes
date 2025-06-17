@@ -1,4 +1,3 @@
-import LoadingPage from "@/components/ui/loader/LoadingPage";
 import FormError from "@/components/ui/shadcn/form-error";
 import { createPermissionGuard } from "@/shared/authorizations/helpers/createPermissionGuard";
 import { PERMISSIONS } from "@/shared/authorizations/types/auth.types";
@@ -7,6 +6,7 @@ import RequisitionTypeUpdateForm from "@/features/requisition-types/components/D
 import { fetchRequisitionType } from "@/features/requisition-types/services/fetch-requisition-type.service";
 import { queryOptions, useSuspenseQuery } from "@tanstack/react-query";
 import { createFileRoute, useParams } from "@tanstack/react-router";
+import LoadingForm from "@/components/ui/loader/LoadingForm";
 
 const requisitionTypeQueryOptions = (id: string) =>
   queryOptions({
@@ -18,8 +18,6 @@ export const Route = createFileRoute(
   "/_authenticated/pilotages/requisition-types/update/$id"
 )({
   beforeLoad: createPermissionGuard([PERMISSIONS.REQUISITION_TYPES.UPDATE]),
-  loader: ({ context, params }) =>
-    context.queryClient.ensureQueryData(requisitionTypeQueryOptions(params.id)),
   head: () => ({
     meta: [{ title: "Modifier le type de réquisition" }],
   }),
@@ -36,8 +34,7 @@ export const Route = createFileRoute(
       },
     ],
   },
-
-  pendingComponent: () => <LoadingPage />,
+  pendingComponent: () => <LoadingForm rows={2} />,
   component: RouteComponent,
 });
 

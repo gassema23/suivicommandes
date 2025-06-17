@@ -9,6 +9,6 @@ import { ConformityTypesController } from './controllers/conformity-types.contro
   imports: [TypeOrmModule.forFeature([ConformityType]), AuthModule],
   controllers: [ConformityTypesController],
   providers: [ConformityTypesService],
-  exports: [ConformityTypesService]
+  exports: [ConformityTypesService],
 })
 export class ConformityTypesModule {}

@@ -4,7 +4,7 @@ export type Provider = {
   id: string;
   providerName: string;
   providerCode?: string;
-  virtualProviderName?: string;
+  virtualProviderName: string;
 };
 
 export type ProviderResponse = PaginatedResponse<Provider>;

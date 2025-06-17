@@ -1,4 +1,7 @@
-export const serviceCategoryFields = [
+import type { FieldConfig } from "@/types/field.type";
+import type { ServiceCategoryFormData } from "../schemas/service-category.schema";
+
+export const serviceCategoryFields: FieldConfig<ServiceCategoryFormData>[] = [
   {
     name: "sectorId",
     label: "Secteur",

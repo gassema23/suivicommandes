@@ -65,7 +65,10 @@ describe('ClientsService', () => {
   it('should throw if client already exists on create', async () => {
     (repo.findOne as jest.Mock).mockResolvedValueOnce(mockClient);
     await expect(
-      service.create({ clientName: 'Test Client', clientNumber: '6000' }, 'user-uuid'),
+      service.create(
+        { clientName: 'Test Client', clientNumber: '6000' },
+        'user-uuid',
+      ),
     ).rejects.toThrow(BadRequestException);
   });
 
@@ -77,7 +80,9 @@ describe('ClientsService', () => {
 
   it('should throw if client not found', async () => {
     (repo.findOne as jest.Mock).mockResolvedValueOnce(undefined);
-    await expect(service.findOne('not-exist')).rejects.toThrow(BadRequestException);
+    await expect(service.findOne('not-exist')).rejects.toThrow(
+      BadRequestException,
+    );
   });
 
   it('should update a client', async () => {
@@ -107,15 +112,22 @@ describe('ClientsService', () => {
   });
 
   it('should remove a client', async () => {
-    (repo.findOne as jest.Mock).mockResolvedValueOnce({ ...mockClient, subdivisionClients: [] });
-    await expect(service.remove('uuid-client', 'user-uuid')).resolves.toBeUndefined();
+    (repo.findOne as jest.Mock).mockResolvedValueOnce({
+      ...mockClient,
+      subdivisionClients: [],
+    });
+    await expect(
+      service.remove('uuid-client', 'user-uuid'),
+    ).resolves.toBeUndefined();
     expect(repo.save).toHaveBeenCalled();
     expect(repo.softDelete).toHaveBeenCalledWith('uuid-client');
   });
 
   it('should throw if client not found on remove', async () => {
     (repo.findOne as jest.Mock).mockResolvedValueOnce(undefined);
-    await expect(service.remove('not-exist', 'user-uuid')).rejects.toThrow(BadRequestException);
+    await expect(service.remove('not-exist', 'user-uuid')).rejects.toThrow(
+      BadRequestException,
+    );
   });
 
   it('should throw if client has subdivisions on remove', async () => {
@@ -123,6 +135,8 @@ describe('ClientsService', () => {
       ...mockClient,
       subdivisionClients: [{ id: 'sub-1' }],
     });
-    await expect(service.remove('uuid-client', 'user-uuid')).rejects.toThrow(BadRequestException);
+    await expect(service.remove('uuid-client', 'user-uuid')).rejects.toThrow(
+      BadRequestException,
+    );
   });
 });

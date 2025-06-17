@@ -1,4 +1,3 @@
-import LoadingPage from "@/components/ui/loader/LoadingPage";
 import FormError from "@/components/ui/shadcn/form-error";
 import { createPermissionGuard } from "@/shared/authorizations/helpers/createPermissionGuard";
 import { PERMISSIONS } from "@/shared/authorizations/types/auth.types";
@@ -7,6 +6,7 @@ import RequestTypeServiceCategoryUpdateForm from "@/features/request-type-servic
 import { fetchRequestTypeServiceCategory } from "@/features/request-type-service-categories/services/fetch-request-type-service-category.service";
 import { queryOptions, useSuspenseQuery } from "@tanstack/react-query";
 import { createFileRoute, useParams } from "@tanstack/react-router";
+import LoadingForm from "@/components/ui/loader/LoadingForm";
 
 const requestTypeServiceCategoriesQueryOptions = (id: string) =>
   queryOptions({
@@ -20,10 +20,6 @@ export const Route = createFileRoute(
   beforeLoad: createPermissionGuard([
     PERMISSIONS.REQUEST_TYPE_SERVICE_CATEGORIES.UPDATE,
   ]),
-  loader: ({ context, params }) =>
-    context.queryClient.ensureQueryData(
-      requestTypeServiceCategoriesQueryOptions(params.id)
-    ),
   head: () => ({
     meta: [
       {
@@ -50,7 +46,7 @@ export const Route = createFileRoute(
     ],
   },
 
-  pendingComponent: () => <LoadingPage />,
+  pendingComponent: () => <LoadingForm rows={7} />,
   component: RouteComponent,
 });
 

@@ -7,8 +7,12 @@ export class CreateDeliverableDto {
     description: 'Nom du livrable',
   })
   @IsOptional()
-  @IsString({ message: 'Le nom du livrable doit être une chaîne de caractères.' })
-  @MaxLength(125, { message: 'Le nom du livrable ne doit pas dépasser 125 caractères.' })
+  @IsString({
+    message: 'Le nom du livrable doit être une chaîne de caractères.',
+  })
+  @MaxLength(125, {
+    message: 'Le nom du livrable ne doit pas dépasser 125 caractères.',
+  })
   deliverableName?: string;
 
   @ApiPropertyOptional({
@@ -16,7 +20,11 @@ export class CreateDeliverableDto {
     description: 'Description du livrable',
   })
   @IsOptional()
-  @IsString({ message: 'La description du livrable doit être une chaîne de caractères.' })
-  @MaxLength(500, { message: 'La description du livrable ne doit pas dépasser 500 caractères.' })
+  @IsString({
+    message: 'La description du livrable doit être une chaîne de caractères.',
+  })
+  @MaxLength(500, {
+    message: 'La description du livrable ne doit pas dépasser 500 caractères.',
+  })
   deliverableDescription?: string;
 }
