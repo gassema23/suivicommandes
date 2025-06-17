@@ -49,6 +49,7 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
    * @throws UnauthorizedException si le token est invalide ou expiré.
    */
   handleRequest(err: any, user: any, info: any) {
+    console.log('handleRequest', { err, user, info });
     if (err || !user) {
       throw (
         err ||

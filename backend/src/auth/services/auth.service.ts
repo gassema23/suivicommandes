@@ -2,7 +2,6 @@ import {
   Injectable,
   UnauthorizedException,
   BadRequestException,
-  ConflictException,
   NotFoundException,
   Inject,
 } from '@nestjs/common';
@@ -25,11 +24,11 @@ import { ResetPasswordDto } from '../dto/reset-password.dto';
 import { ChangePasswordDto } from '../dto/change-password.dto';
 import { instanceToPlain } from 'class-transformer';
 import { VerifyEmailInterface } from '../interfaces/verify-email.interface';
-import { OnboardingDto } from '../dto/onboarding.dto';
 import { parseDurationToMs } from '../../common/utils/parse-duration';
 import { TwoFactorAuthService } from './two-factor-auth.service';
 import { ERROR_MESSAGES } from '@/common/constants/error-messages.constant';
 import { assertUniqueFields } from '@/common/utils/assert-unique-fields';
+import { RefreshTokenResult } from '../interfaces/refresh-token-result.interface';
 
 export interface JwtPayload {
   sub: string;
@@ -38,6 +37,7 @@ export interface JwtPayload {
   lastName?: string;
   iat?: number;
   exp?: number;
+  type?: 'access' | 'refresh' | 'password-reset';
 }
 
 export interface AuthResult {
@@ -311,7 +311,7 @@ export class AuthService {
   ): Promise<{ message: string }> {
     const { token, newPassword } = resetPasswordDto;
     try {
-      const payload = this.jwtService.verify(token);
+      const payload: JwtPayload = this.jwtService.verify(token);
 
       if (payload.type !== 'password-reset')
         throw new BadRequestException(
@@ -390,28 +390,28 @@ export class AuthService {
    * @returns Un objet contenant le nouveau token d'accès et le token de rafraîchissement.
    * @throws UnauthorizedException si le token de rafraîchissement est invalide ou expiré.
    */
-  async refreshToken(
-    refreshToken: string,
-  ): Promise<{ accessToken: string; refreshToken: string }> {
+  async refreshToken(refreshToken: string): Promise<RefreshTokenResult> {
     try {
-      const payload: JwtPayload = this.jwtService.verify(refreshToken, {
+      const payload = this.jwtService.verify<JwtPayload>(refreshToken, {
         secret: this.configService.get('JWT_REFRESH_SECRET'),
       });
+
       const user = await this.userRepository.findOne({
         where: { id: payload.sub, rememberToken: refreshToken },
         relations: ['team'],
       });
-      if (!user)
-        throw new UnauthorizedException(
-          'Le token de rafraîchissement est invalide.',
-        );
 
-      return this.generateTokensAndSaveRefreshToken(user);
+      if (!user) {
+        throw new UnauthorizedException('Token invalide.');
+      }
+
+      const { accessToken, refreshToken: newRefreshToken } =
+        await this.generateTokensAndSaveRefreshToken(user);
+
+      return { accessToken, refreshToken: newRefreshToken };
     } catch (error) {
       console.error('Erreur lors du rafraîchissement du token:', error);
-      throw new UnauthorizedException(
-        'Le token de rafraîchissement est invalide.',
-      );
+      throw new UnauthorizedException('Token invalide.');
     }
   }
 
@@ -444,7 +444,7 @@ export class AuthService {
       maxAge: maxAgeRefreshToken,
     });
 
-    const decoded = this.jwtService.decode(accessToken);
+    const decoded: JwtPayload = this.jwtService.decode(accessToken);
     if (decoded?.exp) {
       res.cookie('accessTokenExpiresAt', decoded.exp * 1000, {
         httpOnly: false,
@@ -563,6 +563,7 @@ export class AuthService {
    * @param onboardingDto Les données d'onboarding contenant l'email, le mot de passe et la confirmation du mot de passe.
    * @throws BadRequestException si l'email n'est pas valide ou si les mots de passe ne correspondent pas.
    */
+  /*
   async onboard(userId: string, onboardingDto: OnboardingDto) {
     this.verifyEmail(onboardingDto.email);
     const { email, password, confirmPassword } = onboardingDto;
@@ -571,4 +572,5 @@ export class AuthService {
     const hashedPassword = await bcrypt.hash(password, 12);
     // TODO: Mettre à jour les infos utilisateur et marquer l'email comme vérifié
   }
+    */
 }

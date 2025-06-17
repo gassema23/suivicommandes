@@ -20,7 +20,7 @@ import { TwoFactorAuthService } from './services/two-factor-auth.service';
     CacheModule.registerAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
-      useFactory: async (configService: ConfigService) => ({
+      useFactory: (configService: ConfigService) => ({
         store: redisStore,
         host: configService.getOrThrow<string>('REDIS_HOST'),
         port: configService.getOrThrow<number>('REDIS_PORT'),
@@ -30,7 +30,7 @@ import { TwoFactorAuthService } from './services/two-factor-auth.service';
     PassportModule.register({ defaultStrategy: 'jwt' }),
     JwtModule.registerAsync({
       imports: [ConfigModule],
-      useFactory: async (configService: ConfigService) => ({
+      useFactory: (configService: ConfigService) => ({
         secret: configService.getOrThrow<string>('JWT_SECRET'),
         signOptions: {
           expiresIn: configService.getOrThrow<string>('JWT_EXPIRATION'),

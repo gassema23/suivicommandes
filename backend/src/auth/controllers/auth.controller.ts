@@ -11,6 +11,7 @@ import {
   Param,
   Patch,
   Req,
+  UnauthorizedException,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import {
@@ -32,9 +33,9 @@ import { CurrentUser } from '../decorators/current-user.decorator';
 import { User } from '../../users/entities/user.entity';
 import { EnableTwoFactorDto } from '../dto/enable-two-factor.dto';
 import { instanceToPlain } from 'class-transformer';
-import { OnboardingDto } from '../dto/onboarding.dto';
 import { TwoFactorAuthService } from '../services/two-factor-auth.service';
 import { randomBytes } from 'crypto';
+import { RequestWithCookies } from '../interfaces/request-with-cookies.interface';
 
 @ApiTags('Authentication')
 @Controller('auth')
@@ -91,6 +92,7 @@ export class AuthController {
    * @param onboardingDto DTO contenant les informations d'onboarding.
    * @returns L'utilisateur onboardé.
    */
+  /*
   @Patch('onboard/:id')
   @HttpCode(HttpStatus.OK)
   @ApiOperation({ summary: 'Onboard nouvel utilisateur' })
@@ -99,7 +101,7 @@ export class AuthController {
   async onboard(@Param('id') id: string, @Body() onboardingDto: OnboardingDto) {
     return this.authService.onboard(id, onboardingDto);
   }
-
+*/
   /**
    * Déconnecte l'utilisateur en invalidant les tokens et en supprimant les cookies.
    * @param user Utilisateur connecté à déconnecter.
@@ -207,16 +209,20 @@ export class AuthController {
     status: 401,
     description: 'Token de rafraîchissement invalide',
   })
-  async refresh(@Req() req: Request, @Res() res: Response) {
-    // Assuming the refresh token is stored in a cookie named 'refreshToken'
+  async refresh(@Req() req: RequestWithCookies) {
     const refreshToken = req.cookies?.refreshToken;
     if (!refreshToken) {
-      return res.status(401).json({ message: 'Refresh token manquant' });
+      throw new UnauthorizedException('Refresh token manquant');
     }
+
     const { accessToken, refreshToken: newRefreshToken } =
       await this.authService.refreshToken(refreshToken);
-    await this.authService.setAuthCookies(res, accessToken, newRefreshToken);
-    return res.json({ success: true });
+
+    return {
+      success: true,
+      accessToken,
+      refreshToken: newRefreshToken,
+    };
   }
 
   /**
@@ -231,7 +237,7 @@ export class AuthController {
     summary: "Obtenir les informations de l'utilisateur connecté",
   })
   @ApiResponse({ status: 200, description: 'Informations utilisateur' })
-  async getProfile(@CurrentUser() user: User) {
+  getProfile(@CurrentUser() user: User) {
     return { user: instanceToPlain(user) };
   }
 

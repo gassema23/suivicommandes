@@ -66,13 +66,6 @@ import { DeliverableDelayFlowsModule } from './deliverable-delay-flows/deliverab
           format: winston.format.combine(
             winston.format.timestamp(),
             winston.format.colorize({ all: true }),
-            winston.format.printf(
-              ({ timestamp, level, message, context, trace }) => {
-                return `${timestamp} [${context || 'Application'}] ${level}: ${message}${
-                  trace ? `\n${trace}` : ''
-                }`;
-              },
-            ),
           ),
         }),
 
