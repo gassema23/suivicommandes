@@ -24,7 +24,7 @@ async function bootstrap() {
   app.use(compression());
 
   app.use(cookieParser());
-  //app.use(csrf.use.bind(csrf));
+  app.use(csrf.use.bind(csrf));
 
   // CORS
   app.enableCors({

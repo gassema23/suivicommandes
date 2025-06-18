@@ -3,9 +3,13 @@ import type { ServiceCategoryFormData } from "../schemas/service-category.schema
 import { apiFetch } from "@/hooks/useApiFetch";
 
 export async function createServiceCategory(data: ServiceCategoryFormData) {
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const { sectorId, ...payload } = data;
+
   const res = await apiFetch(`${API_ROUTE}/service-categories`, {
     method: "POST",
-    body: JSON.stringify(data),
+    body: JSON.stringify(payload),
   });
 
   const result = await res.json();

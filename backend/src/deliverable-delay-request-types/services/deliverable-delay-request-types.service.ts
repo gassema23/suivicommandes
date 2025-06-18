@@ -53,18 +53,22 @@ export class DeliverableDelayRequestTypesService {
 
     const qb = this.deliverableDelayRequestTypeRepository
       .createQueryBuilder('rtd')
-      .leftJoin('rtd.requestTypeServiceCategory', 'rtsc')
-      .leftJoin('rtsc.requestType', 'rt')
-      .leftJoin('rtsc.serviceCategory', 'sc')
-      .leftJoin('sc.service', 'svc')
-      .leftJoin('svc.sector', 'sector')
-      .leftJoin('rtd.deliverable', 'd')
+      .leftJoinAndSelect('rtd.deliverable', 'deliverable')
+      .leftJoinAndSelect('rtd.requestTypeServiceCategory', 'rtsc')
+      .leftJoinAndSelect('rtsc.requestType', 'rt')
+      .leftJoinAndSelect('rtsc.serviceCategory', 'sc')
+      .leftJoinAndSelect('sc.service', 'svc')
+      .leftJoinAndSelect('svc.sector', 'sector')
       .select([
-        'sector.sectorName AS sector_name',
-        'svc.serviceName AS service_name',
-        'sc.serviceCategoryName AS service_category_name',
-        'rt.requestTypeName AS request_type_name',
-        'd.deliverableName AS deliverable_name',
+        'rtd.id',
+        'rtd.createdAt',
+        'deliverable.id',
+        'deliverable.deliverableName',
+        'rtsc.id',
+        'rt.requestTypeName',
+        'sc.serviceCategoryName',
+        'svc.serviceName',
+        'sector.sectorName',
       ])
       .skip(skip)
       .take(limit)
@@ -75,24 +79,20 @@ export class DeliverableDelayRequestTypesService {
 
     if (search) {
       qb.andWhere(
-        `sector.sectorName ILIKE :search
-    OR svc.serviceName ILIKE :search
-    OR sc.serviceCategoryName ILIKE :search
-    OR rt.requestTypeName ILIKE :search
-    OR d.deliverableName ILIKE :search`,
+        `sector.sectorName ILIKE :search OR svc.serviceName ILIKE :search OR sc.serviceCategoryName ILIKE :search OR rt.requestTypeName ILIKE :search OR d.deliverableName ILIKE :search`,
         { search: `%${search}%` },
       );
     }
 
-    const { entities, raw } = await qb.getRawAndEntities();
+    const [items, total] = await qb.getManyAndCount();
 
     return {
-      data: raw,
+      data: items,
       meta: {
         page,
         limit,
-        total: entities.length,
-        totalPages: Math.ceil(entities.length / limit),
+        total,
+        totalPages: Math.ceil(total / limit),
       },
     };
   }

@@ -9,11 +9,9 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/shadcn/dialog";
+import { COUNTDOWN, TIMEOUT } from "@/constants/env.constant";
 
 export default function IdleLogoutModal() {
-
-  const COUNTDOWN = 60; // 60 secondes
-  const TIMEOUT = 4 * 60 * 1000; // 4 minutes
 
   const [showModal, setShowModal] = useState(false);
   const [countdown, setCountdown] = useState(COUNTDOWN);
@@ -48,6 +46,7 @@ export default function IdleLogoutModal() {
     timeout: TIMEOUT,
     onIdle: () => setShowModal(true),
     debounce: 500,
+    crossTab:true
   });
 
   const handleStay = () => {

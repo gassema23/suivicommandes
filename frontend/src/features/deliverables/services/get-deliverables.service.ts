@@ -1,5 +1,5 @@
 import { API_ROUTE } from "@/constants/api-route.constant";
-import type { DeliverableResponse } from "../types/deliverable.type";
+import type { DeliverableResponse } from "../../../shared/deliverable/types/deliverable.type";
 import { apiFetch } from "@/hooks/useApiFetch";
 
 export const getDeliverables = async (

@@ -32,6 +32,8 @@ import { RequestTypeServiceCategoriesModule } from './request-type-service-categ
 import { RequestTypeDelaysModule } from './request-type-delays/request-type-delays.module';
 import { DeliverableDelayRequestTypesModule } from './deliverable-delay-request-types/deliverable-delay-request-types.module';
 import { DeliverableDelayFlowsModule } from './deliverable-delay-flows/deliverable-delay-flows.module';
+import { MetricsService } from './metrics/metrics.service';
+import { MetricsModule } from './metrics/metrics.module';
 
 @Module({
   imports: [
@@ -41,6 +43,8 @@ import { DeliverableDelayFlowsModule } from './deliverable-delay-flows/deliverab
       envFilePath: '.env',
       expandVariables: true,
     }),
+
+    // Prometheus pour la surveillance
 
     // Base de données TypeORM
     TypeOrmModule.forRoot(getDatabaseConfig()),
@@ -131,6 +135,8 @@ import { DeliverableDelayFlowsModule } from './deliverable-delay-flows/deliverab
     RequestTypeDelaysModule,
     DeliverableDelayRequestTypesModule,
     DeliverableDelayFlowsModule,
+    MetricsModule,
   ],
+  providers: [MetricsService],
 })
 export class AppModule {}

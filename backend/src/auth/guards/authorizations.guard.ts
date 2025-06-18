@@ -9,7 +9,6 @@ import { Reflector } from '@nestjs/core';
 import { PERMISSIONS_KEY } from '../../roles/decorators/permission.decorator';
 import { AuthService } from '../services/auth.service';
 import { Permission } from '../../roles/dto/create-role.dto';
-import { RequestWithUser } from '../interfaces/request-with-user.interface';
 
 @Injectable()
 export class AuthorizationsGuard implements CanActivate {
@@ -33,7 +32,7 @@ export class AuthorizationsGuard implements CanActivate {
    * @throws ForbiddenException si l'utilisateur n'a pas les permissions requises.
    */
   async canActivate(context: ExecutionContext): Promise<boolean> {
-    const request = context.switchToHttp().getRequest<RequestWithUser>();
+    const request = context.switchToHttp().getRequest();
 
     if (!request.user) {
       throw new UnauthorizedException(
@@ -70,7 +69,6 @@ export class AuthorizationsGuard implements CanActivate {
         }
       }
     } catch (error) {
-      console.error('Erreur lors de la vérification des permissions :', error);
       throw new ForbiddenException(
         "Erreur lors de la vérification des permissions de l'utilisateur.",
       );

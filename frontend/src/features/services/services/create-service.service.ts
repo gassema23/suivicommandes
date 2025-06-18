@@ -3,6 +3,7 @@ import type { ServiceFormData } from "../schemas/service.schema";
 import { apiFetch } from "@/hooks/useApiFetch";
 
 export async function createService(data: ServiceFormData) {
+  
   const res = await apiFetch(`${API_ROUTE}/services`, {
     method: "POST",
     body: JSON.stringify(data),

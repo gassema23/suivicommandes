@@ -39,7 +39,7 @@ export interface ButtonProps
   disabled?: boolean;
 }
 
-const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
+export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
   (
     {
       className,
@@ -68,12 +68,16 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
       >
         {asChild ? (
           <span className="flex items-center">
-            {isLoading && <Spinner size="sm" className="mr-2" variant="white" />}
+            {isLoading && (
+              <Spinner size="sm" className="mr-2" variant="white" />
+            )}
             {children}
           </span>
         ) : (
           <>
-            {isLoading && <Spinner size="sm" className="mr-2" variant="white" />}
+            {isLoading && (
+              <Spinner size="sm" className="mr-2" variant="white" />
+            )}
             {children}
           </>
         )}
@@ -81,9 +85,3 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     );
   }
 );
-
-Button.displayName = "Button";
-
-export { Button };
-// ⚠️ Si tu veux éviter le warning React Refresh, exporte ceci ailleurs :
-// export { buttonVariants } depuis un fichier séparé (ex: button-variants.ts)

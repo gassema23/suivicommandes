@@ -88,6 +88,7 @@ async function refreshTokenRequest() {
       "x-csrf-token": csrfToken,
     },
   });
+  console.log("Refresh token response status:", await res.json());
   if (!res.ok) throw new Error("Refresh token failed");
   return true;
 }

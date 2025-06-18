@@ -77,7 +77,6 @@ export const QUERY_KEYS = {
   OWNER_LISTS: ["ownerLists"] as const,
   UPDATE_USER_INFORMATION: (userId: string) => ["profile", userId] as const,
 
-
   // Rôles et ressources
   ROLES: ["roles"] as const,
   ROLES_LISTS: ["rolesLists"] as const,
@@ -148,4 +147,16 @@ export const QUERY_KEYS = {
   REQUEST_TYPE_DELAYS: ["requestTypeDelays"] as const,
   REQUEST_TYPE_DELAY_WITH_ID: (requestTypeDelayId?: string | null) =>
     ["requestTypeDelays", requestTypeDelayId ?? ""] as const,
+
+  DELIVERABLE_DELAY_RQUEST_TYPES_WITH_PAGE: (page: number) =>
+    ["deliverableDelayRequestTypes", page] as const,
+  DELIVERABLE_DELAY_RQUEST_TYPES: ["deliverableDelayRequestTypes"] as const,
+  DELIVERABLE_DELAY_REQUEST_TYPE_WITH_ID: (
+    deliverableDelayRequestTypeId?: string | null
+  ) => {
+    return [
+      "deliverableDelayRequestTypes",
+      deliverableDelayRequestTypeId ?? "",
+    ] as const;
+  },
 };

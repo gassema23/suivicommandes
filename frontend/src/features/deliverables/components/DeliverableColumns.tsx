@@ -3,7 +3,7 @@ import moment from "moment";
 import { momentFr } from "@/lib/momentFr";
 import DataTableAction from "@/components/table/components/DataTableAction";
 import { DataTableColumnHeader } from "@/components/table/components/DataTableColumnHeader";
-import type { Deliverable } from "../types/deliverable.type";
+import type { Deliverable } from "../../../shared/deliverable/types/deliverable.type";
 
 momentFr();
 

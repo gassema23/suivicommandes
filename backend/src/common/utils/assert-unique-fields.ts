@@ -1,5 +1,6 @@
 import type { Repository, ObjectLiteral } from 'typeorm';
 import { BadRequestException } from '@nestjs/common';
+import { ERROR_MESSAGES } from '../constants/error-messages.constant';
 
 /**
  * Vérifie l'unicité de plusieurs colonnes (insensible à la casse pour les strings) dans une entité,
@@ -41,7 +42,7 @@ export async function assertUniqueFields<T extends ObjectLiteral>(
   if (existing) {
     throw new BadRequestException(
       message ||
-        "Impossible d'enregistrer : un type de délai avec ces informations existe déjà. Veuillez choisir un nom ou une combinaison unique pour le type de délai.",
+        `${ERROR_MESSAGES.CREATE} un ou plusieurs champs doivent être uniques. Veuillez vérifier les valeurs fournies.`,
     );
   }
 }

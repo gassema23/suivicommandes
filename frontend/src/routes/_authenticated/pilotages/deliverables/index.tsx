@@ -6,7 +6,7 @@ import { PERMISSIONS } from "@/shared/authorizations/types/auth.types";
 import { DataTable } from "@/components/table/DataTable";
 import { deliverableColumns } from "@/features/deliverables/components/DeliverableColumns";
 import { getDeliverables } from "@/features/deliverables/services/get-deliverables.service";
-import type { DeliverableResponse } from "@/features/deliverables/types/deliverable.type";
+import type { DeliverableResponse } from "@/shared/deliverable/types/deliverable.type";
 import {
   queryOptions,
   useQueryClient,

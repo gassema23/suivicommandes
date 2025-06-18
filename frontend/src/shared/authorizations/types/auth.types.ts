@@ -42,6 +42,9 @@ export const PERMISSIONS = {
   ),
   REQUEST_TYPE_DELAYS: makePermissions("request_type_delays"),
   DELIVERABLE_DELAY_FLOWS: makePermissions("deliverable_delay_flows"),
+  DELIVERABLE_DELAY_REQUEST_TYPES: makePermissions(
+    "deliverable_delay_request_types"
+  ),
 } as const;
 
 export const ROLES = {

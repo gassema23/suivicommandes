@@ -11,7 +11,6 @@ import {
   Param,
   Patch,
   Req,
-  UnauthorizedException,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import {
@@ -35,7 +34,7 @@ import { EnableTwoFactorDto } from '../dto/enable-two-factor.dto';
 import { instanceToPlain } from 'class-transformer';
 import { TwoFactorAuthService } from '../services/two-factor-auth.service';
 import { randomBytes } from 'crypto';
-import { RequestWithCookies } from '../interfaces/request-with-cookies.interface';
+import { MetricsService } from '@/metrics/metrics.service';
 
 @ApiTags('Authentication')
 @Controller('auth')
@@ -51,6 +50,7 @@ export class AuthController {
   constructor(
     private readonly authService: AuthService,
     private readonly twoFactorService: TwoFactorAuthService,
+    private readonly metricsService: MetricsService,
   ) {}
 
   /**
@@ -83,6 +83,7 @@ export class AuthController {
     @Body() loginDto: LoginDto,
     @Res({ passthrough: true }) res: Response,
   ) {
+    this.metricsService.incrementRequestCounter();
     return this.authService.loginAndSetCookies(loginDto, res);
   }
 
@@ -209,20 +210,17 @@ export class AuthController {
     status: 401,
     description: 'Token de rafraîchissement invalide',
   })
-  async refresh(@Req() req: RequestWithCookies) {
+  async refresh(@Req() req: Request, @Res() res: Response) {
+    // Assuming the refresh token is stored in a cookie named 'refreshToken'
     const refreshToken = req.cookies?.refreshToken;
     if (!refreshToken) {
-      throw new UnauthorizedException('Refresh token manquant');
+      return res.status(401).json({ message: 'Refresh token manquant' });
     }
 
     const { accessToken, refreshToken: newRefreshToken } =
       await this.authService.refreshToken(refreshToken);
-
-    return {
-      success: true,
-      accessToken,
-      refreshToken: newRefreshToken,
-    };
+    await this.authService.setAuthCookies(res, accessToken, newRefreshToken);
+    return res.json({ success: true });
   }
 
   /**

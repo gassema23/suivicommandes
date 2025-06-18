@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useNavigate } from "@tanstack/react-router";
 
 import { ACTIONS } from "@/shared/authorizations/types/auth.types";
@@ -24,40 +24,19 @@ import type { Role } from "@/shared/roles/types/role.type";
 import { updateRole } from "../services/update-role.service";
 import FormError from "@/components/ui/shadcn/form-error";
 import { QUERY_KEYS } from "@/constants/query-key.constant";
-import { API_ROUTE } from "@/constants/api-route.constant";
-import { apiFetch } from "@/hooks/useApiFetch";
-
-// Fetch resources depuis le backend
-const fetchResources = async (): Promise<
-  { value: string; label: string }[]
-> => {
-  const res = await apiFetch(`${API_ROUTE}/roles/resources/`, {
-    method: "GET",
-    credentials: "include",
-  });
-  if (!res.ok) throw new Error("Erreur lors du chargement des ressources");
-  return res.json();
-};
 
 interface RoleUpdateFormProps {
   role: Role;
+  data: string[]; // Liste des ressources disponibles
 }
 
-export default function RoleUpdateForm({ role }: RoleUpdateFormProps) {
+export default function RoleUpdateForm({
+  role,
+  data: resourceValues,
+}: RoleUpdateFormProps) {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const [backendError, setBackendError] = useState<string | null>(null);
-  // Récupération dynamique des ressources
-  const {
-    data: resourcesRaw = [],
-    isLoading: loadingResources,
-    error: resourcesError,
-  } = useQuery({
-    queryKey: QUERY_KEYS.RESOURCE,
-    queryFn: fetchResources,
-  });
-  const resourceValues = resourcesRaw.map((r) => r.value);
-
   // Initialisation du hook permission matrix AVEC les permissions existantes
   const {
     matrix,
@@ -118,18 +97,6 @@ export default function RoleUpdateForm({ role }: RoleUpdateFormProps) {
     updateRoleMutation.mutate(data);
   };
 
-  if (loadingResources) {
-    return <div>Chargement des ressources...</div>;
-  }
-
-  if (resourcesError) {
-    return (
-      <div className="text-destructive">
-        Erreur lors du chargement des ressources
-      </div>
-    );
-  }
-
   return (
     <form onSubmit={form.handleSubmit(onSubmit)} className="w-full space-y-6">
       {backendError && <FormError message={backendError} />}
@@ -142,9 +109,7 @@ export default function RoleUpdateForm({ role }: RoleUpdateFormProps) {
               id="roleName"
               {...form.register("roleName")}
               placeholder="ex: moderator"
-              className={
-                form.formState.errors.roleName ? "border-destructive" : ""
-              }
+              className="mt-1"
             />
             {form.formState.errors.roleName && (
               <p className="text-sm text-destructive mt-1">
@@ -202,10 +167,9 @@ export default function RoleUpdateForm({ role }: RoleUpdateFormProps) {
         <Button
           type="submit"
           disabled={form.formState.isSubmitting || getTotalPermissions() === 0}
+          isLoading={form.formState.isSubmitting}
         >
-          {form.formState.isSubmitting
-            ? "Mise à jour..."
-            : "Mettre à jour le rôle"}
+          Mettre à jour le rôle
         </Button>
       </div>
     </form>

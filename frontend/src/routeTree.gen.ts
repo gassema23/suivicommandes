@@ -33,6 +33,7 @@ import { Route as AuthenticatedPilotagesProviderDisponibilitiesIndexRouteImport 
 import { Route as AuthenticatedPilotagesHolidaysIndexRouteImport } from './routes/_authenticated/pilotages/holidays/index'
 import { Route as AuthenticatedPilotagesFlowsIndexRouteImport } from './routes/_authenticated/pilotages/flows/index'
 import { Route as AuthenticatedPilotagesDeliverablesIndexRouteImport } from './routes/_authenticated/pilotages/deliverables/index'
+import { Route as AuthenticatedPilotagesDeliverableDelayRequestTypesIndexRouteImport } from './routes/_authenticated/pilotages/deliverable-delay-request-types/index'
 import { Route as AuthenticatedPilotagesDeliverableDelayFlowsIndexRouteImport } from './routes/_authenticated/pilotages/deliverable-delay-flows/index'
 import { Route as AuthenticatedPilotagesDelayTypesIndexRouteImport } from './routes/_authenticated/pilotages/delay-types/index'
 import { Route as AuthenticatedPilotagesConformityTypesIndexRouteImport } from './routes/_authenticated/pilotages/conformity-types/index'
@@ -212,6 +213,12 @@ const AuthenticatedPilotagesDeliverablesIndexRoute =
   AuthenticatedPilotagesDeliverablesIndexRouteImport.update({
     id: '/pilotages/deliverables/',
     path: '/pilotages/deliverables/',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+const AuthenticatedPilotagesDeliverableDelayRequestTypesIndexRoute =
+  AuthenticatedPilotagesDeliverableDelayRequestTypesIndexRouteImport.update({
+    id: '/pilotages/deliverable-delay-request-types/',
+    path: '/pilotages/deliverable-delay-request-types/',
     getParentRoute: () => AuthenticatedRoute,
   } as any)
 const AuthenticatedPilotagesDeliverableDelayFlowsIndexRoute =
@@ -511,6 +518,7 @@ export interface FileRoutesByFullPath {
   '/pilotages/conformity-types': typeof AuthenticatedPilotagesConformityTypesIndexRoute
   '/pilotages/delay-types': typeof AuthenticatedPilotagesDelayTypesIndexRoute
   '/pilotages/deliverable-delay-flows': typeof AuthenticatedPilotagesDeliverableDelayFlowsIndexRoute
+  '/pilotages/deliverable-delay-request-types': typeof AuthenticatedPilotagesDeliverableDelayRequestTypesIndexRoute
   '/pilotages/deliverables': typeof AuthenticatedPilotagesDeliverablesIndexRoute
   '/pilotages/flows': typeof AuthenticatedPilotagesFlowsIndexRoute
   '/pilotages/holidays': typeof AuthenticatedPilotagesHolidaysIndexRoute
@@ -580,6 +588,7 @@ export interface FileRoutesByTo {
   '/pilotages/conformity-types': typeof AuthenticatedPilotagesConformityTypesIndexRoute
   '/pilotages/delay-types': typeof AuthenticatedPilotagesDelayTypesIndexRoute
   '/pilotages/deliverable-delay-flows': typeof AuthenticatedPilotagesDeliverableDelayFlowsIndexRoute
+  '/pilotages/deliverable-delay-request-types': typeof AuthenticatedPilotagesDeliverableDelayRequestTypesIndexRoute
   '/pilotages/deliverables': typeof AuthenticatedPilotagesDeliverablesIndexRoute
   '/pilotages/flows': typeof AuthenticatedPilotagesFlowsIndexRoute
   '/pilotages/holidays': typeof AuthenticatedPilotagesHolidaysIndexRoute
@@ -651,6 +660,7 @@ export interface FileRoutesById {
   '/_authenticated/pilotages/conformity-types/': typeof AuthenticatedPilotagesConformityTypesIndexRoute
   '/_authenticated/pilotages/delay-types/': typeof AuthenticatedPilotagesDelayTypesIndexRoute
   '/_authenticated/pilotages/deliverable-delay-flows/': typeof AuthenticatedPilotagesDeliverableDelayFlowsIndexRoute
+  '/_authenticated/pilotages/deliverable-delay-request-types/': typeof AuthenticatedPilotagesDeliverableDelayRequestTypesIndexRoute
   '/_authenticated/pilotages/deliverables/': typeof AuthenticatedPilotagesDeliverablesIndexRoute
   '/_authenticated/pilotages/flows/': typeof AuthenticatedPilotagesFlowsIndexRoute
   '/_authenticated/pilotages/holidays/': typeof AuthenticatedPilotagesHolidaysIndexRoute
@@ -722,6 +732,7 @@ export interface FileRouteTypes {
     | '/pilotages/conformity-types'
     | '/pilotages/delay-types'
     | '/pilotages/deliverable-delay-flows'
+    | '/pilotages/deliverable-delay-request-types'
     | '/pilotages/deliverables'
     | '/pilotages/flows'
     | '/pilotages/holidays'
@@ -791,6 +802,7 @@ export interface FileRouteTypes {
     | '/pilotages/conformity-types'
     | '/pilotages/delay-types'
     | '/pilotages/deliverable-delay-flows'
+    | '/pilotages/deliverable-delay-request-types'
     | '/pilotages/deliverables'
     | '/pilotages/flows'
     | '/pilotages/holidays'
@@ -861,6 +873,7 @@ export interface FileRouteTypes {
     | '/_authenticated/pilotages/conformity-types/'
     | '/_authenticated/pilotages/delay-types/'
     | '/_authenticated/pilotages/deliverable-delay-flows/'
+    | '/_authenticated/pilotages/deliverable-delay-request-types/'
     | '/_authenticated/pilotages/deliverables/'
     | '/_authenticated/pilotages/flows/'
     | '/_authenticated/pilotages/holidays/'
@@ -1073,6 +1086,13 @@ declare module '@tanstack/react-router' {
       path: '/pilotages/deliverables'
       fullPath: '/pilotages/deliverables'
       preLoaderRoute: typeof AuthenticatedPilotagesDeliverablesIndexRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/pilotages/deliverable-delay-request-types/': {
+      id: '/_authenticated/pilotages/deliverable-delay-request-types/'
+      path: '/pilotages/deliverable-delay-request-types'
+      fullPath: '/pilotages/deliverable-delay-request-types'
+      preLoaderRoute: typeof AuthenticatedPilotagesDeliverableDelayRequestTypesIndexRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
     '/_authenticated/pilotages/deliverable-delay-flows/': {
@@ -1414,6 +1434,7 @@ interface AuthenticatedRouteChildren {
   AuthenticatedPilotagesConformityTypesIndexRoute: typeof AuthenticatedPilotagesConformityTypesIndexRoute
   AuthenticatedPilotagesDelayTypesIndexRoute: typeof AuthenticatedPilotagesDelayTypesIndexRoute
   AuthenticatedPilotagesDeliverableDelayFlowsIndexRoute: typeof AuthenticatedPilotagesDeliverableDelayFlowsIndexRoute
+  AuthenticatedPilotagesDeliverableDelayRequestTypesIndexRoute: typeof AuthenticatedPilotagesDeliverableDelayRequestTypesIndexRoute
   AuthenticatedPilotagesDeliverablesIndexRoute: typeof AuthenticatedPilotagesDeliverablesIndexRoute
   AuthenticatedPilotagesFlowsIndexRoute: typeof AuthenticatedPilotagesFlowsIndexRoute
   AuthenticatedPilotagesHolidaysIndexRoute: typeof AuthenticatedPilotagesHolidaysIndexRoute
@@ -1505,6 +1526,8 @@ const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
     AuthenticatedPilotagesDelayTypesIndexRoute,
   AuthenticatedPilotagesDeliverableDelayFlowsIndexRoute:
     AuthenticatedPilotagesDeliverableDelayFlowsIndexRoute,
+  AuthenticatedPilotagesDeliverableDelayRequestTypesIndexRoute:
+    AuthenticatedPilotagesDeliverableDelayRequestTypesIndexRoute,
   AuthenticatedPilotagesDeliverablesIndexRoute:
     AuthenticatedPilotagesDeliverablesIndexRoute,
   AuthenticatedPilotagesFlowsIndexRoute: AuthenticatedPilotagesFlowsIndexRoute,

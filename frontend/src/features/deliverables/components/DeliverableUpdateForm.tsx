@@ -1,5 +1,5 @@
 import { useState } from "react";
-import type { Deliverable } from "../types/deliverable.type";
+import type { Deliverable } from "../../../shared/deliverable/types/deliverable.type";
 import { useNavigate } from "@tanstack/react-router";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import {

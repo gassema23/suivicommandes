@@ -41,6 +41,7 @@ export const sidebarMenu = {
         PERMISSIONS.PROVIDER_DISPONIBILITIES.READ,
         PERMISSIONS.REQUEST_TYPE_SERVICE_CATEGORIES.READ,
         PERMISSIONS.REQUEST_TYPE_DELAYS.READ,
+        PERMISSIONS.DELIVERABLE_DELAY_REQUEST_TYPES.READ,
         PERMISSIONS.DELIVERABLE_DELAY_FLOWS.READ,
       ],
       permissionLogic: "OR",
@@ -69,6 +70,16 @@ export const sidebarMenu = {
           title: "Délai par type de demande",
           url: "/pilotages/request-type-delays",
           permission: PERMISSIONS.REQUEST_TYPE_DELAYS.READ,
+        },
+        {
+          title: "Type de demandes de délai de livraison",
+          url: "/pilotages/deliverable-delay-request-types",
+          permission: PERMISSIONS.DELIVERABLE_DELAY_REQUEST_TYPES.READ,
+        },
+        {
+          title: "Délai de livraison des flux",
+          url: "/pilotages/deliverable-delay-flows",
+          permission: PERMISSIONS.DELIVERABLE_DELAY_FLOWS.READ,
         },
         {
           title: "Types de délai",

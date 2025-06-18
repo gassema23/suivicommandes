@@ -7,7 +7,6 @@ export class CsrfMiddleware implements NestMiddleware {
     if (['POST', 'PUT', 'PATCH', 'DELETE'].includes(req.method)) {
       const csrfCookie = req.cookies['csrfToken'];
       const csrfHeader = req.headers['x-csrf-token'];
-
       if (!csrfCookie && !csrfHeader) {
         throw new ForbiddenException(
           'Protection CSRF : cookie et en-tête CSRF manquants.',
@@ -23,7 +22,7 @@ export class CsrfMiddleware implements NestMiddleware {
       }
       if (csrfCookie !== csrfHeader) {
         throw new ForbiddenException(
-          'Protection CSRF : le token du cookie et de l’en-tête ne correspondent pas.',
+          "Protection CSRF : le token du cookie et de l'en-tête ne correspondent pas.",
         );
       }
     }

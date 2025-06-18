@@ -1,9 +1,8 @@
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useNavigate } from "@tanstack/react-router";
-
 import { ACTIONS } from "@/shared/authorizations/types/auth.types";
 import {
   Card,
@@ -21,25 +20,19 @@ import {
   createRoleSchema,
   type CreateRoleFormData,
 } from "../schemas/role.schema";
-import { fetchResources } from "../services/fetch-resources.service";
 import FormError from "@/components/ui/shadcn/form-error";
 import { QUERY_KEYS } from "@/constants/query-key.constant";
 
-export default function CreateRolePage() {
+export default function CreateRolePage({
+  data: resourceValues,
+}: {
+  data: string[];
+}) {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const [backendError, setBackendError] = useState<string | null>(null);
 
   // Récupération dynamique des ressources
-  const {
-    data: resourcesRaw = [],
-    isLoading: loadingResources,
-    error: resourcesError,
-  } = useQuery({
-    queryKey: QUERY_KEYS.RESOURCE,
-    queryFn: fetchResources,
-  });
-  const resourceValues = resourcesRaw.map((r) => r.value);
 
   const {
     matrix,
@@ -80,18 +73,6 @@ export default function CreateRolePage() {
   const onSubmit = (data: CreateRoleFormData) => {
     createRoleMutation.mutate(data);
   };
-
-  if (loadingResources) {
-    return <div>Chargement des ressources...</div>;
-  }
-
-  if (resourcesError) {
-    return (
-      <div className="text-destructive">
-        Erreur lors du chargement des ressources
-      </div>
-    );
-  }
 
   return (
     <form onSubmit={form.handleSubmit(onSubmit)} className="w-full space-y-6">

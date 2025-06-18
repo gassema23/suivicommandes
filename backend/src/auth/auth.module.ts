@@ -14,9 +14,11 @@ import { AuthController } from './controllers/auth.controller';
 import { CacheModule } from '@nestjs/cache-manager';
 import * as redisStore from 'cache-manager-ioredis';
 import { TwoFactorAuthService } from './services/two-factor-auth.service';
+import { MetricsModule } from '@/metrics/metrics.module';
 
 @Module({
   imports: [
+    MetricsModule,
     CacheModule.registerAsync({
       imports: [ConfigModule],
       inject: [ConfigService],

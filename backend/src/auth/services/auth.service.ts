@@ -26,9 +26,8 @@ import { instanceToPlain } from 'class-transformer';
 import { VerifyEmailInterface } from '../interfaces/verify-email.interface';
 import { parseDurationToMs } from '../../common/utils/parse-duration';
 import { TwoFactorAuthService } from './two-factor-auth.service';
-import { ERROR_MESSAGES } from '@/common/constants/error-messages.constant';
-import { assertUniqueFields } from '@/common/utils/assert-unique-fields';
-import { RefreshTokenResult } from '../interfaces/refresh-token-result.interface';
+import { ERROR_MESSAGES } from '../../common/constants/error-messages.constant';
+import { assertUniqueFields } from '../../common/utils/assert-unique-fields';
 
 export interface JwtPayload {
   sub: string;
@@ -390,28 +389,29 @@ export class AuthService {
    * @returns Un objet contenant le nouveau token d'accès et le token de rafraîchissement.
    * @throws UnauthorizedException si le token de rafraîchissement est invalide ou expiré.
    */
-  async refreshToken(refreshToken: string): Promise<RefreshTokenResult> {
+  async refreshToken(
+    refreshToken: string,
+  ): Promise<{ accessToken: string; refreshToken: string }> {
     try {
-      const payload = this.jwtService.verify<JwtPayload>(refreshToken, {
-        secret: this.configService.get('JWT_REFRESH_SECRET'),
+      const payload = this.jwtService.verify(refreshToken, {
+        secret: this.configService.getOrThrow('JWT_REFRESH_SECRET'),
       });
 
       const user = await this.userRepository.findOne({
         where: { id: payload.sub, rememberToken: refreshToken },
-        relations: ['team'],
       });
 
       if (!user) {
-        throw new UnauthorizedException('Token invalide.');
+        throw new UnauthorizedException(
+          'Le token de rafraîchissement est invalide.',
+        );
       }
 
-      const { accessToken, refreshToken: newRefreshToken } =
-        await this.generateTokensAndSaveRefreshToken(user);
-
-      return { accessToken, refreshToken: newRefreshToken };
+      return this.generateTokensAndSaveRefreshToken(user);
     } catch (error) {
-      console.error('Erreur lors du rafraîchissement du token:', error);
-      throw new UnauthorizedException('Token invalide.');
+      throw new UnauthorizedException(
+        'Le token de rafraîchissement est invalide.',
+      );
     }
   }
 
@@ -422,11 +422,15 @@ export class AuthService {
    * @param accessToken Le token d'accès à stocker dans le cookie.
    * @param refreshToken Le token de rafraîchissement à stocker dans le cookie.
    */
-  setAuthCookies(res: Response, accessToken: string, refreshToken: string) {
+  async setAuthCookies(
+    res: Response,
+    accessToken: string,
+    refreshToken: string,
+  ) {
     const jwtExpirationAcessToken =
-      this.configService.get<string>('JWT_EXPIRATION') || '1m';
+      this.configService.getOrThrow<string>('JWT_EXPIRATION') || '1m';
     const jwtExpirationRefreshToken =
-      this.configService.get<string>('JWT_REFRESH_EXPIRATION') || '30d';
+      this.configService.getOrThrow<string>('JWT_REFRESH_EXPIRATION') || '30d';
 
     const maxAgeAcessToken = parseDurationToMs(jwtExpirationAcessToken);
     const maxAgeRefreshToken = parseDurationToMs(jwtExpirationRefreshToken);
@@ -444,7 +448,7 @@ export class AuthService {
       maxAge: maxAgeRefreshToken,
     });
 
-    const decoded: JwtPayload = this.jwtService.decode(accessToken);
+    const decoded = this.jwtService.decode(accessToken) as { exp?: number };
     if (decoded?.exp) {
       res.cookie('accessTokenExpiresAt', decoded.exp * 1000, {
         httpOnly: false,
@@ -495,16 +499,18 @@ export class AuthService {
 
     const [accessToken, refreshToken] = await Promise.all([
       this.jwtService.signAsync(payload, {
-        secret: this.configService.get('JWT_SECRET'),
-        expiresIn: this.configService.get('JWT_EXPIRATION') || '8h',
+        secret: this.configService.getOrThrow('JWT_SECRET'),
+        expiresIn: this.configService.getOrThrow('JWT_EXPIRATION'),
       }),
       this.jwtService.signAsync(payload, {
-        secret: this.configService.get('JWT_REFRESH_SECRET'),
-        expiresIn: this.configService.get('JWT_REFRESH_EXPIRATION') || '7d',
+        secret: this.configService.getOrThrow('JWT_REFRESH_SECRET'),
+        expiresIn: this.configService.getOrThrow('JWT_REFRESH_EXPIRATION'),
       }),
     ]);
 
+    // Sauvegarde le refreshToken dans la base de données
     await this.userRepository.update(user.id, { rememberToken: refreshToken });
+
     return { accessToken, refreshToken };
   }
 
