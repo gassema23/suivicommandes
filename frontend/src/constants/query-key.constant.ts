@@ -123,6 +123,7 @@ export const QUERY_KEYS = {
   DELIVERABLE_WITH_ID: (deliverableId?: string | null) =>
     ["deliverables", deliverableId ?? ""] as const,
   DELIVERABLES_WITH_PAGE: (page: number) => ["deliverables", page] as const,
+  DELIVERABLES_LISTS: ["deliverablesLists"] as const,
 
   // Flux de transmission
   FLOWS: ["flow"] as const,
@@ -139,6 +140,13 @@ export const QUERY_KEYS = {
     [
       "requestTypeServiceCategories",
       requestTypeServiceCategoryId ?? "",
+    ] as const,
+  REQUEST_TYPE_SERVICE_CATEGORY_BY_SERVICE_CATEGORY: (
+    serviceCategoryId?: string | null
+  ) =>
+    [
+      "requestTypeServiceCategoryByServiceCategory",
+      serviceCategoryId ?? "",
     ] as const,
 
   // Request type delays

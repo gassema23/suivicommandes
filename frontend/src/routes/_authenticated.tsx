@@ -1,5 +1,5 @@
 import { AppSidebar } from "@/components/navigations/app-sidebar";
-import { LoadingProgress } from "@/components/ui/loader/LoadingProgress";
+import FingerprintLoader from "@/components/ui/loader/FingerprintLoader";
 import { Breadcrumb } from "@/components/ui/quebec/Breadcrumb";
 import { QuebecFooter } from "@/components/ui/quebec/Footer";
 import { QuebecHeader } from "@/components/ui/quebec/QuebecHeader";
@@ -54,7 +54,7 @@ export const Route = createFileRoute("/_authenticated")({
     }
   },
   component: AuthLayout,
-  pendingComponent: () => <LoadingProgress />,
+  pendingComponent: () => <div className="w-full h-screen justify-center"><FingerprintLoader /></div>,
 });
 
 function AuthLayout() {

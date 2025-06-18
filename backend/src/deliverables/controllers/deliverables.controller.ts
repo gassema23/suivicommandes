@@ -61,6 +61,19 @@ export class DeliverablesController {
     );
   }
 
+  @Get('deliverableLists')
+  @Permissions([{ resource: Resource.DELIVERABLES, actions: [Action.READ] }])
+  @ApiOperation({
+    summary: 'Afficher la liste des livrables pour les sélecteurs',
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Liste des livrables récupérée avec succès',
+  })
+  async findDeliverablesLists() {
+    return this.deliverablesService.findDeliverablesLists();
+  }
+
   /**
    * Créer un nouveau livrable
    * @param createDeliverableDto DTO pour créer un livrable

@@ -157,6 +157,18 @@ export class DeliverablesService {
   }
 
   /**
+   * Finds all deliverables for listing purposes.
+   * Returns only the ID and name of each deliverable, sorted by name.
+   * @returns A list of deliverables with their IDs and names.
+   */
+  async findDeliverablesLists(): Promise<Deliverable[]> {
+    return this.deliverableRepository.find({
+      select: ['id', 'deliverableName'],
+      order: { deliverableName: 'ASC' },
+    });
+  }
+
+  /**
    * Removes a deliverable by its ID.
    * Marks the deliverable as deleted and records the user who deleted it.
    * @param id - ID of the deliverable to remove.

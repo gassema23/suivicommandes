@@ -55,6 +55,7 @@ import { Route as AuthenticatedPilotagesProviderDisponibilitiesCreateRouteImport
 import { Route as AuthenticatedPilotagesHolidaysCreateRouteImport } from './routes/_authenticated/pilotages/holidays/create'
 import { Route as AuthenticatedPilotagesFlowsCreateRouteImport } from './routes/_authenticated/pilotages/flows/create'
 import { Route as AuthenticatedPilotagesDeliverablesCreateRouteImport } from './routes/_authenticated/pilotages/deliverables/create'
+import { Route as AuthenticatedPilotagesDeliverableDelayRequestTypesCreateRouteImport } from './routes/_authenticated/pilotages/deliverable-delay-request-types/create'
 import { Route as AuthenticatedPilotagesDelayTypesCreateRouteImport } from './routes/_authenticated/pilotages/delay-types/create'
 import { Route as AuthenticatedPilotagesConformityTypesCreateRouteImport } from './routes/_authenticated/pilotages/conformity-types/create'
 import { Route as AuthenticatedPilotagesClientsCreateRouteImport } from './routes/_authenticated/pilotages/clients/create'
@@ -347,6 +348,12 @@ const AuthenticatedPilotagesDeliverablesCreateRoute =
     path: '/pilotages/deliverables/create',
     getParentRoute: () => AuthenticatedRoute,
   } as any)
+const AuthenticatedPilotagesDeliverableDelayRequestTypesCreateRoute =
+  AuthenticatedPilotagesDeliverableDelayRequestTypesCreateRouteImport.update({
+    id: '/pilotages/deliverable-delay-request-types/create',
+    path: '/pilotages/deliverable-delay-request-types/create',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
 const AuthenticatedPilotagesDelayTypesCreateRoute =
   AuthenticatedPilotagesDelayTypesCreateRouteImport.update({
     id: '/pilotages/delay-types/create',
@@ -497,6 +504,7 @@ export interface FileRoutesByFullPath {
   '/pilotages/clients/create': typeof AuthenticatedPilotagesClientsCreateRoute
   '/pilotages/conformity-types/create': typeof AuthenticatedPilotagesConformityTypesCreateRoute
   '/pilotages/delay-types/create': typeof AuthenticatedPilotagesDelayTypesCreateRoute
+  '/pilotages/deliverable-delay-request-types/create': typeof AuthenticatedPilotagesDeliverableDelayRequestTypesCreateRoute
   '/pilotages/deliverables/create': typeof AuthenticatedPilotagesDeliverablesCreateRoute
   '/pilotages/flows/create': typeof AuthenticatedPilotagesFlowsCreateRoute
   '/pilotages/holidays/create': typeof AuthenticatedPilotagesHolidaysCreateRoute
@@ -567,6 +575,7 @@ export interface FileRoutesByTo {
   '/pilotages/clients/create': typeof AuthenticatedPilotagesClientsCreateRoute
   '/pilotages/conformity-types/create': typeof AuthenticatedPilotagesConformityTypesCreateRoute
   '/pilotages/delay-types/create': typeof AuthenticatedPilotagesDelayTypesCreateRoute
+  '/pilotages/deliverable-delay-request-types/create': typeof AuthenticatedPilotagesDeliverableDelayRequestTypesCreateRoute
   '/pilotages/deliverables/create': typeof AuthenticatedPilotagesDeliverablesCreateRoute
   '/pilotages/flows/create': typeof AuthenticatedPilotagesFlowsCreateRoute
   '/pilotages/holidays/create': typeof AuthenticatedPilotagesHolidaysCreateRoute
@@ -639,6 +648,7 @@ export interface FileRoutesById {
   '/_authenticated/pilotages/clients/create': typeof AuthenticatedPilotagesClientsCreateRoute
   '/_authenticated/pilotages/conformity-types/create': typeof AuthenticatedPilotagesConformityTypesCreateRoute
   '/_authenticated/pilotages/delay-types/create': typeof AuthenticatedPilotagesDelayTypesCreateRoute
+  '/_authenticated/pilotages/deliverable-delay-request-types/create': typeof AuthenticatedPilotagesDeliverableDelayRequestTypesCreateRoute
   '/_authenticated/pilotages/deliverables/create': typeof AuthenticatedPilotagesDeliverablesCreateRoute
   '/_authenticated/pilotages/flows/create': typeof AuthenticatedPilotagesFlowsCreateRoute
   '/_authenticated/pilotages/holidays/create': typeof AuthenticatedPilotagesHolidaysCreateRoute
@@ -711,6 +721,7 @@ export interface FileRouteTypes {
     | '/pilotages/clients/create'
     | '/pilotages/conformity-types/create'
     | '/pilotages/delay-types/create'
+    | '/pilotages/deliverable-delay-request-types/create'
     | '/pilotages/deliverables/create'
     | '/pilotages/flows/create'
     | '/pilotages/holidays/create'
@@ -781,6 +792,7 @@ export interface FileRouteTypes {
     | '/pilotages/clients/create'
     | '/pilotages/conformity-types/create'
     | '/pilotages/delay-types/create'
+    | '/pilotages/deliverable-delay-request-types/create'
     | '/pilotages/deliverables/create'
     | '/pilotages/flows/create'
     | '/pilotages/holidays/create'
@@ -852,6 +864,7 @@ export interface FileRouteTypes {
     | '/_authenticated/pilotages/clients/create'
     | '/_authenticated/pilotages/conformity-types/create'
     | '/_authenticated/pilotages/delay-types/create'
+    | '/_authenticated/pilotages/deliverable-delay-request-types/create'
     | '/_authenticated/pilotages/deliverables/create'
     | '/_authenticated/pilotages/flows/create'
     | '/_authenticated/pilotages/holidays/create'
@@ -1242,6 +1255,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedPilotagesDeliverablesCreateRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
+    '/_authenticated/pilotages/deliverable-delay-request-types/create': {
+      id: '/_authenticated/pilotages/deliverable-delay-request-types/create'
+      path: '/pilotages/deliverable-delay-request-types/create'
+      fullPath: '/pilotages/deliverable-delay-request-types/create'
+      preLoaderRoute: typeof AuthenticatedPilotagesDeliverableDelayRequestTypesCreateRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
     '/_authenticated/pilotages/delay-types/create': {
       id: '/_authenticated/pilotages/delay-types/create'
       path: '/pilotages/delay-types/create'
@@ -1413,6 +1433,7 @@ interface AuthenticatedRouteChildren {
   AuthenticatedPilotagesClientsCreateRoute: typeof AuthenticatedPilotagesClientsCreateRoute
   AuthenticatedPilotagesConformityTypesCreateRoute: typeof AuthenticatedPilotagesConformityTypesCreateRoute
   AuthenticatedPilotagesDelayTypesCreateRoute: typeof AuthenticatedPilotagesDelayTypesCreateRoute
+  AuthenticatedPilotagesDeliverableDelayRequestTypesCreateRoute: typeof AuthenticatedPilotagesDeliverableDelayRequestTypesCreateRoute
   AuthenticatedPilotagesDeliverablesCreateRoute: typeof AuthenticatedPilotagesDeliverablesCreateRoute
   AuthenticatedPilotagesFlowsCreateRoute: typeof AuthenticatedPilotagesFlowsCreateRoute
   AuthenticatedPilotagesHolidaysCreateRoute: typeof AuthenticatedPilotagesHolidaysCreateRoute
@@ -1484,6 +1505,8 @@ const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
     AuthenticatedPilotagesConformityTypesCreateRoute,
   AuthenticatedPilotagesDelayTypesCreateRoute:
     AuthenticatedPilotagesDelayTypesCreateRoute,
+  AuthenticatedPilotagesDeliverableDelayRequestTypesCreateRoute:
+    AuthenticatedPilotagesDeliverableDelayRequestTypesCreateRoute,
   AuthenticatedPilotagesDeliverablesCreateRoute:
     AuthenticatedPilotagesDeliverablesCreateRoute,
   AuthenticatedPilotagesFlowsCreateRoute:
