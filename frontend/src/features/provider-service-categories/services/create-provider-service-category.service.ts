@@ -5,10 +5,8 @@ import { apiFetch } from "@/hooks/useApiFetch";
 export async function createProviderServiceCategory(
   data: ProviderServiceCategoryFormData
 ) {
-  const payload = {
-    providerId: data.providerId,
-    serviceCategoryId: data.serviceCategoryId,
-  }
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const { sectorId, serviceId, ...payload } = data;
 
   const res = await apiFetch(`${API_ROUTE}/provider-service-categories`, {
     method: "POST",

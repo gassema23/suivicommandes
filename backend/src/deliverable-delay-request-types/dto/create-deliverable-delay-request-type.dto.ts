@@ -1,5 +1,5 @@
-import { IsString, MaxLength, IsOptional, IsUUID } from 'class-validator';
-import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import { IsUUID } from 'class-validator';
+import { ApiProperty } from '@nestjs/swagger';
 
 export class CreateDeliverableDelayRequestTypeDto {
   @ApiProperty({

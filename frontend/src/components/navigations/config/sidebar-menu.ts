@@ -7,9 +7,12 @@ export const sidebarMenu = {
       url: "#",
       items: [
         {
+          title: "Tableau de bord",
+          url: "/",
+        },
+        {
           title: "Suivi des commandes",
-          url: "/applications/tracking",
-          isActive: true,
+          url: "/applications/tracking-order",
         },
         {
           title: "Mes commandes",

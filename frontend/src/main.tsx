@@ -1,42 +1,22 @@
 import ReactDOM from "react-dom/client";
 import "./styles/gloabal.css";
+import { RouterProvider } from "@tanstack/react-router";
 
-import { RouterProvider, createRouter } from "@tanstack/react-router";
-
-import { routeTree } from "./routeTree.gen";
 import { useAuth } from "./providers/auth.provider.tsx";
 import React from "react";
 import Providers from "./providers/providers.provider.tsx";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-
-const queryClient = new QueryClient({
-  defaultOptions: {
-    queries: {
-      staleTime: 5 * 60 * 1000, // 5 minutes
-      retry: 1,
-    },
-  },
-});
-
-const router = createRouter({
-  routeTree,
-  defaultPreload: "intent",
-  scrollRestoration: true,
-  context: {
-    auth: undefined!,
-    queryClient,
-  },
-});
-
-declare module "@tanstack/react-router" {
-  interface Register {
-    router: typeof router;
-  }
-}
+import { QueryClientProvider } from "@tanstack/react-query";
+import { queryClient } from "./lib/react-query.ts";
+import { router } from "./lib/router.ts";
 
 function InnerApp() {
   const auth = useAuth();
-  return <RouterProvider router={router} context={{ auth, queryClient }} />;
+  return (
+    <RouterProvider
+      router={router}
+      context={{ auth: { ...auth }, queryClient }}
+    />
+  );
 }
 
 function App() {

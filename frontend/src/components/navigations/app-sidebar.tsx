@@ -9,11 +9,11 @@ import {
   SidebarRail,
 } from "@/components/ui/shadcn/sidebar";
 import { sidebarMenu } from "./config/sidebar-menu";
-import AppLogo from "@/components/ui/quebec/AppLogo";
 import { usePermissions } from "../../shared/authorizations/hooks/usePermissions";
 import { ProtectedNavLink } from "../../shared/authorizations/components/ProtectedNavLink";
 import type { ComponentProps } from "react";
 import { GroupCollapsible } from "./components/GroupCollapsible";
+import AppLogo from "../ui/quebec/AppLogo";
 
 type Permission = {
   resource: string;
@@ -75,7 +75,7 @@ export function AppSidebar(props: ComponentProps<typeof Sidebar>) {
   };
   return (
     <Sidebar {...props}>
-      <SidebarHeader className="py-4 flex w-full items-center justify-center">
+      <SidebarHeader className="py-4 pt-1 flex w-full items-center justify-center">
         <AppLogo />
       </SidebarHeader>
 
@@ -84,10 +84,7 @@ export function AppSidebar(props: ComponentProps<typeof Sidebar>) {
           const visibleItems = group.items.filter(canAccessItem);
           if (!canAccessGroup(group) || visibleItems.length === 0) return null;
           return (
-            <GroupCollapsible
-              group={group}
-              key={group.title}
-            >
+            <GroupCollapsible group={group} key={group.title}>
               <SidebarGroupContent>
                 <SidebarMenu>
                   {visibleItems.map((item) => (

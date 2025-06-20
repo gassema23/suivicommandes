@@ -129,6 +129,7 @@ export const QUERY_KEYS = {
   FLOWS: ["flow"] as const,
   FLOW_WITH_ID: (flowId?: string | null) => ["flow", flowId ?? ""] as const,
   FLOWS_WITH_PAGE: (page: number) => ["flow", page] as const,
+  FLOWS_LISTS: ["flowsLists"] as const,
 
   // Request Type Service Categories
   REQUEST_TYPE_SERVICE_CATEGORIES_WITH_PAGE: (page: number) =>
@@ -167,4 +168,20 @@ export const QUERY_KEYS = {
       deliverableDelayRequestTypeId ?? "",
     ] as const;
   },
+  DELIVERABLE_DELAY_REQUEST_TYPE_BY_REQUEST_TYPE_SERVICE_CATEGORY: (
+    requestTypeServiceCategoryId?: string | null
+  ) => {
+    return [
+      "deliverableDelayRequestTypeByRequestTypeServiceCategory",
+      requestTypeServiceCategoryId ?? "",
+    ] as const;
+  },
+
+  DELIVERABLE_DELAY_FLOW_WITH_PAGE: (page: number) =>
+    ["deliverableDelayFlows", page] as const,
+  DELIVERABLE_DELAY_FLOW_WITH_ID: (deliverableDelayFlowId?: string | null) => {
+    return ["deliverableDelayFlows", deliverableDelayFlowId ?? ""] as const;
+  },
+  DELIVERABLE_DELAY_FLOWS: ["deliverableDelayFlows"] as const,
+  DELIVERABLE_DELAY_FLOWS_LISTS: ["deliverableDelayFlowsLists"] as const,
 };

@@ -22,9 +22,16 @@ export async function assertUniqueFields<T extends ObjectLiteral>(
 
   Object.entries(fields).forEach(([key, value], idx) => {
     const paramKey = `value${idx}`;
-    if (typeof value === 'string') {
+    // Récupère le type du champ via les métadonnées TypeORM
+    const column = repository.metadata.findColumnWithPropertyName(key);
+    if (column?.type === 'uuid') {
+      // Pour les UUID, comparaison directe
+      whereClauses.push(`entity.${key} = :${paramKey}`);
+    } else if (typeof value === 'string') {
+      // Pour les strings, insensible à la casse
       whereClauses.push(`LOWER(entity.${key}) = LOWER(:${paramKey})`);
     } else {
+      // Pour les autres types (number, etc.)
       whereClauses.push(`entity.${key} = :${paramKey}`);
     }
     params[paramKey] = value;

@@ -33,9 +33,7 @@ export class DeliverableDelayRequestType {
   @ManyToOne(
     () => Deliverable,
     (deliverable) => deliverable.requestTypeDelays,
-    {
-      nullable: false,
-    },
+    { nullable: false },
   )
   @JoinColumn({ name: 'deliverable_id' })
   deliverable: Deliverable;
@@ -70,7 +68,7 @@ export class DeliverableDelayRequestType {
 
   @OneToMany(
     () => DeliverableDelayFlow,
-    (flow) => flow.requestTypeServiceCategory,
+    (deliverableDelayFlow) => deliverableDelayFlow.deliverableDelayRequestType,
   )
   deliverableDelayFlows: DeliverableDelayFlow[];
 }

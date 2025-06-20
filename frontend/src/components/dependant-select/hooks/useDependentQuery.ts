@@ -11,5 +11,6 @@ export function useDependentQuery<T>(
     queryFn: () => fetchFn(id),
     enabled: id !== undefined && id !== null && id !== "",
     staleTime: 5 * 60 * 1000,
+    retry: 1,
   });
 }

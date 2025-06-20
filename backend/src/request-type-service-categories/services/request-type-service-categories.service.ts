@@ -2,13 +2,14 @@ import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { RequestType } from '../../request-types/entities/request-type.entity';
 import { ServiceCategory } from '../../service-categories/entities/service-category.entity';
-import { Repository, FindOptionsWhere, ILike } from 'typeorm';
+import { Repository } from 'typeorm';
 import { RequestTypeServiceCategory } from '../entities/request-type-service-category.entity';
 import { PaginationDto } from '../../common/dto/pagination.dto';
 import { PaginatedResult } from '../../common/interfaces/paginated-result.interface';
 import { CreateRequestTypeServiceCategoryDto } from '../dto/create-request-type-service-category.dto';
 import { User } from '../../users/entities/user.entity';
 import { UpdateRequestTypeServiceCategoryDto } from '../dto/update-request-type-service-category.dto';
+import { DeliverableDelayRequestType } from '@/deliverable-delay-request-types/entities/deliverable-delay-request-type.entity';
 
 @Injectable()
 export class RequestTypeServiceCategoriesService {
@@ -189,6 +190,37 @@ export class RequestTypeServiceCategoriesService {
     }
 
     return entity;
+  }
+
+  async getDeliverableDelayRequestByRequestTypeServiceCategory(
+    id: string,
+  ): Promise<DeliverableDelayRequestType[]> {
+    const qb = this.requestTypeServiceCategoryRepository
+      .createQueryBuilder('rtsc')
+      .leftJoinAndSelect('rtsc.deliverableDelayRequestTypes', 'ddrt')
+      .leftJoinAndSelect('ddrt.deliverable', 'deliverable')
+      .select([
+        'rtsc.id',
+        'ddrt.id',
+        'deliverable.id',
+        'deliverable.deliverableName',
+      ])
+      .where('rtsc.id = :id', { id });
+
+    const entities = await qb.getMany();
+
+    if (!entities || entities.length === 0) {
+      throw new BadRequestException(
+        'Aucune association type de demande/catégorie de service trouvée avec cet identifiant.',
+      );
+    }
+
+    // Flatten and filter out undefined/null
+    const deliverableDelayRequestTypes = entities
+      .flatMap((e) => e.deliverableDelayRequestTypes || [])
+      .filter(Boolean);
+
+    return deliverableDelayRequestTypes;
   }
 
   /**

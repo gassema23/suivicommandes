@@ -1,7 +1,6 @@
 import { useIdleTimer } from "react-idle-timer";
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useCallback, useEffect } from "react";
 import { Button } from "@/components/ui/quebec/Button";
-import { useAuthService } from "../libs/useAuthService";
 import {
   Dialog,
   DialogContent,
@@ -9,67 +8,101 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/shadcn/dialog";
-import { COUNTDOWN, TIMEOUT } from "@/constants/env.constant";
+import { useAuth } from "@/providers/auth.provider";
+
+const LOGOUT_TIMEOUT = 45; // secondes
 
 export default function IdleLogoutModal() {
+  const { logout } = useAuth();
+  const [showIdleModal, setShowIdleModal] = useState(false);
+  const [countdown, setCountdown] = useState(LOGOUT_TIMEOUT);
+  const countdownRef = useRef<number>(LOGOUT_TIMEOUT);
+  const intervalRef = useRef<NodeJS.Timeout | null>(null);
+  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 
-  const [showModal, setShowModal] = useState(false);
-  const [countdown, setCountdown] = useState(COUNTDOWN);
-  const countdownRef = useRef<NodeJS.Timeout | null>(null);
-
-  const { logout, refreshToken } = useAuthService();
-  // Lance le compte à rebours quand le modal s'affiche
-  useEffect(() => {
-    if (showModal) {
-      setCountdown(COUNTDOWN);
-      countdownRef.current = setInterval(() => {
-        setCountdown((c) => c - 1);
-      }, 1000);
-    } else if (countdownRef.current) {
-      clearInterval(countdownRef.current);
-      countdownRef.current = null;
+  const clearTimers = useCallback(() => {
+    if (intervalRef.current) {
+      clearInterval(intervalRef.current);
+      intervalRef.current = null;
     }
-    return () => {
-      if (countdownRef.current) clearInterval(countdownRef.current);
-    };
-  }, [showModal]);
-
-  // Déconnexion auto si le compte à rebours atteint 0
-  useEffect(() => {
-    if (showModal && countdown <= 0) {
-      logout();
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current);
+      timeoutRef.current = null;
     }
-  }, [countdown, showModal, logout]);
+    countdownRef.current = LOGOUT_TIMEOUT;
+  }, []);
 
-  // Idle timer
-  useIdleTimer({
-    timeout: TIMEOUT,
-    onIdle: () => setShowModal(true),
+  const startCountdown = useCallback(() => {
+    // Reset countdown
+    countdownRef.current = LOGOUT_TIMEOUT;
+    setCountdown(LOGOUT_TIMEOUT);
+
+    // Countdown every second
+    intervalRef.current = setInterval(async () => {
+      countdownRef.current -= 1;
+      setCountdown(countdownRef.current);
+      if (countdownRef.current <= 0) {
+        await logout();
+        clearTimers();
+      }
+    }, 1000);
+  }, [logout, clearTimers]);
+
+  const onIdle = useCallback(() => {
+    setShowIdleModal(true);
+  }, []);
+
+  const onActive = useCallback(() => {
+    setShowIdleModal(false);
+    clearTimers();
+  }, [clearTimers]);
+
+  useEffect(() => {
+    if (showIdleModal) {
+      startCountdown();
+    } else {
+      clearTimers();
+    }
+    return clearTimers;
+  }, [showIdleModal, startCountdown, clearTimers]);
+
+  const { reset } = useIdleTimer({
+    timeout: 4 * 60 * 1000, // 4 minutes
+    onIdle,
+    onActive,
     debounce: 500,
-    crossTab:true
+    stopOnIdle: true,
+    crossTab: true,
   });
 
   const handleStay = () => {
-    refreshToken();
-    setShowModal(false);
+    setShowIdleModal(false);
+    clearTimers();
+    reset();
   };
-  const handleLogout = () => logout();
-  // Empêche la fermeture par clic extérieur ou Escape
-  const handleOpenChange = (open: boolean) => {
-    if (!open && showModal) {
-      setShowModal(true);
-    }
+
+  const handleLogout = () => {
+    setShowIdleModal(false);
+    clearTimers();
+    logout();
   };
 
   return (
-    <Dialog open={showModal} onOpenChange={handleOpenChange}>
-      <DialogContent showCloseButton={false}>
+    <Dialog open={showIdleModal} onOpenChange={setShowIdleModal}>
+      <DialogContent
+        showCloseButton={false}
+        onInteractOutside={(e) => e.preventDefault()}
+      >
         <DialogHeader>
           <DialogTitle>Vous allez être déconnecté(e) bientôt</DialogTitle>
         </DialogHeader>
         <div>
-          Pour protéger vos informations, vous serez déconnecté(e) dans{" "}
-          <span className="font-semibold">{countdown} secondes</span>.
+          Pour protéger vos informations, vous serez automatiquement
+          déconnecté(e) dans{" "}
+          <span className="font-semibold text-destructive">
+            {countdown} seconde{countdown > 1 ? "s" : ""}
+          </span>{" "}
+          si aucune action n'est effectuée.
         </div>
         <DialogFooter>
           <Button onClick={handleLogout} variant="link">

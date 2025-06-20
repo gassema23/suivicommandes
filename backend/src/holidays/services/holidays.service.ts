@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { BadRequestException, Inject, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Holiday } from '../entities/holiday.entity';
 import { FindOptionsWhere, ILike, Repository } from 'typeorm';
@@ -7,6 +7,8 @@ import { PaginatedResult } from '../../common/interfaces/paginated-result.interf
 import { CreateHolidayDto } from '../dto/create-holiday.dto';
 import { User } from '../../users/entities/user.entity';
 import { UpdateHolidayDto } from '../dto/update-holiday.dto';
+import { CACHE_MANAGER } from '@nestjs/cache-manager';
+import type { Cache } from 'cache-manager';
 
 @Injectable()
 export class HolidaysService {
@@ -17,6 +19,7 @@ export class HolidaysService {
    * @param holidayRepository - Repository pour accéder aux données des jours fériés.
    */
   constructor(
+    @Inject(CACHE_MANAGER) private cacheManager: Cache,
     @InjectRepository(Holiday)
     private readonly holidayRepository: Repository<Holiday>,
   ) {}
@@ -68,6 +71,28 @@ export class HolidaysService {
         totalPages: Math.ceil(total / limit),
       },
     };
+  }
+
+  async getHolidays(): Promise<string[]> {
+    const cacheKey = 'holidays';
+    const cached = await this.cacheManager.get<string[]>(cacheKey);
+    // 1. Si les jours fériés sont déjà en cache, on les retourne
+    if (Array.isArray(cached)) {
+      return cached;
+    }
+
+    // 2. Sinon, charge depuis la base
+    const holidays = await this.holidayRepository.find({
+      select: ['holidayDate'],
+      order: { holidayDate: 'ASC' },
+    });
+    const holidayDates = holidays.map((holiday) => {
+      if (typeof holiday.holidayDate === 'string') return holiday.holidayDate;
+      return new Date(holiday.holidayDate).toISOString().split('T')[0];
+    });
+    await this.cacheManager.set(cacheKey, holidayDates, 60 * 60 * 24);
+
+    return holidayDates;
   }
 
   /**

@@ -38,6 +38,7 @@ import { Route as AuthenticatedPilotagesDeliverableDelayFlowsIndexRouteImport } 
 import { Route as AuthenticatedPilotagesDelayTypesIndexRouteImport } from './routes/_authenticated/pilotages/delay-types/index'
 import { Route as AuthenticatedPilotagesConformityTypesIndexRouteImport } from './routes/_authenticated/pilotages/conformity-types/index'
 import { Route as AuthenticatedPilotagesClientsIndexRouteImport } from './routes/_authenticated/pilotages/clients/index'
+import { Route as AuthenticatedApplicationsTrackingOrderIndexRouteImport } from './routes/_authenticated/applications/tracking-order/index'
 import { Route as AuthenticatedAdministrationsRolesIndexRouteImport } from './routes/_authenticated/administrations/roles/index'
 import { Route as AuthenticatedPilotagesUsersCreateRouteImport } from './routes/_authenticated/pilotages/users/create'
 import { Route as AuthenticatedPilotagesTeamsCreateRouteImport } from './routes/_authenticated/pilotages/teams/create'
@@ -56,9 +57,11 @@ import { Route as AuthenticatedPilotagesHolidaysCreateRouteImport } from './rout
 import { Route as AuthenticatedPilotagesFlowsCreateRouteImport } from './routes/_authenticated/pilotages/flows/create'
 import { Route as AuthenticatedPilotagesDeliverablesCreateRouteImport } from './routes/_authenticated/pilotages/deliverables/create'
 import { Route as AuthenticatedPilotagesDeliverableDelayRequestTypesCreateRouteImport } from './routes/_authenticated/pilotages/deliverable-delay-request-types/create'
+import { Route as AuthenticatedPilotagesDeliverableDelayFlowsCreateRouteImport } from './routes/_authenticated/pilotages/deliverable-delay-flows/create'
 import { Route as AuthenticatedPilotagesDelayTypesCreateRouteImport } from './routes/_authenticated/pilotages/delay-types/create'
 import { Route as AuthenticatedPilotagesConformityTypesCreateRouteImport } from './routes/_authenticated/pilotages/conformity-types/create'
 import { Route as AuthenticatedPilotagesClientsCreateRouteImport } from './routes/_authenticated/pilotages/clients/create'
+import { Route as AuthenticatedApplicationsTrackingOrderCreateRouteImport } from './routes/_authenticated/applications/tracking-order/create'
 import { Route as AuthenticatedAdministrationsRolesCreateRouteImport } from './routes/_authenticated/administrations/roles/create'
 import { Route as AuthenticatedPilotagesTeamsUpdateIdRouteImport } from './routes/_authenticated/pilotages/teams/update/$id'
 import { Route as AuthenticatedPilotagesSubdivisionClientsUpdateIdRouteImport } from './routes/_authenticated/pilotages/subdivision-clients/update/$id'
@@ -75,6 +78,8 @@ import { Route as AuthenticatedPilotagesProviderDisponibilitiesUpdateIdRouteImpo
 import { Route as AuthenticatedPilotagesHolidaysUpdateIdRouteImport } from './routes/_authenticated/pilotages/holidays/update/$id'
 import { Route as AuthenticatedPilotagesFlowsUpdateIdRouteImport } from './routes/_authenticated/pilotages/flows/update/$id'
 import { Route as AuthenticatedPilotagesDeliverablesUpdateIdRouteImport } from './routes/_authenticated/pilotages/deliverables/update/$id'
+import { Route as AuthenticatedPilotagesDeliverableDelayRequestTypesUpdateIdRouteImport } from './routes/_authenticated/pilotages/deliverable-delay-request-types/update/$id'
+import { Route as AuthenticatedPilotagesDeliverableDelayFlowsUpdateIdRouteImport } from './routes/_authenticated/pilotages/deliverable-delay-flows/update/$id'
 import { Route as AuthenticatedPilotagesDelayTypesUpdateIdRouteImport } from './routes/_authenticated/pilotages/delay-types/update/$id'
 import { Route as AuthenticatedPilotagesConformityTypesUpdateIdRouteImport } from './routes/_authenticated/pilotages/conformity-types/update/$id'
 import { Route as AuthenticatedPilotagesClientsUpdateIdRouteImport } from './routes/_authenticated/pilotages/clients/update/$id'
@@ -246,6 +251,12 @@ const AuthenticatedPilotagesClientsIndexRoute =
     path: '/pilotages/clients/',
     getParentRoute: () => AuthenticatedRoute,
   } as any)
+const AuthenticatedApplicationsTrackingOrderIndexRoute =
+  AuthenticatedApplicationsTrackingOrderIndexRouteImport.update({
+    id: '/applications/tracking-order/',
+    path: '/applications/tracking-order/',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
 const AuthenticatedAdministrationsRolesIndexRoute =
   AuthenticatedAdministrationsRolesIndexRouteImport.update({
     id: '/administrations/roles/',
@@ -354,6 +365,12 @@ const AuthenticatedPilotagesDeliverableDelayRequestTypesCreateRoute =
     path: '/pilotages/deliverable-delay-request-types/create',
     getParentRoute: () => AuthenticatedRoute,
   } as any)
+const AuthenticatedPilotagesDeliverableDelayFlowsCreateRoute =
+  AuthenticatedPilotagesDeliverableDelayFlowsCreateRouteImport.update({
+    id: '/pilotages/deliverable-delay-flows/create',
+    path: '/pilotages/deliverable-delay-flows/create',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
 const AuthenticatedPilotagesDelayTypesCreateRoute =
   AuthenticatedPilotagesDelayTypesCreateRouteImport.update({
     id: '/pilotages/delay-types/create',
@@ -370,6 +387,12 @@ const AuthenticatedPilotagesClientsCreateRoute =
   AuthenticatedPilotagesClientsCreateRouteImport.update({
     id: '/pilotages/clients/create',
     path: '/pilotages/clients/create',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+const AuthenticatedApplicationsTrackingOrderCreateRoute =
+  AuthenticatedApplicationsTrackingOrderCreateRouteImport.update({
+    id: '/applications/tracking-order/create',
+    path: '/applications/tracking-order/create',
     getParentRoute: () => AuthenticatedRoute,
   } as any)
 const AuthenticatedAdministrationsRolesCreateRoute =
@@ -468,6 +491,18 @@ const AuthenticatedPilotagesDeliverablesUpdateIdRoute =
     path: '/pilotages/deliverables/update/$id',
     getParentRoute: () => AuthenticatedRoute,
   } as any)
+const AuthenticatedPilotagesDeliverableDelayRequestTypesUpdateIdRoute =
+  AuthenticatedPilotagesDeliverableDelayRequestTypesUpdateIdRouteImport.update({
+    id: '/pilotages/deliverable-delay-request-types/update/$id',
+    path: '/pilotages/deliverable-delay-request-types/update/$id',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+const AuthenticatedPilotagesDeliverableDelayFlowsUpdateIdRoute =
+  AuthenticatedPilotagesDeliverableDelayFlowsUpdateIdRouteImport.update({
+    id: '/pilotages/deliverable-delay-flows/update/$id',
+    path: '/pilotages/deliverable-delay-flows/update/$id',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
 const AuthenticatedPilotagesDelayTypesUpdateIdRoute =
   AuthenticatedPilotagesDelayTypesUpdateIdRouteImport.update({
     id: '/pilotages/delay-types/update/$id',
@@ -501,9 +536,11 @@ export interface FileRoutesByFullPath {
   '/verify-email/$token': typeof GuestVerifyEmailTokenRoute
   '/profile': typeof AuthenticatedProfileIndexRoute
   '/administrations/roles/create': typeof AuthenticatedAdministrationsRolesCreateRoute
+  '/applications/tracking-order/create': typeof AuthenticatedApplicationsTrackingOrderCreateRoute
   '/pilotages/clients/create': typeof AuthenticatedPilotagesClientsCreateRoute
   '/pilotages/conformity-types/create': typeof AuthenticatedPilotagesConformityTypesCreateRoute
   '/pilotages/delay-types/create': typeof AuthenticatedPilotagesDelayTypesCreateRoute
+  '/pilotages/deliverable-delay-flows/create': typeof AuthenticatedPilotagesDeliverableDelayFlowsCreateRoute
   '/pilotages/deliverable-delay-request-types/create': typeof AuthenticatedPilotagesDeliverableDelayRequestTypesCreateRoute
   '/pilotages/deliverables/create': typeof AuthenticatedPilotagesDeliverablesCreateRoute
   '/pilotages/flows/create': typeof AuthenticatedPilotagesFlowsCreateRoute
@@ -522,6 +559,7 @@ export interface FileRoutesByFullPath {
   '/pilotages/teams/create': typeof AuthenticatedPilotagesTeamsCreateRoute
   '/pilotages/users/create': typeof AuthenticatedPilotagesUsersCreateRoute
   '/administrations/roles': typeof AuthenticatedAdministrationsRolesIndexRoute
+  '/applications/tracking-order': typeof AuthenticatedApplicationsTrackingOrderIndexRoute
   '/pilotages/clients': typeof AuthenticatedPilotagesClientsIndexRoute
   '/pilotages/conformity-types': typeof AuthenticatedPilotagesConformityTypesIndexRoute
   '/pilotages/delay-types': typeof AuthenticatedPilotagesDelayTypesIndexRoute
@@ -548,6 +586,8 @@ export interface FileRoutesByFullPath {
   '/pilotages/clients/update/$id': typeof AuthenticatedPilotagesClientsUpdateIdRoute
   '/pilotages/conformity-types/update/$id': typeof AuthenticatedPilotagesConformityTypesUpdateIdRoute
   '/pilotages/delay-types/update/$id': typeof AuthenticatedPilotagesDelayTypesUpdateIdRoute
+  '/pilotages/deliverable-delay-flows/update/$id': typeof AuthenticatedPilotagesDeliverableDelayFlowsUpdateIdRoute
+  '/pilotages/deliverable-delay-request-types/update/$id': typeof AuthenticatedPilotagesDeliverableDelayRequestTypesUpdateIdRoute
   '/pilotages/deliverables/update/$id': typeof AuthenticatedPilotagesDeliverablesUpdateIdRoute
   '/pilotages/flows/update/$id': typeof AuthenticatedPilotagesFlowsUpdateIdRoute
   '/pilotages/holidays/update/$id': typeof AuthenticatedPilotagesHolidaysUpdateIdRoute
@@ -572,9 +612,11 @@ export interface FileRoutesByTo {
   '/verify-email/$token': typeof GuestVerifyEmailTokenRoute
   '/profile': typeof AuthenticatedProfileIndexRoute
   '/administrations/roles/create': typeof AuthenticatedAdministrationsRolesCreateRoute
+  '/applications/tracking-order/create': typeof AuthenticatedApplicationsTrackingOrderCreateRoute
   '/pilotages/clients/create': typeof AuthenticatedPilotagesClientsCreateRoute
   '/pilotages/conformity-types/create': typeof AuthenticatedPilotagesConformityTypesCreateRoute
   '/pilotages/delay-types/create': typeof AuthenticatedPilotagesDelayTypesCreateRoute
+  '/pilotages/deliverable-delay-flows/create': typeof AuthenticatedPilotagesDeliverableDelayFlowsCreateRoute
   '/pilotages/deliverable-delay-request-types/create': typeof AuthenticatedPilotagesDeliverableDelayRequestTypesCreateRoute
   '/pilotages/deliverables/create': typeof AuthenticatedPilotagesDeliverablesCreateRoute
   '/pilotages/flows/create': typeof AuthenticatedPilotagesFlowsCreateRoute
@@ -593,6 +635,7 @@ export interface FileRoutesByTo {
   '/pilotages/teams/create': typeof AuthenticatedPilotagesTeamsCreateRoute
   '/pilotages/users/create': typeof AuthenticatedPilotagesUsersCreateRoute
   '/administrations/roles': typeof AuthenticatedAdministrationsRolesIndexRoute
+  '/applications/tracking-order': typeof AuthenticatedApplicationsTrackingOrderIndexRoute
   '/pilotages/clients': typeof AuthenticatedPilotagesClientsIndexRoute
   '/pilotages/conformity-types': typeof AuthenticatedPilotagesConformityTypesIndexRoute
   '/pilotages/delay-types': typeof AuthenticatedPilotagesDelayTypesIndexRoute
@@ -619,6 +662,8 @@ export interface FileRoutesByTo {
   '/pilotages/clients/update/$id': typeof AuthenticatedPilotagesClientsUpdateIdRoute
   '/pilotages/conformity-types/update/$id': typeof AuthenticatedPilotagesConformityTypesUpdateIdRoute
   '/pilotages/delay-types/update/$id': typeof AuthenticatedPilotagesDelayTypesUpdateIdRoute
+  '/pilotages/deliverable-delay-flows/update/$id': typeof AuthenticatedPilotagesDeliverableDelayFlowsUpdateIdRoute
+  '/pilotages/deliverable-delay-request-types/update/$id': typeof AuthenticatedPilotagesDeliverableDelayRequestTypesUpdateIdRoute
   '/pilotages/deliverables/update/$id': typeof AuthenticatedPilotagesDeliverablesUpdateIdRoute
   '/pilotages/flows/update/$id': typeof AuthenticatedPilotagesFlowsUpdateIdRoute
   '/pilotages/holidays/update/$id': typeof AuthenticatedPilotagesHolidaysUpdateIdRoute
@@ -645,9 +690,11 @@ export interface FileRoutesById {
   '/_guest/verify-email/$token': typeof GuestVerifyEmailTokenRoute
   '/_authenticated/profile/': typeof AuthenticatedProfileIndexRoute
   '/_authenticated/administrations/roles/create': typeof AuthenticatedAdministrationsRolesCreateRoute
+  '/_authenticated/applications/tracking-order/create': typeof AuthenticatedApplicationsTrackingOrderCreateRoute
   '/_authenticated/pilotages/clients/create': typeof AuthenticatedPilotagesClientsCreateRoute
   '/_authenticated/pilotages/conformity-types/create': typeof AuthenticatedPilotagesConformityTypesCreateRoute
   '/_authenticated/pilotages/delay-types/create': typeof AuthenticatedPilotagesDelayTypesCreateRoute
+  '/_authenticated/pilotages/deliverable-delay-flows/create': typeof AuthenticatedPilotagesDeliverableDelayFlowsCreateRoute
   '/_authenticated/pilotages/deliverable-delay-request-types/create': typeof AuthenticatedPilotagesDeliverableDelayRequestTypesCreateRoute
   '/_authenticated/pilotages/deliverables/create': typeof AuthenticatedPilotagesDeliverablesCreateRoute
   '/_authenticated/pilotages/flows/create': typeof AuthenticatedPilotagesFlowsCreateRoute
@@ -666,6 +713,7 @@ export interface FileRoutesById {
   '/_authenticated/pilotages/teams/create': typeof AuthenticatedPilotagesTeamsCreateRoute
   '/_authenticated/pilotages/users/create': typeof AuthenticatedPilotagesUsersCreateRoute
   '/_authenticated/administrations/roles/': typeof AuthenticatedAdministrationsRolesIndexRoute
+  '/_authenticated/applications/tracking-order/': typeof AuthenticatedApplicationsTrackingOrderIndexRoute
   '/_authenticated/pilotages/clients/': typeof AuthenticatedPilotagesClientsIndexRoute
   '/_authenticated/pilotages/conformity-types/': typeof AuthenticatedPilotagesConformityTypesIndexRoute
   '/_authenticated/pilotages/delay-types/': typeof AuthenticatedPilotagesDelayTypesIndexRoute
@@ -692,6 +740,8 @@ export interface FileRoutesById {
   '/_authenticated/pilotages/clients/update/$id': typeof AuthenticatedPilotagesClientsUpdateIdRoute
   '/_authenticated/pilotages/conformity-types/update/$id': typeof AuthenticatedPilotagesConformityTypesUpdateIdRoute
   '/_authenticated/pilotages/delay-types/update/$id': typeof AuthenticatedPilotagesDelayTypesUpdateIdRoute
+  '/_authenticated/pilotages/deliverable-delay-flows/update/$id': typeof AuthenticatedPilotagesDeliverableDelayFlowsUpdateIdRoute
+  '/_authenticated/pilotages/deliverable-delay-request-types/update/$id': typeof AuthenticatedPilotagesDeliverableDelayRequestTypesUpdateIdRoute
   '/_authenticated/pilotages/deliverables/update/$id': typeof AuthenticatedPilotagesDeliverablesUpdateIdRoute
   '/_authenticated/pilotages/flows/update/$id': typeof AuthenticatedPilotagesFlowsUpdateIdRoute
   '/_authenticated/pilotages/holidays/update/$id': typeof AuthenticatedPilotagesHolidaysUpdateIdRoute
@@ -718,9 +768,11 @@ export interface FileRouteTypes {
     | '/verify-email/$token'
     | '/profile'
     | '/administrations/roles/create'
+    | '/applications/tracking-order/create'
     | '/pilotages/clients/create'
     | '/pilotages/conformity-types/create'
     | '/pilotages/delay-types/create'
+    | '/pilotages/deliverable-delay-flows/create'
     | '/pilotages/deliverable-delay-request-types/create'
     | '/pilotages/deliverables/create'
     | '/pilotages/flows/create'
@@ -739,6 +791,7 @@ export interface FileRouteTypes {
     | '/pilotages/teams/create'
     | '/pilotages/users/create'
     | '/administrations/roles'
+    | '/applications/tracking-order'
     | '/pilotages/clients'
     | '/pilotages/conformity-types'
     | '/pilotages/delay-types'
@@ -765,6 +818,8 @@ export interface FileRouteTypes {
     | '/pilotages/clients/update/$id'
     | '/pilotages/conformity-types/update/$id'
     | '/pilotages/delay-types/update/$id'
+    | '/pilotages/deliverable-delay-flows/update/$id'
+    | '/pilotages/deliverable-delay-request-types/update/$id'
     | '/pilotages/deliverables/update/$id'
     | '/pilotages/flows/update/$id'
     | '/pilotages/holidays/update/$id'
@@ -789,9 +844,11 @@ export interface FileRouteTypes {
     | '/verify-email/$token'
     | '/profile'
     | '/administrations/roles/create'
+    | '/applications/tracking-order/create'
     | '/pilotages/clients/create'
     | '/pilotages/conformity-types/create'
     | '/pilotages/delay-types/create'
+    | '/pilotages/deliverable-delay-flows/create'
     | '/pilotages/deliverable-delay-request-types/create'
     | '/pilotages/deliverables/create'
     | '/pilotages/flows/create'
@@ -810,6 +867,7 @@ export interface FileRouteTypes {
     | '/pilotages/teams/create'
     | '/pilotages/users/create'
     | '/administrations/roles'
+    | '/applications/tracking-order'
     | '/pilotages/clients'
     | '/pilotages/conformity-types'
     | '/pilotages/delay-types'
@@ -836,6 +894,8 @@ export interface FileRouteTypes {
     | '/pilotages/clients/update/$id'
     | '/pilotages/conformity-types/update/$id'
     | '/pilotages/delay-types/update/$id'
+    | '/pilotages/deliverable-delay-flows/update/$id'
+    | '/pilotages/deliverable-delay-request-types/update/$id'
     | '/pilotages/deliverables/update/$id'
     | '/pilotages/flows/update/$id'
     | '/pilotages/holidays/update/$id'
@@ -861,9 +921,11 @@ export interface FileRouteTypes {
     | '/_guest/verify-email/$token'
     | '/_authenticated/profile/'
     | '/_authenticated/administrations/roles/create'
+    | '/_authenticated/applications/tracking-order/create'
     | '/_authenticated/pilotages/clients/create'
     | '/_authenticated/pilotages/conformity-types/create'
     | '/_authenticated/pilotages/delay-types/create'
+    | '/_authenticated/pilotages/deliverable-delay-flows/create'
     | '/_authenticated/pilotages/deliverable-delay-request-types/create'
     | '/_authenticated/pilotages/deliverables/create'
     | '/_authenticated/pilotages/flows/create'
@@ -882,6 +944,7 @@ export interface FileRouteTypes {
     | '/_authenticated/pilotages/teams/create'
     | '/_authenticated/pilotages/users/create'
     | '/_authenticated/administrations/roles/'
+    | '/_authenticated/applications/tracking-order/'
     | '/_authenticated/pilotages/clients/'
     | '/_authenticated/pilotages/conformity-types/'
     | '/_authenticated/pilotages/delay-types/'
@@ -908,6 +971,8 @@ export interface FileRouteTypes {
     | '/_authenticated/pilotages/clients/update/$id'
     | '/_authenticated/pilotages/conformity-types/update/$id'
     | '/_authenticated/pilotages/delay-types/update/$id'
+    | '/_authenticated/pilotages/deliverable-delay-flows/update/$id'
+    | '/_authenticated/pilotages/deliverable-delay-request-types/update/$id'
     | '/_authenticated/pilotages/deliverables/update/$id'
     | '/_authenticated/pilotages/flows/update/$id'
     | '/_authenticated/pilotages/holidays/update/$id'
@@ -1136,6 +1201,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedPilotagesClientsIndexRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
+    '/_authenticated/applications/tracking-order/': {
+      id: '/_authenticated/applications/tracking-order/'
+      path: '/applications/tracking-order'
+      fullPath: '/applications/tracking-order'
+      preLoaderRoute: typeof AuthenticatedApplicationsTrackingOrderIndexRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
     '/_authenticated/administrations/roles/': {
       id: '/_authenticated/administrations/roles/'
       path: '/administrations/roles'
@@ -1262,6 +1334,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedPilotagesDeliverableDelayRequestTypesCreateRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
+    '/_authenticated/pilotages/deliverable-delay-flows/create': {
+      id: '/_authenticated/pilotages/deliverable-delay-flows/create'
+      path: '/pilotages/deliverable-delay-flows/create'
+      fullPath: '/pilotages/deliverable-delay-flows/create'
+      preLoaderRoute: typeof AuthenticatedPilotagesDeliverableDelayFlowsCreateRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
     '/_authenticated/pilotages/delay-types/create': {
       id: '/_authenticated/pilotages/delay-types/create'
       path: '/pilotages/delay-types/create'
@@ -1281,6 +1360,13 @@ declare module '@tanstack/react-router' {
       path: '/pilotages/clients/create'
       fullPath: '/pilotages/clients/create'
       preLoaderRoute: typeof AuthenticatedPilotagesClientsCreateRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/applications/tracking-order/create': {
+      id: '/_authenticated/applications/tracking-order/create'
+      path: '/applications/tracking-order/create'
+      fullPath: '/applications/tracking-order/create'
+      preLoaderRoute: typeof AuthenticatedApplicationsTrackingOrderCreateRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
     '/_authenticated/administrations/roles/create': {
@@ -1395,6 +1481,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedPilotagesDeliverablesUpdateIdRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
+    '/_authenticated/pilotages/deliverable-delay-request-types/update/$id': {
+      id: '/_authenticated/pilotages/deliverable-delay-request-types/update/$id'
+      path: '/pilotages/deliverable-delay-request-types/update/$id'
+      fullPath: '/pilotages/deliverable-delay-request-types/update/$id'
+      preLoaderRoute: typeof AuthenticatedPilotagesDeliverableDelayRequestTypesUpdateIdRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/pilotages/deliverable-delay-flows/update/$id': {
+      id: '/_authenticated/pilotages/deliverable-delay-flows/update/$id'
+      path: '/pilotages/deliverable-delay-flows/update/$id'
+      fullPath: '/pilotages/deliverable-delay-flows/update/$id'
+      preLoaderRoute: typeof AuthenticatedPilotagesDeliverableDelayFlowsUpdateIdRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
     '/_authenticated/pilotages/delay-types/update/$id': {
       id: '/_authenticated/pilotages/delay-types/update/$id'
       path: '/pilotages/delay-types/update/$id'
@@ -1430,9 +1530,11 @@ interface AuthenticatedRouteChildren {
   AuthenticatedIndexRoute: typeof AuthenticatedIndexRoute
   AuthenticatedProfileIndexRoute: typeof AuthenticatedProfileIndexRoute
   AuthenticatedAdministrationsRolesCreateRoute: typeof AuthenticatedAdministrationsRolesCreateRoute
+  AuthenticatedApplicationsTrackingOrderCreateRoute: typeof AuthenticatedApplicationsTrackingOrderCreateRoute
   AuthenticatedPilotagesClientsCreateRoute: typeof AuthenticatedPilotagesClientsCreateRoute
   AuthenticatedPilotagesConformityTypesCreateRoute: typeof AuthenticatedPilotagesConformityTypesCreateRoute
   AuthenticatedPilotagesDelayTypesCreateRoute: typeof AuthenticatedPilotagesDelayTypesCreateRoute
+  AuthenticatedPilotagesDeliverableDelayFlowsCreateRoute: typeof AuthenticatedPilotagesDeliverableDelayFlowsCreateRoute
   AuthenticatedPilotagesDeliverableDelayRequestTypesCreateRoute: typeof AuthenticatedPilotagesDeliverableDelayRequestTypesCreateRoute
   AuthenticatedPilotagesDeliverablesCreateRoute: typeof AuthenticatedPilotagesDeliverablesCreateRoute
   AuthenticatedPilotagesFlowsCreateRoute: typeof AuthenticatedPilotagesFlowsCreateRoute
@@ -1451,6 +1553,7 @@ interface AuthenticatedRouteChildren {
   AuthenticatedPilotagesTeamsCreateRoute: typeof AuthenticatedPilotagesTeamsCreateRoute
   AuthenticatedPilotagesUsersCreateRoute: typeof AuthenticatedPilotagesUsersCreateRoute
   AuthenticatedAdministrationsRolesIndexRoute: typeof AuthenticatedAdministrationsRolesIndexRoute
+  AuthenticatedApplicationsTrackingOrderIndexRoute: typeof AuthenticatedApplicationsTrackingOrderIndexRoute
   AuthenticatedPilotagesClientsIndexRoute: typeof AuthenticatedPilotagesClientsIndexRoute
   AuthenticatedPilotagesConformityTypesIndexRoute: typeof AuthenticatedPilotagesConformityTypesIndexRoute
   AuthenticatedPilotagesDelayTypesIndexRoute: typeof AuthenticatedPilotagesDelayTypesIndexRoute
@@ -1477,6 +1580,8 @@ interface AuthenticatedRouteChildren {
   AuthenticatedPilotagesClientsUpdateIdRoute: typeof AuthenticatedPilotagesClientsUpdateIdRoute
   AuthenticatedPilotagesConformityTypesUpdateIdRoute: typeof AuthenticatedPilotagesConformityTypesUpdateIdRoute
   AuthenticatedPilotagesDelayTypesUpdateIdRoute: typeof AuthenticatedPilotagesDelayTypesUpdateIdRoute
+  AuthenticatedPilotagesDeliverableDelayFlowsUpdateIdRoute: typeof AuthenticatedPilotagesDeliverableDelayFlowsUpdateIdRoute
+  AuthenticatedPilotagesDeliverableDelayRequestTypesUpdateIdRoute: typeof AuthenticatedPilotagesDeliverableDelayRequestTypesUpdateIdRoute
   AuthenticatedPilotagesDeliverablesUpdateIdRoute: typeof AuthenticatedPilotagesDeliverablesUpdateIdRoute
   AuthenticatedPilotagesFlowsUpdateIdRoute: typeof AuthenticatedPilotagesFlowsUpdateIdRoute
   AuthenticatedPilotagesHolidaysUpdateIdRoute: typeof AuthenticatedPilotagesHolidaysUpdateIdRoute
@@ -1499,12 +1604,16 @@ const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
   AuthenticatedProfileIndexRoute: AuthenticatedProfileIndexRoute,
   AuthenticatedAdministrationsRolesCreateRoute:
     AuthenticatedAdministrationsRolesCreateRoute,
+  AuthenticatedApplicationsTrackingOrderCreateRoute:
+    AuthenticatedApplicationsTrackingOrderCreateRoute,
   AuthenticatedPilotagesClientsCreateRoute:
     AuthenticatedPilotagesClientsCreateRoute,
   AuthenticatedPilotagesConformityTypesCreateRoute:
     AuthenticatedPilotagesConformityTypesCreateRoute,
   AuthenticatedPilotagesDelayTypesCreateRoute:
     AuthenticatedPilotagesDelayTypesCreateRoute,
+  AuthenticatedPilotagesDeliverableDelayFlowsCreateRoute:
+    AuthenticatedPilotagesDeliverableDelayFlowsCreateRoute,
   AuthenticatedPilotagesDeliverableDelayRequestTypesCreateRoute:
     AuthenticatedPilotagesDeliverableDelayRequestTypesCreateRoute,
   AuthenticatedPilotagesDeliverablesCreateRoute:
@@ -1541,6 +1650,8 @@ const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
     AuthenticatedPilotagesUsersCreateRoute,
   AuthenticatedAdministrationsRolesIndexRoute:
     AuthenticatedAdministrationsRolesIndexRoute,
+  AuthenticatedApplicationsTrackingOrderIndexRoute:
+    AuthenticatedApplicationsTrackingOrderIndexRoute,
   AuthenticatedPilotagesClientsIndexRoute:
     AuthenticatedPilotagesClientsIndexRoute,
   AuthenticatedPilotagesConformityTypesIndexRoute:
@@ -1590,6 +1701,10 @@ const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
     AuthenticatedPilotagesConformityTypesUpdateIdRoute,
   AuthenticatedPilotagesDelayTypesUpdateIdRoute:
     AuthenticatedPilotagesDelayTypesUpdateIdRoute,
+  AuthenticatedPilotagesDeliverableDelayFlowsUpdateIdRoute:
+    AuthenticatedPilotagesDeliverableDelayFlowsUpdateIdRoute,
+  AuthenticatedPilotagesDeliverableDelayRequestTypesUpdateIdRoute:
+    AuthenticatedPilotagesDeliverableDelayRequestTypesUpdateIdRoute,
   AuthenticatedPilotagesDeliverablesUpdateIdRoute:
     AuthenticatedPilotagesDeliverablesUpdateIdRoute,
   AuthenticatedPilotagesFlowsUpdateIdRoute:

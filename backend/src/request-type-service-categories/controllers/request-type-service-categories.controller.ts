@@ -108,6 +108,28 @@ export class RequestTypeServiceCategoriesController {
     );
   }
 
+  @Get(':id/deliverable-delay-request-types')
+  @Permissions([
+    {
+      resource: Resource.REQUEST_TYPE_SERVICE_CATEGORIES,
+      actions: [Action.READ],
+    },
+  ])
+  @ApiOperation({
+    summary: 'Obtenir un type de demandes par service par son ID',
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Type de demandes par service trouvé',
+  })
+  async getDeliverableDelayRequestByRequestTypeServiceCategory(
+    @Param('id', UuidParamPipe) id: string,
+  ) {
+    return this.requestTypeServiceCategoriesService.getDeliverableDelayRequestByRequestTypeServiceCategory(
+      id,
+    );
+  }
+
   /**
    * Controller for retrieving a specific request type service category by its ID.
    * @param id - The ID of the request type service category to retrieve.

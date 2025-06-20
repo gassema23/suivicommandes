@@ -2,7 +2,7 @@ import AppLogoIcon from "./AppLogoIcon";
 
 export default function AppLogo() {
     return (
-        <div className="flex items-center">
+        <div className="flex items-center pt-3">
             <div className="">
                 <AppLogoIcon />
             </div>

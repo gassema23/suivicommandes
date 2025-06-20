@@ -359,7 +359,6 @@ export class AuthService {
       throw new NotFoundException(
         'Aucun utilisateur trouvé avec cet identifiant.',
       );
-
     const isCurrentPasswordValid = await bcrypt.compare(
       currentPassword,
       user.password,
@@ -447,16 +446,6 @@ export class AuthService {
       secure: process.env.NODE_ENV === 'production',
       maxAge: maxAgeRefreshToken,
     });
-
-    const decoded = this.jwtService.decode(accessToken) as { exp?: number };
-    if (decoded?.exp) {
-      res.cookie('accessTokenExpiresAt', decoded.exp * 1000, {
-        httpOnly: false,
-        sameSite: 'strict',
-        secure: process.env.NODE_ENV === 'production',
-        maxAge: maxAgeAcessToken,
-      });
-    }
   }
 
   /**

@@ -52,8 +52,6 @@ function RouteComponent() {
   const { data } = useSuspenseQuery(rolesQueryOptions(id!));
   const { data: resources } = useSuspenseQuery(resourcesQueryOptions());
 
-  console.log(resources);
-
   const resourceValues = resources.map((r) => r.value);
 
   return <RoleUpdateForm role={data} data={resourceValues} />;

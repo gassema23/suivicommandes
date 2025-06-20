@@ -1,5 +1,5 @@
 import { useAuth } from "@/providers/auth.provider";
-import { Link, useNavigate, useRouter } from "@tanstack/react-router";
+import { Link, useNavigate } from "@tanstack/react-router";
 import { useMemo } from "react";
 
 interface NavLinkProps {
@@ -19,19 +19,9 @@ export const ProtectedNavLink: React.FC<NavLinkProps> = ({
   requiredRole,
   className = "",
   activeClassName = "",
-  exactMatch = false,
 }) => {
   const { hasPermission, hasRole } = useAuth();
   const navigate = useNavigate();
-  const router = useRouter();
-  // Vérifier si le lien est actif
-  const isActive = useMemo(() => {
-    const currentPath = router.state.location.pathname;
-    if (exactMatch) {
-      return currentPath === to;
-    }
-    return currentPath.startsWith(to);
-  }, [router.state.location.pathname, to, exactMatch]);
 
   // Vérifier les permissions
   const hasAccess = useMemo(() => {
@@ -58,11 +48,13 @@ export const ProtectedNavLink: React.FC<NavLinkProps> = ({
     return null;
   }
 
-  const finalClassName =
-    `${className} ${isActive ? activeClassName : ""}`.trim();
-
   return (
-    <Link to={to} onClick={handleClick} className={finalClassName}>
+    <Link
+      to={to}
+      onClick={handleClick}
+      className={className}
+      activeProps={{ className: activeClassName }}
+    >
       {children}
     </Link>
   );

@@ -20,6 +20,5 @@ export const Route = createFileRoute("/_guest/(login)/login")({
 });
 
 function LoginPage() {
-
   return <LoginContainer />;
 }

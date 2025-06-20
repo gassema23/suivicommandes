@@ -61,6 +61,9 @@ export class Flow {
   @IsOptional()
   readonly deletedAt?: Date;
 
-  @OneToMany(() => DeliverableDelayFlow, (flow) => flow.deliverable)
+  @OneToMany(
+    () => DeliverableDelayFlow,
+    (deliverableDelayFlow) => deliverableDelayFlow.flow,
+  )
   deliverableDelayFlows: DeliverableDelayFlow[];
 }

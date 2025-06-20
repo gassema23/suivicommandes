@@ -45,6 +45,6 @@ import { MetricsModule } from '@/metrics/metrics.module';
   ],
   providers: [AuthService, TwoFactorAuthService, JwtStrategy, LocalStrategy],
   controllers: [AuthController],
-  exports: [AuthService, TwoFactorAuthService, AuthService],
+  exports: [AuthService, TwoFactorAuthService],
 })
 export class AuthModule {}

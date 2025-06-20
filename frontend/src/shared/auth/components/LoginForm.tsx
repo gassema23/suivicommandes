@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useSearch } from "@tanstack/react-router";
+import { redirect, useSearch } from "@tanstack/react-router";
 import type { z } from "zod";
 import { Button } from "@/components/ui/quebec/Button";
 import { Input } from "@/components/ui/shadcn/input";
@@ -14,23 +14,18 @@ import ErrorMessage from "@/components/ui/shadcn/error-message";
 import { useAuth } from "@/providers/auth.provider";
 import { QuebecLink } from "@/components/ui/quebec/QuebecLink";
 import { Label } from "@/components/ui/shadcn/label";
-import { QUERY_KEYS } from "@/constants/query-key.constant";
-import { loginSchema, type LoginFormData } from "../schema/login.schema";
-import { useLogin } from "../services/login.service";
+import { loginSchema } from "../schema/login.schema";
 
 interface LoginFormProps {
   onSuccess: (token: string, email: string) => void;
   className?: string;
 }
 
-export default function LoginForm({
-  className = "",
-}: LoginFormProps) {
+export default function LoginForm({ className = "" }: LoginFormProps) {
   const [backendError, setBackendError] = useState<string | null>(null);
   const search = useSearch({ from: "/_guest/(login)/login" });
   const { login, refetchUser } = useAuth();
   const queryClient = useQueryClient();
-  const loginServiceMutation = useLogin();
 
   const form = useForm<z.infer<typeof loginSchema>>({
     resolver: zodResolver(loginSchema),
@@ -45,15 +40,18 @@ export default function LoginForm({
   };
 
   const loginMutation = useMutation({
-    mutationFn: (credentials: LoginFormData) =>
-      loginServiceMutation(credentials),
-    onSuccess: async () => {
+    mutationFn: async (data: z.infer<typeof loginSchema>) => {
+      // Passe bien les credentials et le redirect
+      await login({ credentials: data, redirect: search?.redirect });
       await refetchUser();
-      await queryClient.invalidateQueries({ queryKey: QUERY_KEYS.USERS });
-      await queryClient.invalidateQueries({ queryKey: QUERY_KEYS.ME });
-      login(search.redirect);
     },
-    onError: (error) => setBackendError(extractErrorMessage(error)),
+    onSuccess: () => {
+      queryClient.invalidateQueries();
+      redirect({ to: search?.redirect || "/" });
+    },
+    onError: (error) => {
+      setBackendError(extractErrorMessage(error));
+    },
   });
 
   const onSubmit = (data: z.infer<typeof loginSchema>) => {

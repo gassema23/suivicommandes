@@ -26,13 +26,13 @@ export class DeliverableDelayFlow {
     { nullable: false },
   )
   @JoinColumn({ name: 'deliverable_delay_request_type_id' })
-  requestTypeServiceCategory: DeliverableDelayRequestType;
+  deliverableDelayRequestType: DeliverableDelayRequestType;
 
   @ManyToOne(() => Flow, (flow) => flow.deliverableDelayFlows, {
     nullable: false,
   })
   @JoinColumn({ name: 'flow_id' })
-  deliverable: Flow;
+  flow: Flow;
 
   // Relation vers l'utilisateur ayant créé l'équipe
   @ManyToOne(() => User, { nullable: true })

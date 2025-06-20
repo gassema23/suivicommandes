@@ -19,7 +19,9 @@ export type FieldConfig<T extends object> = {
     | "select-request-type"
     | "select-client"
     | "select-team-owner"
-    | "select-deliverable";
+    | "select-deliverable"
+    | "select-deliverable-delay-request-type"
+    | "select-flow";
   rows?: number;
   required?: boolean;
   min?: number;

@@ -34,6 +34,10 @@ import { DeliverableDelayRequestTypesModule } from './deliverable-delay-request-
 import { DeliverableDelayFlowsModule } from './deliverable-delay-flows/deliverable-delay-flows.module';
 import { MetricsService } from './metrics/metrics.service';
 import { MetricsModule } from './metrics/metrics.module';
+import { DeadlineModule } from './deadline/deadline.module';
+import { CacheModule } from '@nestjs/cache-manager';
+
+import * as redisStore from 'cache-manager-ioredis';
 
 @Module({
   imports: [
@@ -136,6 +140,7 @@ import { MetricsModule } from './metrics/metrics.module';
     DeliverableDelayRequestTypesModule,
     DeliverableDelayFlowsModule,
     MetricsModule,
+    DeadlineModule,
   ],
   providers: [MetricsService],
 })

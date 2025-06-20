@@ -8,7 +8,7 @@ import {
 import { MoreVertical } from "lucide-react";
 
 export default function UserDropDownMenu({ userId }: { userId: string }) {
-  console.log("UserDropDownMenu rendered for userId:", userId);
+  console.warn("UserDropDownMenu rendered for userId:", userId);
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>

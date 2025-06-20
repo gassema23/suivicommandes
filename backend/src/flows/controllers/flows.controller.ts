@@ -79,6 +79,17 @@ export class FlowsController {
     return this.flowsService.create(createFlowDto, currentUser.id);
   }
 
+  @Get('flowLists')
+  @Permissions([{ resource: Resource.FLOWS, actions: [Action.READ] }])
+  @ApiOperation({ summary: 'Afficher la liste des flux de transmission' })
+  @ApiResponse({
+    status: 200,
+    description: 'Liste des flux de transmission récupérée avec succès',
+  })
+  async findAllForList() {
+    return this.flowsService.findAllForList();
+  }
+
   /**
    * Récupère un flux de transmission par son ID.
    * @param id - ID du flux à récupérer.

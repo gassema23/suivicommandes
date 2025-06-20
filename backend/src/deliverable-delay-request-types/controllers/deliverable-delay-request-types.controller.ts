@@ -173,19 +173,18 @@ export class DeliverableDelayRequestTypesController {
    * @param currentUser - The user deleting the request type.
    * @returns A confirmation message indicating successful deletion.
    */
-  @Delete()
+
+  @Delete(':id')
   @Permissions([
     {
       resource: Resource.DELIVERABLE_DELAY_REQUEST_TYPES,
       actions: [Action.DELETE],
     },
   ])
-  @ApiOperation({
-    summary: 'Supprimer un type de demandes par livrable',
-  })
+  @ApiOperation({ summary: 'Supprimer un type de demande par livrable' })
   @ApiResponse({
     status: 200,
-    description: 'le type de demandes par livrable supprimé avec succès',
+    description: 'Le type de demandes par livrable supprimé avec succès',
   })
   async remove(
     @Param('id', UuidParamPipe) id: string,

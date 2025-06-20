@@ -6,7 +6,7 @@ import { SUCCESS_MESSAGES } from "@/constants/messages.constant";
 import { QUERY_KEYS } from "@/constants/query-key.constant";
 import { flowColumns } from "@/features/flows/components/FlowColumns";
 import { getFlows } from "@/features/flows/services/get-flows.service";
-import type { FlowResponse } from "@/features/flows/types/flow.type";
+import type { FlowResponse } from "@/shared/flow/types/flow.type";
 import { createPermissionGuard } from "@/shared/authorizations/helpers/createPermissionGuard";
 import { PERMISSIONS } from "@/shared/authorizations/types/auth.types";
 import {

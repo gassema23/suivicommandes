@@ -6,11 +6,13 @@ export async function updateRequestTypeServiceCategory(
   id: string,
   data: RequestTypeServiceCategoryFormData
 ) {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const { sectorId, serviceId, ...payload } = data;
   const res = await apiFetch(
     `${API_ROUTE}/request-type-service-categories/${id}`,
     {
       method: "POST",
-      body: JSON.stringify(data),
+      body: JSON.stringify(payload),
     }
   );
 

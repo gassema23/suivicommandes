@@ -105,13 +105,13 @@ export class DeliverableDelayRequestTypesService {
    * @throws BadRequestException if an association with the same request type and deliverable already exists.
    */
   async create(dto: CreateDeliverableDelayRequestTypeDto, createdBy: string) {
-    await assertUniqueFields(
+    await assertUniqueFields<DeliverableDelayRequestType>(
       this.deliverableDelayRequestTypeRepository,
       {
         deliverable: dto.deliverableId,
-        requestTypeServiceCategory: { id: dto.requestTypeServiceCategoryId },
+        requestTypeServiceCategory: dto.requestTypeServiceCategoryId,
       },
-      undefined, // id à exclure pour l'update
+      undefined,
       `${ERROR_MESSAGES.CREATE} ${ERROR_MESSAGES.UNIQUE_CONSTRAINT}`,
     );
 
@@ -154,18 +154,25 @@ export class DeliverableDelayRequestTypesService {
     // Utilisation du QueryBuilder pour ne sélectionner que les champs nécessaires
     const qb = this.deliverableDelayRequestTypeRepository
       .createQueryBuilder('rtd')
-      .leftJoin('rtd.requestTypeServiceCategory', 'rtsc')
-      .leftJoin('rtsc.requestType', 'rt')
-      .leftJoin('rtsc.serviceCategory', 'sc')
-      .leftJoin('sc.service', 'svc')
-      .leftJoin('svc.sector', 'sector')
-      .leftJoin('rtd.deliverable', 'd')
+      .leftJoinAndSelect('rtd.deliverable', 'deliverable')
+      .leftJoinAndSelect('rtd.requestTypeServiceCategory', 'rtsc')
+      .leftJoinAndSelect('rtsc.requestType', 'rt')
+      .leftJoinAndSelect('rtsc.serviceCategory', 'sc')
+      .leftJoinAndSelect('sc.service', 'svc')
+      .leftJoinAndSelect('svc.sector', 'sector')
       .select([
-        'sector.sectorName AS sector_name',
-        'svc.serviceName AS service_name',
-        'sc.serviceCategoryName AS service_category_name',
-        'rt.requestTypeName AS request_type_name',
-        'd.deliverableName AS deliverable_name',
+        'rtd.id',
+        'deliverable.id',
+        'deliverable.deliverableName',
+        'rtsc.id',
+        'rt.requestTypeName',
+        'rt.id',
+        'sc.serviceCategoryName',
+        'sc.id',
+        'svc.serviceName',
+        'svc.id',
+        'sector.sectorName',
+        'sector.id',
       ])
       .where('rtd.id = :id', { id });
 
@@ -249,7 +256,15 @@ export class DeliverableDelayRequestTypesService {
    * @throws BadRequestException if no association is found for the given ID.
    */
   async remove(id: string, deletedBy: string): Promise<void> {
-    const entity = await this.findOne(id);
+    const entity = await this.deliverableDelayRequestTypeRepository.findOne({
+      where: { id },
+    });
+
+    if (!entity) {
+      throw new BadRequestException(
+        `${ERROR_MESSAGES.DELETE} ${ERROR_MESSAGES.NOT_FOUND}`,
+      );
+    }
 
     entity.deletedBy = { id: deletedBy } as User;
     await this.deliverableDelayRequestTypeRepository.save(entity);

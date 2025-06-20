@@ -10,9 +10,6 @@ momentFr();
 type DeliverableDelayRequestTypeWithDelete = DeliverableDelayRequestType & {
   onDelete: () => void;
 };
-/**
- * 5c2cc702-fc7c-48b8-bdf4-6635bbd42627
- */
 
 export const deliverableDelayRequestTypeColumns: ColumnDef<DeliverableDelayRequestTypeWithDelete>[] =
   [
@@ -61,7 +58,6 @@ export const deliverableDelayRequestTypeColumns: ColumnDef<DeliverableDelayReque
     {
       accessorKey: "requestTypeId",
       cell: ({ row }) => {
-        console.log(row)
         return (
           row.original.requestTypeServiceCategory?.requestType
             ?.requestTypeName || "N/A"

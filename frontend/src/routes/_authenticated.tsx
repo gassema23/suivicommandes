@@ -1,5 +1,5 @@
 import { AppSidebar } from "@/components/navigations/app-sidebar";
-import FingerprintLoader from "@/components/ui/loader/FingerprintLoader";
+import LoadingPage from "@/components/ui/loader/LoadingPage";
 import { Breadcrumb } from "@/components/ui/quebec/Breadcrumb";
 import { QuebecFooter } from "@/components/ui/quebec/Footer";
 import { QuebecHeader } from "@/components/ui/quebec/QuebecHeader";
@@ -43,18 +43,44 @@ export const Route = createFileRoute("/_authenticated")({
   head: () => ({
     meta: [{ title: "OSCAR" }],
   }),
-  beforeLoad: ({ context, location }) => {
+  beforeLoad: async ({ context, location }) => {
     if (!context.auth.isAuthenticated) {
-      throw redirect({
-        to: "/login",
-        search: {
-          redirect: location.href,
-        },
-      });
+      // Tente un refresh automatique du token si possible
+      try {
+        await context.auth.refreshToken?.();
+        // Après refresh, refetch l'utilisateur
+        await context.auth.refetchUser?.();
+      } catch (e) {
+        // Le refresh a échoué, on redirige
+        console.error(
+          "Refresh token failed or not available, redirecting to login",
+          e
+        );
+        return redirect({
+          to: "/login",
+          search: {
+            redirect: location.href,
+          },
+        });
+      }
+
+      // Si après refresh/refetch l'utilisateur est toujours non authentifié, on redirige
+      if (!context.auth.isAuthenticated) {
+        return redirect({
+          to: "/login",
+          search: {
+            redirect: location.href,
+          },
+        });
+      }
     }
   },
   component: AuthLayout,
-  pendingComponent: () => <div className="w-full h-screen justify-center"><FingerprintLoader /></div>,
+  pendingComponent: () => (
+    <div className="w-full h-screen justify-center">
+      <LoadingPage />
+    </div>
+  ),
 });
 
 function AuthLayout() {

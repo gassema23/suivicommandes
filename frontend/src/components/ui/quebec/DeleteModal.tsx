@@ -9,7 +9,6 @@ import {
 import { Button } from "@/components/ui/quebec/Button";
 import { useEffect, useState } from "react";
 import { API_ROUTE } from "@/constants/api-route.constant";
-import { useCsrf } from "@/providers/csrf.provider";
 import { formatErrorMessage } from "@/lib/utils";
 import { apiFetch } from "@/hooks/useApiFetch";
 
@@ -34,7 +33,6 @@ export function DeleteModal({
 }: DeleteModalProps) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const { ensureCsrfToken } = useCsrf();
 
   const handleDelete = async () => {
     if (!deleteId || !deletePageName) {
@@ -46,14 +44,8 @@ export function DeleteModal({
     setError(null);
 
     try {
-      const csrfToken = await ensureCsrfToken();
       const res = await apiFetch(`${API_ROUTE}/${deletePageName}/${deleteId}`, {
         method: "DELETE",
-        credentials: "include",
-        headers: {
-          "Content-Type": "application/json",
-          "x-csrf-token": csrfToken,
-        },
       });
 
       if (!res.ok) {

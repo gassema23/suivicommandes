@@ -8,7 +8,7 @@ import DeliverableDelayRequestTypeCreateForm from "@/features/deliverable-delay-
 export const Route = createFileRoute(
   "/_authenticated/pilotages/deliverable-delay-request-types/create"
 )({
-  beforeLoad: createPermissionGuard([PERMISSIONS.DELIVERABLES.CREATE]),
+  beforeLoad: createPermissionGuard([PERMISSIONS.DELIVERABLE_DELAY_REQUEST_TYPES.CREATE]),
   head: () => ({
     meta: [{ title: "Ajouter un type de demande de délai de livraison" }],
   }),

@@ -1,5 +1,5 @@
 import { API_ROUTE } from "@/constants/api-route.constant";
-import type { Flow } from "../types/flow.type";
+import type { Flow } from "../../../shared/flow/types/flow.type";
 import { apiFetch } from "@/hooks/useApiFetch";
 
 export const fetchFlow = async (id: string): Promise<Flow> => {

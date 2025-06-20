@@ -1,6 +1,6 @@
 import { createFileRoute, Outlet } from '@tanstack/react-router'
 import authImage from "@/assets/auth-image.jpg";
-import AppLogo from "@/components/ui/quebec/AppLogo";
+import AppLogo from '@/components/ui/quebec/AppLogo';
 
 export const Route = createFileRoute('/_guest')({
   component: RouteComponent,
@@ -10,8 +10,8 @@ function RouteComponent() {
   return (
     <div className="grid min-h-svh lg:grid-cols-2 w-full">
       <div className="flex flex-col gap-4 p-6 md:p-10">
-        <div className="flex justify-center gap-2 md:justify-start">
-          <a href="#" className="flex items-center gap-2 font-medium">
+        <div className="flex justify-center md:justify-start">
+          <a href="#" className="flex items-center font-medium">
             <AppLogo />
           </a>
         </div>

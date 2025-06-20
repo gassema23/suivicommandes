@@ -1,5 +1,5 @@
 import { useState } from "react";
-import type { Flow } from "../types/flow.type";
+import type { Flow } from "../../../shared/flow/types/flow.type";
 import { useNavigate } from "@tanstack/react-router";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { flowSchema, type FlowFormData } from "../schemas/flow.schema";

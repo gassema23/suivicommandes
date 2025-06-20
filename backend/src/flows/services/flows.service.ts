@@ -69,6 +69,13 @@ u   * @param flowRepository - Repository pour l'entité Flow.
     };
   }
 
+  async findAllForList(): Promise<Flow[]> {
+    return this.flowRepository.find({
+      select: ['id', 'flowName'],
+      order: { flowName: 'ASC' },
+    });
+  }
+
   /**
    * Crée un nouveau flux de transmission.
    * @param createFlowDto - DTO contenant les informations du flux à créer.

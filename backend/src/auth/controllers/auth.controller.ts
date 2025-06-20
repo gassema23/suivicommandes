@@ -11,6 +11,7 @@ import {
   Param,
   Patch,
   Req,
+  UnauthorizedException,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import {
@@ -212,14 +213,19 @@ export class AuthController {
   })
   async refresh(@Req() req: Request, @Res() res: Response) {
     // Assuming the refresh token is stored in a cookie named 'refreshToken'
-    const refreshToken = req.cookies?.refreshToken;
+    const refreshToken =
+      typeof req.cookies?.refreshToken === 'string'
+        ? req.cookies.refreshToken
+        : undefined;
     if (!refreshToken) {
-      return res.status(401).json({ message: 'Refresh token manquant' });
+      return res.json({ success: false, message: 'Refresh token manquant' });
     }
 
     const { accessToken, refreshToken: newRefreshToken } =
       await this.authService.refreshToken(refreshToken);
+
     await this.authService.setAuthCookies(res, accessToken, newRefreshToken);
+
     return res.json({ success: true });
   }
 
