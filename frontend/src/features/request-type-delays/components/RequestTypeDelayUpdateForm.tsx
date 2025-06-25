@@ -17,7 +17,7 @@ import { DependentSelect } from "@/components/dependant-select/components/Depend
 import InputContainer from "@/components/forms/components/InputContainer";
 import { requestTypeDelayFields } from "../configs/request-type-delay-fields";
 import FormError from "@/components/ui/shadcn/form-error";
-import type { RequestTypeDelay } from "../types/request-type-delay.type";
+import type { RequestTypeDelay } from "../../../shared/request-type-delays/types/request-type-delay.type";
 import { updateRequestTypeDelay } from "../services/update-request-type-delay.service";
 
 import { getRequestTypeServiceCategoryByServiceCategory } from "@/shared/request-type-service-categories/services/get-request-type-service-category-by-service-category.service";

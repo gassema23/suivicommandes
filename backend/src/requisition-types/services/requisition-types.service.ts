@@ -174,4 +174,10 @@ export class RequisitionTypesService {
 
     await this.requisitionTypeRepository.softDelete(id);
   }
+
+  async findRequisitionTypeList(): Promise<RequisitionType[]> {
+    return this.requisitionTypeRepository.find({
+      order: { requisitionTypeName: 'ASC' },
+    });
+  }
 }

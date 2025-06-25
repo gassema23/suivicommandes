@@ -61,6 +61,8 @@ export const QUERY_KEYS = {
     ["subdivisionClients", subdivisionClientId ?? ""] as const,
   SUBDIVISION_CLIENTS_WITH_PAGE: (page: number) =>
     ["subdivisionClients", page] as const,
+  SUBDIVISION_CLIENT_BY_CLIENT_ID: (clientId?: string | null) =>
+    ["subdivisionClientByClientId", clientId ?? ""] as const,
 
   // Équipes
   TEAMS: ["teams"] as const,
@@ -156,6 +158,8 @@ export const QUERY_KEYS = {
   REQUEST_TYPE_DELAYS: ["requestTypeDelays"] as const,
   REQUEST_TYPE_DELAY_WITH_ID: (requestTypeDelayId?: string | null) =>
     ["requestTypeDelays", requestTypeDelayId ?? ""] as const,
+  REQUEST_TYPE_DELAYS_BY_REQUEST_TYPE: (requestTypeId?: string | null) =>
+    ["requestTypeDelaysByRequestType", requestTypeId ?? ""] as const,
 
   DELIVERABLE_DELAY_RQUEST_TYPES_WITH_PAGE: (page: number) =>
     ["deliverableDelayRequestTypes", page] as const,
@@ -184,4 +188,21 @@ export const QUERY_KEYS = {
   },
   DELIVERABLE_DELAY_FLOWS: ["deliverableDelayFlows"] as const,
   DELIVERABLE_DELAY_FLOWS_LISTS: ["deliverableDelayFlowsLists"] as const,
-};
+
+  // Commandes de suivi
+  TRACKING_ORDERS: ["trackingOrders"] as const,
+
+  PROCESSING_TIME_CALCULATION: (
+    requestTypeId: string,
+    requestTypeDelayId: string | undefined,
+    order_registration_at: string,
+    order_registration_time: string
+  ) =>
+    [
+      "processing-time-calculation",
+      requestTypeId,
+      requestTypeDelayId || "default",
+      order_registration_at,
+      order_registration_time,
+    ] as const,
+} as const;

@@ -74,6 +74,23 @@ export class SubdivisionClientsController {
     };
   }
 
+  @Get('subdivision-client-client-id/:id')
+  @Permissions([
+    { resource: Resource.SUBDIVISION_CLIENTS, actions: [Action.READ] },
+  ])
+  @ApiOperation({
+    summary: 'Obtenir les subdivisions clients par ID de client',
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Liste des subdivisions clients pour le client spécifié',
+  })
+  async findByClientId(@Param('id', UuidParamPipe) id: string) {
+    const subdivisions =
+      await this.subdivisionClientsService.findByClientId(id);
+    return subdivisions.map((subdivision) => instanceToPlain(subdivision));
+  }
+
   /**
    * Crée une nouvelle subdivision client.
    * @param createSubdivisionClientDto - DTO pour la création d'une subdivision client.

@@ -77,10 +77,23 @@ export class ClientsService {
    * @returns Un tableau de clients avec les champs sélectionnés.
    */
   async getClientsList(): Promise<Client[]> {
-    return this.clientRepository.find({
-      select: ['id', 'clientName', 'clientNumber'],
-      order: { clientName: 'ASC' },
-    });
+    try {
+      return this.clientRepository
+        .createQueryBuilder('client')
+        .select(['client.id', 'client.clientName', 'client.clientNumber'])
+        .orderBy('CAST(client.clientNumber AS INTEGER)', 'ASC')
+        .getMany();
+    } catch (error) {
+      // Fallback en cas d'erreur de conversion (si clientNumber contient du texte)
+      console.warn(
+        'Erreur lors du tri numérique, fallback vers tri alphabétique:',
+        error,
+      );
+      return this.clientRepository.find({
+        select: ['id', 'clientName', 'clientNumber'],
+        order: { clientNumber: 'ASC' },
+      });
+    }
   }
 
   /**

@@ -2,7 +2,7 @@ import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { DelayType } from '../../delay-types/entities/delay-type.entity';
 import { RequestTypeServiceCategory } from '../../request-type-service-categories/entities/request-type-service-category.entity';
-import { FindOptionsWhere, ILike, Repository } from 'typeorm';
+import { FindOptionsWhere, Repository } from 'typeorm';
 import { RequestTypeDelay } from '../entities/request-type-delay.entity';
 import { PaginationDto } from '../../common/dto/pagination.dto';
 import { PaginatedResult } from '../../common/interfaces/paginated-result.interface';
@@ -274,5 +274,22 @@ export class RequestTypeDelaysService {
     await this.requestTypeDelayRepository.save(entity);
 
     await this.requestTypeDelayRepository.softDelete(id);
+  }
+
+  /**
+   * Finds request type delays associated with a specific request type service category.
+   * @param id - The ID of the request type service category.
+   * @returns An array of request type delays associated with the specified request type service category.
+   */
+  async findByRequestType(id: string): Promise<RequestTypeDelay[]> {
+    const where: FindOptionsWhere<RequestTypeDelay> = {
+      requestTypeServiceCategory: { id },
+    };
+
+    return this.requestTypeDelayRepository.find({
+      where,
+      relations: ['requestTypeServiceCategory', 'delayType'],
+      order: { createdAt: 'DESC' },
+    });
   }
 }

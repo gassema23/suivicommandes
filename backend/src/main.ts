@@ -7,13 +7,11 @@ import * as compression from 'compression';
 import helmet from 'helmet';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import * as cookieParser from 'cookie-parser';
-import { CsrfMiddleware } from './common/middlewares/csrf.middleware';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   const configService = app.get(ConfigService);
   const logger = new Logger('Bootstrap');
-  const csrf = new CsrfMiddleware();
 
   app.use(helmet());
 
@@ -24,7 +22,6 @@ async function bootstrap() {
   app.use(compression());
 
   app.use(cookieParser());
-  ///app.use(csrf.use.bind(csrf));
 
   // CORS
   app.enableCors({

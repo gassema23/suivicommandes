@@ -3,7 +3,7 @@ import moment from "moment";
 import { momentFr } from "@/lib/momentFr";
 import DataTableAction from "@/components/table/components/DataTableAction";
 import { DataTableColumnHeader } from "@/components/table/components/DataTableColumnHeader";
-import type { RequestTypeDelay } from "../types/request-type-delay.type";
+import type { RequestTypeDelay } from "../../../shared/request-type-delays/types/request-type-delay.type";
 
 momentFr();
 

@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { MiddlewareConsumer, Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule } from '@nestjs/config';
 import { ThrottlerModule } from '@nestjs/throttler';
@@ -35,9 +35,6 @@ import { DeliverableDelayFlowsModule } from './deliverable-delay-flows/deliverab
 import { MetricsService } from './metrics/metrics.service';
 import { MetricsModule } from './metrics/metrics.module';
 import { DeadlineModule } from './deadline/deadline.module';
-import { CacheModule } from '@nestjs/cache-manager';
-
-import * as redisStore from 'cache-manager-ioredis';
 
 @Module({
   imports: [

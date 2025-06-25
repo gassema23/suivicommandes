@@ -7,7 +7,7 @@ import { QUERY_KEYS } from "@/constants/query-key.constant";
 import { DataTable } from "@/components/table/DataTable";
 import { requestTypeDelayColumns } from "@/features/request-type-delays/components/RequestTypeDelayColumns";
 import { getRequestTypeDelays } from "@/features/request-type-delays/services/get-request-type-delays.service";
-import type { RequestTypeDelayResponse } from "@/features/request-type-delays/types/request-type-delay.type";
+import type { RequestTypeDelayResponse } from "@/shared/request-type-delays/types/request-type-delay.type";
 import {
   queryOptions,
   useQueryClient,

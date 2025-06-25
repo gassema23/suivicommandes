@@ -1,5 +1,4 @@
 import LoadingPage from "@/components/ui/loader/LoadingPage";
-import { Button } from "@/components/ui/quebec/Button";
 import FormError from "@/components/ui/shadcn/form-error";
 import { createFileRoute } from "@tanstack/react-router";
 

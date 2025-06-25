@@ -8,7 +8,7 @@ import { CalendarIcon } from "lucide-react";
 import { cn, parseLocalDate } from "@/lib/utils";
 import { format } from "date-fns";
 import { Calendar } from "@/components/ui/shadcn/calendar";
-import type { DayPickerSingleProps } from "react-day-picker";
+import type { PropsSingle } from "react-day-picker";
 import { fr } from "date-fns/locale";
 import { useState } from "react";
 
@@ -16,7 +16,7 @@ type DatePickerProps = {
   value?: Date;
   onChange?: (date: Date | undefined) => void;
   className?: string;
-} & Omit<DayPickerSingleProps, "selected" | "onSelect">;
+} & Omit<PropsSingle, "selected" | "onSelect">;
 
 export default function DatePicker({
   value,

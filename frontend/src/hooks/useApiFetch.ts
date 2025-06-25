@@ -1,13 +1,7 @@
 let isRefreshing = false;
 let refreshPromise: Promise<Response> | null = null;
 import { API_ROUTE } from "@/constants/api-route.constant";
-import Cookies from "js-cookie";
 
-function needsCsrf(method?: string) {
-  return ["POST", "PUT", "PATCH", "DELETE"].includes(
-    (method ?? "GET").toUpperCase()
-  );
-}
 
 export async function apiFetch(
   input: RequestInfo,
@@ -15,19 +9,11 @@ export async function apiFetch(
 ): Promise<Response> {
   let headers = { ...(init?.headers || {}) };
   const method = (init?.method ?? "GET").toUpperCase();
-  const csrfToken = Cookies.get("csrfToken");
 
-  if (!csrfToken) {
-    throw new Error("CSRF token is missing");
-  }
-  
-  if (needsCsrf(method)) {
     headers = {
       ...headers,
       "Content-Type": "application/json",
-      "X-CSRF-Token": csrfToken,
     };
-  }
 
   let response = await fetch(input, {
     ...init,
@@ -45,7 +31,6 @@ export async function apiFetch(
         credentials: "include",
         headers: {
           "Content-Type": "application/json",
-          "x-csrf-token": csrfToken,
         },
       }).finally(() => {
         isRefreshing = false;

@@ -1,5 +1,5 @@
 import { API_ROUTE } from "@/constants/api-route.constant";
-import type { RequisitionTypeResponse } from "../types/requisition-type.type";
+import type { RequisitionTypeResponse } from "../../../shared/requisition-types/types/requisition-type.type";
 import { apiFetch } from "@/hooks/useApiFetch";
 
 export const getRequisitionTypes = async (

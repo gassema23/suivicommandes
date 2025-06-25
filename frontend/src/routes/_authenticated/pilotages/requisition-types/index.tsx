@@ -7,7 +7,7 @@ import { QUERY_KEYS } from "@/constants/query-key.constant";
 import { DataTable } from "@/components/table/DataTable";
 import { requisitionTypeColumns } from "@/features/requisition-types/components/RequisitionTypeColumns";
 import { getRequisitionTypes } from "@/features/requisition-types/services/get-requisition-types.service";
-import type { RequisitionTypeResponse } from "@/features/requisition-types/types/requisition-type.type";
+import type { RequisitionTypeResponse } from "@/shared/requisition-types/types/requisition-type.type";
 import {
   queryOptions,
   useQueryClient,

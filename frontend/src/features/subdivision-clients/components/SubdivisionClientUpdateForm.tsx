@@ -10,7 +10,7 @@ import {
   type SubdivisionClientFormData,
 } from "../schemas/subdivision-client.schema";
 import { fetchClients } from "@/shared/clients/services/fetch-client.service";
-import type { SubdivisionClient } from "../types/subdivision-client.type";
+import type { SubdivisionClient } from "../../../shared/subdivision-clients/types/subdivision-client.type";
 import { updateSubdivisionClient } from "../services/update-subdivision-client.service";
 import { QUERY_KEYS } from "@/constants/query-key.constant";
 import { FormActions } from "@/components/forms/components/FormActions";

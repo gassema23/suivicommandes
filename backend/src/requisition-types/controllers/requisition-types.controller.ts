@@ -87,6 +87,25 @@ export class RequisitionTypesController {
     );
   }
 
+  @Get('requisition-type-list')
+  @Permissions([
+    { resource: Resource.REQUISITION_TYPES, actions: [Action.READ] },
+  ])
+  @ApiOperation({
+    summary: 'Afficher la liste des types de réquisitions pour les sélecteurs',
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Liste des types de réquisitions récupérée avec succès',
+  })
+  @ApiResponse({
+    status: 404,
+    description: 'Aucun type de réquisition trouvé',
+  })
+  async findRequisitionTypeList() {
+    return this.requisitionTypesService.findRequisitionTypeList();
+  }
+
   /**
    * Récupère un type de réquisition par son ID
    * @param id ID du type de réquisition à récupérer

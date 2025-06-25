@@ -11,7 +11,7 @@ import { Input } from "@/components/ui/shadcn/input";
 import { Textarea } from "@/components/ui/shadcn/textarea";
 import { FormActions } from "@/components/forms/components/FormActions";
 import { SUCCESS_MESSAGES } from "@/constants/messages.constant";
-import type { RequisitionType } from "../types/requisition-type.type";
+import type { RequisitionType } from "../../../shared/requisition-types/types/requisition-type.type";
 import {
   requisitionTypeSchema,
   type RequisitionTypeFormData,

@@ -6,7 +6,7 @@ import { PERMISSIONS } from "@/shared/authorizations/types/auth.types";
 import { DataTable } from "@/components/table/DataTable";
 import { SubdivisionClientColumns } from "@/features/subdivision-clients/components/SubdivisionClientColumns";
 import { getSubdivisionClients } from "@/features/subdivision-clients/services/get-subdivision-clients.service";
-import type { SubdivisionClientResponse } from "@/features/subdivision-clients/types/subdivision-client.type";
+import type { SubdivisionClientResponse } from "@/shared/subdivision-clients/types/subdivision-client.type";
 import {
   queryOptions,
   useQueryClient,

@@ -3,7 +3,7 @@ import moment from "moment";
 import { momentFr } from "@/lib/momentFr";
 import DataTableAction from "@/components/table/components/DataTableAction";
 import { DataTableColumnHeader } from "@/components/table/components/DataTableColumnHeader";
-import type { SubdivisionClient } from "../types/subdivision-client.type";
+import type { SubdivisionClient } from "../../../shared/subdivision-clients/types/subdivision-client.type";
 
 momentFr();
 

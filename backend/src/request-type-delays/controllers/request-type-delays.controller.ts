@@ -75,6 +75,29 @@ export class RequestTypeDelaysController {
   }
 
   /**
+   * Controller for retrieving request type delays by request type ID.
+   * @param id - The ID of the request type to retrieve delays for.
+   */
+  @Get('request-type-delays-by-request-type/:id')
+  @Permissions([
+    {
+      resource: Resource.REQUEST_TYPE_DELAYS,
+      actions: [Action.READ],
+    },
+  ])
+  @ApiOperation({
+    summary: 'Obtenir les délais des types de demandes par type de demande',
+  })
+  @ApiResponse({
+    status: 200,
+    description:
+      'Liste des délais des types de demandes par type de demande obtenue avec succès',
+  })
+  async findByRequestType(@Param('id', UuidParamPipe) id: string) {
+    return this.requestTypeDelayService.findByRequestType(id);
+  }
+
+  /**
    * Controller for creating a new request type delay.
    * @param createRequestTypeDelayDto - Data transfer object for creating a request type delay.
    * @param currentUser - The user creating the request type delay.

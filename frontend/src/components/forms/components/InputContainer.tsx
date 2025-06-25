@@ -23,7 +23,7 @@ export default function InputContainer({
       </Label>
       <div className="col-span-12 xl:col-span-8">
         {children}
-        {error && <p className="text-destructive text-sm mt-1">{error}</p>}
+        {error && <p className="text-destructive text-xs mt-0.5">{error}</p>}
       </div>
     </div>
   );

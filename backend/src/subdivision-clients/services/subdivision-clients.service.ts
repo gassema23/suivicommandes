@@ -221,4 +221,34 @@ export class SubdivisionClientsService {
     await this.subdivisionClientRepository.save(subdivisionClient);
     await this.subdivisionClientRepository.softDelete(id);
   }
+
+  async findByClientId(id: string): Promise<SubdivisionClient[]> {
+    try {
+      return this.subdivisionClientRepository
+        .createQueryBuilder('subdivision_client')
+        .leftJoinAndSelect('subdivision_client.client', 'client')
+        .where('client.id = :id', { id })
+        .select([
+          'subdivision_client.id',
+          'subdivision_client.subdivisionClientName',
+          'subdivision_client.subdivisionClientNumber',
+        ])
+        .orderBy(
+          'CAST(subdivision_client.subdivisionClientNumber AS INTEGER)',
+          'ASC',
+        )
+        .getMany();
+    } catch (error) {
+      console.warn(
+        'Erreur lors du tri numérique, fallback vers tri alphabétique:',
+        error,
+      );
+      return this.subdivisionClientRepository.find({
+        select: ['id', 'subdivisionClientName', 'subdivisionClientNumber'],
+        relations: ['client'],
+        where: { client: { id } },
+        order: { subdivisionClientNumber: 'ASC' },
+      });
+    }
+  }
 }

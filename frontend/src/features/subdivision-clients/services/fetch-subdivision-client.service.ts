@@ -1,5 +1,5 @@
 import { API_ROUTE } from "@/constants/api-route.constant";
-import type { SubdivisionClient } from "../types/subdivision-client.type";
+import type { SubdivisionClient } from "../../../shared/subdivision-clients/types/subdivision-client.type";
 import { apiFetch } from "@/hooks/useApiFetch";
 
 export const fetchSubdivisionClient = async (

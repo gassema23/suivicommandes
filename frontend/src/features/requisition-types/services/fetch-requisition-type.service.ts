@@ -1,5 +1,5 @@
 import { API_ROUTE } from "@/constants/api-route.constant";
-import type { RequisitionType } from "../types/requisition-type.type";
+import type { RequisitionType } from "../../../shared/requisition-types/types/requisition-type.type";
 import { apiFetch } from "@/hooks/useApiFetch";
 
 export const fetchRequisitionType = async (id: string): Promise<RequisitionType> => {

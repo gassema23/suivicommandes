@@ -1,7 +1,6 @@
 import { API_ROUTE } from "@/constants/api-route.constant";
 import { PUBLIC_ROUTES } from "@/constants/public-route.constant";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import Cookies from "js-cookie";
 import { apiFetch } from "./useApiFetch";
 
 export interface AuthContext {
@@ -58,12 +57,6 @@ interface Permission {
 
 const AUTH_USER_QUERY_KEY = ["auth", "user"] as const;
 
-function getCsrfTokenOrThrow() {
-  const csrfToken = Cookies.get("csrfToken");
-  if (!csrfToken) throw new Error("CSRF token is missing");
-  return csrfToken;
-}
-
 async function apiFetchWithRefresh(
   input: RequestInfo,
   init?: RequestInit
@@ -76,7 +69,6 @@ async function apiFetchWithRefresh(
       credentials: "include",
       headers: {
         "Content-Type": "application/json",
-        "x-csrf-token": Cookies.get("csrfToken")!,
       },
     });
     if (refreshRes.ok) {
@@ -98,27 +90,23 @@ async function fetchUser(): Promise<AuthUser | null> {
 }
 
 async function logoutRequest() {
-  const csrfToken = getCsrfTokenOrThrow();
   await refreshTokenRequest(); // Assure que le token est rafraîchi avant de se déconnecter
   const res = await fetch(`${API_ROUTE}/auth/logout`, {
     method: "POST",
     credentials: "include",
     headers: {
       "Content-Type": "application/json",
-      "x-csrf-token": csrfToken,
     },
   });
   if (!res.ok) throw new Error("Logout failed");
 }
 
 async function refreshTokenRequest() {
-  const csrfToken = getCsrfTokenOrThrow();
   const res = await fetch(`${API_ROUTE}/auth/refresh`, {
     method: "POST",
     credentials: "include",
     headers: {
       "Content-Type": "application/json",
-      "x-csrf-token": csrfToken,
     },
   });
   if (!res.ok) throw new Error("Refresh token failed");

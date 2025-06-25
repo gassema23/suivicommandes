@@ -11,7 +11,6 @@ import {
   Param,
   Patch,
   Req,
-  UnauthorizedException,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import {
@@ -34,7 +33,6 @@ import { User } from '../../users/entities/user.entity';
 import { EnableTwoFactorDto } from '../dto/enable-two-factor.dto';
 import { instanceToPlain } from 'class-transformer';
 import { TwoFactorAuthService } from '../services/two-factor-auth.service';
-import { randomBytes } from 'crypto';
 import { MetricsService } from '@/metrics/metrics.service';
 
 @ApiTags('Authentication')
@@ -53,6 +51,7 @@ export class AuthController {
     private readonly twoFactorService: TwoFactorAuthService,
     private readonly metricsService: MetricsService,
   ) {}
+
 
   /**
    * Enregistre un nouvel utilisateur.
@@ -312,16 +311,5 @@ export class AuthController {
     @Body() changePasswordDto: ChangePasswordDto,
   ) {
     return this.authService.changePassword(id, changePasswordDto);
-  }
-
-  @Get('csrf-token')
-  getCsrfToken(@Res() res: Response) {
-    const token = randomBytes(32).toString('hex');
-    res.cookie('csrfToken', token, {
-      httpOnly: false,
-      sameSite: 'strict',
-      secure: process.env.NODE_ENV === 'production',
-    });
-    res.json({ csrfToken: token });
   }
 }
