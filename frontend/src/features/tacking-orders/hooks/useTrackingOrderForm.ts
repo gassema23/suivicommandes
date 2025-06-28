@@ -13,6 +13,7 @@ import { QUERY_KEYS } from "@/constants/query-key.constant";
 import { SUCCESS_MESSAGES } from "@/constants/messages.constant";
 import { formatErrorMessage } from "@/lib/utils";
 import { useCalculateDeadline } from "./useCalculateDeadline";
+import { useGetDataToCalculateDeadline } from "./useGetDataToCalculateDeadline";
 
 const DEFAULT_VALUES: TrackingOrderFormData = {
   requisitionTypeId: "",
@@ -51,17 +52,21 @@ export function useTrackingOrderForm() {
   const order_registration_at = watch("order_registration_at");
   const order_registration_time = watch("order_registration_time");
 
+  const dataToCalculateDeadlineQuery = useGetDataToCalculateDeadline({
+    requestTypeServiceCategoryId,
+    requestTypeDelayId,
+  });
+
   const processingDeadlineQuery = useCalculateDeadline({
-    requestTypeServiceCategoryId: requestTypeServiceCategoryId || "",
-    requestTypeDelayId: requestTypeDelayId || undefined,
-    order_registration_at: order_registration_at || "",
-    order_registration_time: order_registration_time || "",
+    startDate: order_registration_at,
+    startTime: order_registration_time,
+    delayInDays:
+      dataToCalculateDeadlineQuery?.data?.requestTypeServiceCategory
+        ?.minimumRequiredDelay,
   });
 
   const createMutation = useMutation({
     mutationFn: (data: TrackingOrderFormData) => {
-      console.log("Creating tracking order:", data);
-      console.log("Processing time data:", processingDeadlineQuery.data);
       return Promise.resolve(data);
     },
     onSuccess: () => {
@@ -157,5 +162,6 @@ export function useTrackingOrderForm() {
     },
     mutation: createMutation,
     processingDeadlineQuery,
+    dataToCalculateDeadlineQuery,
   };
 }

@@ -1,10 +1,22 @@
-import { IsDateString, IsInt, Min } from 'class-validator';
+import { Type } from 'class-transformer';
+import {
+  IsDate,
+  IsInt,
+  IsOptional,
+  IsPositive,
+  IsString,
+} from 'class-validator';
 
 export class CalculateDeadlineDto {
-  @IsDateString()
-  startDate: string;
+  @IsDate()
+  @Type(() => Date)
+  startDate: Date;
+
+  @IsString()
+  @IsOptional()
+  startTime?: string;
 
   @IsInt()
-  @Min(1)
+  @IsPositive()
   delayInDays: number;
 }

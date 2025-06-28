@@ -1,9 +1,6 @@
 import { Body, Controller, Post } from '@nestjs/common';
 import { DeadlineService } from '../services/deadline.service';
 import { CalculateDeadlineDto } from '../dto/calculate-deadline.dto';
-import { Permissions } from '@/roles/decorators/permission.decorator';
-import { Action } from '@/roles/enums/action.enum';
-import { Resource } from '@/roles/enums/resource.enum';
 import { ApiOperation, ApiQuery, ApiResponse } from '@nestjs/swagger';
 import { DataToCalculateDeadlineDto } from '../dto/data-to-calculate-deadline.dto';
 
@@ -21,13 +18,7 @@ export class DeadlineController {
     return this.deadlineService.calculateDeadline(dto);
   }
 
-  @Post('get-data-to-calculate-deadline')
-  @Permissions([
-    {
-      resource: Resource.REQUEST_TYPE_SERVICE_CATEGORIES,
-      actions: [Action.READ],
-    },
-  ])
+  @Post('data-to-calculate-deadline')
   @ApiOperation({
     summary:
       'Récupérer les données nécessaires pour calculer le délai de traitement',

@@ -6,7 +6,6 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { RequestTypeServiceCategory } from '@/request-type-service-categories/entities/request-type-service-category.entity';
 import { Repository } from 'typeorm';
 import { RequestTypeDelay } from '@/request-type-delays/entities/request-type-delay.entity';
-
 @Injectable()
 export class DeadlineService {
   constructor(
@@ -14,39 +13,21 @@ export class DeadlineService {
     @InjectRepository(RequestTypeServiceCategory)
     private readonly requestTypeServiceCategoryRepository: Repository<RequestTypeServiceCategory>,
     @InjectRepository(RequestTypeDelay)
-    private readonly requestTypeDelayepository: Repository<RequestTypeDelay>,
+    private readonly requestTypeDelayRepository: Repository<RequestTypeDelay>,
   ) {}
 
   async calculateDeadline(dto: CalculateDeadlineDto) {
-    const { startDate, delayInDays } = dto;
-    const start = new Date(startDate);
-    if (isNaN(start.getTime())) {
-      throw new BadRequestException('Date de départ invalide');
-    }
-    if (typeof delayInDays !== 'number' || delayInDays < 0) {
-      throw new BadRequestException('Le délai doit être un nombre positif');
-    }
-    // Récupère les jours fériés depuis le service
-    const holidays: string[] = await this.holidaysService.getHolidays();
-    const current = new Date(start);
-    let daysAdded = 0;
+    const { startDate, startTime, delayInDays } = dto;
 
-    while (daysAdded < delayInDays) {
-      current.setDate(current.getDate() + 1);
-      const dateStr = current.toISOString().split('T')[0];
-      const isWeekend = current.getDay() === 0 || current.getDay() === 6;
-      const isHoliday = holidays.includes(dateStr);
-      if (!isWeekend && !isHoliday) {
-        daysAdded++;
-      }
-    }
+    const holidays = await this.holidaysService.getHolidays();
 
-    return { deadline: current.toISOString() };
+    console.log(
+      `Calculating deadline: ${delayInDays} business days from ${startDate}`,
+    );
   }
 
   async getDataToCalculateDeadline(dto: DataToCalculateDeadlineDto) {
     const { requestTypeServiceCategoryId, requestTypeDelayId } = dto;
-
     const requestTypeServiceCategory =
       await this.requestTypeServiceCategoryRepository.findOneOrFail({
         where: { id: requestTypeServiceCategoryId },
@@ -64,9 +45,9 @@ export class DeadlineService {
 
     // Récupère les délais associés à la catégorie de service
     if (requestTypeDelayId) {
-      const requestType = await this.requestTypeDelayepository.findOneOrFail({
+      const requestType = await this.requestTypeDelayRepository.findOneOrFail({
         where: { id: requestTypeDelayId },
-        relations: ['requestType'],
+        relations: ['delayType'],
       });
       if (!requestType) {
         throw new BadRequestException(
@@ -104,5 +85,13 @@ export class DeadlineService {
           requestTypeServiceCategory.serviceActivationDelay || 0,
       },
     };
+  }
+
+  private isWeekend(date) {
+    if (date instanceof Date) {
+      return date.getDay() % 6 === 0;
+    }
+
+    throw new Error('La date doit être un objet Date valide.');
   }
 }

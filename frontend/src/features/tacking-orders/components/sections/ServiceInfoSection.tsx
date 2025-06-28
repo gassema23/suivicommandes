@@ -8,7 +8,7 @@ import type { ServiceCategory } from "@/shared/service-categories/types/service-
 import type { RequestTypeServiceCategory } from "@/shared/request-type-service-categories/types/request-type-service-category.type";
 import type { RequestTypeDelay } from "@/shared/request-type-delays/types/request-type-delay.type";
 
-interface ServiceInfoSectionProps {
+type ServiceInfoSectionProps = {
   form: UseFormReturn<TrackingOrderFormData>;
   sectors: {
     data: Sector[] | undefined;

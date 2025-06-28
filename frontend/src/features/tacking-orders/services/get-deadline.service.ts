@@ -1,26 +1,30 @@
 import { API_ROUTE } from "@/constants/api-route.constant";
 import { apiFetch } from "@/hooks/useApiFetch";
 import type { ProcessingTimeParams } from "../types/processing-deadline.type";
+import moment from "moment";
 
 // Fetch resources depuis le backend
 export const getDeadline = async ({
-  requestTypeServiceCategoryId,
-  requestTypeDelayId,
-  order_registration_at,
-  order_registration_time,
+  startDate,
+  startTime,
+  delayInDays,
 }: ProcessingTimeParams) => {
+  const formattedDate = startDate ? moment(startDate).format("YYYY-MM-DD") : "";
 
-  const res = await apiFetch(`${API_ROUTE}/deadline/get-data-to-calculate-deadline`, {
+  console.log(formattedDate);
+
+  const res = await apiFetch(`${API_ROUTE}/deadline/calculate`, {
     method: "POST",
     body: JSON.stringify({
-      requestTypeServiceCategoryId,
-      requestTypeDelayId
+      startDate: formattedDate,
+      startTime,
+      delayInDays,
     }),
   });
-  if (!res.ok) throw new Error("Erreur lors du chargement des clients");
-
-    // Vérification de la réponse
-    console.log(await res.json());
+  if (!res.ok)
+    throw new Error(
+      "Erreur lors du chargement des données pour le calcul du délai"
+    );
 
   return res.json();
 };

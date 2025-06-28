@@ -193,16 +193,24 @@ export const QUERY_KEYS = {
   TRACKING_ORDERS: ["trackingOrders"] as const,
 
   PROCESSING_TIME_CALCULATION: (
-    requestTypeId: string,
-    requestTypeDelayId: string | undefined,
     order_registration_at: string,
-    order_registration_time: string
+    delayInDays: string,
+    order_registration_time?: string
   ) =>
     [
       "processing-time-calculation",
-      requestTypeId,
-      requestTypeDelayId || "default",
       order_registration_at,
-      order_registration_time,
+      delayInDays,
+      order_registration_time ?? "default",
+    ] as const,
+
+  GET_DATA_TO_CALCULATE_DEADLINE: (
+    requestTypeServiceCategoryId: string,
+    requestTypeDelayId?: string
+  ) =>
+    [
+      "get-data-to-calculate-deadline",
+      requestTypeServiceCategoryId,
+      requestTypeDelayId ?? "default",
     ] as const,
 } as const;

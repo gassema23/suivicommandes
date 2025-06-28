@@ -6,12 +6,12 @@ import { Input } from "@/components/ui/shadcn/input";
 import type { useTrackingOrderForm } from "../../hooks/useTrackingOrderForm";
 import { ProcessingDeadlineDisplay } from "./ProcessingDeadlineDisplay";
 
-interface OrderDateSectionProps {
+type OrderDateSectionProps = {
   form: UseFormReturn<TrackingOrderFormData>;
   processingDeadlineQuery: ReturnType<
     typeof useTrackingOrderForm
   >["processingDeadlineQuery"];
-}
+};
 
 export default function OrderDateSection({
   form,
@@ -19,8 +19,6 @@ export default function OrderDateSection({
 }: OrderDateSectionProps) {
   const {
     register,
-    watch,
-    setValue,
     control,
     formState: { errors },
   } = form;
@@ -61,7 +59,7 @@ export default function OrderDateSection({
         />
       </InputContainer>
 
-      <InputContainer label="Heure d'inscription de la réquisition">
+      <InputContainer label="Date calculée">
         <div className="col-span-12 xl:col-span-4">
           <ProcessingDeadlineDisplay
             processingDeadlineQuery={processingDeadlineQuery}

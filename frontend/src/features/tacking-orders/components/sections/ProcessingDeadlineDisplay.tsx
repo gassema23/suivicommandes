@@ -1,51 +1,44 @@
 import { Button } from "@/components/ui/shadcn/button";
 import { Skeleton } from "@/components/ui/shadcn/skeleton";
 import type { UseQueryResult } from "@tanstack/react-query";
-import { Info } from "lucide-react";
+import { Calendar } from "lucide-react";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/shadcn/popover";
+import moment from "moment";
 
-interface ProcessingDeadlineResult {
+type ProcessingDeadlineResult = {
   deadline: moment.Moment;
-  deadlineFormatted: string;
-  businessDays: number;
-  workingHours: number;
-  isUrgent: boolean;
-  estimatedCompletion: moment.Moment;
-  estimatedCompletionFormatted: string;
-  timeFromNow: string;
-  isOverdue: boolean;
-}
+};
 
-interface ProcessingDeadlineDisplayProps {
+type ProcessingDeadlineDisplayProps = {
   processingDeadlineQuery: UseQueryResult<ProcessingDeadlineResult, Error>;
-}
+};
 
 export function ProcessingDeadlineDisplay({
   processingDeadlineQuery,
 }: ProcessingDeadlineDisplayProps) {
-  
-  const { data, isLoading, isError, error } = processingDeadlineQuery;
+  const { data, isError, isFetching, error } = processingDeadlineQuery;
 
-  if (isLoading) {
+  if (isFetching) {
     return <Skeleton className="h-9 w-full" />;
   }
 
   if (isError) {
     return (
       <div className="px-3 py-1 h-9 border items-center flex w-full bg-destructive/10 text-sm text-destructive">
-        Erreur lors du calcul: {error?.message}
+        Erreur lors du calcul {error.message}
       </div>
     );
   }
 
   if (!data) {
     return (
-      <div className="px-3 py-1 h-9 border items-center flex w-full bg-muted text-sm text-muted-foreground">
+      <div className="px-3 py-1 h-9 border items-center flex w-full bg-muted text-sm text-muted-foreground justify-between">
         Délai de traitement
+        <Calendar className="ml-2 h-4 w-4" />
       </div>
     );
   }
@@ -58,8 +51,8 @@ export function ProcessingDeadlineDisplay({
           type="button"
           className="w-full  text-left justify-between"
         >
-          {data.deadlineFormatted}
-          <Info />
+          {moment(data?.deadline).format("LL")}
+          <Calendar />
         </Button>
       </PopoverTrigger>
       <PopoverContent side="top" align="center">

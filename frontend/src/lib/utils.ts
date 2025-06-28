@@ -1,5 +1,6 @@
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
+import moment from "moment";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -43,3 +44,33 @@ export function getFieldError<T extends object>(
 ): string | undefined {
   return errors[name]?.message;
 }
+
+export const formatDateForBackend = (dateInput: string): string => {
+  // Si c'est déjà au bon format YYYY-MM-DD
+  if (/^\d{4}-\d{2}-\d{2}$/.test(dateInput)) {
+    return dateInput;
+  }
+
+  // Si c'est un ISO string ou autre format
+  const momentDate = moment(dateInput);
+  if (momentDate.isValid()) {
+    return momentDate.format("YYYY-MM-DD");
+  }
+
+  throw new Error(`Format de date invalide: ${dateInput}`);
+};
+
+export const formatTimeForBackend = (timeInput: string): string => {
+  // Si c'est déjà au bon format HH:mm
+  if (/^\d{2}:\d{2}$/.test(timeInput)) {
+    return timeInput;
+  }
+
+  // Si c'est un autre format
+  const momentTime = moment(timeInput, ["HH:mm:ss", "HH:mm"]);
+  if (momentTime.isValid()) {
+    return momentTime.format("HH:mm");
+  }
+
+  throw new Error(`Format d'heure invalide: ${timeInput}`);
+};
