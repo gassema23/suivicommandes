@@ -27,7 +27,7 @@ import { CreateRequestTypeDto } from '../dto/create-request-type.dto';
 import { CurrentUser } from '../../auth/decorators/current-user.decorator';
 import { User } from '../../users/entities/user.entity';
 import { UpdateRequestTypeDto } from '../dto/update-request-type.dto';
-import { UuidParamPipe } from '@/common/pipes/uuid-param.pipe';
+import { UuidParamPipe } from '../../common/pipes/uuid-param.pipe';
 
 @ApiTags('Request types')
 @Controller('request-types')

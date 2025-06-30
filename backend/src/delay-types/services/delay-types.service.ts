@@ -7,8 +7,8 @@ import { PaginatedResult } from '../../common/interfaces/paginated-result.interf
 import { CreateDelayTypeDto } from '../dto/create-delay-type.dto';
 import { User } from '../../users/entities/user.entity';
 import { UpdateDelayTypeDto } from '../dto/update-delay-type.dto';
-import { ERROR_MESSAGES } from '@/common/constants/error-messages.constant';
-import { assertUniqueFields } from '@/common/utils/assert-unique-fields';
+import { ERROR_MESSAGES } from '../../common/constants/error-messages.constant';
+import { assertUniqueFields } from '../../common/utils/assert-unique-fields';
 
 @Injectable()
 export class DelayTypesService {

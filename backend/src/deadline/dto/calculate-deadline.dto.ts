@@ -1,20 +1,8 @@
-import { Type } from 'class-transformer';
-import {
-  IsDate,
-  IsInt,
-  IsOptional,
-  IsPositive,
-  IsString,
-} from 'class-validator';
+import { IsDate, IsInt, IsPositive } from 'class-validator';
 
 export class CalculateDeadlineDto {
   @IsDate()
-  @Type(() => Date)
   startDate: Date;
-
-  @IsString()
-  @IsOptional()
-  startTime?: string;
 
   @IsInt()
   @IsPositive()

@@ -28,7 +28,7 @@ import { User } from '../../users/entities/user.entity';
 import { CreateRequestTypeServiceCategoryDto } from '../dto/create-request-type-service-category.dto';
 import { instanceToPlain } from 'class-transformer';
 import { UpdateRequestTypeServiceCategoryDto } from '../dto/update-request-type-service-category.dto';
-import { UuidParamPipe } from '@/common/pipes/uuid-param.pipe';
+import { UuidParamPipe } from '../../common/pipes/uuid-param.pipe';
 
 @Controller('request-type-service-categories')
 @ApiTags('Service Provider Categories')

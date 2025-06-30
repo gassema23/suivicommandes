@@ -28,7 +28,7 @@ import { CreateRequestTypeDelayDto } from '../dto/create-request-type-delay.dto'
 import { User } from '../../users/entities/user.entity';
 import { CurrentUser } from '../../auth/decorators/current-user.decorator';
 import { UpdateRequestTypeDelayDto } from '../dto/update-request-type-delay.dto';
-import { UuidParamPipe } from '@/common/pipes/uuid-param.pipe';
+import { UuidParamPipe } from '../../common/pipes/uuid-param.pipe';
 
 @Controller('request-type-delays')
 @ApiTags('Délai des types de demandes')

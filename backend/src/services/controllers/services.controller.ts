@@ -27,7 +27,7 @@ import { User } from '../../users/entities/user.entity';
 import { CurrentUser } from '../../auth/decorators/current-user.decorator';
 import { CreateServiceDto } from '../dto/create-service.dto';
 import { UpdateServiceDto } from '../dto/update-service.dto';
-import { UuidParamPipe } from '@/common/pipes/uuid-param.pipe';
+import { UuidParamPipe } from '../../common/pipes/uuid-param.pipe';
 
 @Controller('services')
 @ApiTags('Services')

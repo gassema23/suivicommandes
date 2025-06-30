@@ -28,7 +28,7 @@ import { User } from '../../users/entities/user.entity';
 import { CurrentUser } from '../../auth/decorators/current-user.decorator';
 import { CreateSubdivisionClientDto } from '../dto/create-subdivision-client.dto';
 import { UpdateSubdivisionClientDto } from '../dto/update-subdivision-client.dto';
-import { UuidParamPipe } from '@/common/pipes/uuid-param.pipe';
+import { UuidParamPipe } from '../../common/pipes/uuid-param.pipe';
 
 @Controller('subdivision-clients')
 @ApiTags('Subdivision clients')

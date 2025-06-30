@@ -9,8 +9,8 @@ import { PaginatedResult } from '../../common/interfaces/paginated-result.interf
 import { CreateDeliverableDelayRequestTypeDto } from '../dto/create-deliverable-delay-request-type.dto';
 import { User } from '../../users/entities/user.entity';
 import { UpdateDeliverableDelayRequestTypeDto } from '../dto/update-deliverable-delay-request-type.dto';
-import { assertUniqueFields } from '@/common/utils/assert-unique-fields';
-import { ERROR_MESSAGES } from '@/common/constants/error-messages.constant';
+import { assertUniqueFields } from '../../common/utils/assert-unique-fields';
+import { ERROR_MESSAGES } from '../../common/constants/error-messages.constant';
 
 @Injectable()
 export class DeliverableDelayRequestTypesService {

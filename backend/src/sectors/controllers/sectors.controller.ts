@@ -27,7 +27,7 @@ import { CreateSectorDto } from '../dto/create-sector.dto';
 import { User } from '../../users/entities/user.entity';
 import { CurrentUser } from '../../auth/decorators/current-user.decorator';
 import { UpdateSectorDto } from '../dto/update-sector.dto';
-import { UuidParamPipe } from '@/common/pipes/uuid-param.pipe';
+import { UuidParamPipe } from '../../common/pipes/uuid-param.pipe';
 
 @Controller('sectors')
 @ApiTags('Sectors')

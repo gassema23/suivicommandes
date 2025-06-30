@@ -9,7 +9,7 @@ import { PaginatedResult } from '../../common/interfaces/paginated-result.interf
 import { CreateRequestTypeServiceCategoryDto } from '../dto/create-request-type-service-category.dto';
 import { User } from '../../users/entities/user.entity';
 import { UpdateRequestTypeServiceCategoryDto } from '../dto/update-request-type-service-category.dto';
-import { DeliverableDelayRequestType } from '@/deliverable-delay-request-types/entities/deliverable-delay-request-type.entity';
+import { DeliverableDelayRequestType } from '../../deliverable-delay-request-types/entities/deliverable-delay-request-type.entity';
 
 @Injectable()
 export class RequestTypeServiceCategoriesService {

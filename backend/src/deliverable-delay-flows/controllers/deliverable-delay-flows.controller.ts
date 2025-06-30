@@ -1,4 +1,4 @@
-import { AuthorizationsGuard } from '@/auth/guards/authorizations.guard';
+import { AuthorizationsGuard } from '../../auth/guards/authorizations.guard';
 import {
   Body,
   Controller,
@@ -19,15 +19,15 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 import { DeliverableDelayFlowsService } from '../services/deliverable-delay-flows.service';
-import { Permissions } from '@/roles/decorators/permission.decorator';
-import { Resource } from '@/roles/enums/resource.enum';
-import { Action } from '@/roles/enums/action.enum';
-import { PaginationDto } from '@/common/dto/pagination.dto';
+import { Permissions } from '../../roles/decorators/permission.decorator';
+import { Resource } from '../../roles/enums/resource.enum';
+import { Action } from '../../roles/enums/action.enum';
+import { PaginationDto } from '../../common/dto/pagination.dto';
 import { instanceToPlain } from 'class-transformer';
-import { CurrentUser } from '@/auth/decorators/current-user.decorator';
-import { User } from '@/users/entities/user.entity';
+import { CurrentUser } from '../../auth/decorators/current-user.decorator';
+import { User } from '../../users/entities/user.entity';
 import { CreateDeliverableDelayFlowDto } from '../dto/create-deliverable-delay-flow.dto';
-import { UuidParamPipe } from '@/common/pipes/uuid-param.pipe';
+import { UuidParamPipe } from '../../common/pipes/uuid-param.pipe';
 
 @Controller('deliverable-delay-flows')
 @ApiTags('Deliverable Delay flows')

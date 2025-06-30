@@ -27,7 +27,7 @@ import { CreateDeliverableDto } from '../dto/create-deliverable.dto';
 import { User } from '../../users/entities/user.entity';
 import { CurrentUser } from '../../auth/decorators/current-user.decorator';
 import { UpdateDeliverableDto } from '../dto/update-deliverable.dto';
-import { UuidParamPipe } from '@/common/pipes/uuid-param.pipe';
+import { UuidParamPipe } from '../../common/pipes/uuid-param.pipe';
 
 @ApiTags('Deliverables')
 @Controller('deliverables')

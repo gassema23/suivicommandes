@@ -7,8 +7,8 @@ import { PaginatedResult } from '../../common/interfaces/paginated-result.interf
 import { CreateClientDto } from '../dto/create-client.dto';
 import { User } from '../../users/entities/user.entity';
 import { UpdateClientDto } from '../dto/update-client.dto';
-import { assertUniqueFields } from '@/common/utils/assert-unique-fields';
-import { ERROR_MESSAGES } from '@/common/constants/error-messages.constant';
+import { assertUniqueFields } from '../../common/utils/assert-unique-fields';
+import { ERROR_MESSAGES } from '../../common/constants/error-messages.constant';
 
 @Injectable()
 export class ClientsService {

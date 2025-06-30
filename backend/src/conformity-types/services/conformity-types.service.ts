@@ -7,8 +7,8 @@ import { FindOptionsWhere, ILike, Repository } from 'typeorm';
 import { PaginationDto } from '../../common/dto/pagination.dto';
 import { PaginatedResult } from '../../common/interfaces/paginated-result.interface';
 import { BadRequestException, Injectable } from '@nestjs/common';
-import { assertUniqueFields } from '@/common/utils/assert-unique-fields';
-import { ERROR_MESSAGES } from '@/common/constants/error-messages.constant';
+import { assertUniqueFields } from '../../common/utils/assert-unique-fields';
+import { ERROR_MESSAGES } from '../../common/constants/error-messages.constant';
 
 @Injectable()
 export class ConformityTypesService {

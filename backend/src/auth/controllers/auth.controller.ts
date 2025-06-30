@@ -33,7 +33,7 @@ import { User } from '../../users/entities/user.entity';
 import { EnableTwoFactorDto } from '../dto/enable-two-factor.dto';
 import { instanceToPlain } from 'class-transformer';
 import { TwoFactorAuthService } from '../services/two-factor-auth.service';
-import { MetricsService } from '@/metrics/metrics.service';
+import { MetricsService } from '../../metrics/metrics.service';
 
 @ApiTags('Authentication')
 @Controller('auth')

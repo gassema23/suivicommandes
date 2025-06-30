@@ -28,7 +28,7 @@ import { User } from '../../users/entities/user.entity';
 import { CurrentUser } from '../../auth/decorators/current-user.decorator';
 import { UpdateProviderDto } from '../dto/update-provider.dto';
 import { instanceToPlain } from 'class-transformer';
-import { UuidParamPipe } from '@/common/pipes/uuid-param.pipe';
+import { UuidParamPipe } from '../../common/pipes/uuid-param.pipe';
 
 @ApiTags('Providers')
 @Controller('providers')

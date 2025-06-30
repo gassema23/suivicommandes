@@ -28,7 +28,7 @@ import { CurrentUser } from '../../auth/decorators/current-user.decorator';
 import { CreateDeliverableDelayRequestTypeDto } from '../dto/create-deliverable-delay-request-type.dto';
 import { User } from '../../users/entities/user.entity';
 import { UpdateDeliverableDelayRequestTypeDto } from '../dto/update-deliverable-delay-request-type.dto';
-import { UuidParamPipe } from '@/common/pipes/uuid-param.pipe';
+import { UuidParamPipe } from '../../common/pipes/uuid-param.pipe';
 
 @Controller('deliverable-delay-request-types')
 @ApiTags('Deliverable Delay Request Types')

@@ -1,3 +1,5 @@
+import type { ProcessingTimeParams } from "@/shared/tacking-orders/types/processing-deadline.type";
+
 export const QUERY_KEYS = {
   // Secteurs
   SECTORS: ["sectors"] as const,
@@ -192,16 +194,25 @@ export const QUERY_KEYS = {
   // Commandes de suivi
   TRACKING_ORDERS: ["trackingOrders"] as const,
 
+  /**
+   *
+   * @param order_registration_at
+   * @param delayInDays
+   * @param order_registration_time
+   * @param timeEnd
+   * @returns
+   */
+
   PROCESSING_TIME_CALCULATION: (
-    order_registration_at: string,
-    delayInDays: string,
-    order_registration_time?: string
+    startDate: string,
+    startTime: string,
+    dataToCaculateDeadline: ProcessingTimeParams["dataToCaculateDeadline"]
   ) =>
     [
       "processing-time-calculation",
-      order_registration_at,
-      delayInDays,
-      order_registration_time ?? "default",
+      startDate,
+      startTime,
+      dataToCaculateDeadline,
     ] as const,
 
   GET_DATA_TO_CALCULATE_DEADLINE: (

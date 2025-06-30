@@ -1,8 +1,8 @@
 import { useQuery } from "@tanstack/react-query";
 import moment from "moment";
 import { QUERY_KEYS } from "@/constants/query-key.constant";
-import type { DataToCalculateDeadline } from "../types/data-to-calculate-deadline.type";
 import { getDataToCalculateDeadline } from "../services/get-data-to-calculate-deadline.service";
+import type { DataToCalculateDeadline } from "@/shared/tacking-orders/types/data-to-calculate-deadline.type";
 
 moment.locale("fr");
 

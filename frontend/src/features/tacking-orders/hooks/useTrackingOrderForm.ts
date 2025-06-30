@@ -57,13 +57,12 @@ export function useTrackingOrderForm() {
     requestTypeDelayId,
   });
 
-  const processingDeadlineQuery = useCalculateDeadline({
-    startDate: order_registration_at,
-    startTime: order_registration_time,
-    delayInDays:
-      dataToCalculateDeadlineQuery?.data?.requestTypeServiceCategory
-        ?.minimumRequiredDelay,
-  });
+    const processingDeadlineQuery = useCalculateDeadline({
+      startDate: order_registration_at,
+      startTime: order_registration_time,
+      dataToCaculateDeadline:
+        dataToCalculateDeadlineQuery?.data?.requestTypeServiceCategory,
+    });
 
   const createMutation = useMutation({
     mutationFn: (data: TrackingOrderFormData) => {

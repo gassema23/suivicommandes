@@ -15,7 +15,7 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 import { RequestTypeDelay } from '../../request-type-delays/entities/request-type-delay.entity';
-import { DeliverableDelayRequestType } from '@/deliverable-delay-request-types/entities/deliverable-delay-request-type.entity';
+import { DeliverableDelayRequestType } from '../../deliverable-delay-request-types/entities/deliverable-delay-request-type.entity';
 
 @Entity('request_type_service_categories')
 @Unique(['serviceCategory', 'requestType'])

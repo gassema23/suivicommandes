@@ -29,7 +29,7 @@ import { Resource } from '../../roles/enums/resource.enum';
 import { Action } from '../../roles/enums/action.enum';
 import { AuthorizationsGuard } from '../../auth/guards/authorizations.guard';
 import { instanceToPlain } from 'class-transformer';
-import { UuidParamPipe } from '@/common/pipes/uuid-param.pipe';
+import { UuidParamPipe } from '../../common/pipes/uuid-param.pipe';
 
 @ApiTags('Teams')
 @Controller('teams')

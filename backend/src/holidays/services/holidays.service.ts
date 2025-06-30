@@ -195,4 +195,21 @@ export class HolidaysService {
 
     await this.holidayRepository.softDelete(id);
   }
+
+  async getHolidaysWithNames(): Promise<
+    Array<{ holidayDate: string; holidayName: string }>
+  > {
+    const holidays = await this.holidayRepository.find({
+      select: ['holidayDate', 'holidayName'],
+      order: { holidayDate: 'ASC' },
+    });
+
+    return holidays.map((holiday) => ({
+      holidayDate:
+        typeof holiday.holidayDate === 'string'
+          ? holiday.holidayDate
+          : holiday.holidayDate.toISOString().split('T')[0],
+      holidayName: holiday.holidayName!,
+    }));
+  }
 }

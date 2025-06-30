@@ -27,7 +27,7 @@ import { CreateFlowDto } from '../dto/create-flow.dto';
 import { User } from '../../users/entities/user.entity';
 import { CurrentUser } from '../../auth/decorators/current-user.decorator';
 import { UpdateFlowDto } from '../dto/update-flow.dto';
-import { UuidParamPipe } from '@/common/pipes/uuid-param.pipe';
+import { UuidParamPipe } from '../../common/pipes/uuid-param.pipe';
 
 @ApiTags('Flows')
 @Controller('flows')

@@ -22,7 +22,6 @@ export class MainSeeder implements Seeder {
     const providerServiceCategoryCount = 20;
     const clientCount = 50;
     const subdivisionClientCount = 100;
-    const holidayCount = 100;
 
     // Truncate existing data
     await truncateSeed(dataSource);
@@ -65,6 +64,7 @@ export class MainSeeder implements Seeder {
       clients,
     );
 
-    return await holidaySeed(dataSource, factoryManager, holidayCount);
+    // ✅ Seed holidays from CSV for multiple years
+    await holidaySeed(dataSource, factoryManager, [2024, 2025, 2026]);
   }
 }

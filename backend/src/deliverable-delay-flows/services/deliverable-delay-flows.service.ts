@@ -1,14 +1,14 @@
-import { Flow } from '@/flows/entities/flow.entity';
+import { Flow } from '../../flows/entities/flow.entity';
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { DeliverableDelayFlow } from '../entities/deliverable-delay-flow.entity';
-import { PaginationDto } from '@/common/dto/pagination.dto';
-import { DeliverableDelayRequestType } from '@/deliverable-delay-request-types/entities/deliverable-delay-request-type.entity';
+import { PaginationDto } from '../../common/dto/pagination.dto';
 import { CreateDeliverableDelayFlowDto } from '../dto/create-deliverable-delay-flow.dto';
-import { assertUniqueFields } from '@/common/utils/assert-unique-fields';
-import { ERROR_MESSAGES } from '@/common/constants/error-messages.constant';
-import { User } from '@/users/entities/user.entity';
+import { assertUniqueFields } from '../../common/utils/assert-unique-fields';
+import { ERROR_MESSAGES } from '../../common/constants/error-messages.constant';
+import { User } from '../../users/entities/user.entity';
+import { DeliverableDelayRequestType } from '../../deliverable-delay-request-types/entities/deliverable-delay-request-type.entity';
 
 @Injectable()
 export class DeliverableDelayFlowsService {

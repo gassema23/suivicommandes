@@ -27,7 +27,7 @@ import { User } from '../../users/entities/user.entity';
 import { CreateHolidayDto } from '../dto/create-holiday.dto';
 import { PaginationDto } from '../../common/dto/pagination.dto';
 import { UpdateHolidayDto } from '../dto/update-holiday.dto';
-import { UuidParamPipe } from '@/common/pipes/uuid-param.pipe';
+import { UuidParamPipe } from '../../common/pipes/uuid-param.pipe';
 
 @ApiTags('Holidays')
 @Controller('holidays')

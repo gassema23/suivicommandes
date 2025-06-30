@@ -27,7 +27,7 @@ import { CreateRequisitionTypeDto } from '../dto/create-requisition-type.dto';
 import { CurrentUser } from '../../auth/decorators/current-user.decorator';
 import { User } from '../../users/entities/user.entity';
 import { UpdateRequisitionTypeDto } from '../dto/update-requisition-type.dto';
-import { UuidParamPipe } from '@/common/pipes/uuid-param.pipe';
+import { UuidParamPipe } from '../../common/pipes/uuid-param.pipe';
 
 @ApiTags('Requisition types')
 @Controller('requisition-types')
