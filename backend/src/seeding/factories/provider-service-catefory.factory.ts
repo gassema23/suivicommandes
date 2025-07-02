@@ -5,7 +5,6 @@ export const ProviderServiceCategoryFactory = setSeederFactory(
   ProviderServiceCategory,
   (faker) => {
     const providerServiceCategory = new ProviderServiceCategory();
-
     return providerServiceCategory;
   },
 );

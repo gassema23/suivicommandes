@@ -13,7 +13,6 @@ export async function clientSeed(
     cliProgress.Presets.shades_classic,
   );
   clientBar.start(count, 0, { name: 'Clients' });
-  1;
   const clientFactory = factoryManager.get(Client);
   const clients: Client[] = [];
   for (let i = 0; i < count; i++) {

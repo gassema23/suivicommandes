@@ -9,6 +9,13 @@ import { providerServiceCategorySeed } from './seeders/provider-service-category
 import { clientSeed } from './seeders/client.seed';
 import { subdivisionClientSeed } from './seeders/subdivision-client.seed';
 import { holidaySeed } from './seeders/holiday.seed';
+import { requestTypeServiceCategorySeed } from './seeders/request-type-service-category.seed';
+import { requestTypeSeed } from './seeders/request-type.seed';
+import { flowSeed } from './seeders/flow.seed';
+import { deliverableSeed } from './seeders/deliverable.seed';
+import { conformityTypeSeed } from './seeders/conformity-type.seed';
+import { deliverableDelayRequestTypeSeed } from './seeders/deliverable-delay-request-type.seed';
+import { deliverableDelayFlowSeed } from './seeders/deliverable-delay-flow.seed';
 
 export class MainSeeder implements Seeder {
   public async run(
@@ -21,7 +28,14 @@ export class MainSeeder implements Seeder {
     const providerCount = 20;
     const providerServiceCategoryCount = 20;
     const clientCount = 50;
+    const requestTypeCount = 50;
     const subdivisionClientCount = 100;
+    const requestTypeServiceCategoryCount = 100;
+    const flowCount = 50;
+    const deliverableCount = 50;
+    const conformityTypeCount = 10;
+    const deliverableDelayRequestTypeCount = 100;
+    const deliverableDelayFlowCount = 100;
 
     // Truncate existing data
     await truncateSeed(dataSource);
@@ -38,8 +52,50 @@ export class MainSeeder implements Seeder {
     const serviceCategories = await serviceCategorySeed(
       dataSource,
       factoryManager,
-      serviceCategoryCount,
+      requestTypeServiceCategoryCount,
       services,
+    );
+
+    const requestTypes = await requestTypeSeed(
+      dataSource,
+      factoryManager,
+      requestTypeCount,
+    );
+
+    const requestTypeServiceCategories = await requestTypeServiceCategorySeed(
+      dataSource,
+      factoryManager,
+      serviceCategoryCount,
+      serviceCategories,
+      requestTypes,
+    );
+
+    const flows = await flowSeed(dataSource, factoryManager, flowCount);
+    const deliverables = await deliverableSeed(
+      dataSource,
+      factoryManager,
+      deliverableCount,
+    );
+    const conformityTypes = await conformityTypeSeed(
+      dataSource,
+      factoryManager,
+      conformityTypeCount,
+    );
+
+    const deliverableDelayRequestTypes = await deliverableDelayRequestTypeSeed(
+      dataSource,
+      factoryManager,
+      deliverableDelayRequestTypeCount,
+      requestTypeServiceCategories,
+      deliverables,
+    );
+
+    const deliverableDelayFlows = await deliverableDelayFlowSeed(
+      dataSource,
+      factoryManager,
+      deliverableDelayFlowCount,
+      deliverableDelayRequestTypes,
+      flows,
     );
 
     const providers = await providerSeed(
